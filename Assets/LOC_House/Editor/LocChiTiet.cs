@@ -1,0 +1,154 @@
+﻿// Bước "texture bề mặt": mọi món (LocProp) còn vật liệu màu phẳng, không texture → gán bản đồ chi tiết TRUNG TÍNH theo chất liệu (gỗ, sơn/men, nhựa, vải, carton, đan lát, chiếu, xi măng)
+// nhân với màu gốc, kèm UV chiếu hộp theo mét (mesh .glb của các món tự dựng không có UV). Món đã có texture thì bỏ qua.
+// Bản đồ: HMAsset/KhuPho/make_detail.py → Assets/LOC_House/Textures/D_*.png. Gọi từ LocHouseBuilder.Build() sau khi đặt xong mọi món.
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using UnityEditor;
+using UnityEngine;
+
+public static class LocChiTiet
+{
+    const string TexDir = "Assets/LOC_House/Textures";
+    const string MatDir = "Assets/LOC_House/Materials";
+
+    // (regex trên tên món, loại) — khớp đầu tiên thắng. Đặt trước các luật chung những món dễ nhầm.
+    static readonly (string re, string cls)[] Rules =
+    {
+        (@"^(ChoiLau_Gop|Khan_Ru|Decal|Kinh|Guong$|TV_|Den|Bong|Ranh|Nhan|PH_|CuaChinh|Tranh|Tham_|Khung|KhungAnh|DongHoTreo_Vuong|MacAoDung|QuatCayDung)", null),
+        (@"^TuLanh", "tulanh"),
+        (@"Carton|ThungCarton|BocVai|GocKho|DongDoCung|BaoTai|BaoXi|Bui", "carton"),
+        (@"XiMang|BeNuoc|ChauTrauBa|BonHoa|GachMau|ChauCay_|ChauCayKieng|ChauLuoiHo", "xm"),
+        (@"ChieuMen|ChieuCoi|Chieu|NenSanPhoi|SapGo", "chieu"),
+        (@"^Ro|RoRa|RauQua|Gio|Non|BoAm|ThamChui|ChoiLau|ChoiQuet|CayChoi", "dan"),
+        (@"ThungNuoc|ThungRac|ThungGao|ThungSon|^Xo|Thau|ChauNhua|^Thung", "thung"),
+        (@"Chong|GiuongXep|Tre$", "go"),
+        (@"^TuAo|^TuQuanAo", "mau"),   // [29/9 khuya] tủ áo: tên có "Ao_" bị nhầm sang vải → phân loại theo màu từng vật liệu (gỗ / kim loại)
+        (@"Chan|Men|Goi|Rem|AoMua|AoTang|Ao_|^Ao|Khan|Tui|Balo|Gau|ManTuyn|DongPhuc|Dem|Salon_Dem|Walkman|DoTuDauGiuong_Me", "vai"),
+        (@"TuiNilon|Nilon|Thung|Xo|Thau|Chau|Coc|DoChoi|Bup|Choi|Dep|Hop|GheDau_Nhua|GheNhua|TuNhua|SM_Plastic|BaoBot|Binh|ThungRac|BatDia_Trong|LongBan|Sach|Cap|DayPhoi|KepPhoi|Loa|Gat|Khay|Dia|Lon|Rao|Nut|Lo", "nhua"),
+        (@"TuLanh|BeRua|BeGiat|XiBet|NoiCom|Bep|Noi|AmNhom|Am|KetSat|TuHoSo|BangDien|CauDao|Quat|CotPhoi|LanCan|GianPhoi|XeRua|XeDap|OngNuoc|ThanhSat|ThangNhom|CuonLuoi|BinhGas|Lavabo|Voi|MayBom|Ong|Thanh|Cuon|Phich|BinhThuy|TanNhiet|Antena|Anten|HopCong|DongHoNuoc|Chuong|HopThu|MocKhoa|Moc|Khoa|Song|Cong", "son"),
+        (@"Ban|Ghe|Tu|Giuong|Ke|Go|Salon|Khung|Chan_|Buffet|Ruong|MacAo|DongHo|Tranh|Anh|Lich|Bang|Sap|Cay|Cua|Kho|ChoiLau|Choi", "go"),
+    };
+
+    static readonly Dictionary<string, (string tex, float tile, float spec, float smooth)> Cls = new()
+    {
+        ["go"] = ("D_go.png", 0.7f, 0.08f, 0.22f),
+        ["son"] = ("D_son.png", 0.9f, 0.16f, 0.32f),
+        ["nhua"] = ("D_nhua.png", 0.5f, 0.12f, 0.30f),
+        ["vai"] = ("D_vai.png", 0.35f, 0.02f, 0.05f),
+        ["carton"] = ("D_carton.png", 0.7f, 0.02f, 0.05f),
+        ["dan"] = ("D_dan.png", 0.3f, 0.03f, 0.08f),
+        ["chieu"] = ("D_chieu.png", 0.5f, 0.02f, 0.06f),
+        ["xm"] = ("D_xm.png", 0.8f, 0.03f, 0.08f),
+        ["thung"] = ("D_thung.png", 0.5f, 0.14f, 0.32f),
+        ["tulanh"] = ("D_tulanh.png", 1f, 0.22f, 0.40f),
+    };
+
+    static readonly Dictionary<string, Material> mats = new();
+    static readonly Dictionary<string, Mesh> meshes = new();
+    static readonly Dictionary<string, Texture2D> texs = new();
+    static int nMat, nRend;
+
+    public static void Apply(Transform root)
+    {
+        mats.Clear(); meshes.Clear(); nMat = nRend = 0;
+        var log = new List<string>();
+        foreach (var lp in root.GetComponentsInChildren<LocProp>(true))
+        {
+            string byName = Classify(lp.name, out bool skip);
+            if (skip) continue;
+            foreach (var r in lp.GetComponentsInChildren<MeshRenderer>(true))
+            {
+                var mf = r.GetComponent<MeshFilter>();
+                if (!mf || !mf.sharedMesh) continue;
+                var ms = r.sharedMaterials; var flat = new List<int>();
+                for (int i = 0; i < ms.Length; i++)
+                {
+                    var m = ms[i]; if (!m || HasTex(m) || IsEmissiveOrClear(m)) continue;
+                    var c = BaseColor(m);
+                    string cls = byName ?? ByColor(c);
+                    if (cls == null) continue;
+                    ms[i] = Get(cls, c, m.doubleSidedGI); flat.Add(i);   // giữ hai mặt cho vải/bạt/rèm (glTFast bật doubleSidedGI)
+                }
+                if (flat.Count == 0) continue;
+                r.sharedMaterials = ms;
+                mf.sharedMesh = WithUV(mf.sharedMesh, flat, Cls[Class(ms[flat[0]])].tile, Class(ms[flat[0]]) == "tulanh");
+                nRend++;
+            }
+            log.Add($"{lp.name} → {byName ?? "màu"}");
+        }
+        System.IO.File.WriteAllText("Assets/LOC_House/BaoCao_TextureBeMat.txt",
+            $"TEXTURE BỀ MẶT: {nRend} renderer, {mats.Count} vật liệu mới\n" + string.Join("\n", log.Distinct().OrderBy(s => s)));
+        Debug.Log($"[LOC] Texture bề mặt: {nRend} renderer, {mats.Count} vật liệu. Xem Assets/LOC_House/BaoCao_TextureBeMat.txt");
+    }
+
+    static string Classify(string name, out bool skip)
+    {
+        skip = false;
+        foreach (var (re, cls) in Rules)
+            if (Regex.IsMatch(name, re)) { if (cls == "mau") return null; if (cls == null) skip = true; return cls; }
+        return null;   // không khớp → phân loại theo màu từng vật liệu
+    }
+
+    static bool HasTex(Material m) => (m.HasProperty("_BaseMap") && m.GetTexture("_BaseMap")) || m.mainTexture;
+    // vật liệu nhập từ .glb dùng shader glTF-pbrMetallicRoughness (baseColorFactor); vật liệu tự tạo (M_NT_*) dùng Simple Lit (_BaseColor)
+    static Color BaseColor(Material m) => m.HasProperty("baseColorFactor") ? m.GetColor("baseColorFactor") : m.HasProperty("_BaseColor") ? m.GetColor("_BaseColor") : Color.white;
+    static bool IsEmissiveOrClear(Material m) => m.IsKeywordEnabled("_EMISSION") || (m.HasProperty("emissiveFactor") && m.GetColor("emissiveFactor").maxColorComponent > 0.05f)
+        || (m.HasProperty("_Surface") && m.GetFloat("_Surface") > 0.5f) || BaseColor(m).a < 0.95f;
+
+    static string ByColor(Color c)
+    {
+        Color.RGBToHSV(c, out float h, out float s, out float v);
+        if (s > 0.25f && h > 0.02f && h < 0.13f && v < 0.7f) return "go";      // nâu
+        if (s < 0.18f && v > 0.55f) return "son";                                // trắng/xám sáng: men, sơn
+        if (s > 0.45f && v > 0.35f) return "nhua";                               // màu tươi: nhựa
+        if (v < 0.25f) return "nhua";
+        return "son";
+    }
+
+    static string Class(Material m) => m.name.Split('_')[1];
+
+    static Material Get(string cls, Color c, bool doubleSided = false)
+    {
+        c = new Color(Mathf.Round(c.r * 10) / 10f, Mathf.Round(c.g * 10) / 10f, Mathf.Round(c.b * 10) / 10f, 1);   // gộp màu gần nhau
+        string hex = ColorUtility.ToHtmlStringRGB(c);
+        string key = (cls == "tulanh" ? "tulanh" : $"{cls}_{hex}") + (doubleSided ? "_2m" : "");
+        if (mats.TryGetValue(key, out var m)) return m;
+        var (tex, tile, spec, smooth) = Cls[cls];
+        if (!texs.TryGetValue(tex, out var t)) texs[tex] = t = AssetDatabase.LoadAssetAtPath<Texture2D>($"{TexDir}/{tex}");
+        m = new Material(Shader.Find("Universal Render Pipeline/Simple Lit")) { name = $"CT_{cls}_{hex}" };
+        if (t) { m.SetTexture("_BaseMap", t); m.mainTexture = t; }
+        m.SetColor("_BaseColor", c); m.color = c;
+        m.SetColor("_SpecColor", new Color(spec, spec, spec, 1)); m.SetFloat("_Smoothness", smooth);
+        if (doubleSided) { m.SetFloat("_Cull", 0); m.doubleSidedGI = true; }
+        return mats[key] = m;   // ponytail: vật liệu chỉ nằm trong scene, dựng lại mỗi lần chạy menu — không rải hàng trăm file .mat
+    }
+
+    // UV chiếu hộp theo pháp tuyến đỉnh, đơn vị mét / tile; chỉ ghi đè UV của các submesh phẳng, giữ UV cũ cho submesh đã có texture.
+    static Mesh WithUV(Mesh src, List<int> flat, float tile, bool fit)
+    {
+        string key = $"{src.GetInstanceID()}_{string.Join(",", flat)}_{tile}_{fit}";
+        if (meshes.TryGetValue(key, out var done)) return done;
+        var m = Object.Instantiate(src); m.name = src.name + "_uv";
+        if (m.normals.Length != m.vertexCount) m.RecalculateNormals();
+        var v = m.vertices; var n = m.normals;
+        var uv = new List<Vector2>(); m.GetUVs(0, uv);
+        if (uv.Count != v.Length) { uv.Clear(); uv.AddRange(new Vector2[v.Length]); }
+        var bb = m.bounds; var sz = bb.size; float Nz(float v, float mn, float d) => (v - mn) / Mathf.Max(d, 0.001f);
+        foreach (int s in flat)
+            foreach (int i in m.GetTriangles(s).Distinct())
+            {
+                var a = new Vector3(Mathf.Abs(n[i].x), Mathf.Abs(n[i].y), Mathf.Abs(n[i].z));
+                if (fit)
+                {   // chỉ mặt trước (+z) mang cả hình cánh tủ (nam châm, tay nắm, nhãn); các mặt còn lại lấy dải trơn bên trên tay nắm để hông/lưng/nóc không dính tay nắm + nam châm
+                    bool front = a.z >= a.x && a.z >= a.y && n[i].z > 0;
+                    uv[i] = front ? new Vector2(Nz(v[i].x, bb.min.x, sz.x), Nz(v[i].y, bb.min.y, sz.y))
+                                  : new Vector2(0.05f + 0.6f * Nz(a.x >= a.z ? v[i].z : v[i].x, a.x >= a.z ? bb.min.z : bb.min.x, a.x >= a.z ? sz.z : sz.x), 0.62f + 0.06f * Nz(v[i].y, bb.min.y, sz.y));
+                    continue;
+                }
+                uv[i] = a.x >= a.y && a.x >= a.z ? new Vector2(v[i].z, v[i].y) / tile : a.y >= a.z ? new Vector2(v[i].x, v[i].z) / tile : new Vector2(v[i].x, v[i].y) / tile;
+            }
+        m.SetUVs(0, uv);
+        return meshes[key] = m;
+    }
+}

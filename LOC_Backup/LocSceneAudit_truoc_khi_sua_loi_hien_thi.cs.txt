@@ -1,0 +1,281 @@
+// Rà soát scene nhà LỘC — Menu: LOC → Rà soát: chạm sàn + chồng lấn (cũng tự chạy cuối "Dựng nhà LỘC").
+//  1. Đồ đâm xuyên tường/bậc thang → đẩy ra (tối đa 0,40 m).
+//  2. Đồ "San" lơ lửng hoặc lún → thả chạm mặt đỡ cao nhất ngay bên dưới (sàn, mặt bàn, kệ…).
+//  3. Hai đồ cùng đứng trên một mặt mà đè lên nhau → đẩy món nhỏ hơn ra (không đẩy vào tường).
+// Chỉ đụng tới đồ có LocProp.kieu = San. Mọi thay đổi ghi vào Assets/LOC_House/BaoCao_RaSoat.txt.
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+
+public static class LocSceneAudit
+{
+    const string ReportPath = "Assets/LOC_House/BaoCao_RaSoat.txt";
+    const float Eps = 0.004f, MaxWallPush = 0.4f, MaxOverlapPush = 0.6f;
+
+    [MenuItem("LOC/Rà soát: chạm sàn + chồng lấn")]
+    public static void RunMenu()
+    {
+        // bật tạm các nhóm Đêm 2/3 đang ẩn để rà luôn
+        var hidden = Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .Where(t => (t.name is "Dem2" or "Dem3") && !t.gameObject.activeSelf).ToList();
+        foreach (var t in hidden) t.gameObject.SetActive(true);
+        var log = Run();
+        foreach (var t in hidden) t.gameObject.SetActive(false);
+        EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+        System.IO.File.WriteAllText(ReportPath, log);
+        AssetDatabase.Refresh();
+        Debug.Log("[LOC] Rà soát xong — xem " + ReportPath + "\n" + log.Split('\n').FirstOrDefault(l => l.StartsWith("TỔNG")));
+    }
+
+    public static string Run()
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"RÀ SOÁT NHÀ LỘC — {System.DateTime.Now:dd/MM/yyyy HH:mm}\n");
+        var props = Object.FindObjectsByType<LocProp>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        var san = props.Where(p => p.kieu == LocProp.Kieu.San && WB(p.gameObject).size != Vector3.zero).ToList();
+
+        // collider tạm cho mọi mesh chưa có collider (đồ nhập từ .glb không kèm collider)
+        var added = new List<MeshCollider>();
+        foreach (var mf in Object.FindObjectsByType<MeshFilter>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        {
+            if (!mf.sharedMesh || mf.GetComponent<Collider>()) continue;
+            var r = mf.GetComponent<Renderer>();
+            if (!r || !r.enabled) continue;
+            added.Add(mf.gameObject.AddComponent<MeshCollider>());
+        }
+        Physics.SyncTransforms();
+
+        int nWall = 0, nDrop = 0, nOver = 0, nManual = 0;
+        var probe = new GameObject("_ProbeRaSoat") { hideFlags = HideFlags.HideAndDontSave };
+        var pb = probe.AddComponent<BoxCollider>();
+        try
+        {
+            sb.AppendLine("① XUYÊN TƯỜNG / BẬC THANG");
+            foreach (var p in san) WallFix(p, pb, sb, ref nWall, ref nManual);
+
+            sb.AppendLine("\n② CHẠM MẶT ĐỠ (thả xuống / nhấc lên)");
+            foreach (var p in san.OrderBy(p => WB(p.gameObject).min.y)) Drop(p, sb, ref nDrop, ref nManual);
+
+            sb.AppendLine("\n③ CHỒNG LẤN (hai đồ cùng mặt đỡ đè lên nhau)");
+            var reported = new HashSet<(int, int)>();
+            for (int pass = 0; pass < 4; pass++)
+            {
+                int before = nOver;
+                var obbs = san.Select(p => Obb.Of(p)).Where(o => o.h > 0.03f).ToList();
+                for (int i = 0; i < obbs.Count; i++)
+                for (int j = i + 1; j < obbs.Count; j++)
+                {
+                    var a = obbs[i]; var b = obbs[j];
+                    if (Mathf.Abs(a.y0 - b.y0) > 0.1f) continue;                        // không cùng mặt đỡ
+                    if (Mathf.Min(a.y1, b.y1) - Mathf.Max(a.y0, b.y0) < 0.03f) continue;
+                    if (!SameVariant(a.p, b.p)) continue;                                 // Đêm1/Đêm2/Đêm3 không so với nhau
+                    if (!Obb.Sat(a, b, out var axis, out var depth) || depth < 0.02f) continue;
+                    // đẩy món nhỏ hơn; nếu vướng tường thì thử đẩy món kia
+                    var (mv, st) = a.vol <= b.vol ? (a, b) : (b, a);
+                    var dir = Vector2.Dot(mv.c - st.c, axis) >= 0 ? axis : -axis;
+                    float d = depth + 0.02f;
+                    var key = (a.p.GetInstanceID(), b.p.GetInstanceID());
+                    if (reported.Contains(key)) continue;
+                    if (d > MaxOverlapPush) { reported.Add(key); sb.AppendLine($"  ⚠ {Path(a.p)} ↔ {Path(b.p)}: đè {depth:0.00} m — quá sâu, CẦN XỬ LÝ TAY"); nManual++; continue; }
+                    if (TryMove(mv.p, new Vector3(dir.x, 0, dir.y) * d, pb) || TryMove(st.p, new Vector3(-dir.x, 0, -dir.y) * d, pb))
+                    {
+                        sb.AppendLine($"  ↔ {Path(a.p)} ↔ {Path(b.p)}: đè {depth:0.00} m → tách {d:0.00} m");
+                        nOver++;
+                        obbs[i] = Obb.Of(a.p); obbs[j] = Obb.Of(b.p);
+                    }
+                    else { reported.Add(key); sb.AppendLine($"  ⚠ {Path(a.p)} ↔ {Path(b.p)}: đè {depth:0.00} m, đẩy món nào cũng vướng tường — CẦN XỬ LÝ TAY"); nManual++; }
+                }
+                if (nOver == before) break;
+            }
+            // tách xong có thể làm đồ trên mặt bàn hụt chân → thả lại một lượt
+            int dummy = 0;
+            foreach (var p in san.OrderBy(p => WB(p.gameObject).min.y)) Drop(p, new StringBuilder(), ref dummy, ref dummy);
+        }
+        finally
+        {
+            Object.DestroyImmediate(probe);
+            // giữ collider cho đồ đứng sàn (người chơi không đi xuyên), bỏ collider tạm của đồ treo/cửa
+            foreach (var c in added)
+            {
+                if (!c) continue;
+                var lp = c.GetComponentInParent<LocProp>();
+                if (lp == null || lp.kieu != LocProp.Kieu.San) Object.DestroyImmediate(c);
+            }
+        }
+        sb.Insert(0, $"TỔNG: {nWall} món kéo khỏi tường · {nDrop} món chỉnh chạm mặt đỡ · {nOver} cặp chồng lấn đã tách · {nManual} chỗ cần xử lý tay\n\n");
+        return sb.ToString();
+    }
+
+    // ───────── ① xuyên tường
+    static void WallFix(LocProp p, BoxCollider pb, StringBuilder sb, ref int n, ref int manual)
+    {
+        var o = Obb.Of(p);
+        if (o.h < 0.1f) return;
+        var total = Vector3.zero;
+        for (int it = 0; it < 4; it++)
+        {
+            var push = WallPush(p, pb, out _);
+            if (push == Vector3.zero) break;
+            p.transform.position += push; total += push;
+            Physics.SyncTransforms();
+        }
+        if (total == Vector3.zero) return;
+        if (total.magnitude > MaxWallPush || WallPush(p, pb, out _) != Vector3.zero)
+        {
+            p.transform.position -= total; Physics.SyncTransforms();
+            WallPush(p, pb, out var wall);
+            sb.AppendLine($"  ⚠ {Path(p)} đâm vào {wall} — đẩy {total.magnitude:0.00} m vẫn chưa ra, CẦN XỬ LÝ TAY"); manual++;
+            return;
+        }
+        sb.AppendLine($"  → {Path(p)}: kéo {total.magnitude:0.00} m ra khỏi tường"); n++;
+    }
+
+    // vector đẩy ngang để món không còn lấn kết cấu (tường, bậc, lan can); bỏ qua sàn nhờ nâng đáy hộp dò 6 cm
+    static Vector3 WallPush(LocProp p, BoxCollider pb, out string hitName)
+    {
+        hitName = null;
+        var o = Obb.Of(p);
+        float y0 = o.y0 + 0.06f, y1 = o.y1 - 0.02f;
+        if (y1 <= y0) return Vector3.zero;
+        var rot = Quaternion.Euler(0, p.transform.eulerAngles.y, 0);
+        var half = new Vector3(Mathf.Max(o.ex - 0.01f, 0.005f), (y1 - y0) / 2, Mathf.Max(o.ez - 0.01f, 0.005f));
+        var center = new Vector3(o.c.x, (y0 + y1) / 2, o.c.y);
+        pb.transform.SetPositionAndRotation(center, rot);
+        pb.size = half * 2;
+        Physics.SyncTransforms();
+        var push = Vector3.zero;
+        foreach (var c in Physics.OverlapBox(center, half, rot, ~0, QueryTriggerInteraction.Ignore))
+        {
+            if (!IsStructure(c)) continue;
+            if (Physics.ComputePenetration(pb, center, rot, c, c.transform.position, c.transform.rotation, out var dir, out var dist))
+            {
+                var h = new Vector3(dir.x, 0, dir.z);
+                if (h.sqrMagnitude < 0.25f) continue;          // chạm theo phương đứng (sàn/trần) → bỏ
+                var v = h.normalized * (dist / h.magnitude + 0.005f);
+                if (v.sqrMagnitude > push.sqrMagnitude) { push = v; hitName = c.name; }
+            }
+        }
+        return push;
+    }
+
+    static bool IsStructure(Collider c) =>
+        !(c is CharacterController) && c.GetComponentInParent<LocProp>() == null && c.gameObject.name != "_ProbeRaSoat";
+
+    static bool TryMove(LocProp p, Vector3 v, BoxCollider pb)
+    {
+        p.transform.position += v; Physics.SyncTransforms();
+        if (WallPush(p, pb, out _) == Vector3.zero) return true;
+        p.transform.position -= v; Physics.SyncTransforms();
+        return false;
+    }
+
+    // ───────── ② chạm mặt đỡ
+    static void Drop(LocProp p, StringBuilder sb, ref int n, ref int manual)
+    {
+        var g = p.gameObject;
+        var b = WB(g);
+        var self = new HashSet<Collider>(g.GetComponentsInChildren<Collider>(true));
+        float lift = Mathf.Clamp(b.size.y * 0.5f, 0.05f, 0.3f);
+        float top = float.NegativeInfinity; int hitN = 0;
+        foreach (var (sx, sz) in new[] { (0f, 0f), (-.35f, -.35f), (.35f, -.35f), (-.35f, .35f), (.35f, .35f) })
+        {
+            var o = new Vector3(b.center.x + sx * b.size.x, b.min.y + lift, b.center.z + sz * b.size.z);
+            float best = float.NegativeInfinity;
+            foreach (var h in Physics.RaycastAll(o, Vector3.down, lift + 3f, ~0, QueryTriggerInteraction.Ignore))
+            {
+                if (self.Contains(h.collider) || h.collider is CharacterController) continue;
+                var lp = h.collider.GetComponentInParent<LocProp>();
+                if (lp && lp.kieu == LocProp.Kieu.Cua) continue;          // cánh cửa không làm mặt đỡ
+                if (h.point.y > best) best = h.point.y;
+            }
+            if (best > float.NegativeInfinity) { hitN++; top = Mathf.Max(top, best); }
+        }
+        if (hitN == 0) { sb.AppendLine($"  ⚠ {Path(p)}: không tìm thấy mặt đỡ bên dưới — CẦN XỬ LÝ TAY"); manual++; return; }
+        float d = top - b.min.y;
+        if (Mathf.Abs(d) < Eps) return;
+        g.transform.position += Vector3.up * d;
+        Physics.SyncTransforms();
+        sb.AppendLine($"  {(d < 0 ? "↓ thả" : "↑ nhấc")} {Path(p)}: {Mathf.Abs(d) * 100:0.0} cm");
+        n++;
+    }
+
+    static bool SameVariant(LocProp a, LocProp b)
+    {
+        string V(Transform t) { for (; t; t = t.parent) if (t.name.StartsWith("Dem") && t.name.Length == 4) return t.name; return null; }
+        var va = V(a.transform); var vb = V(b.transform);
+        return va == null || vb == null || va == vb;
+    }
+
+    // ───────── tiện ích
+    public static Bounds WB(GameObject g)
+    {
+        var rs = g.GetComponentsInChildren<Renderer>(false).Where(r => r.enabled && !(r.GetComponent<TextMesh>())).ToArray();
+        if (rs.Length == 0) return new Bounds(g.transform.position, Vector3.zero);
+        var b = rs[0].bounds;
+        foreach (var r in rs) b.Encapsulate(r.bounds);
+        return b;
+    }
+
+    // bounds theo khung toạ độ của `frame` (tính từ mesh gốc, không phải AABB thế giới → đúng cả khi món bị xoay)
+    public static Bounds LocalBounds(Transform of, Transform frame)
+    {
+        bool any = false; var lb = new Bounds();
+        foreach (var mf in of.GetComponentsInChildren<MeshFilter>(false))
+        {
+            var r = mf.GetComponent<Renderer>();
+            if (!mf.sharedMesh || !r || !r.enabled || mf.GetComponent<TextMesh>()) continue;
+            var mb = mf.sharedMesh.bounds; var m = frame.worldToLocalMatrix * mf.transform.localToWorldMatrix;
+            for (int i = 0; i < 8; i++)
+            {
+                var c = mb.center + Vector3.Scale(mb.extents, new Vector3((i & 1) == 0 ? -1 : 1, (i & 2) == 0 ? -1 : 1, (i & 4) == 0 ? -1 : 1));
+                var q = m.MultiplyPoint3x4(c);
+                if (!any) { lb = new Bounds(q, Vector3.zero); any = true; } else lb.Encapsulate(q);
+            }
+        }
+        return lb;
+    }
+
+    static string Path(LocProp p)
+    {
+        var s = p.name; var t = p.transform.parent;
+        for (int i = 0; i < 2 && t && t.parent; i++, t = t.parent) s = t.name + "/" + s;
+        return s;
+    }
+
+    // hộp chữ nhật xoay trên mặt bằng XZ (theo hướng yaw của món) + khoảng cao
+    struct Obb
+    {
+        public LocProp p; public Vector2 c, ax, az; public float ex, ez, y0, y1, h, vol;
+        public static Obb Of(LocProp p)
+        {
+            var t = p.transform;
+            var lb = LocalBounds(t, t);
+            var wb = WB(p.gameObject);
+            var o = new Obb { p = p };
+            var wc = t.TransformPoint(lb.center);
+            o.c = new Vector2(wc.x, wc.z);
+            var r = t.right; var f = t.forward;
+            o.ax = new Vector2(r.x, r.z).normalized; o.az = new Vector2(f.x, f.z).normalized;
+            o.ex = lb.extents.x * t.lossyScale.x; o.ez = lb.extents.z * t.lossyScale.z;
+            o.y0 = wb.min.y; o.y1 = wb.max.y; o.h = o.y1 - o.y0;
+            o.vol = 4 * o.ex * o.ez * o.h;
+            return o;
+        }
+        static float Proj(Obb o, Vector2 axis) => o.ex * Mathf.Abs(Vector2.Dot(o.ax, axis)) + o.ez * Mathf.Abs(Vector2.Dot(o.az, axis));
+        public static bool Sat(Obb a, Obb b, out Vector2 best, out float depth)
+        {
+            best = Vector2.right; depth = float.MaxValue;
+            foreach (var axis in new[] { a.ax, a.az, b.ax, b.az })
+            {
+                float dist = Mathf.Abs(Vector2.Dot(b.c - a.c, axis));
+                float pen = Proj(a, axis) + Proj(b, axis) - dist;
+                if (pen <= 0) return false;
+                if (pen < depth) { depth = pen; best = axis; }
+            }
+            return true;
+        }
+    }
+}

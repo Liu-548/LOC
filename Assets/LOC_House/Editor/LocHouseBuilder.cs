@@ -1,0 +1,2044 @@
+﻿// Dựng ngôi nhà LỘC theo prompt-gui-claude-design-gd5/00-thiet-ke-noi-that-ngoi-nha.md (phương án ★),
+// BẢN 8 × 25 + TIỆM TÁCH RIÊNG bên trái (bản vẽ đã duyệt 27/9/2026). Cao độ, thang, hầm 2,40 × 3,00 giữ nguyên số GĐ1–5.
+// Menu: LOC → Dựng nhà LỘC. Tạo lại Assets/Scenes/LOC_NhaLoc.unity mỗi lần chạy.
+//
+// Toạ độ: X = bề ngang (0 = mặt trong tường trái, đứng ngoài đường nhìn vào) · Z Unity = Y của file 00
+// (0 = mặt trong tường mặt tiền, tăng vào trong) · Y Unity = cao độ tuyệt đối (sàn T1 = 0).
+// Đồ nội thất GĐ5 (HMAsset/PhanTrungLam/NoiThat_Game → Assets/LOC_House/Models/NoiThat) xuất từ trimesh, trục Z hướng lên:
+// Inst() tự bọc thêm một lớp xoay −90° quanh X nên mọi chỗ gọi vẫn dùng quy ước chung "mặt trước = +Z cục bộ".
+// Cuối mỗi lần dựng tự chạy LocSceneAudit (thả chạm mặt đỡ, gỡ chồng lấn, kéo khỏi tường) → BaoCao_RaSoat.txt.
+// Placeholder: VÀNG = đồ GĐ5 chưa làm · XANH = đồ GĐ1–4 đã thiết kế nhưng chưa có file trong HMAsset
+//              ĐỎ = món kịch bản khoá cứng chưa có file · TÍM = tuỳ chọn, nhóm duyệt.
+using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+
+public static class LocHouseBuilder
+{
+    const string ScenePath = "Assets/Scenes/LOC_NhaLoc.unity";
+    const string MatFolder = "Assets/LOC_House/Materials";
+    static readonly string[] ModelFolders = { "Assets/LOC_House/Models", "Assets/Prefab" };
+    static readonly string[] HideRefs = { "ThamChieu", "PhongThamChieu", "VatKiem", "EyeLevel", "KhoiNhaXa", "SM_ScaleRef" };
+
+    static Transform root, cur;
+    static readonly List<GameObject> boxObjs = new();
+    static Dictionary<string, string> index;
+    static readonly Dictionary<string, Material> mats = new();
+    static readonly List<string> found = new(), missing = new(), placeholders = new();
+    static Font font;
+
+    static readonly Color VANG = Hex("#F2C94C"), XANH = Hex("#6FA8DC"), DO = Hex("#E06666"), TIM = Hex("#B48EDB");
+
+    // ───────────────────────── vật liệu vỏ nhà
+    const string TexFolder = "Assets/LOC_House/Textures";
+    // sàn/tường có texture: gạch bông T1 (viên 20 cm, tile 0,8 m) · ceramic 30 cm (tile 0,6 m) · granito · tường vôi ố (tile 2,0 × 3,3 m, bẩn chân tường nằm ở mỗi cao độ sàn)
+    static Material GachBong => MT("M_SanGachBong_T1_Tex", "T_GachBong_T1.png", 0.8f, 0.8f, "#FFFFFF", true);
+    static Material Ceramic => MT("M_SanCeramic_T2_Tex", "T_Ceramic30_PhongNgu.png", 0.6f, 0.6f, "#FFFFFF", true);
+    static Material SanT3 => MT("M_SanGach_T3_Tex", "T_Ceramic30_PhongNgu.png", 0.6f, 0.6f, "#EDEAE0", true);
+    static Material Granito => MT("M_Granito_Tex", "T_Granito_Bac.png", 1.0f, 1.0f);
+    static Material Tuong => MT("M_TuongVoi_Tex", "T_TuongVoi_O.png", 2.0f, 3.3f);
+    static Material TuongNgoai => MT("M_TuongNgoai_Tex", "T_TuongVoi_O.png", 2.0f, 3.3f, "#D5C39C");
+    static Material TuongHam => M("M_TuongHam", "#6B6252");
+    static Material SanHam => M("M_SanHam", "#4A4238");
+    static Material Tran => M("M_TranSan", "#EEEBE2");
+    static Material Sat => M("M_SatSon", "#3A3A38");
+    static Material Go => MT("M_GoCua_Tex", "D_go.png", 0.9f, 0.9f, "#6B4A2E");
+    static Material Kinh => MG("M_KinhTrong", "#A9C0BD", 0.16f);
+    static Material SanXiMang => M("M_SanXiMang", "#8C877D");
+    static Material Duong => M("M_Duong", "#2A2A2C");
+    static Material NhaBen => M("M_NhaHangXom", "#9C9484");
+
+    [MenuItem("LOC/Dựng nhà LỘC (tạo scene)")]
+    public static void Build()
+    {
+        if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+        if (System.IO.File.Exists(ScenePath))   // giữ bản cũ phòng khi đã sửa tay trong scene
+        {
+            System.IO.Directory.CreateDirectory("LOC_Backup");
+            System.IO.File.Copy(ScenePath, $"LOC_Backup/LOC_NhaLoc_{System.DateTime.Now:yyyyMMdd_HHmmss}.unity", true);
+        }
+        index = null; found.Clear(); missing.Clear(); placeholders.Clear(); mats.Clear(); boxObjs.Clear();
+        font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+
+        var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        root = new GameObject("NhaLoc").transform;
+
+        MoiTruong();
+        SanTruoc();
+        Tiem();
+        Tang1();
+        Ham();
+        Tang2();
+        Tang3();
+        CongTacToanNha();   // [29/9 tối] cụm công tắc mới cho từng phòng
+        NguoiChoi();
+
+        LocChiTiet.Apply(root);   // gán texture chi tiết cho món còn màu phẳng
+        FixZFight();
+        var pre = root.GetComponentsInChildren<LocProp>(true).ToDictionary(x => x, x => x.transform.position);
+        var audit = LocSceneAudit.Run();          // chạy khi Đêm 2/3 còn bật để rà cả ba đêm
+        System.IO.File.WriteAllText("Assets/LOC_House/BaoCao_RaSoat.txt", audit);
+        // món bị rà soát dời xa vị trí đặt ban đầu (>25 cm) → thường là toạ độ đặt chưa hợp lý
+        var moved = pre.Where(kv => kv.Key && (kv.Key.transform.position - kv.Value).magnitude > 0.25f)
+                       .OrderByDescending(kv => (kv.Key.transform.position - kv.Value).magnitude)
+                       .Select(kv => $"{(kv.Key.transform.position - kv.Value).magnitude:0.00} m  {kv.Key.name}  ({kv.Value.x:0.00},{kv.Value.y:0.00},{kv.Value.z:0.00}) → ({kv.Key.transform.position.x:0.00},{kv.Key.transform.position.y:0.00},{kv.Key.transform.position.z:0.00})  [{kv.Key.transform.parent?.name}]");
+        System.IO.File.WriteAllText("Assets/LOC_House/BaoCao_ViTriBiDoi.txt", "MÓN BỊ RÀ SOÁT DỜI > 25 CM SO VỚI TOẠ ĐỘ ĐẶT\n" + string.Join("\n", moved));
+        var hamLog = HamSach();   // [29/9 tối] hầm chỉ giữ đồ thiết kế gốc
+        System.IO.File.AppendAllText("Assets/LOC_House/BaoCao_ViTriBiDoi.txt", "\n\nĐỒ LỌT VÀO HẦM ĐÃ NHẤC RA (hầm chỉ giữ đồ thiết kế gốc):\n" + (hamLog.Length > 0 ? hamLog : "  (không có)\n"));
+
+        System.IO.File.WriteAllText("Assets/LOC_House/BaoCao_LanCan.txt", LanCanRaSoat());   // [30/9] lan can nào cắm vào kết cấu
+        foreach (var t in root.GetComponentsInChildren<Transform>(true))
+            if (t.name is "Dem2" or "Dem3") t.gameObject.SetActive(false);
+
+        System.IO.Directory.CreateDirectory("Assets/Scenes");
+        EditorSceneManager.SaveScene(scene, ScenePath);
+        WriteReport();
+        AssetDatabase.Refresh();
+    }
+
+    // [30/9] mỗi hộp va chạm lan can (LanCan*/Collider) thử xuyên sâu với mọi collider khác ngoài cùng nhóm; ghi tên + độ sâu (cm) + hướng đẩy ra.
+    static string LanCanRaSoat()
+    {
+        Physics.SyncTransforms();
+        var sb = new System.Text.StringBuilder("LAN CAN CẮM VÀO KẾT CẤU (xuyên > 1 cm)\n");
+        foreach (var bc in root.GetComponentsInChildren<BoxCollider>(true))
+        {
+            if (bc.name != "Collider" || !bc.transform.parent.name.StartsWith("LanCan")) continue;
+            var t = bc.transform; var half = Vector3.Scale(bc.size, t.lossyScale) / 2;
+            foreach (var o in Physics.OverlapBox(t.TransformPoint(bc.center), half, t.rotation))
+            {
+                if (o == bc || o.transform.IsChildOf(t.parent)) continue;
+                if (Physics.ComputePenetration(bc, t.position, t.rotation, o, o.transform.position, o.transform.rotation, out var dir, out var d) && d > 0.01f)
+                    sb.AppendLine($"{t.parent.name}  ↔  {o.name} [{o.transform.parent?.name}]  xuyên {d * 100:0.0} cm  đẩy ({dir.x:0.00},{dir.y:0.00},{dir.z:0.00})");
+            }
+        }
+        return sb.ToString();
+    }
+
+    // Hai hộp kết cấu có mặt đồng phẳng, cùng hướng và chồng lên nhau → GPU không biết vẽ mặt nào → nhấp nháy (tường/trần/sàn giao nhau ở góc, mái và tường bao…).
+    // Hộp nhỏ hơn được lùi mặt đó vào trong 4 mm: mặt của hộp lớn luôn thắng, phần ló ra của hộp nhỏ vẫn còn nguyên.
+    static void FixZFight()
+    {
+        const float tol = 0.003f, shrink = 0.004f;
+        var bs = boxObjs.Where(b => b).ToList();
+        var bb = bs.Select(b => b.GetComponent<Renderer>().bounds).ToList();
+        int n = 0;
+        for (int i = 0; i < bs.Count; i++)
+        for (int j = i + 1; j < bs.Count; j++)
+        {
+            if (!bb[i].Intersects(bb[j])) continue;
+            for (int ax = 0; ax < 3; ax++)
+            for (int side = 0; side < 2; side++)
+            {
+                float pa = side == 0 ? bb[i].min[ax] : bb[i].max[ax], pb = side == 0 ? bb[j].min[ax] : bb[j].max[ax];
+                if (Mathf.Abs(pa - pb) > tol) continue;
+                bool ok = true;
+                for (int o = 0; o < 3; o++)
+                {
+                    if (o == ax) continue;
+                    if (Mathf.Min(bb[i].max[o], bb[j].max[o]) - Mathf.Max(bb[i].min[o], bb[j].min[o]) < 0.02f) { ok = false; break; }
+                }
+                if (!ok) continue;
+                int v = bb[i].size.x * bb[i].size.y * bb[i].size.z <= bb[j].size.x * bb[j].size.y * bb[j].size.z ? i : j;
+                var tr = bs[v].transform;
+                var sc = tr.localScale; var pos = tr.position;
+                if (sc[ax] < 0.05f) continue;
+                sc[ax] -= shrink; pos[ax] += (side == 0 ? 1 : -1) * shrink / 2;
+                tr.localScale = sc; tr.position = pos;
+                bb[v] = bs[v].GetComponent<Renderer>().bounds;
+                n++;
+            }
+        }
+        Debug.Log($"[LOC] FixZFight: lùi {n} mặt hộp đồng phẳng");
+    }
+
+    [MenuItem("LOC/Bật-tắt nhãn chữ placeholder")]
+    public static void ToggleLabels()
+    {
+        var labels = Object.FindObjectsByType<TextMesh>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        bool on = labels.Length > 0 && !labels[0].gameObject.activeSelf;
+        foreach (var l in labels) l.gameObject.SetActive(on);
+        EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+    }
+
+    // ═════════════════════════ BẢN 8 × 25, TIỆM TÁCH RIÊNG (đã duyệt 27/9/2026)
+    // Nhà: tường ngoài X −0,20…7,80 · Z −0,20…24,80 (lòng 7,60 × 24,60). Tiệm: căn bên trái X −4,40…−0,20 · Z −5,40…7,00.
+    // Cao độ giữ nguyên: hầm −2,30 · sân −0,15 · T1 ±0 · T2 +3,40 · T3 +6,60 · mái +9,80.
+    const float W = 7.6f;
+    // [29/9 tối] cửa sắt hầm dựng ở tư thế ĐÓNG (khoá treo ở mặt ngoài, hướng phòng khách). Đặt false để trở lại cánh mở áp tường như trước.
+    const bool CuaHamDong = true;
+    static readonly System.Random rng = new(2002);
+    static float J(float a) => (float)(rng.NextDouble() * 2 - 1) * a;
+
+    // ═════════════════════════ MÔI TRƯỜNG
+    static void MoiTruong()
+    {
+        cur = G("MoiTruong");
+        var sun = new GameObject("TrangDem").AddComponent<Light>();
+        sun.transform.SetParent(cur, false);
+        sun.type = LightType.Directional; sun.color = Hex("#8FA3C8"); sun.intensity = 0.12f;
+        sun.shadows = LightShadows.Soft; sun.transform.rotation = Quaternion.Euler(55, -35, 0);
+        LocKhuPho.Troi();   // HDRI đêm (CC0) + sương mù nhẹ
+        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+        RenderSettings.ambientLight = Hex("#1C2130");
+
+        Box("TuongRao_Phai", 7.8f, 8.0f, -0.15f, 2.2f, -5.3f, -0.2f, NhaBen);
+        LocKhuPho.Build(root);   // đường, vỉa hè, dãy nhà ống bốn phía, cột điện (thay các khối hàng xóm cũ)
+    }
+
+    // ═════════════════════════ SÂN TRƯỚC 8,00 × 5,00 (cốt −0,15) — lối giữa 1,6 m + dải hiên 1,3 m luôn trống
+    static void SanTruoc()
+    {
+        const float y = -0.15f;
+        cur = G("SanTruoc");
+        Slab(-0.2f, 7.8f, -5.4f, -0.2f, y, SanXiMang);
+        // rạp 4,70 × 4,70 mở bốn phía (ẩn vải quây hai bên + cổng/bảng có sẵn trong bộ rạp — đã đặt riêng)
+        A("SM_FuneralTent_300", 3.8f, -2.75f, y, 180, k: LocProp.Kieu.CoDinh, hide: new[] { "SM_TentTarp_Side", "SM_FuneralGate", "SM_ObituaryBoard", "SM_Pipe_200_Gate", "SM_Pipe_Stub_Gate", "SM_PipeJoint_Gate", "SM_PipeFoot_Gate", "SM_PipeJoint_Lintel", "SM_MourningBanner" });
+        A("SM_FuneralGate", 3.8f, -4.93f, y, 180, k: LocProp.Kieu.CoDinh);
+        A("SM_ObituaryBoard", 5.95f, -5.62f, y, 180, k: LocProp.Kieu.CoDinh);   // [29/9 tối] cáo phó = 1 tấm bảng đặt dưới đất như thiết kế gốc, đưa ra sát cổng (bên phải lối chính, quay ra đường)
+        foreach (var tx in new[] { 2.2f, 5.4f, 6.5f }) A("CongSat_TruGach", tx, -5.25f, y, 0, new Vector3(0.3f, 2.1f, 0.3f), k: LocProp.Kieu.CoDinh);
+        foreach (var (rx0, rx1) in new[] { (-0.16f, 2.04f), (6.7f, 7.8f) })   // tường rào thấp 0,45 + song sắt tới 1,2
+        {
+            Box("TuongRao_Thap", rx0, rx1, y, y + 0.45f, -5.35f, -5.15f, TuongNgoai);
+            LanCan("RaoSong", new Vector3(rx0 + 0.05f, y + 0.45f, -5.25f), new Vector3(rx1 - 0.05f, y + 0.45f, -5.25f), 0.75f);
+        }
+        Mo(LeafM("CongSat_CanhTrai", "CanhCong_Trai (mở)", 2.36f, -5.25f, y, -75.5f, 1.5f, 1.8f, PhMat(VANG)), 0f, true, "cổng");
+        Mo(LeafM("CongSat_CanhPhai", "CanhCong_Phai (mở)", 5.24f, -5.25f, y, -104.5f, 1.5f, 1.8f, PhMat(VANG)), 180f, true, "cổng");
+        Mo(LeafM("CongSat_CuaNgach", "CuaNgachCong (mở)", 6.34f, -5.25f, y, -90, 0.8f, 1.8f, PhMat(VANG)), 180f, true, "cửa ngách cổng");
+        A("HopCongTo", 7.3f, -0.28f, 1.9f, 180, top: true);
+        A("DongHoNuoc_HopCong", 7.3f, -0.2f, 1.1f, 180, pivot: true);   // dưới hộp công tơ điện, ống PVC xanh
+        A("BienSoNha", 2.2f, -5.4f, 1.55f, 180, pivot: true);            // biển số nhà tráng men trên trụ cổng, quay ra đường
+        A("ThungRacNhua", 7.45f, -0.7f, y, 0);                           // thùng rác + bao đen đầy (nhà có tang)
+        A("ChuongDien_Nut", 6.5f, -5.4f, 1.4f, 180, pivot: true);        // nút chuông trên trụ cổng phải, quay ra đường
+        A("HopThu_Cong", 5.4f, -5.4f, 1.15f, 180, pivot: true);           // hộp thư tôn trên trụ giữa
+        A("DenCong_ChaoTon", 0.5f, -0.2f, 2.75f, 180, pivot: true);       // bóng đèn chao tôn treo mặt tường ngoài, hai bên cánh cửa
+        A("DenCong_ChaoTon", 7.05f, -0.2f, 2.75f, 180, pivot: true);
+
+        // bàn nhận phúng viếng — cạnh cổng, bên phải lối giữa
+        A("SM_PlasticTable_TableCover", 5.42f, -3.98f, y);
+        A("SM_EnvelopeTray_day", 5.42f, -3.98f, y + 0.72f);
+        A("SoPhungViengTang", 5.78f, -3.9f, y + 1.2f, 90);              // sổ phúng viếng cạnh khay phong bì
+        A("SM_PlasticChair_Red", 6.0f, -3.75f, y, -90);
+        A("SM_PlasticChair_Green", 6.0f, -4.25f, y, -80);
+        A("SM_PlasticChairStack_8", 0.25f, -4.87f, y);
+        A("SM_PlasticChairStack_4", 6.65f, -4.87f, y);
+        A("ThungNuocNgot_Khach", 7.4f, -1.3f, y);
+
+        cur = G("SanTruoc/Dem1");
+        Cum(1.3f, -3.4f, y, 5); Cum(2.2f, -2.1f, y, 4); Cum(5.9f, -2.1f, y, 4); Cum(7.0f, -2.95f, y, 3, 0.6f);
+        Vong("VongHoa_Tuoi", y, 3);
+        A("SM_BurnBasin_Burning", 7.3f, -4.85f, y);
+        cur = G("SanTruoc/Dem2");
+        Cum(1.3f, -3.0f, y, 3); Cum(6.2f, -2.5f, y, 3);
+        A("SM_PlasticChairStack_8", 2.3f, -4.6f, y); A("SM_PlasticChairStack_4", 0.3f, -1.9f, y);
+        Vong("VongHoa_Heo", y, 3);
+        A("SM_BurnBasin_Ash", 7.3f, -4.85f, y);
+        cur = G("SanTruoc/Dem3");
+        Cum(6.2f, -2.5f, y, 2);
+        A("SM_PlasticChairStack_8", 2.3f, -4.6f, y); A("SM_PlasticChairStack_8", 0.3f, -1.9f, y); A("SM_PlasticChairStack_4", 7.3f, -1.9f, y);
+        Vong("VongHoa_Heo", y, 2);
+        A("SM_BurnBasin_Ash", 7.3f, -4.85f, y);
+
+        cur = G("SanTruoc");
+        L("Rap_Trai", 1.9f, 2.4f, -2.6f, "#FFD27A", 6, 2.0f, true);
+        L("Rap_Phai", 5.7f, 2.4f, -2.6f, "#FFD27A", 6, 2.0f);
+    }
+
+    // [29/9 tối] vòng hoa xếp thành hàng ngay ngắn sát chân tường rào ngoài, mặt quay ra đường, đối xứng quanh cổng:
+    // 2 vòng ôm bên trái (cách nhau 1,25 m, không chồng lên nhau) + 1 vòng bên phải, cáo phó đứng giữa hai bên; đêm 3 chỉ còn 2 vòng, mỗi bên một.
+    static void Vong(string n, float y, int count)
+    {
+        var pos = count > 2 ? new[] { (0.25f, 179f), (1.50f, 181f), (7.25f, 180f) } : new[] { (1.50f, 181f), (7.25f, 180f) };
+        foreach (var (px, yaw) in pos) A(n, px, -5.66f, y, yaw, k: LocProp.Kieu.CoDinh);
+    }
+
+    // cánh cửa chính có hoa văn: bản lề tại (hx, hz), yaw như Leaf(); cánh dày 5 cm, núm đồng hai mặt, bản lề đồng
+    static Transform CuaChinhLa(string n, float hx, float hz, float yaw, float w, float h, Material m)
+    {
+        var p = new GameObject(n).transform; p.SetParent(cur, false);
+        p.SetPositionAndRotation(new Vector3(hx, 0, hz), Quaternion.Euler(0, yaw, 0));
+        var c = GameObject.CreatePrimitive(PrimitiveType.Cube); Object.DestroyImmediate(c.GetComponent<Collider>());
+        c.name = "Canh"; c.transform.SetParent(p, false);
+        c.transform.localPosition = new Vector3(w / 2, h / 2, 0); c.transform.localScale = new Vector3(w, h, 0.05f);
+        c.GetComponent<Renderer>().sharedMaterial = m;
+        // [29/9 tối] UV theo toạ độ cánh: ở hai mặt lớn, u chạy từ bản lề → mép tự do (tay nắm luôn ở mép tự do), v hướng lên.
+        // Hai cánh có yaw khác nhau nên trước đây hoa văn của cánh phải bị lộn ngược; nay hai cánh đối xứng gương qua trục cổng.
+        var mf = c.GetComponent<MeshFilter>();
+        var mesh = Object.Instantiate(mf.sharedMesh);
+        var vs = mesh.vertices; var ns = mesh.normals; var uv = mesh.uv;
+        for (int i = 0; i < vs.Length; i++)
+            if (Mathf.Abs(ns[i].z) > 0.5f) uv[i] = new Vector2(vs[i].x + 0.5f, vs[i].y + 0.5f);
+        mesh.uv = uv; mesh.name = "CuaChinh_UV";
+        mf.sharedMesh = mesh;
+        var dong = M("M_DongThau", "#B8862B");
+        foreach (var sg in new[] { -1f, 1f })
+        {
+            var k = GameObject.CreatePrimitive(PrimitiveType.Sphere); Object.DestroyImmediate(k.GetComponent<Collider>());
+            k.name = "NumDong"; k.transform.SetParent(p, false); k.transform.localPosition = new Vector3(w - 0.06f, 1.05f, sg * 0.05f); k.transform.localScale = Vector3.one * 0.075f;
+            k.GetComponent<Renderer>().sharedMaterial = dong;
+        }
+        foreach (var hy in new[] { 0.35f, 1.3f, 2.25f })
+        {
+            var b = GameObject.CreatePrimitive(PrimitiveType.Cube); Object.DestroyImmediate(b.GetComponent<Collider>());
+            b.name = "BanLe"; b.transform.SetParent(p, false); b.transform.localPosition = new Vector3(0.025f, hy, 0); b.transform.localScale = new Vector3(0.07f, 0.14f, 0.065f);   // [30/9] lấn ra 1 cm sau mép cánh: bỏ mặt x=0 đồng phẳng (nhấp nháy)
+            b.GetComponent<Renderer>().sharedMaterial = dong;
+        }
+        Mark(p.gameObject, LocProp.Kieu.Cua);
+        return p;
+    }
+
+    // một bàn nhựa + n ghế quây quanh, xếp lệch như khách vừa đứng dậy
+    static int cumN;
+    static void Cum(float x, float z, float y, int n, float r = 0.65f)
+    {
+        var bx = x + J(0.05f); var bz = z + J(0.05f);
+        A("SM_PlasticTable_TableCover", bx, bz, y, J(10));
+        A((cumN++ % 2 == 0) ? "KhayTra_LyThuyTinh" : "DiaKeoBanh_HatDua", bx, bz, y + 0.9f, (cumN * 53) % 360);
+        float a0 = J(40);
+        for (int i = 0; i < n; i++)
+        {
+            float a = (a0 + i * 360f / n + J(18)) * Mathf.Deg2Rad, rr = r + J(0.12f);
+            float cx = x + Mathf.Sin(a) * rr, cz = z + Mathf.Cos(a) * rr;
+            float face = Mathf.Atan2(x - cx, z - cz) * Mathf.Rad2Deg + J(35) + (rng.NextDouble() < 0.2 ? 150 : 0);
+            A(i % 2 == 0 ? "SM_PlasticChair_Red" : "SM_PlasticChair_Green", cx, cz, y, face);
+        }
+    }
+
+    // ═════════════════════════ TIỆM VẬT LIỆU — căn bên trái, 1 tầng mái tôn, đóng cửa sắt vì có tang
+    static void Tiem()
+    {
+        cur = G("Tiem/VoNha");
+        Slab(-4.4f, -0.2f, -5.4f, 7.0f, 0, SanXiMang);
+        WallX("Tiem_MatTien", -5.4f, -5.2f, -4.4f, -0.2f, -0.2f, 3.6f, TuongNgoai, -4.1f, -0.5f, 0, 2.4f);
+        WallZ("Tiem_TuongTrai", -4.4f, -4.2f, -5.4f, 7.0f, 0, 3.6f, Tuong);
+        WallZ("Tiem_TuongPhai", -0.4f, -0.2f, -5.4f, 7.0f, -0.15f, 3.6f, Tuong, -1.6f, -0.8f, 0, 2.0f);
+        WallX("Tiem_TuongSau", 6.8f, 7.0f, -4.4f, -0.2f, 0, 3.6f, Tuong);
+        WallX("Tiem_VachKho", 1.8f, 1.9f, -4.2f, -0.4f, 0, 3.4f, Tuong, -2.8f, -1.6f, 0, 2.2f);
+        Box("Tiem_MaiTon", -4.5f, -0.22f, 3.6f, 3.7f, -5.5f, 7.1f, Tran);
+        Box("Tiem_BacCua", -4.4f, -0.2f, -0.2f, 0f, -5.6f, -5.4f, SanXiMang);
+        var csx = A("CuaSatXep_Dong", -2.3f, -5.3f, 0, k: LocProp.Kieu.CoDinh);
+        if (csx)   // [29/9 khuya] cửa sắt xếp kéo gọn về một đầu khi mở
+        {
+            var dx = csx.AddComponent<LocDoor>(); dx.gapX = 0.12f; dx.dungSanLaMo = false; dx.ten = "cửa sắt xếp tiệm"; dx.thoiGian = 1.2f;
+            var lbx = LocSceneAudit.LocalBounds(csx.transform, csx.transform);
+            var bcx = csx.AddComponent<BoxCollider>(); bcx.center = lbx.center; bcx.size = new Vector3(lbx.size.x, lbx.size.y, Mathf.Max(lbx.size.z, 0.06f));
+        }
+        Box("BienHieu", -4.12f, -0.48f, 2.61f, 3.25f, -5.46f, -5.40f, Sat);
+        Decal("Assets/LOC_House/Models/NoiThat/ThangCong/textures/T_BienHieu_BC.png", "M_Decal_BienHieu", -2.3f, 2.65f, -5.462f, 180, 3.52f, 0.56f);
+        Decal("Decal_ToGiay_NghiBan.png", "M_Decal_ToGiay", -2.3f, 1.3f, -5.335f, 180, 0.32f, 0.4f);   // tờ giấy dán cửa sắt
+        Mo(Leaf("CuaNgach_Tiem (mở)", -0.3f, -0.8f, 0, 0.8f, 2.0f, 180, Go), 90f, true, "cửa ngách tiệm");
+
+        cur = G("Tiem/BanHang");      // phía trước: quầy dọc tường trái, người bán đứng sát tường
+        A("LOC_CanhQuayHang", -3.3f, -2.3f, 0, -90, new Vector3(2.2f, 0.95f, 0.6f), label: "Quầy + ngăn kéo (lọ keo)");
+        A("TuKinh", -0.73f, -3.9f, 0, -90);
+        A("CanBanHang", -2.68f, -0.78f, 0);
+        A("ThungSon_Cum2", -0.76f, 0.21f, 0, -90);
+        A("BaoXiMang_Chong", -0.72f, 1.26f, 0, -90);
+        A("CuonDayDien", -2.05f, 1.3f, 0);
+        A("SM_PlasticChairStack_4", -3.0f, 1.12f, 0);
+        Set("KeVLo_DoKe", new[] { "KeVLo", "DoKe_Gop@0.04,0.08,0.44" }, -0.58f, -2.4f, 0, -90);
+        A("BangGia", -0.41f, -3.2f, 1.9f, -90, top: true);
+        Box("VetDau_XeMay", -2.6f, -1.8f, 0.001f, 0.004f, -5.0f, -3.4f, M("M_VetDau", "#1F1C19"), false);      // chỗ xe máy trống: vết dầu + tấm bìa lót
+        Box("TamBia_XeMay", -2.5f, -1.9f, 0.004f, 0.009f, -4.85f, -3.85f, M("M_BiaCarton", "#A98B5E"), false);
+        A("BanThoThanTai", -3.88f, 1.62f, 0, 180);   // lưng sát vách kho (z 1,8), mặt nhìn ra cửa
+        A("QuatBan_SatCu", -3.3f, -1.5f, 1.3f, 90);                            // đầu quầy, thả xuống mặt quầy
+        A("SoHoaDon_Quay", -3.3f, -3.0f, 1.3f, 10);                            // sổ nợ + cuộn hoá đơn trên quầy
+        A("DongHoTreo_Tiem", -0.4f, -2.5f, 2.35f, -90, pivot: true);           // treo tường phải, kim hơi trễ
+        A("LichBloc_CongTy", -4.2f, -3.0f, 2.3f, 90, pivot: true);             // lịch công ty vật liệu tặng, mép trên = 2,30
+        A("DenTuyp_120", -2.3f, -2.0f, 3.6f, 90, top: true);
+        L("Tiem_BanHang", -2.3f, 3.35f, -2.0f, "#DDEBFF", 6, 0.9f);
+
+        cur = G("Tiem/Kho");
+        A("KeGoDai", -3.99f, 3.4f, 0, 90);
+        A("BaoXiMang_Chong2", -0.75f, 2.5f, 0, -90);
+        A("BaoXiMang_Le", -1.5f, 3.2f, 0, 20);
+        A("BaoTaiRong", -1.55f, 2.4f, 0, -10);
+        A("ThanhSat_Bo", -0.6f, 4.3f, 0, -90);
+        A("CuonLuoiThep", -0.75f, 5.2f, 0, -90);
+        A("XeRua", -2.3f, 4.1f, 0, 30);
+        A("ThangNhom", -4.12f, 5.3f, 0, 90);
+        A("CayChoi", -1.8f, 4.6f, 0);
+        A("GachMau_Chong", -3.4f, 5.55f, 0);
+        A("ThungGo", -2.8f, 5.7f, 0, 15);
+        A("OngNuoc_Nam", -2.15f, 6.45f, 0);
+        A("OngNuoc_Bo", -3.9f, 6.45f, 0);
+        A("ThungSon", -0.8f, 6.4f, 0, -90);
+        A("CuonDayDien_2", -3.2f, 2.3f, 0);
+        A("BuiXiMang_San", -2.3f, 3.0f, 0.001f);
+        L("Tiem_Kho", -2.3f, 3.2f, 4.3f, "#FFE9C8", 5, 0.5f);
+    }
+
+    // ═════════════════════════ TẦNG 1 (±0,00 · trần 3,20)
+    //  phòng khách 0–7,40 · sảnh sau + thang 7,50–10,90 · bếp + ăn 11,00–16,40 · giếng trời 16,50–19,10 · khối sau 19,20–24,60
+    static void Tang1()
+    {
+        cur = G("Tang_1/VoNha");
+        Slab(0, W, 0, 7.4f, 0, GachBong);
+        Slab(0, 6.7f, 7.4f, 10.4f, 0, GachBong);
+        Slab(0, W, 10.4f, 16.5f, 0, GachBong);
+        Slab(0, W, 16.5f, 19.1f, -0.05f, SanXiMang);   // giếng trời, lộ trời
+        Slab(0, W, 19.1f, 24.6f, 0, GachBong);
+
+        // tường bao hai bên: T1 hết chiều sâu, T2 tới giếng trời, T3 tới hết khối thang; đoạn giếng trời lên tới mái
+        foreach (var (x0, x1) in new[] { (-0.2f, 0f), (W, W + 0.2f) })
+        {
+            Box("TuongBao_T1", x0, x1, -0.2f, 3.4f, -0.2f, 24.8f, Tuong);
+            Box("TuongBao_T2", x0, x1, 3.4f, 6.6f, -0.2f, 19.1f, Tuong);
+            Box("TuongBao_T3", x0, x1, 6.6f, 9.8f, -0.2f, 10.9f, Tuong);
+            Box("TuongBao_GiengTroi", x0, x1, 6.6f, 9.8f, 16.5f, 19.1f, Tuong);
+        }
+        Box("TuongPhai_Ham", W, W + 0.2f, -2.3f, -0.2f, 7.3f, 13.5f, TuongHam);
+
+        WallX("MatTien_T1", -0.2f, 0, -0.2f, W + 0.2f, -0.2f, 3.4f, TuongNgoai,
+              0.6f, 1.8f, 0.9f, 2.3f, 2.4f, 5.2f, 0, 2.6f, 5.8f, 7.0f, 0.9f, 2.3f);
+        Box("Kinh_MatTien_1", 0.6f, 1.8f, 0.9f, 2.3f, -0.12f, -0.08f, Kinh);
+        Box("Kinh_MatTien_2", 5.8f, 7.0f, 0.9f, 2.3f, -0.12f, -0.08f, Kinh);
+        WallX("PhongKhach_SanhSau", 7.4f, 7.5f, 0, 6.3f, 0, 3.2f, Tuong, 1.0f, 1.9f, 0, 2.2f, 2.4f, 4.6f, 0, 2.2f);   // khoét ô x 1,0–1.9 đúng làn vế 1 để chân thang thông ra phòng khách
+        WallX("Hop_ThangHam_Truoc", 5.7f, 5.8f, 6.3f, W, 0, 3.2f, Tuong);
+        WallZ("Hop_ThangHam_Trai", 6.3f, 6.4f, 5.7f, 10.9f, 0, 3.2f, Tuong, 6.36f, 7.24f, 0, 1.96f);   // [29/9 khuya] lỗ = viền ngoài khung cửa sắt hầm (0,88 × 1,96)
+        WallX("SanhSau_Bep", 10.9f, 11.0f, 0, W, 0, 3.2f, Tuong, 2.4f, 4.4f, 0, 2.2f);
+        WallX("Bep_GiengTroi", 16.4f, 16.5f, -0.2f, W + 0.2f, 0, 3.4f, TuongNgoai,
+              0.4f, 1.4f, 1.1f, 2.1f, 3.8f, 4.7f, 0, 2.2f, 5.6f, 7.0f, 0.9f, 2.3f);
+        WallX("T2_GiengTroi", 16.4f, 16.5f, -0.2f, W + 0.2f, 3.4f, 6.6f, TuongNgoai,
+              0.4f, 1.4f, 4.3f, 5.7f, 2.0f, 3.0f, 4.3f, 5.7f, 5.1f, 6.3f, 4.3f, 5.7f);                    // cửa sổ phòng Khôi 1,20 × 1,40
+        foreach (var (a, b, h0, h1) in new[] { (0.4f, 1.4f, 1.1f, 2.1f), (5.6f, 7.0f, 0.9f, 2.3f), (0.4f, 1.4f, 4.3f, 5.7f), (2.0f, 3.0f, 4.3f, 5.7f), (5.1f, 6.3f, 4.3f, 5.7f) })
+            Box("Kinh_GiengTroi", a, b, h0, h1, 16.48f, 16.50f, Kinh);
+        WallX("KhoiSau_Truoc", 19.1f, 19.2f, -0.2f, W + 0.2f, 0, 3.4f, TuongNgoai, 1.4f, 2.2f, 0, 2.1f, 3.7f, 4.6f, 0, 2.2f);
+        WallZ("Kho_Loi", 3.6f, 3.7f, 19.2f, 24.6f, 0, 3.2f, Tuong);
+        WallZ("Loi_WC", 4.6f, 4.7f, 19.2f, 21.8f, 0, 3.2f, Tuong, 20.15f, 20.95f, 0, 1.95f);   // [29/9 khuya] lỗ = viền ngoài khung cửa WC
+        WallX("WC_Giat", 21.8f, 21.9f, 4.7f, W, 0, 3.2f, Tuong);
+        WallX("TuongSau", 24.6f, 24.8f, -0.2f, W + 0.2f, 0, 3.4f, TuongNgoai);
+        Box("Mai_KhoiSau", -0.2f, W + 0.2f, 3.2f, 3.4f, 19.1f, 24.8f, Tran);
+        Box("TuongChan_KhoiSau", -0.2f, W + 0.2f, 3.4f, 4.0f, 24.6f, 24.8f, TuongNgoai);
+
+        // cầu thang chính T1 → T2 sát tường trái: vế 1 làn trong đi vào, vế 2 làn sát tường đi ra
+        Flight("Thang_T1_Ve1", 1.0f, 1.9f, 7.6f, +1, 0, 0.17f, 10, 0.25f, Granito);
+        Slab(0, 1.9f, 9.85f, 10.85f, 1.7f, Granito, 0.15f);
+        Flight("Thang_T1_Ve2", 0, 0.9f, 9.85f, -1, 1.7f, 0.17f, 10, 0.25f, Granito);
+        WallZ("VachGiuaHaiVe_T1", 0.9f, 1.0f, 7.6f, 9.85f, 0, 3.4f, Tuong);   // lên tới sàn T2 — vế 2 leo tới +3,23 nên vách 2,6 để hở mép
+        MuiBacVe(1.0f, 1.9f, 7.6f, +1, 0, 0.17f, 10, 0.25f);
+        MuiBacVe(0, 0.9f, 9.85f, -1, 1.7f, 0.17f, 10, 0.25f);
+        MonBac(1.0f, 1.9f, 7.6f, +1, 0, 0.17f, 10, 0.25f); MonBac(0, 0.9f, 9.85f, -1, 1.7f, 0.17f, 10, 0.25f);
+        LanCan("LanCan_T1_Ve1", new Vector3(1.87f, 0.17f, 7.6f), new Vector3(1.87f, 1.70f, 9.85f));
+        A("TruDauThang", 1.87f, 7.6f, 0, 0, pivot: true);
+        LanCan("LanCan_ChieuNghi_T1", new Vector3(1.87f, 1.70f, 9.85f), new Vector3(1.87f, 1.70f, 10.85f));   // mép chiếu nghỉ hở ra sảnh
+        L("ChieuNghi_T1", 0.95f, 2.9f, 10.3f, "#FFF1D6", 4, 0.6f);
+
+        PhongKhach(); SanhSau(); Bep(); GiengTroi(); KhoiSau();
+    }
+
+    static void PhongKhach()   // 7,60 × 7,40 — bàn thờ vong tường trái, 2 quan tài đầu về bàn thờ, cửa hầm góc sau phải
+    {
+        cur = G("Tang_1/PhongKhach");
+        // mở toang 180°: hai cánh áp sát mặt tường ngoài (mở 90° thì cánh và rạp — cột/kèo z −0,35 — chồng nhau)
+        var doorMat = MT("M_CuaChinh_HoaVan", "T_CuaChinh_HoaVan.png", 1f, 1f);
+        Mo(CuaChinhLa("CuaChinh_Trai (mở ra ngoài)", 2.4f, -0.235f, 180, 1.4f, 2.6f, doorMat), 0f, true, "cửa chính", -180f);   // đóng = yaw 0; quay 180° qua phía ngoài
+        Mo(CuaChinhLa("CuaChinh_Phai (mở ra ngoài)", 5.2f, -0.235f, 0, 1.4f, 2.6f, doorMat), 180f, true, "cửa chính", 180f);
+        var quanTai = A("QuanTai_LOC", 2.975f, 3.7f, 0, 0, hide: new[] { "Vai_Phu" });   // [29/9 tối] ẩn mảnh vải phẳng mỏng có sẵn trong .glb, thay bằng hai tấm vải phủ dày, có viền
+        PhuVaiQuanTai(quanTai);
+        A("LOC_BanNhoDatMay", 0.22f, 1.52f, 0, 90);
+        A("LOC_DienThoai_TronBo", 0.22f, 1.52f, 0.72f, 90);
+        A("LOC_TapGiay_ButBi", 0.2f, 1.33f, 0.72f, 90);
+        A("LOC_DongDoCungTang", 0.49f, 6.33f, 0, 90);
+        A("LOC_BatGao", 1.15f, 6.2f, 0);
+        A("LOC_BatMuoi", 1.15f, 6.45f, 0);
+
+        A("Salon_GheDai", 7.28f, 1.95f, 0, -90);
+        A("Salon_Dem_NgoiDai_Kia", 7.25f, 1.56f, 0.7f, -90);      // đệm rời: thả từ trên xuống, bước rà soát cho chạm mặt ghế
+        A("Salon_Dem_NgoiDai_GanTV", 7.25f, 2.34f, 0.7f, -90);
+        A("Salon_BanNuoc", 6.28f, 1.95f, 0, 90);
+        A("KhayAmChen", 6.28f, 1.88f, 0.7f, 90);
+        A("DieuKhien", 6.2f, 2.3f, 0.7f, 75);
+        foreach (var gz in new[] { 1.42f, 2.47f })
+        {
+            A("Salon_GheDon", 5.4f, gz, 0, 90);
+            A("Salon_Dem_NgoiDon", 5.43f, gz, 0.7f, 90);
+        }
+        // tủ TV đứng: khoang giữa (mặt kệ +0,62) để TV + đầu VCD, khoang trên (+1,12) là tủ kính bày đồ
+        var tuTv = Set("TuTV_Dung_Bo", new[] { "TuTV_Dung", "TV_CRT@0.17,-0.03,0.62", "DauVCD@0.76,0.05,0.62",
+                                    "DoTrongTuKinh", "KhungNho_Nhim@0.1,0.22,1.12", "KhungNho_Khoi@1.1,0.22,1.12",
+                                    "TuTV_CanhKinh_Trai@0.03,-0.02,1.12", "TuTV_CanhKinh_Phai@0.6,-0.02,1.12" },
+            7.34f, 4.2f, 0, -90);
+        A("Loa_Thung", 7.45f, 3.38f, 0, -90);
+        A("Loa_Thung", 7.45f, 5.02f, 0, -90);
+        Amb(tuTv, "Loop_TV_Nhieu.wav", 0.25f, 0.8f, 6, false);                    // nhiễu TV: gắn sẵn, script game bật khi người chơi bật TV
+        Amb(A("QuatCay_NguyenBo", 6.5f, 3.5f, 0), "Loop_QuatCay_KeuLach.wav", 0.3f, 0.8f, 6, false);   // bật khi người chơi quay quạt
+        A("KeGiay_ChanCau", 1.2f, 0.2f, 0, 0);                          // kệ giày cạnh cửa chính, dưới cửa sổ mặt tiền
+        A("BaoCu_TrenBan", 7.2f, 1.95f, 1.0f, 100);                     // tờ báo gấp bỏ trên ghế salon dài
+        A("ChieuMen_KhachO", 0.5f, 5.55f, 0, 90);                       // chiếu + mền + gối cho người trông linh cữu
+        A("NonLa_TreoTuong", W, 0.9f, 1.75f, -90, pivot: true);         // nón lá treo đinh trên tường phải cạnh cửa
+        A("KhayHoaQua_Nhua", 6.28f, 2.25f, 1.2f, 0);                    // trên bàn nước, cạnh khay ấm chén
+        A("DiaVCD_XepChong", 7.3f, 4.75f, 2.6f, 90);                    // trên nóc tủ TV
+        A("LoHoaGia_Nhua", 7.3f, 3.65f, 2.6f, 0);
+
+        A("LichThang8_2002", W - 0.01f, 5.3f, 1.85f, -90, top: true);
+        var dhql = A("DongHoQuaLac", 5.5f, 0.075f, 2.4f, 0, top: true);
+        if (dhql)   // tiếng tích tắc 2 nhịp, nghe rõ khi đứng gần
+        {
+            dhql.AddComponent<LocDongHo>();   // quả lắc lắc ±6°, chu kỳ 1 s (node con "QuaLac" trong GLB)
+            var au = dhql.AddComponent<AudioSource>();
+            au.clip = AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/LOC_House/Audio/Loop_DongHoQuaLac_TichTac.wav");
+            au.loop = true; au.playOnAwake = true; au.spatialBlend = 1; au.minDistance = 0.6f; au.maxDistance = 9; au.volume = 0.5f;
+        }
+        A("AnhGiaDinh_Tex", W - 0.01f, 1.95f, 2.0f, -90, top: true);
+        A("TranhTheu_Tex", 3.5f, 7.39f, 2.95f, 180, top: true);   // trên lintel ô thông sảnh sau (chỗ cũ x 0,8–1,8 nay là lối vào chân thang)
+        A("BangGDVH_Tex", 5.3f, 7.39f, 2.25f, 180, top: true);
+        A("TranGiatCap_Khung", 3.0f, 3.7f, 3.2f, 0, top: true);
+        A("HoaTran", 3.0f, 3.7f, 3.2f, 0, top: true);
+        A("DenChum_5Tay", 3.0f, 3.7f, 3.2f, 0, top: true);
+        A("DenTuyp_120", 3.0f, 1.0f, 3.2f, 0, top: true);
+        foreach (var (hx, hz) in new[] { (2.5f, 2.55f), (3.5f, 2.55f), (2.5f, 4.85f), (3.5f, 4.85f) }) A("DenHat_Ong", hx, hz, 3.16f, 0, top: true);   // ống neon trong rãnh trần giật cấp — tắt suốt game
+        // [29/9 tối] công tắc phòng khách + hộp điều tốc: dựng lại thành cụm lớn ở CongTacToanNha() (tâm cao 1,45 m, cạnh ô thông sảnh sau)
+        A("OCamKeoDai", 0.85f, 4.35f, 0, 0);                                                 // cắm tạm nến điện bàn thờ vong + quạt cây
+        QuatTran(3.0f, 6.3f, 3.2f);
+        A("Rem_Hat", 2.56f, 7.45f, 2.2f, 0, top: true);   // rèm hạt buộc gọn sát khung ô thông, hai bên
+        A("Rem_Hat", 4.44f, 7.45f, 2.2f, 0, top: true);
+        // cửa sắt hầm: mở về phía bàn thờ → lúc mở, người chơi quay lưng về bàn thờ
+        LeafM("CuaSatHam_Khung", "KhungCuaSatHam", 6.35f, 7.2f, 0, 90, 0.8f, 1.9f, PhMat(XANH));
+        Mo(LeafM("CuaSatHam_Canh", "CuaSatHam (mở)", 6.35f, 7.2f, 0, CuaHamDong ? 90 : 180, 0.8f, 1.9f, PhMat(XANH)), CuaHamDong ? 180f : 90f, !CuaHamDong, "cửa sắt xuống hầm");   // yaw 90 = đóng (cùng khung), 180 = mở áp tường
+        GanKhoa(cur.Find("CuaSatHam (mở)"), 1.0f, 0.28f);   // chỉ gắn khoá ở mặt ngoài (phía phòng khách)
+        A("HopKhanGiay_Nhua", 6.32f, 1.49f, 1.2f, 0);              // mép bàn nước
+        A("GatTan_ThuyTinh", 6.4f, 2.4f, 1.2f);
+        A("RadioCassette_2Loa", 7.3f, 4.2f, 2.6f, -90);           // nóc tủ TV
+        A("ChoiQuet_Ky", 7.3f, 0.3f, 0, 0);                        // dựng cạnh cửa chính
+        A("BangCassette_Hop", 7.45f, 5.02f, 0.9f, -60);                   // trên loa thùng phía sau, cạnh tủ TV (nóc tủ đã kín)
+        A("CayChoiLongGa", 7.4f, 5.6f, 0, 0);                              // dựng cạnh tủ TV
+        A("ChauCayKieng_LaTo", 0.45f, 0.95f, 0, 0);                        // góc trước trái, cạnh kệ giày
+        A("BinhHoaLon_Gom", 0.45f, 2.3f, 0, 0);                            // bình cúc trắng/vàng cạnh bàn thờ vong
+        A("ThamChuiChan_Cua", 3.8f, 0.8f, 0, 0);                           // thảm chùi chân trong cửa chính
+        A("GheDau_Go", 5.05f, 7.12f, 0, 25);                               // ghế đẩu góc sau — [29/9 khuya] dời khỏi lối vào cửa hầm (cánh quay ra x 5,55–6,35)
+        A("ChauCayKieng_LaTo", 6.55f, 0.45f, 0, 0);                        // [29/9 tối] dời khỏi hộp thang hầm: góc trước phải, dưới cửa sổ mặt tiền
+        A("KeGo_TreoTuong", W, 3.0f, 1.55f, -90, pivot: true);            // [29/9 tối] dời khỏi hộp thang hầm: kệ gỗ treo tường phải, giữa ảnh gia đình và loa, chậu hoa nhỏ + ảnh
+        A("TranhSonThuy_Khung", 0.0f, 0.85f, 1.55f, 90, pivot: true);     // tranh sơn thuỷ tường trái, cạnh cửa sổ
+        DF("Decal_VetGheCoTuong.png", "M_Decal_VetGheCoTuong", W - 0.004f, 0.55f, 1.95f, -90, 1.5f, 0.375f);
+        DC("Decal_KhoiAmTran.png", "M_Decal_KhoiAmTran", 0.9f, 3.198f, 3.7f, 1.6f, 1.4f, 0);   // khói nhang ám trần trên bàn thờ vong
+        DW("Decal_ChanTuong_Ban.png", "M_Decal_ChanTuongBan", W - 0.004f, 0f, 5.5f, -90, 1.6f, 0.4f);
+        DW("Decal_ChanTuong_Ban.png", "M_Decal_ChanTuongBan", 0.004f, 0f, 0.9f, 90, 1.6f, 0.4f);
+        DW("Decal_VetTayCongTac.png", "M_Decal_VetTay", 5.30f, 1.40f, 7.395f, 180, 0.32f, 0.32f);
+
+        L("PhongKhach_Tuyp", 3.0f, 3.0f, 1.0f, "#DDEBFF", 7, 1.1f);
+        L("PhongKhach_Chum", 3.0f, 2.45f, 3.7f, "#FFD9A0", 7, 1.2f);
+        L("PhongKhach_Sau", 4.5f, 3.0f, 6.4f, "#DDEBFF", 5, 0.6f);
+        L("NenDien_BanTho", 0.8f, 1.15f, 3.7f, "#FF5A3C", 1.8f, 0.8f);
+
+        cur = G("Tang_1/PhongKhach/Dem1"); A("BanThoVong_Dem1", 0.35f, 3.7f, 0, 90);
+        cur = G("Tang_1/PhongKhach/Dem2"); A("BanThoVong_Dem2", 0.35f, 3.7f, 0, 90);
+        cur = G("Tang_1/PhongKhach/Dem3"); A("BanThoVong_Dem3", 0.35f, 3.7f, 0, 90);
+    }
+
+    static void SanhSau()
+    {
+        cur = G("Tang_1/SanhSau");
+        // giá dép 3 tầng (mặt tầng +0,04 / +0,28): dép bố mẹ tầng dưới, một chiếc dép Nhím tầng giữa, chiếc kia rơi dưới sàn
+        Set("GiaDep_Bo", new[] { "GiaDep", "Dep_Bo@0.22,0.14,0.045", "Dep_Me@0.66,0.14,0.045", "Dep_Nhim_Gia@0.3,0.14,0.285" },
+            5.25f, 7.65f, 0, 0);
+        A("Dep_Nhim_Roi", 4.62f, 7.95f, 0, 35);
+        A("Dep_Khach", 5.3f, 8.2f, 0, 8);
+        A("XeDap_Khoi", 0.98f, 10.45f, 0, 180);   // dựng vào góc gầm chiếu nghỉ cầu thang (x 0–1,9 · z 9,85–10,85; trần gầm 1,55), bánh trước quay ra sảnh — không chắn lối sang bếp
+        A("BangDienChinh", 6.265f, 8.8f, 2.05f, 90, top: true);
+        A("MocChiaKhoa", 6.29f, 9.4f, 1.55f, -90, top: true);
+        ChoiLauVatLieu(A("ChoiLau_Gop", 6.05f, 10.6f, 0, -90));
+        A("BongCompact", 4.1f, 9.2f, 3.2f, 0, top: true);
+        L("SanhSau", 4.1f, 3.0f, 9.2f, "#FFF1D6", 5, 0.7f);
+    }
+
+    static void Bep()   // 7,60 × 5,40 — Good Ending: nắng giếng trời qua cửa sắt kính sau lưng Nhím
+    {
+        cur = G("Tang_1/Bep");
+        A("MatBepXay_180", 0.92f, 16.1f, 0, 180);
+        A("BepGas_Doi", 0.7f, 16.1f, 0.8f, 180);
+        A("NoiChao_Rong", 0.52f, 16.1f, 0.87f, 180);
+        A("BinhGas", 2.05f, 16.15f, 0);
+        A("Chan_BatDiaTrongChan", 0.25f, 12.65f, 0, 90);
+        A("BoMia", 0.12f, 13.55f, 0);
+        Set("BeRua_Bo", new[] { "BeRua", "ChauInox@0.15,0.1,0", "Voi@0.4,0.6,0" }, 0.31f, 15.3f, 0, 90);
+        A("ThungRac", 0.2f, 14.6f, 0, 90);
+        Amb(Set("TuLanh_Bo", new[] { "TuLanh", "TuLanh_Canh@0.04,0,0.05" }, W - 0.35f, 11.5f, 0, -90), "Loop_TuLanh_Ro.wav", 0.35f, 0.8f, 6);
+        Set("BanAn_Bo", new[] { "BanAn", "KhanBan_Nilon" }, 4.25f, 14.6f, 0, 0);   // Good Ending
+        A("GheAn_nhim", 4.25f, 15.31f, 0, 180);   // lưng về cửa sắt kính
+        A("GheAn_bo", 4.25f, 13.89f, 0, 0);
+        A("GheAn_me", 3.34f, 14.6f, 0, 90);
+        A("GheAn_khoi", 5.16f, 14.6f, 0, -90);
+        A("LichBloc", W - 0.01f, 14.0f, 1.6f, -90, top: true);
+        A("NoiComDien", 1.5f, 16.1f, 1.1f, 180);
+        A("PhichHoa", 1.74f, 15.98f, 1.1f, 180);
+        A("DenTuyp_120", 3.8f, 13.7f, 3.2f, 0, top: true);
+        Mo(LeafM("CuaSatKinh_Sau", "CuaSatKinh (mở)", 4.7f, 16.45f, 0, 90, 0.9f, 2.2f, PhMat(VANG)), 180f, true, "cửa sắt kính ra giếng trời");
+        CuaSo("Bep", 0.4f, 1.4f, 1.1f, 16.4f, -1);
+        L("Bep", 3.8f, 3.0f, 13.7f, "#DDEBFF", 7, 1.2f);
+
+        A("AmNhom", 0.9f, 16.1f, 1.2f);                 // ấm nhôm trên lò phụ (thả xuống mặt bếp)
+        A("ThungGao_Nhua", 2.65f, 16.05f, 0, 0);
+        A("RoRaThit", 1.3f, 13.3f, 0, 0);                                 // [30/9] rổ rau, thớt dựng, dao — cạnh ghế đẩu nhặt rau (trước đây chắn ô cửa sắt kính sau bếp)
+        A("XoChauKhanLau", 7.2f, 15.8f, 0);
+        A("HopBanhQuy_ThiecTaiDung", 0.28f, 12.4f, 2.4f);   // nóc chạn bát
+        A("ChaiNuocMam_Lo", 0.25f, 12.95f, 2.4f, 90);   // trên nóc chạn bát
+        A("GiaBatUp", 0.35f, 15.55f, 1.2f, 90);
+        A("TuiNilon_Treo", 0.03f, 14.3f, 1.8f, 90, top: true);
+        A("RauQua_Ro", 0.55f, 14.1f, 0, 0);
+        A("BatDia_TrongChau", 0.40f, 15.15f, 1.2f, 90);   // cạnh bồn rửa (mặt bàn ăn luôn có mâm/lồng bàn nên đĩa bẩn bị rà soát đẩy ra ngoài)
+        A("CocBanChai_TreEm", 0.28f, 15.0f, 1.2f);
+        A("BinhThuy_Phich", W - 0.35f, 11.5f, 1.7f, 0);                   // phích Rạng Đông trên nóc tủ lạnh
+        A("ChongTre", 6.95f, 13.1f, 0, 90);                                // chõng tre dọc tường phải
+        A("BatDia_DangUp_Ban", 6.95f, 13.1f, 0.7f, 0);                     // bát đĩa vừa rửa úp phơi trên chõng
+        A("TuBuffet_ChenBat", W - 0.28f, 14.95f, 0, -90);                  // tủ chén kính, mặt hướng vào bếp
+        A("GheDau_Go", 1.1f, 14.15f, 0, 20);                              // ghế đẩu ngồi nhặt rau, cạnh rổ rau (bỏ chỗ cũ giữa lối fridge – chõng)
+        A("ChauCayKieng_LaTo", 6.15f, 16.0f, 0, 0);                        // chậu cây dưới cửa sổ sau, cạnh xô
+        // [gọn 29/9] bỏ BanTron_Thap + 3 GheDau_Go giữa bếp: bếp đã có bàn ăn chính, bộ này chỉ chắn lối từ sảnh ra bếp
+        A("DongHoTreo_Vuong", W, 12.5f, 2.05f, -90, pivot: true);
+        // [29/9] đồ sinh hoạt: kệ chén treo tường, thanh treo dụng cụ, hũ rượu ngâm, tạp dề/khăn
+        A("KeChenTreoTuong", 0.0f, 15.2f, 1.6f, 90, pivot: true);
+        A("ThanhTreoDungCu_Bep", 2.5f, 16.4f, 1.75f, 180, pivot: true);   /* [29/9 tối] dời khỏi ô cửa sắt kính (x 3,8–4,7): thanh rộng 0,8 chiếm x 2,1–2,9, trên ổ cắm và cụm công tắc */ A("HuBinhNgamRuou", 0.3f, 11.55f, 0, 90);
+        A("MocAo_KhanTam", 0.0f, 11.6f, 1.6f, 90, pivot: true);
+        A("TranhHoaSen_Khung", 5.75f, 11.0f, 1.55f, 0, pivot: true);      // tranh hoa sen tường ngăn sảnh sau, cạnh tủ lạnh
+        A("LonSuaDac_DungBut", 1.15f, 16.1f, 1.2f, 0);                     // lon sữa đặc cắm đũa cạnh bếp
+        A("TuiGiaVi_Treo", 1.85f, 16.4f, 1.55f, 180, pivot: true);        // túi gia vị/thuốc nam treo đinh, ám khói
+        DW("Decal_ChanTuong_Ban.png", "M_Decal_ChanTuongBan", W - 0.004f, 0f, 15.3f, -90, 1.6f, 0.4f);
+        DW("Decal_VetTayCongTac.png", "M_Decal_VetTay", 3.1f, 1.40f, 16.395f, 180, 0.32f, 0.32f);
+        DF("Decal_VetNuoc_San.png", "M_Decal_VetNuocSan", 0.9f, 0.003f, 15.3f, 0, 0.9f, 0.7f);   // nước rửa chén văng dưới bồn
+        DC("Decal_VetNuocTran.png", "M_Decal_VetNuocTran", 6.6f, 3.198f, 12.4f, 1.0f, 1.0f, 30);
+        A("OCam_Doi", 2.4f, 16.39f, 1.05f, 180, k: LocProp.Kieu.CoDinh);   // công tắc bếp dựng ở CongTacToanNha()
+        cur = G("Tang_1/Bep/Dem1"); A("LongBan", 4.25f, 14.6f, 0.76f); A("BatChao_An", 3.9f, 14.6f, 0.76f); A("BatChao_An", 4.6f, 14.6f, 0.76f);
+        cur = G("Tang_1/Bep/Dem2"); A("LongBan", 4.25f, 14.6f, 0.76f); A("BatChao_An", 3.9f, 14.6f, 0.76f); A("BatChao_An", 4.6f, 14.6f, 0.76f);
+        cur = G("Tang_1/Bep/Dem3"); A("MamDoCungMan", 4.25f, 14.6f, 0.76f);
+    }
+
+    static void GiengTroi()
+    {
+        cur = G("Tang_1/GiengTroi");
+        A("ThungNuoc_Nap", 0.65f, 17.45f, -0.05f);
+        A("ChauTrauBa", 6.9f, 17.4f, -0.05f);
+        A("GianPhoi_Gap", 3.6f, 17.9f, -0.05f, 0);
+        A("MayBom_NuocGiengTroi", 2.4f, 16.85f, -0.05f, 0);               // máy bơm nước lên bể, ống PVC xanh dâng lên tường bếp
+        A("OngNuocMua_GiengTroi", W, 18.5f, -0.05f, -90, pivot: true);    // ống nước mưa dọc tường phải giếng trời
+        Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 3.0f, 2.3f, 16.505f, 0, 0.8f, 0.8f);
+        Box("Ranh_ThoatNuoc", 0.05f, W - 0.05f, -0.0499f, -0.046f, 18.87f, 19.03f, M("M_RanhNuoc", "#26241F"), false);   // vệt rãnh tối + nắp thanh sắt nổi 7 mm
+        Box("Ranh_Vien_Truoc", 0.05f, W - 0.05f, -0.05f, -0.043f, 18.85f, 18.88f, Sat, false);
+        Box("Ranh_Vien_Sau", 0.05f, W - 0.05f, -0.05f, -0.043f, 19.02f, 19.05f, Sat, false);
+        for (float rx = 0.1f; rx < W - 0.1f; rx += 0.22f) Box("Ranh_Thanh", rx, rx + 0.03f, -0.05f, -0.043f, 18.88f, 19.02f, Sat, false);
+        L("GiengTroi", 0.2f, 2.6f, 17.8f, "#FFE9B8", 5, 0.5f);
+    }
+
+    static void KhoiSau()
+    {
+        cur = G("Tang_1/KhoiSau");
+        Mo(Leaf("CuaKho (mở)", 2.2f, 19.15f, 0, 0.8f, 2.1f, -90, Go), 180f, true, "cửa kho");
+        LeafM("CuaWC_Khung", "KhungCuaWC_T1", 4.65f, 20.9f, 0, 90, 0.7f, 1.9f, PhMat(VANG));
+        Mo(LeafM("CuaWC_Canh", "CuaWC_T1 (mở)", 4.65f, 20.9f, 0, 0, 0.7f, 1.9f, PhMat(VANG)), 90f, true, "cửa WC");
+        A("ThungCarton_Chong", 1.2f, 23.9f, 0, 10); A("ThungCarton_Chong", 2.5f, 24.0f, 0, -8); A("ThungCarton_Chong", 3.1f, 23.3f, 0, 25);
+        A("XiBet_Tron", W - 0.31f, 21.2f, 0, -90);
+        A("GiayVeSinh_Treo", 7.25f, 21.8f, 0.7f, 180, pivot: true);   // trên vách WC_Giat, cạnh bồn cầu
+        A("ChoiCauBonCau", 7.4f, 21.6f, 0);
+        A("VoiSen", 5.6f, 21.79f, 0, 180, pivot: true, k: LocProp.Kieu.Treo);
+        A("XoGao_Up", 5.35f, 21.45f, 0, 20);
+        KhanRu(5.05f, 1.6f, 21.8f, 180);   // [30/9] móc nhựa + khăn rũ trên vách sau WC (trước đây dán sát cạnh cửa WC, bị cánh cửa mở đè lên)
+        A("ThamChuiChan", 4.2f, 20.9f, 0.002f, 90);
+        A("BoXoGauChau_WC", 6.95f, 19.6f, 0, 0); A("KeXaPhong_WC", 6.4f, 21.8f, 1.2f, 180, pivot: true); A("MocAo_KhanTam", 6.0f, 19.2f, 1.6f, 0, pivot: true);   // [29/9] đồ dùng WC
+        A("BaoBotGiat_XaPhong", 7.2f, 24.3f, 1.4f, 0);                    // bột giặt, xà phòng, nước rửa chén — thả xuống bệ giặt
+        A("DenTuyp_60", 6.1f, 20.5f, 3.2f, 90, top: true);
+        Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 4.705f, 2.2f, 20.3f, 90, 0.55f, 0.55f);
+        Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 6.2f, 2.35f, 21.795f, 180, 0.6f, 0.6f);
+        Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 3.595f, 2.3f, 22.3f, -90, 0.7f, 0.7f);   // kho sau: tường ngăn + tường trái
+        Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 0.005f, 2.4f, 23.0f, 90, 0.6f, 0.6f);        A("ChauNhua_Up", 5.3f, 23.3f, 0); A("GheDau_Nhua", 6.1f, 23.4f, 0);
+        A("DepToOng_Fix", 4.95f, 20.55f, 0, 15);
+        A("BeGiat", 7.095f, 24.25f, 0, 180);   // [30/9] bệ dựng lại liền khối, sát tường sau + tường phải
+        A("BanChaiCo_XaPhong", 6.8f, 24.05f, 1.3f, 170);   // thả xuống mặt bệ
+        A("ThungNuoc_Nap", 4.2f, 24.2f, 0);
+        A("Thau_Nhua_QuanAo", 5.85f, 23.9f, 0, 15);                        // thau quần áo chưa giặt
+        A("GheDau_Go", 6.6f, 22.7f, 0, -20);
+        DF("Decal_VetNuoc_San.png", "M_Decal_VetNuocSan", 6.6f, 0.003f, 21.4f, 30, 0.9f, 0.8f);   // nước quanh bồn cầu
+        DW("Decal_MangNhen.png", "M_Decal_MangNhen", 0.004f, 2.6f, 19.25f, 90, 0.6f, 0.6f);
+        L("Kho", 1.8f, 3.0f, 21.9f, "#FFF1D6", 5, 0.5f);
+        L("WC_T1", 6.1f, 3.0f, 20.5f, "#FFF1D6", 3, 0.4f);
+        L("Giat", 5.6f, 3.0f, 23.3f, "#FFF1D6", 4, 0.4f);
+    }
+
+    // ═════════════════════════ HẦM (−2,30 · trần 2,10) — 2,40 × 3,00 dưới góc phải bếp
+    static void Ham()
+    {
+        const float y = -2.3f, top = 0.68f, cx = 6.4f, zb = 13.4f;
+        cur = G("Ham");
+        Slab(5.1f, W, 9.9f, 13.5f, y, SanHam);
+        WallX("Ham_Truoc", 10.3f, 10.4f, 5.1f, 6.7f, y, -0.2f, TuongHam);
+        WallZ("Ham_TuongTrai", 5.1f, 5.2f, 10.3f, 13.5f, y, -0.2f, TuongHam);
+        WallX("Ham_TuongSau", zb, zb + 0.1f, 5.1f, W + 0.2f, y, -0.2f, TuongHam);
+        WallZ("ThangHam_TuongTrai", 6.6f, 6.7f, 7.3f, 10.4f, y, 0, TuongHam);
+        WallX("ThangHam_Dau", 7.3f, 7.4f, 6.6f, W + 0.2f, y, 0, TuongHam);
+        Box("Ham_OpTuongPhai", W - 0.02f, W, y, -0.2f, 7.4f, zb, TuongHam);
+        // thang hầm một vế thẳng: 12 bậc cao 0,19 · sâu 0,24 · rộng 0,80 — dốc hơn thang chính là CỐ Ý
+        Flight("ThangHam", 6.7f, W - 0.02f, 7.4f, +1, 0, -0.19f, 12, 0.24f, SanHam);
+
+        A("TuongBuaMau", cx, zb, y, 180, new Vector3(2.2f, 1.42f, 0.03f), pivot: true);
+        A("BanThoHam", cx, zb - 0.22f, y, 180);
+        A("BatNhang_FullAssembly", cx, zb - 0.13f, y + top, 180, pivot: true);
+        A("Bo_Chen_Tren_De", cx, zb - 0.3f, y + top, 90, pivot: true);
+        A("GiayKeChan", cx - 0.4f, zb - 0.4f, y, 0, pivot: true);
+        A("DenHam_FullAssembly", cx, 11.9f, y, 0, pivot: true, hide: new[] { "DayKeo" });   // [29/9 khuya] bỏ dây kéo + núm: bật/tắt bằng công tắc đối diện cửa sắt (CongTac_Ham)
+        A("Decal_ChuBatDien", W - 0.012f, 6.5f, 1.45f, -90, pivot: true);   // [29/9 khuya] chữ BẬT ĐIỆN lên ngay cạnh công tắc, trên tường đối diện cửa sắt (đầu thang)
+        DW("Decal_VetTayCongTac.png", "M_Decal_VetTay", W - 0.004f, 1.40f, 6.9f, -90, 0.32f, 0.32f);
+        DW("Decal_VetAm_Ham.png", "M_Decal_VetAm_Ham", 5.204f, y + 0.45f, 12.0f, 90, 1.2f, 1.65f);   // [30/9] vết ẩm thấm từ trần xuống: loang mờ, viền ố vàng, vệt chảy, đốm mốc
+        A("Decal_BongVoi_A", 5.8f, zb - 0.02f, y + 1.9f, 180, pivot: true);
+        L("BongDayToc_Ham", cx, -0.5f, 11.9f, "#FF9A3C", 4, 1.0f, true);
+    }
+
+    // ═════════════════════════ TẦNG 2 (+3,40 · trần 3,00)
+    static void Tang2()
+    {
+        const float y = 3.4f;
+        cur = G("Tang_2/VoNha");
+        Slab(0, W, 0, 7.6f, y, Ceramic);
+        Slab(1.9f, W, 7.6f, 10.8f, y, Ceramic);
+        Slab(0, W, 10.8f, 16.4f, y, Ceramic);
+        Slab(-0.2f, W + 0.2f, -1.2f, -0.2f, y, SanXiMang);
+        if (FindModel("LanCan_BanCong"))
+        {
+            A("LanCan_BanCong", 3.6f, -1.175f, y, 0, pivot: true);   // mỗi đoạn 3,80 m, gốc ở mép phải
+            A("LanCan_BanCong", 7.4f, -1.175f, y, 0, pivot: true);
+            A("GoBanCong", 3.65f, -1.175f, y, 0, pivot: true);   // gờ bê tông 3,90 dưới chân mỗi đoạn
+            A("GoBanCong", 7.45f, -1.175f, y, 0, pivot: true);
+        }
+        else Box("LanCan_BanCong", -0.2f, W + 0.2f, y, y + 1.1f, -1.2f, -1.15f, Sat);
+        // ban công T2: đoạn đầu hồi bên phải (7,4→7,8) và hai đầu hông chưa có lan can
+        LanCan("LanCan_BanCong_Phu", new Vector3(7.4f, y + 0.1f, -1.175f), new Vector3(7.8f, y + 0.1f, -1.175f), 1.0f);
+        LanCan("LanCan_BanCong_Hong_Trai", new Vector3(-0.15f, y + 0.1f, -1.175f), new Vector3(-0.15f, y + 0.1f, -0.2f), 1.0f);
+        LanCan("LanCan_BanCong_Hong_Phai", new Vector3(W + 0.15f, y + 0.1f, -1.175f), new Vector3(W + 0.15f, y + 0.1f, -0.2f), 1.0f);
+
+        WallX("MatTien_T2", -0.2f, 0, -0.2f, W + 0.2f, y, 6.6f, TuongNgoai,
+              0.75f, 1.85f, y + 0.9f, y + 2.3f, 3.2f, 4.4f, y, y + 2.2f, 5.55f, 6.65f, y + 0.9f, y + 2.3f);   // cửa sổ bố mẹ 1,10 × 1,40
+        Box("Kinh_T2_1", 0.75f, 1.85f, y + 0.9f, y + 2.3f, -0.20f, -0.18f, Kinh);
+        Box("Kinh_T2_2", 5.55f, 6.65f, y + 0.9f, y + 2.3f, -0.20f, -0.18f, Kinh);
+        WallX("BoMe_Sanh", 5.4f, 5.5f, 0, W, y, 6.4f, Tuong, 2.2f, 3.0f, y, y + 2.0f);
+        WallZ("WC_BoMe_Vach", 5.7f, 5.8f, 3.6f, 5.4f, y, 6.4f, Tuong, 3.85f, 4.65f, y, y + 1.95f);   // [29/9 khuya] lỗ = viền NGOÀI khung cửa (0,80 × 1,95): trước đây mép trong khung trùng mặt lỗ tường → nhấp nháy
+        WallX("WC_BoMe_Truoc", 3.5f, 3.6f, 5.7f, W, y, 6.4f, Tuong);
+        WallZ("HanhLang_Phai", 3.1f, 3.2f, 5.5f, 16.4f, y, 6.4f, Tuong,
+              6.0f, 7.2f, y, y + 2.2f,          // góc làm việc: ô trống, không cánh
+              8.95f, 9.85f, y, y + 2.45f,       // cửa phòng Nhím (khung 0,90) + ô thoáng phía trên
+              13.4f, 14.2f, y, y + 2.0f);       // cửa phòng Khôi
+        // trụ + lanh tô quanh ô thoáng (0,80 × 0,30) trên cửa phòng Nhím — ô thoáng OThoang_BongGio đặt lọt vào đây
+        Box("Nhim_LanhTo", 3.1f, 3.2f, y + 2.05f, y + 2.15f, 8.95f, 9.85f, Tuong);
+        Box("Nhim_TruOThoang_Trai", 3.1f, 3.2f, y + 2.15f, y + 2.45f, 8.95f, 9.0f, Tuong);
+        Box("Nhim_TruOThoang_Phai", 3.1f, 3.2f, y + 2.15f, y + 2.45f, 9.8f, 9.85f, Tuong);
+        WallX("LamViec_Nhim", 8.4f, 8.5f, 3.2f, W, y, 6.4f, Tuong);
+        WallX("Nhim_Khoi", 12.4f, 12.5f, 3.2f, W, y, 6.4f, Tuong);
+        WallX("SauChieuNghi", 10.8f, 10.9f, 0, 1.9f, y, 6.4f, Tuong);
+        Box("Mai_T2_Sau", -0.2f, W + 0.2f, 6.4f, 6.6f, 10.8f, 16.5f, SanXiMang);
+        Box("TuongChan_GiengTroi_T3", -0.2f, W + 0.2f, 6.6f, 7.4f, 16.4f, 16.5f, TuongNgoai);
+
+        // cầu thang T2 → T3: 18 bậc 0,178, chiếu nghỉ +1,60
+        Flight("Thang_T2_Ve1", 1.0f, 1.9f, 7.6f, +1, y, 0.178f, 9, 0.25f, Granito);
+        Slab(0, 1.9f, 9.6f, 10.8f, y + 1.6f, Granito, 0.15f);
+        Flight("Thang_T2_Ve2", 0, 0.9f, 9.6f, -1, y + 1.6f, 0.1778f, 9, 0.25f, Granito);
+        WallZ("VachGiuaHaiVe_T2", 0.9f, 1.0f, 7.6f, 9.6f, y, y + 3.2f, Tuong);   // lên tới sàn T3 (vế 2 leo tới y+3,2)
+        LanCan("LanCan_OThang_T2", new Vector3(1.88f, y, 9.85f), new Vector3(1.88f, y, 10.8f));   // [30/9] bắt đầu từ cuối vế 1 (9,85): trước đây từ 8,5 nên xuyên qua bậc 4–6
+        LanCan("LanCan_ChieuNghi_T2", new Vector3(1.87f, y + 1.6f, 9.6f), new Vector3(1.87f, y + 1.6f, 10.8f));   // mép chiếu nghỉ T2 hở ra sảnh
+        MuiBacVe(1.0f, 1.9f, 7.6f, +1, y, 0.178f, 9, 0.25f);
+        MuiBacVe(0, 0.9f, 9.6f, -1, y + 1.6f, 0.1778f, 9, 0.25f);
+        MonBac(1.0f, 1.9f, 7.6f, +1, y, 0.178f, 9, 0.25f); MonBac(0, 0.9f, 9.6f, -1, y + 1.6f, 0.1778f, 9, 0.25f);
+        LanCan("LanCan_T2_Ve1", new Vector3(1.87f, y + 0.178f, 7.6f), new Vector3(1.87f, y + 1.60f, 9.6f));
+        A("TruDauThang", 1.87f, 7.6f, y, 0, pivot: true);
+        L("ChieuNghi_T2", 0.95f, y + 2.8f, 10.2f, "#FFF1D6", 4, 0.6f);
+
+        PhongBoMe(y); SanhT2(y); PhongNhim(y); PhongKhoi(y);
+    }
+
+    static void PhongBoMe(float y)   // 7,60 × 5,40, WC 1,80 × 1,80 góc trong phải
+    {
+        cur = G("Tang_2/PhongBoMe");
+        Mo(LeafM("CuaBanCong_Trai", "CanhBanCong_Trai", 3.2f, 0.03f, y, -90, 0.6f, 2.2f, Go), 0f, true, "cửa ban công");
+        Mo(LeafM("CuaBanCong_Phai", "CanhBanCong_Phai", 4.4f, 0.03f, y, -90, 0.6f, 2.2f, Go), 180f, true, "cửa ban công");
+        Mo(Leaf("CuaBoMe (mở)", 3.0f, 5.45f, y, 0.8f, 2.0f, 90, Go), 180f, true, "cửa phòng bố mẹ");
+        LeafM("CuaWC_Khung", "KhungCuaWC_BoMe", 5.75f, 4.6f, y, 90, 0.7f, 1.9f, PhMat(VANG));
+        Mo(LeafM("CuaWC_Canh", "CuaWC_BoMe (mở)", 5.75f, 4.6f, y, 0, 0.7f, 1.9f, PhMat(VANG)), 90f, true, "cửa WC");
+        A("BanCoHoc_Go", 1.3f, 0.27f, y, 0);
+        A("NhatKy_Dong", 1.3f, 0.3f, y + 0.75f);
+        A("GheTua_AoBo_Fix", 2.17f, 0.6f, y, 180);
+        BoGuongTu(A("TuQuanAo_GamHo", 1.2f, 5.12f, y, 180, k: LocProp.Kieu.CoDinh));   // [29/9 khuya] bỏ ô gương trên cánh tủ
+        A("KetSat_KhoaSo", 1.18f, 5.15f, y, 180, k: LocProp.Kieu.CoDinh);            // dưới gầm tủ 0,26
+        A("AoMuaBo_TreoCua", 3.95f, 5.34f, y + 1.75f, 180, top: true);
+        A("DongHoDeBan_BaoThuc", W - 0.2f, 0.5f, y + 1.3f, 0);
+        A("HopKimChi_Me", 0.2f, 2.6f, y + 1.3f, 0);          // trên bàn trang điểm (z 2,0–2,9)
+        MacAoDungMoi(0.25f, 4.95f, y);   // [29/9 khuya] dựng lại bằng khối (mô hình .glb cũ không có UV → texture sọc)
+        var gq = A("GioQuanAo", 3.85f, 5.0f, y, 10);   // [29/9 khuya] to gấp 1,9 lần (Ø 0,55 · cao 0,42), dời khỏi ô cửa phòng (x 2,2–3,0) sang tường sau, cạnh cửa
+        if (gq) { gq.transform.localScale = Vector3.one * 1.9f; Align(gq, 3.85f, y, 5.0f); }
+        Set("BanTrangDiem_Bo", new[] { "BanTrangDiem", "Guong@0.15,0.3,0.73", "VaiChePhuGuong_Ban@0.15,0.3,0.73", "DoBanTrangDiem@0.48,0.02,0.73" }, 0.21f, 2.45f, y, 90);
+        A("DonTrangDiem", 0.75f, 2.45f, y);
+        A("TuiXachMe_ViTien", 0.75f, 2.45f, y + 1.0f, 20);   // túi mẹ để trên đôn, chủ nay đã mất
+        A("ThuocBo_LoThuocNam", W - 0.22f, 0.5f, y + 1.2f, -90);   // thuốc bổ, dầu gió, thuốc hạ áp — thả xuống tủ đầu giường bố
+        A("KinhLao_HopKinh", 1.75f, 0.3f, y + 1.2f, 20);                    // kính + hộp da của bố, trên bàn viết cạnh cuốn nhật ký
+        A("Nokia_DoChuong", W - 0.3f, 2.85f, y + 1.2f, 200);              // điện thoại + sạc bên giường mẹ
+        A("KhungAnh_CuoiNho", 0.9f, 0.27f, y + 1.0f, 10);                   // ảnh cưới nhỏ trên bàn viết
+        A("Tham_Do_1m2", 3.5f, 2.4f, y + 0.05f, 90);                        // thảm giữa phòng
+        A("TranhThuPhap_Phuc", 0.0f, 1.55f, y + 1.55f, 90, pivot: true);   // chữ Phúc tường trái
+        A("ChanMenBong_GapGon", 5.75f, 1.7f, y + 1.3f, 90);         // chăn bông + gối ôm cuối giường, thả xuống đệm
+        // giường đôi: đầu giường về tường phải (+X), chiếu, đệm, gối, chăn gấp, màn tuyn buộc
+        Set("GiuongDoi_Bo", new[] { "GiuongDoi", "DemMong", "ChieuTruc", "Goi_BoMe_Bo", "Goi_BoMe_Me", "Chan_GapDo", "ManTuyn_Buoc" },
+            6.46f, 1.7f, y, 90);
+        foreach (var tz in new[] { 0.66f, 2.76f }) A("TuDauGiuong", W - 0.23f, tz, y, -90);
+        A("DoTuDauGiuong_Bo", 6.5f, 0.95f, y + 1.3f, 0);            // tủ đầu giường bố đã kín (đồng hồ + thuốc) → để trên giường
+        A("DoTuDauGiuong_Me", W - 0.23f, 2.76f, y + 0.8f, -90);
+        A("AnhCuoi_Tex", W - 0.01f, 1.7f, y + 2.35f, -90, top: true);
+        A("QuatTreoTuong_Fix", 0.0f, 3.8f, y + 2.1f, 90, pivot: true, k: LocProp.Kieu.Treo);   // gốc = mặt sau đế, ép vào mặt tường x = 0
+        A("DenOpTran", 3.4f, 2.7f, y + 3.0f, 0, top: true);
+        foreach (var cx in new[] { 1.3f, 6.1f })
+        {
+            CuaSo("BoMe", cx - 0.55f, cx + 0.55f, y + 0.9f, 0f, +1);
+            Rem("Rem_Voan_BoMe", "Rem_Vai_BoMe_Buong", cx, 0f, +1, y + 2.45f);   // vải buộc gọn hai bên, voan trắng
+        }
+        A("XiBet_Tron", 7.15f, 5.09f, y, 180);
+        A("GiayVeSinh_Treo", W, 5.05f, y + 0.7f, -90, pivot: true);   // trên tường phải, cạnh bồn cầu
+        A("ChoiCauBonCau", 6.78f, 5.28f, y);
+        A("Lavabo", W - 0.18f, 4.1f, y + 0.82f, -90, top: true);
+        A("KeKinh", W - 0.05f, 4.1f, y + 0.89f, -90, top: true);
+        A("KeKinh_DoBoMe", W - 0.05f, 4.1f, y + 1.0f, -90);   // thả xuống kệ kính
+        A("GuongWC", W - 0.01f, 4.1f, y + 1.35f, -90, top: true);
+        A("VaiChePhuGuong_WC", W - 0.01f, 4.1f, y + 0.93f, -90, pivot: true);   // [29/9] vải che gương
+        A("MocAo_KhanTam", 6.4f, 3.6f, y + 1.6f, 0, pivot: true); A("KeXaPhong_WC", 6.4f, 5.4f, y + 1.3f, 180, pivot: true);
+        A("KeSachHoSo_Go", 0.17f, 3.95f, y, 90); QuatCayMoi(0.55f, 3.15f, y, 90); A("RoNhua_QuanAoBan", 4.95f, 5.1f, y, 0);   // [29/9] đồ sinh hoạt
+        A("BinhNongLanh", W - 0.18f, 4.75f, y + 2.3f, -90, top: true);
+        A("CocBanChai_NguoiLon", W - 0.09f, 4.05f, y + 1.3f, 0);   // trên kệ kính (z 3,95–4,25)
+        A("DenTuyp_60", 6.7f, 4.5f, y + 3.0f, 90, top: true);
+        A("DenNgu_BoMe", W - 0.22f, 2.92f, y + 1.2f, 0);                    // tủ đầu giường phía mẹ — tắt
+        // công tắc phòng bố mẹ: dựng ở CongTacToanNha()
+        A("OCam_Doi", W - 0.01f, 3.2f, y + 0.5f, -90, k: LocProp.Kieu.CoDinh);
+        L("BoMe_OpTran", 3.4f, y + 2.9f, 2.7f, "#FFE3B0", 7, 1.0f);
+    }
+
+    static void SanhT2(float y)
+    {
+        cur = G("Tang_2/SanhHanhLang");
+        A("TuThap_Sanh", 0.19f, 6.22f, y, 90);
+        A("GuongTreo_Sanh", 0.01f, 6.22f, y + 1.75f, 90, top: true);
+        A("VaiChePhuGuong_Sanh", 0.01f, 6.22f, y + 1.17f, 90, pivot: true);   // [29/9] vải che gương
+        // [29/9 khuya] bỏ GiaPhoiDo_Xep ở góc làm việc (giá phơi đồ không thuộc phòng này)
+        A("KeGiayDep_Go", 0.2f, 14.9f, y, 90); A("ThungCarton_Chong", 0.35f, 15.95f, y, 80); A("KeSachHoSo_Go", 1.5f, 16.2f, y, 180);
+        A("MocAo_KhanTam", 3.1f, 15.4f, y + 1.6f, -90, pivot: true);
+        A("ChauLuoiHo", 0.22f, 6.85f, y);   // sát tủ thờ đầu hành lang, không đặt giữa lối đi
+        A("ChuongDien_Chuong", 3.1f, 7.7f, y + 2.2f, -90, pivot: true);   // chuông điện trên tường hành lang
+        A("ChauCayKieng_LaTo", 2.75f, 11.6f, y, 0);
+        A("TranhSonThuy_Khung", 0.0f, 11.5f, y + 1.55f, 90, pivot: true);
+        A("Tham_Chieu_Hoa", 1.55f, 12.3f, y + 0.05f, 0);
+        DC("Decal_VetNuocTran.png", "M_Decal_VetNuocTran", 2.0f, y + 2.98f, 12.6f, 1.1f, 1.1f, 60);
+        A("TranhNho_HanhLang", 3.095f, 11.2f, y + 1.7f, -90, top: true);
+        Decal("Decal_VetTreoAnh.png", "M_Decal_VetTreoAnh", 3.095f, y + 1.3f, 8.05f, -90, 0.5f, 0.667f);   // vệt sáng + 2 lỗ đinh nơi từng treo khung ảnh lớn (không nói gì)
+        A("TuDung_RuongChanMan", 0.33f, 13.25f, y, 90, k: LocProp.Kieu.CoDinh);   // dài 2,32 dọc tường trái, mặt hướng +X
+        L("Sanh_T2", 1.5f, y + 2.9f, 6.5f, "#FFE3B0", 5, 0.7f);
+        L("HanhLang_T2", 2.5f, y + 2.9f, 13.0f, "#FFE3B0", 5, 0.6f);
+        A("BongCompact", 2.5f, 13.0f, y + 3.0f, 0, top: true);
+        cur = G("Tang_2/GocLamViec");
+        // [29/9 khuya] góc làm việc của bố trước đây chỉ là ô trống 1,20 × 2,20 → thêm cửa hai cánh (cùng loại cánh cửa ban công 0,60 × 2,20), dựng sẵn ở tư thế mở vào phòng
+        Mo(LeafM("CuaBanCong_Trai", "CuaLamViec_Trai (mở)", 3.15f, 6.0f, y, 0, 0.6f, 2.2f, Go), -90f, true, "cửa phòng làm việc");
+        Mo(LeafM("CuaBanCong_Phai", "CuaLamViec_Phai (mở)", 3.15f, 7.2f, y, 0, 0.6f, 2.2f, Go), 90f, true, "cửa phòng làm việc");
+        A("BanGiay_Go", 5.9f, 6.95f, y, 180);
+        A("GheBanGiay", 5.9f, 6.3f, y, 0);
+        A("MayTinhBoTui", 5.45f, 6.9f, y + 1.3f, 20);
+        A("ChongSoSach_Cu", 6.3f, 6.95f, y + 1.3f, 0);
+        A("BanTinh_Go", 5.85f, 6.85f, y + 1.3f, 175);
+        A("TuHoSo_Sat", W - 0.225f, 6.3f, y, -90, k: LocProp.Kieu.CoDinh);
+        A("ConDau_HopMuc", 5.65f, 6.75f, y + 1.3f, 30);
+        L("LamViec", 5.4f, y + 2.9f, 6.9f, "#FFE3B0", 4, 0.4f);
+    }
+
+    static void PhongNhim(float y)   // 4,40 × 3,90 — không cửa sổ, chỉ đèn ngủ; em nằm quay mặt ra cửa
+    {
+        cur = G("Tang_2/PhongNhim");
+        var cua = A("CuaPhongNhim_FullAssembly", 3.15f, 9.4f, y, -90, new Vector3(0.9f, 2.05f, 0.05f), pivot: true);
+        var canh = cua.transform.Find("CanhCua");
+        if (canh)
+        {
+            PrefabUtility.UnpackPrefabInstance(cua, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);   // được phép đổi cha của các nút con
+            foreach (var nc in cua.GetComponentsInChildren<Transform>(true).Where(x => x.name.StartsWith("NamCua")).ToArray()) nc.SetParent(canh, true);   // tay nắm quay theo cánh
+            canh.localRotation *= Quaternion.Euler(0, -80, 0);
+            Mo(canh, 0f, true, "cửa phòng Nhím", 80f);   // đóng = bỏ góc −80° (cánh thiết kế đóng ở góc 0)
+        }
+        A("OThoang_BongGio", 3.15f, 9.4f, y + 2.45f, 90, top: true);
+        A("GiuongNhim_ChieuChan", 5.35f, 8.95f, y, 0);
+        A("BanCanhGiuong_Thuoc", 6.55f, 8.75f, y);
+        A("DenNgu_Nhim", 6.55f, 8.75f, y + 1.2f);
+        A("GauBong_Cu", 5.85f, 9.05f, y + 1.2f, 200);        // thả xuống gối
+        A("BangTayGay", 5.3f, 9.0f, y + 1.2f, 15);
+        A("DoChoi_Lon", 4.6f, 10.2f, y);
+        A("BupBe_NhuaCu", 4.9f, 9.8f, y, 60);
+        A("GiuongXep_CoTam", 3.85f, 11.3f, y, 0);                // giường xếp cô Tâm sát tường trái, chừa lối giữa giường Nhím và bàn học
+        Decal("Decal_VetButSap.png", "M_Decal_VetButSap", W - 0.005f, y + 0.2f, 10.0f, -90, 0.62f, 0.465f);   // nét bút sáp của Nhím ở chân tường
+        A("DongPhuc_Treo", W, 11.9f, y + 1.42f, -90, pivot: true);   // áo trắng, quần xanh, khăn quàng đỏ treo mắc
+        A("SachTruyenTranh", 4.9f, 10.35f, y, 30);
+        A("ChauNuoc_KhanUot", 5.85f, 9.8f, y);
+        A("CapSach_TieuHoc", 4.3f, 12.55f, y, 90);
+        Decal("Decal_VachChieuCao.png", "M_Decal_VachChieuCao", 3.205f, y + 0.45f, 9.98f, 90, 0.24f, 0.95f);   // vạch đo chiều cao Nhím, cạnh khung cửa phòng
+        A("TuNhua_Nhim", W - 0.2f, 11.0f, y, -90);
+        A("BanHoc_Nhim", 5.0f, 12.22f, y, 180);
+        A("DoHoc_Nhim", 5.0f, 12.22f, y + 0.445f, 180, k: LocProp.Kieu.Treo);   // gói đúng mặt bàn học nhỏ (mặt cao 0,445), audit khỏi xô lệch
+        A("GheNhua_Nhim", 5.0f, 11.8f, y);
+        A("HopBut_ThuocKe", 4.9f, 12.2f, y + 0.645f, 10, k: LocProp.Kieu.Treo);        // bàn học Nhím chỉ 0,48×0,34, đặt trên chồng đồ học
+        A("BinhNuocHocSinh", 5.12f, 12.3f, y + 0.645f, 30, k: LocProp.Kieu.Treo);
+        DW("Decal_Sticker_TuNhua.png", "M_Decal_Sticker", 7.2f, y + 0.55f, 11.0f, -90, 0.4f, 0.4f, true);   // hình dán trên cánh tủ nhựa, một góc bong
+        DW("Decal_TranhSap_2.png", "M_Decal_TranhSap2", W - 0.004f, y + 0.95f, 9.55f, -90, 0.36f, 0.48f, true);
+        A("MocDongPhuc", W - 0.06f, 11.9f, y + 1.5f, -90, top: true);
+        A("TranhSap_Nhim", 5.25f, 8.51f, y + 1.3f, 0, top: true);
+        L("DenNgu_Nhim", 6.55f, y + 0.95f, 8.75f, "#FFB36B", 4.5f, 0.9f, true);
+    }
+
+    static void PhongKhoi(float y)   // 4,40 × 3,90 — đứng yên từ 9/2000, cửa sổ nhìn xuống giếng trời
+    {
+        cur = G("Tang_2/PhongKhoi");
+        Mo(Leaf("CuaKhoi (mở)", 3.15f, 14.2f, y, 0.8f, 2.0f, 0, Go), 90f, true, "cửa phòng Khôi");
+        CuaSo("Khoi", 5.1f, 6.3f, y + 0.9f, 16.4f, -1);
+        Rem("Rem_Voan_Khoi", "Rem_Vai_Khoi_Buong", 5.7f, 16.4f, -1, y + 2.45f);
+        A("GiuongDon_Khoi", W - 0.49f, 13.52f, y, 180);
+        Set("BanHoc_Khoi_Bo", new[] { "BanHoc_Khoi", "KinhMatBan" }, 5.7f, 16.1f, y, 180);
+        A("GheBanHoc_Go", 5.7f, 15.5f, y, 0);
+        A("TamNilon_PhuBui", W - 0.49f, 13.52f, y + 1.0f, 0);      // nilon chống bụi phủ giường (phòng đóng cửa lâu)
+        A("Walkman_BangCu", 6.1f, 16.0f, y + 1.3f, 190);           // máy cassette + tai nghe + băng, thả xuống bàn học
+        A("GiayBaoNhapHoc", 5.2f, 16.0f, y + 1.3f, 15);                    // giấy báo + thẻ sinh viên + thư trên bàn học
+        A("HanhLyKhoi_TuiVai", 3.6f, 15.75f, y, 30);                       // túi vải mang từ ký túc xá, chưa dỡ
+        DW("Decal_MangNhen.png", "M_Decal_MangNhen", 3.204f, y + 2.55f, 12.55f, 90, 0.6f, 0.6f);
+        Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 3.205f, y + 2.15f, 15.9f, 90, 0.6f, 0.6f);   // phòng đóng cửa lâu: mốc góc trần tường trái
+        A("DenBanHoc", 5.25f, 16.15f, y + 1.0f, 180);
+        A("TuAo_Khoi", 3.68f, 12.88f, y, 0);
+        Set("GiaSach_Bo", new[] { "GiaSach_Treo", "SachGop@0.05,0,0.55" }, W - 0.1f, 15.4f, y + 1.0f, -90, k: LocProp.Kieu.Treo);
+        A("LichTo_2000", W - 0.005f, 13.2f, y + 1.6f, -90, top: true);
+        A("Poster_BanNhac", W - 0.005f, 14.0f, y + 1.65f, -90, top: true);
+        A("GiayKhen_Khoi", 4.4f, 16.395f, y + 1.7f, 180, top: true);
+        A("Guitar", 7.45f, 16.22f, y, -90);
+        A("BongDa_Xep", 7.1f, 14.0f, y, 0, k: LocProp.Kieu.CoDinh);   // gầm giường, không cho bước rà soát đẩy ra
+        L("DenBan_Khoi", 5.3f, y + 1.2f, 15.9f, "#FFD08A", 3.5f, 0.9f);
+        L("Khoi_Tran", 5.4f, y + 2.9f, 14.4f, "#FFE3B0", 5, 0.35f);
+        cur = G("Tang_2/PhongKhoi/Dem2"); A("BaloKhoi_XanhLa", 6.5f, 12.8f, y, 20);
+        cur = G("Tang_2/PhongKhoi/Dem3"); A("BaloKhoi_XanhLa", 6.5f, 12.8f, y, 20);
+    }
+
+    // ═════════════════════════ TẦNG 3 (+6,60 · trần 3,00)
+    static void Tang3()
+    {
+        const float y = 6.6f;
+        cur = G("Tang_3/VoNha");
+        Slab(0, W, 0, 7.6f, y, SanT3);
+        Slab(1.9f, W, 7.6f, 10.8f, y, SanT3);
+        Box("GoMatTien_T3", -0.2f, W + 0.2f, y, y + 0.1f, -0.2f, 0, TuongNgoai);
+        WallX("SanPhoi_PhongTho", 3.0f, 3.1f, -0.2f, W + 0.2f, y, 9.8f, Tuong,
+              0.8f, 2.0f, y + 0.9f, y + 2.3f, 3.29f, 4.31f, y, y + 2.18f, 5.6f, 6.8f, y + 0.9f, y + 2.3f);   // [29/9 khuya] lỗ cửa sân phơi = viền ngoài khung (1,02 × 2,18)
+        Box("Kinh_PhongTho_1", 0.8f, 2.0f, y + 0.9f, y + 2.3f, 3.0f, 3.02f, Kinh);
+        Box("Kinh_PhongTho_2", 5.6f, 6.8f, y + 0.9f, y + 2.3f, 3.0f, 3.02f, Kinh);
+        WallX("PhongTho_Sanh", 6.4f, 6.5f, 0, W, y, 9.6f, Tuong, 5.8f, 6.6f, y, y + 2.0f);
+        WallX("TuongSau_T3", 10.8f, 10.9f, -0.2f, W + 0.2f, y, 9.8f, Tuong);
+        LanCan("LanCan_OThang_T3", new Vector3(1.88f, y, 7.6f), new Vector3(1.88f, y, 10.8f));
+        LanCan("LanCan_DauThang_T3", new Vector3(1.0f, y, 7.6f), new Vector3(1.88f, y, 7.6f));
+        Box("Mai_Truoc", -0.2f, W + 0.2f, 9.6f, 9.8f, 3.0f, 7.6f, Tran);
+        Box("Mai_Sau", 1.9f, W + 0.2f, 9.6f, 9.8f, 7.6f, 10.9f, Tran);
+        Box("Mai_TuongTrai", -0.2f, 0f, 9.6f, 9.8f, 7.6f, 10.9f, Tran);
+        A("GiengTroi", 0.95f, 9.2f, 9.6f, 0, k: LocProp.Kieu.CoDinh);
+        A("BonNuocMai", 5.3f, 13.5f, y);
+        Mo(Leaf("CuaPhongTho (mở)", 6.6f, 6.45f, y, 0.8f, 2.0f, 90, Go), 180f, true, "cửa phòng thờ");
+
+        cur = G("Tang_3/PhongTho");   // 7,60 × 3,30 — PA B: tủ thờ quay thẳng ra cửa sân phơi
+        Set("BanThoGiaTien_Set", new[] { "BanThoGiaTien", "KhanPhuBanTho", "DoTrenBanTho", "KhungAnhOngBa", "BocVai_Kin" },
+            3.8f, 6.08f, y, 180);
+        CuaSanPhoiMo(A("CuaSanPhoi", 3.8f, 3.05f, y, 180, k: LocProp.Kieu.CoDinh));
+        A("ChieuCoi_PhongTho", 3.8f, 4.75f, y, 90);
+        A("SapGo", 1.0f, 4.5f, y, 90);
+        A("LichAm_TreoTuong", 5.4f, 6.395f, y + 1.9f, 180, top: true);          // lịch âm cạnh tủ thờ
+        A("HuongNen_DuTru", 2.6f, 6.15f, y, 0);                                    // nhang, nến, dầu, diêm dự trữ
+        A("BinhHoaTho", 3.2f, 6.1f, y + 1.6f, 0);                                  // bình cúc vàng/trắng xen hoa héo, thả xuống bàn thờ
+        A("MamDong_HoaQuaTho", 5.2f, 6.2f, y + 1.3f, 180);                 // mâm quả trên tủ đồ thờ
+        A("ChauCayKieng_LaTo", 0.45f, 5.95f, y, 0); A("ChauCayKieng_LaTo", 7.1f, 7.3f, y, 0);   // [30/9] chậu trái dời vào góc phòng thờ: trước đây đặt ngay chỗ người leo lên cầu thang bước ra
+        A("BinhHoaLon_Gom", 1.9f, 6.3f, y, 0);
+        A("KeGo_TreoTuong", W, 6.3f, y + 1.55f, -90, pivot: true);
+        A("GheDau_Go", 6.4f, 5.6f, y, -15);
+        A("AoTangGap", 1.0f, 4.5f, y + 1.0f, 0);                            // áo tang gấp trên sạp
+        A("TranhHoaSen_Khung", W, 4.6f, y + 1.65f, -90, pivot: true);
+        A("CumAnhCu_TreoTuong", 0.0f, 5.6f, y + 1.5f, 90, pivot: true); A("MocAo_KhanTam", W, 3.75f, y + 1.6f, -90, pivot: true);   // [29/9]
+        A("KeGiayDep_Go", W - 0.17f, 7.0f, y, -90); A("ThungCarton_Chong", 3.65f, 10.45f, y, 8);
+        A("GiaPhoiDo_Xep", 3.4f, 8.9f, y, 90); A("HuBinhNgamRuou", 2.35f, 7.95f, y, 0); A("RoNhua_QuanAoBan", 6.9f, 10.4f, y, 0);
+        A("TranhThuPhap_Phuc", 0.0f, 3.3f, y + 1.65f, 90, pivot: true);
+        DC("Decal_KhoiAmTran.png", "M_Decal_KhoiAmTran", 3.8f, y + 2.998f, 6.0f, 2.0f, 1.4f, 0);
+        DC("Decal_VetNuocTran.png", "M_Decal_VetNuocTran", 6.8f, y + 2.998f, 4.4f, 1.1f, 1.1f, 15);
+        A("TuDoTho_Fix", 5.2f, 6.2f, y, 180);   // cạnh bàn thờ, lưng sát tường sau, chừa cửa (x 5,8–6,6)
+        A("DenTuyp_120", 2.2f, 4.7f, y + 3.0f, 0, top: true);
+        A("DenTuyp_120", 5.4f, 4.7f, y + 3.0f, 0, top: true);
+        foreach (var cx in new[] { 1.4f, 6.2f })
+        {
+            CuaSo("Khoi", cx - 0.6f, cx + 0.6f, y + 0.9f, 3.1f, +1);
+            Rem("Rem_Voan_PhongTho", null, cx, 3.1f, +1, y + 2.45f);   // phòng thờ chỉ có voan trắng
+        }
+        L("PhongTho_1", 2.2f, y + 2.8f, 4.7f, "#FFF6E0", 6, 1.3f);
+        L("PhongTho_2", 5.4f, y + 2.8f, 4.7f, "#FFF6E0", 6, 1.3f);
+        L("NenDien_GiaTien", 3.8f, y + 1.3f, 5.6f, "#FF5A3C", 1.5f, 0.6f);
+
+        cur = G("Tang_3/SanPhoi");    // 7,60 × 3,00
+        A("NenSanPhoi", 3.8f, 1.4f, y);
+        A("LanCanSanPhoi", 3.8f, -0.1f, y + 0.1f, k: LocProp.Kieu.CoDinh);
+        LanCan("LanCan_SanPhoi_Trai", new Vector3(0.0f, y + 0.1f, -0.1f), new Vector3(2.33f, y + 0.1f, -0.1f), 1.05f);   // hai đoạn ngoài của mặt tiền sân phơi
+        LanCan("LanCan_SanPhoi_Phai", new Vector3(5.28f, y + 0.1f, -0.1f), new Vector3(W, y + 0.1f, -0.1f), 1.05f);   // [30/9] đầu lan can dừng ở mặt tường bên, không cắm vào tường
+        A("BonHoa_SanPhoi", W - 0.52f, 1.5f, y);
+        A("CotPhoi", 3.8f, 1.8f, y);
+        A("DayPhoi", 3.8f, 1.8f, y + 1.59f, k: LocProp.Kieu.CoDinh);
+        A("KepPhoi", 3.8f, 1.8f, y + 1.6f, k: LocProp.Kieu.CoDinh);
+        string[] ao = { "AoTang_Phoi_01", "AoTang_Phoi_02", "AoTang_Phoi_03", "AoTang_Phoi_04", "AoTang_Phoi_05" };
+        for (int i = 0; i < ao.Length; i++) A(ao[i], 2.85f + i * 0.48f, 1.8f, y + 1.65f, 0, pivot: true);
+        A("BeNuoc_Nap", 0.85f, 0.68f, y);
+        A("ChauNhua", 1.75f, 0.5f, y);
+        A("ChauCay_SanPhoi", 5.9f, 0.5f, y);
+        A("BongDenSan_DayDien", 6.3f, 3.0f, y + 2.4f, 180, pivot: true);   // bóng đèn chao tôn + dây điện kéo ra sân phơi
+        A("AntenTV_MaiNha", 6.6f, 5.0f, 9.8f, 0, k: LocProp.Kieu.CoDinh);   // ăng-ten chữ Y trên mái (nhìn từ sân phơi / ngoài phố)
+        var mua = new GameObject("Am_MuaTonMai").transform; mua.SetParent(cur, false); mua.position = new Vector3(3.8f, 9.3f, 5.0f);
+        Amb(mua.gameObject, "Loop_MuaTren_TonMaiNha.wav", 0.3f, 4, 14);   // mưa tháng 8 trên mái tầng 3
+        L("SanPhoi", 0.2f, y + 2.0f, 2.7f, "#FFE9B8", 5, 0.7f);
+
+        cur = G("Tang_3/SanhGocKho");  // không cửa, không gì bấm E được
+        A("GocKho_DoTet_Fix", W - 0.19f, 8.2f, y, -90);        // mai giả, thùng "ĐỒ TẾT", đèn ông sao gấp bẹp
+        A("GocKho_DoGio_Fix", W - 0.23f, 9.8f, y, -90);        // nồi đồng úp, thùng nhựa, chiếu cói gấp
+        A("GocKho_DoNha_Fix", 4.95f, 10.6f, y, 180);          // quạt gãy lồng, chiếu cuộn, chồng mâm nhôm
+        A("ChauCayKieng_LaTo", 2.7f, 10.4f, y, 0);                          // chậu cây góc sảnh T3
+        // [gọn 29/9] bỏ GheDau_Go giữa sảnh T3 (đã có ghế đẩu trong phòng thờ)
+        L("Sanh_T3", 4.0f, y + 2.9f, 8.6f, "#FFF6E0", 6, 0.9f);
+        A("BongCompact", 4.0f, 8.6f, y + 3.0f, 0, top: true);
+    }
+
+    // ═════════════════════════ NGƯỜI CHƠI — đứng trong cổng, mắt 1,65
+    static void NguoiChoi()
+    {
+        cur = root;
+        var p = new GameObject("NguoiChoi");
+        p.transform.SetParent(root, false);
+        p.transform.position = new Vector3(3.8f, -0.15f, -4.7f);
+        var cc = p.AddComponent<CharacterController>();
+        cc.height = 1.65f; cc.radius = 0.25f; cc.center = new Vector3(0, 0.825f, 0);   // [30/9] hạ thấp (cao 1,65 m, mắt 1,52 m) cc.stepOffset = 0.3f; cc.slopeLimit = 50;
+        var camGo = new GameObject("Camera_1m52");
+        camGo.tag = "MainCamera";
+        camGo.transform.SetParent(p.transform, false);
+        camGo.transform.localPosition = new Vector3(0, 1.52f, 0);
+        var cam = camGo.AddComponent<Camera>();
+        cam.nearClipPlane = 0.05f; cam.fieldOfView = 70;
+        cam.clearFlags = CameraClearFlags.Skybox; cam.backgroundColor = Hex("#0B0E16");
+        camGo.AddComponent<AudioListener>();
+        var fps = p.AddComponent<LocFirstPerson>();
+        fps.cam = camGo.transform;
+    }
+
+    // ───── cửa sổ gỗ 2 cánh (đóng) + bậu granito + song sắt hoa phía trong. dir = +1: trong nhà nằm phía +Z của mặt tường zFace, −1: phía −Z.
+    // loai: Bep 1,00×1,00 · BoMe 1,10×1,40 · Khoi 1,20×1,40 (Khoi dùng cả cho phòng thờ). Cánh nằm trong độ dày tường, kính trà (khối Kinh) sát mặt ngoài.
+    static void CuaSo(string loai, float x0, float x1, float y0, float zFace, int dir)
+    {
+        float w = x1 - x0, zs = zFace - dir * 0.05f, xa = dir > 0 ? x0 : x1, xb = dir > 0 ? x1 : x0;
+        var sT = Mo(LeafM($"CuaSo_Go_{loai}_Trai", $"CuaSo_{loai}_Trai", xa, zs, y0, dir > 0 ? 0 : 180, w / 2, 1.4f, Go), 0f, false, "cửa sổ", +90f);   // cánh mở ra ngoài
+        var sP = Mo(LeafM($"CuaSo_Go_{loai}_Phai", $"CuaSo_{loai}_Phai", xb, zs, y0, dir > 0 ? 180 : 0, w / 2, 1.4f, Go), 0f, false, "cửa sổ", -90f);
+        // ô kính trà đặt sát mặt ngoài (khối Kinh*) — ẩn khi có cánh mở, để cửa sổ mở là thấy ra ngoài
+        var probe = new Bounds(new Vector3((x0 + x1) / 2, y0 + 0.7f, zFace), new Vector3(w - 0.1f, 0.5f, 0.5f));
+        var kinh = boxObjs.Where(g => g && g.name.StartsWith("Kinh") && g.GetComponent<Renderer>().bounds.Intersects(probe)).ToArray();
+        if (sT && sP) { sT.cungCua = new[] { sP }; sP.cungCua = new[] { sT }; sT.anKhiMo = sP.anKhiMo = kinh; }
+        // glTFast lật X: file +x → Unity −x ở yaw 0 (yaw 180 thì +x) nên gốc nằm ở mép phải khi dir=+1, mép trái khi dir=−1
+        A($"BauCuaSo_Granito_{loai}", dir > 0 ? x1 : x0, zFace, y0 - 0.028f, dir > 0 ? 0 : 180, pivot: true);   // [30/9] nâng 2 mm: mặt trên không còn đồng phẳng với đáy ô tường
+        A($"SongSatHoa_{loai}", dir > 0 ? x1 - 0.025f : x0 + 0.025f, zFace + dir * 0.04f, y0 + 0.025f, dir > 0 ? 0 : 180, pivot: true);
+    }
+
+    // ───── [30/9] khăn tắm rũ trên móc. (x,y,z) = điểm móc trên mặt tường; yaw như A(): +Z cục bộ = hướng ra khỏi tường (tường phía −Z cục bộ).
+    // Khăn gập đôi vắt qua đầu móc: tấm trước dài, tấm sau ngắn; hẹp lại ở chỗ vắt rồi xoè ra, nếp sóng tăng dần về phía gấu.
+    static void KhanRu(float x, float y, float z, float yaw)
+    {
+        var g = new GameObject("Khan_Ru"); g.transform.SetParent(cur, false);
+        g.transform.SetPositionAndRotation(new Vector3(x, y, z), Quaternion.Euler(0, yaw, 0));
+        var nhua = M("M_MocNhua_Khan", "#8B8A82");
+        void C(string n, Vector3 pos, Vector3 sc)
+        {
+            var c = GameObject.CreatePrimitive(PrimitiveType.Cube); Object.DestroyImmediate(c.GetComponent<Collider>());
+            c.name = n; c.transform.SetParent(g.transform, false); c.transform.localPosition = pos; c.transform.localScale = sc;
+            c.GetComponent<Renderer>().sharedMaterial = nhua;
+        }
+        C("MocKhan_De", new Vector3(0, -0.012f, 0.004f), new Vector3(0.05f, 0.05f, 0.008f));
+        C("MocKhan_Can", new Vector3(0, -0.004f, 0.03f), new Vector3(0.014f, 0.014f, 0.052f));
+        C("MocKhan_Dau", new Vector3(0, 0.006f, 0.052f), new Vector3(0.014f, 0.028f, 0.014f));
+        var vai = MT("M_KhanRu", "D_vai.png", 0.5f, 0.5f, "#A9C2CF");
+        Mesh Sheet(float len, float zTop, float zHem, float amp, float phase)
+        {
+            const int nu = 14, nt = 16; var v = new List<Vector3>(); var t = new List<int>();
+            for (int j = 0; j <= nt; j++)
+                for (int i = 0; i <= nu; i++)
+                {
+                    float tt = j / (float)nt, u = i / (float)nu - 0.5f;
+                    float w = Mathf.Lerp(0.15f, 0.46f, Mathf.SmoothStep(0, 1, Mathf.Clamp01(tt / 0.4f)));
+                    float fold = amp * Mathf.Sin(u * Mathf.PI * 5f + phase) * Mathf.Sin(tt * 2.2f) * tt;
+                    v.Add(new Vector3(u * w, -tt * len, Mathf.Lerp(zTop, zHem, tt * tt) + fold));
+                }
+            for (int j = 0; j < nt; j++)
+                for (int i = 0; i < nu; i++)
+                {
+                    int a = j * (nu + 1) + i, b = a + 1, c = a + nu + 1, d = c + 1;
+                    t.AddRange(new[] { a, c, b, b, c, d });
+                }
+            var m = new Mesh { name = "KhanRu_Sheet" };
+            // hai mặt: bản sao lật chiều tam giác (vật liệu một mặt vẫn nhìn được cả hai phía)
+            int n0 = v.Count; var vv = new List<Vector3>(v); vv.AddRange(v);
+            var tt2 = new List<int>(t); for (int k = 0; k < t.Count; k += 3) tt2.AddRange(new[] { t[k] + n0, t[k + 2] + n0, t[k + 1] + n0 });
+            m.SetVertices(vv); m.SetTriangles(tt2, 0); m.RecalculateNormals(); m.RecalculateBounds();
+            var uv = new List<Vector2>(); foreach (var p in vv) uv.Add(new Vector2(p.x * 2f, p.y * 2f)); m.SetUVs(0, uv);
+            return m;
+        }
+        void S(string n, Mesh m) { var o = new GameObject(n, typeof(MeshFilter), typeof(MeshRenderer)); o.transform.SetParent(g.transform, false); o.GetComponent<MeshFilter>().sharedMesh = m; o.GetComponent<MeshRenderer>().sharedMaterial = vai; }
+        S("Khan_Truoc", Sheet(0.56f, 0.066f, 0.085f, 0.011f, 0.4f));
+        S("Khan_Sau", Sheet(0.40f, 0.040f, 0.030f, 0.007f, 2.1f));
+        Mark(g, LocProp.Kieu.CoDinh);
+    }
+
+    // ───── [30/9] cây lau nhà gộp: tách từng chi tiết (cán gỗ, đầu bông lau, thùng nhựa, tấm đế) rồi gán vật liệu riêng; trước đây cả khối bị dán texture mây đan.
+    static void ChoiLauVatLieu(GameObject root)
+    {
+        var mf = root ? root.GetComponentInChildren<MeshFilter>() : null;
+        var mr = mf ? mf.GetComponent<MeshRenderer>() : null;
+        if (!mf || !mf.sharedMesh || !mr) return;
+        var src = mf.sharedMesh; var v = src.vertices; var tri = src.triangles;
+        var id = new Dictionary<Vector3Int, int>(); var par = new List<int>();
+        int Id(Vector3 p) { var k = new Vector3Int(Mathf.RoundToInt(p.x * 2000), Mathf.RoundToInt(p.y * 2000), Mathf.RoundToInt(p.z * 2000)); if (!id.TryGetValue(k, out var r)) { r = par.Count; id[k] = r; par.Add(r); } return r; }
+        int Find(int a) { while (par[a] != a) { par[a] = par[par[a]]; a = par[a]; } return a; }
+        var tv = new int[tri.Length]; for (int i = 0; i < tri.Length; i++) tv[i] = Id(v[tri[i]]);
+        for (int i = 0; i < tri.Length; i += 3) { par[Find(tv[i + 1])] = Find(tv[i]); par[Find(tv[i + 2])] = Find(tv[i]); }
+        var bb = new Dictionary<int, Bounds>();
+        for (int i = 0; i < tri.Length; i++) { int r = Find(tv[i]); if (!bb.ContainsKey(r)) bb[r] = new Bounds(v[tri[i]], Vector3.zero); else { var b = bb[r]; b.Encapsulate(v[tri[i]]); bb[r] = b; } }
+        // 0 gỗ · 1 bông lau (vải) · 2 nhựa xanh (thùng) · 3 nhựa xám đậm (đế, lòng thùng)
+        Bounds? thung = null; foreach (var b in bb.Values) if (b.size.x > 0.18f && b.size.y > 0.15f && b.size.y < 0.3f && (!thung.HasValue || b.size.x * b.size.z > thung.Value.size.x * thung.Value.size.z)) thung = b;
+        int Cls(Bounds b) => b.size.y > 0.8f ? 0 : (thung.HasValue && b.size == thung.Value.size && b.center == thung.Value.center) ? 2
+            : (thung.HasValue && thung.Value.Contains(b.center)) ? 3 : b.size.y < 0.06f ? 3 : 1;
+        var lists = new List<int>[4]; for (int i = 0; i < 4; i++) lists[i] = new List<int>();
+        for (int i = 0; i < tri.Length; i += 3) { int c = Cls(bb[Find(tv[i])]); lists[c].AddRange(new[] { tri[i], tri[i + 1], tri[i + 2] }); }
+        var nm = src.normals; var uv = new Vector2[v.Length];
+        float[] tile = { 0.7f, 0.35f, 0.5f, 0.5f };
+        for (int c = 0; c < 4; c++)
+            foreach (int i in lists[c].Distinct())
+            {
+                var a = new Vector3(Mathf.Abs(nm[i].x), Mathf.Abs(nm[i].y), Mathf.Abs(nm[i].z));
+                uv[i] = (a.x >= a.y && a.x >= a.z ? new Vector2(v[i].z, v[i].y) : a.y >= a.z ? new Vector2(v[i].x, v[i].z) : new Vector2(v[i].x, v[i].y)) / tile[c];
+            }
+        var m = new Mesh { name = src.name + "_vl", indexFormat = src.indexFormat };
+        m.vertices = v; m.normals = nm; m.uv = uv; m.subMeshCount = 4;
+        for (int c = 0; c < 4; c++) m.SetTriangles(lists[c], c);
+        m.RecalculateBounds(); mf.sharedMesh = m;
+        mr.sharedMaterials = new[] { MT("M_ChoiLau_Go", "D_go.png", 0.7f, 0.7f, "#9A7448"), MT("M_ChoiLau_Vai", "D_vai.png", 0.35f, 0.35f, "#D8D3C4"),
+                                     MT("M_ChoiLau_Xo", "D_nhua.png", 0.5f, 0.5f, "#2F6DB0"), MT("M_ChoiLau_De", "D_nhua.png", 0.5f, 0.5f, "#4A4A48") };
+    }
+
+    // gắn bản lề khoá + ổ khoá treo lên MẶT NGOÀI cánh cửa (con của cánh nên xoay theo cánh); h = độ cao so với chân cửa.
+    // [29/9 tối] mặt ngoài = mặt hướng ra phòng khách (−X) khi cánh ĐÓNG; suy ra từ yaw hiện tại của cánh (đóng ⇔ yaw 90°) nên đúng cả khi cánh đang mở.
+    // xTuMep: khoá cách mép tự do bao nhiêu m — chừa chỗ cho tấm móc chìa (MocKhoaCuaHam) đặt sát mép.
+    static void GanKhoa(Transform leaf, float h, float xTuMep = 0.30f)
+    {
+        if (!leaf) return;
+        var lb = LocSceneAudit.LocalBounds(leaf, leaf);
+        var old = cur; cur = leaf;
+        var veDong = Quaternion.Euler(0, 90f - leaf.eulerAngles.y, 0);
+        // [30/9] mặt tấm cánh nằm ở |z| = 0,02 (lb.min.z/max.z còn tính cả gân/bản lề 0,016 nhô ra) → hasp đặt đúng mặt tấm, không lơ lửng.
+        // Cạnh tự do = min.x (phía tay nắm): ổ khoá cách mép xTuMep, tấm móc chìa ngay cạnh, cùng là con của cánh nên xoay theo cánh.
+        foreach (var (z, yaw) in new[] { (0.02f, 0f), (-0.02f, 180f) })
+        {
+            var phap = veDong * (leaf.rotation * Quaternion.Euler(0, yaw, 0) * Vector3.forward);
+            if (phap.x > -0.5f) continue;   // mặt trong (hướng về thang hầm): không gắn khoá
+            var g = Inst("KhoaCua_Hasp");
+            if (g) { g.transform.localPosition = new Vector3(lb.min.x + xTuMep, h, z); g.transform.localRotation = Quaternion.Euler(0, yaw, 0); }
+            var m = Inst("MocKhoaCuaHam");
+            if (m) { m.transform.localPosition = new Vector3(lb.min.x + xTuMep + 0.13f, h - 0.05f, z); m.transform.localRotation = Quaternion.Euler(0, yaw, 0); }
+        }
+        cur = old;
+    }
+
+    // lan can sắt + tay vịn gỗ dọc mép hở: a, b = hai điểm trên đường mũi bậc (hoặc mép sàn). Song đứng cách nhau 0,11 m (trẻ con không lọt đầu),
+    // thanh dưới cách mũi bậc 0,08, thanh trên và tay vịn cao 0,90 tính từ mũi bậc — bám đúng độ dốc từng vế nên không lệch như module 1 m.
+    static void LanCan(string n, Vector3 a, Vector3 b, float h = 0.9f)
+    {
+        var grp = new GameObject(n).transform; grp.SetParent(cur, false);
+        var old = cur; cur = grp;
+        var flat = new Vector3(b.x - a.x, 0, b.z - a.z);
+        int k = Mathf.Max(2, Mathf.CeilToInt(flat.magnitude / 0.11f));
+        for (int i = 0; i <= k; i++)
+        {
+            var p = Vector3.Lerp(a, b, (float)i / k);
+            var s = GameObject.CreatePrimitive(PrimitiveType.Cube); s.name = "Song";
+            Object.DestroyImmediate(s.GetComponent<Collider>());
+            s.transform.SetParent(cur, false);
+            s.transform.position = p + Vector3.up * (0.08f + (h - 0.05f - 0.08f) / 2);
+            s.transform.localScale = new Vector3(0.014f, h - 0.05f - 0.08f, 0.014f);
+            s.GetComponent<Renderer>().sharedMaterial = Sat;
+        }
+        void Thanh(string nm, float dy, float w, float th, Material m)
+        {
+            var g = GameObject.CreatePrimitive(PrimitiveType.Cube); g.name = nm;
+            Object.DestroyImmediate(g.GetComponent<Collider>());
+            g.transform.SetParent(cur, false);
+            var pa = a + Vector3.up * dy; var pb = b + Vector3.up * dy;
+            g.transform.position = (pa + pb) / 2; g.transform.rotation = Quaternion.LookRotation(pb - pa);
+            g.transform.localScale = new Vector3(w, th, Vector3.Distance(pa, pb));
+            g.GetComponent<Renderer>().sharedMaterial = m;
+        }
+        Thanh("ThanhDuoi", 0.08f, 0.02f, 0.02f, Sat);
+        Thanh("ThanhTren", h - 0.05f, 0.03f, 0.014f, Sat);
+        Thanh("TayVin", h - 0.025f, 0.06f, 0.05f, Go);
+        // [30/9] va chạm: một hộp mỏng dọc cả đoạn (bám độ dốc), cao đúng bằng lan can
+        var col = new GameObject("Collider"); col.transform.SetParent(cur, false);
+        var dv = b - a; col.transform.rotation = Quaternion.LookRotation(dv); col.transform.position = (a + b) / 2 + col.transform.up * (h / 2);
+        var bc = col.AddComponent<BoxCollider>(); bc.size = new Vector3(0.08f, h, dv.magnitude);
+        cur = old;
+    }
+
+    // mũi bậc granito 0,90 nhô 0,02 ở mép mỗi bậc (cùng tham số với Flight). Gốc file ở mép trái, glTFast lật X → dir=+1 đặt gốc ở x1, dir=−1 (yaw 180) ở x0.
+    static void MuiBacVe(float x0, float x1, float zs, int dir, float baseY, float rise, int risers, float run)
+    {
+        for (int i = 0; i < risers - 1; i++)
+            A("MuiBac_Mon", dir > 0 ? x1 : x0, zs + dir * run * i, baseY + rise * (i + 1), dir > 0 ? 0 : 180, pivot: true);
+    }
+
+    // lan can sắt hoa xiên + tay vịn gỗ cho vế thang chạy +Z dọc mép x; mỗi module dài 1,00 m (đầu dưới ở gốc). rise = độ dốc 1 m (0,68 = 34° · 0,712 = 35°)
+    // file +x → Unity −x nên yaw +90 mới chạy về +Z
+    static void LanCanXien(bool t1, float x, float z0, float y0, int n)
+    {
+        string lc = t1 ? "LanCan_Xien_T1" : "LanCan_Xien_T2", tv = t1 ? "TayVin_Xien_1m_34" : "TayVin_Xien_1m_35";
+        float rise = t1 ? 0.68f : 0.712f;
+        for (int i = 0; i < n; i++)
+        {
+            A(lc, x - 0.03f, z0 + i, y0 + i * rise, 90, pivot: true);
+            A(tv, x - 0.03f, z0 + i, y0 + i * rise + 0.88f, 90, pivot: true);
+        }
+    }
+
+    // rèm hai lớp (voan sát cửa, vải phía trong) treo trên thanh rèm; top = mép trên rèm
+    static void Rem(string voan, string vai, float cx, float zFace, int dir, float top)
+    {
+        foreach (var (a, off) in new[] { (voan, 0.07f), (vai, 0.16f) })
+        {
+            float z = zFace + dir * off, yaw = dir > 0 ? 0 : 180;
+            A("ThanhRem", cx, z, top + 0.03f, yaw, top: true);
+            if (a != null) A(a, cx, z, top, yaw, top: true);
+        }
+    }
+
+    // quạt trần: thân treo trần + 3 cánh cách nhau 120° (file cánh chỉ có 1 cánh, gốc ở tâm trục)
+    static void QuatTran(float x, float z, float ceil)
+    {
+        var than = A("QuatTran_Than", x, z, ceil, 0, new Vector3(0.18f, 0.22f, 0.18f), top: true);
+        if (!FindModel("QuatTran_Canh")) return;
+        for (int i = 0; i < 3; i++) A("QuatTran_Canh", x, z, ceil - 0.17f, i * 120 + 15, pivot: true, k: LocProp.Kieu.Treo);
+    }
+
+    // ═════════════════════════ [29/9 tối] HẦM SẠCH · VẢI PHỦ QUAN TÀI · CÔNG TẮC
+
+    // Hầm giữ đúng thiết kế gốc: chỉ nhóm "Ham" được nằm dưới sàn T1. Món nào KHÔNG thuộc nhóm "Ham" mà tâm lọt vào thể tích hầm (rơi xuyên sàn khi rà soát…)
+    // được nhấc lên sàn T1 ngay phía trên và ghi vào BaoCao_ViTriBiDoi.txt.
+    static string HamSach()
+    {
+        var sb = new System.Text.StringBuilder();
+        var ham = root.Find("Ham");
+        foreach (var lp in root.GetComponentsInChildren<LocProp>(true))
+        {
+            if (!lp || (ham && lp.transform.IsChildOf(ham))) continue;
+            var rs = lp.GetComponentsInChildren<Renderer>(false);
+            if (rs.Length == 0) continue;
+            var b = rs[0].bounds;
+            foreach (var r in rs) b.Encapsulate(r.bounds);
+            var c = b.center;
+            if (c.x < 5.1f || c.x > W || c.z < 7.4f || c.z > 13.5f || b.min.y > -0.3f || c.y > 0.05f) continue;
+            float lift = -b.min.y;
+            lp.transform.position += Vector3.up * lift;
+            sb.AppendLine($"  {lp.name}  ({c.x:0.00},{c.y:0.00},{c.z:0.00}) → nhấc lên {lift:0.00} m về sàn T1");
+        }
+        // vùng đầu thang hầm (hộp x 6,4–W, z 5,7–7,4 sau cửa sắt): chỉ cửa, khoá, móc chìa được có mặt — món khác chỉ CẢNH BÁO để tự dời
+        foreach (var lp in root.GetComponentsInChildren<LocProp>(true))
+        {
+            if (!lp || lp.kieu == LocProp.Kieu.Cua || (ham && lp.transform.IsChildOf(ham))) continue;
+            if (lp.name.StartsWith("MocKhoa") || lp.name.StartsWith("KhoaCua")) continue;
+            var rs = lp.GetComponentsInChildren<Renderer>(false);
+            if (rs.Length == 0) continue;
+            var b = rs[0].bounds;
+            foreach (var r in rs) b.Encapsulate(r.bounds);
+            var c = b.center;
+            if (c.x > 6.4f && c.x < W && c.z > 5.7f && c.z < 7.4f && c.y < 2.6f && b.min.y > -0.3f)
+                sb.AppendLine($"  CẢNH BÁO: {lp.name} nằm trong hộp thang hầm ({c.x:0.00},{c.y:0.00},{c.z:0.00}) — nên dời ra ngoài");
+        }
+        return sb.ToString();
+    }
+
+    // ───── hai tấm vải phủ quan tài
+    static GameObject Cb(Transform p, string n, Vector3 pos, Vector3 size, Material m, PrimitiveType t = PrimitiveType.Cube)
+    {
+        var g = GameObject.CreatePrimitive(t);
+        Object.DestroyImmediate(g.GetComponent<Collider>());
+        g.name = n; g.transform.SetParent(p, false);
+        g.transform.localPosition = pos; g.transform.localScale = size;
+        g.GetComponent<Renderer>().sharedMaterial = m;
+        return g;
+    }
+
+    // dải phẳng dày th nối hai điểm a→b (trục dài theo a→b, bề ngang width nằm theo trục còn lại)
+    static void Dai(Transform p, string n, Vector3 a, Vector3 b, float width, Material m, float th = 0.010f)
+    {
+        var g = Cb(p, n, (a + b) / 2, new Vector3(width, th, Vector3.Distance(a, b)), m);
+        g.transform.localRotation = Quaternion.LookRotation(b - a, Vector3.up);
+    }
+
+    // mỗi quan tài (nắp ba tầng, sống nắp = "Nap_Song") được phủ một tấm vải trắng riêng: dựng theo bounds thật của nắp nên khớp dù dời quan tài
+    static void PhuVaiQuanTai(GameObject qt)
+    {
+        if (!qt) return;
+        var trang = M("M_VaiPhuQuanTai_Trang", "#F3EFE2");
+        var vang = M("M_VaiPhuQuanTai_ViengVang", "#C89A38");
+        var dor = M("M_VaiPhuQuanTai_DaiDo", "#7A1616");
+        int idx = 0;
+        foreach (var t in qt.GetComponentsInChildren<Transform>(false))
+        {
+            if (t.name != "Nap_Song") continue;
+            var rd = t.GetComponent<Renderer>();
+            if (!rd) continue;
+            var b = rd.bounds;
+            VaiPhu("VaiPhuQuanTai_" + (char)('A' + idx++), b.center.x, b.center.z, b.max.y, b.extents.x, b.extents.z, trang, vang, dor);
+        }
+    }
+
+    // một tấm vải nằm dài trên nắp: mặt trên phẳng có dải đỏ giữa + viền vàng hai mép; hai vạt bên ôm bậc nắp rồi buông xuống (6 đoạn so le nhẹ cho ra nếp gấp),
+    // gấu viền vàng; hai vạt đầu/chân ngắn hơn. Dày 1 cm, không collider. hl/hw = nửa dài/nửa rộng của sống nắp.
+    static void VaiPhu(string ten, float cx, float cz, float top, float hl, float hw, Material trang, Material vang, Material dor)
+    {
+        var g = new GameObject(ten).transform;
+        g.SetParent(cur, false);
+        float y0 = top + 0.008f, hl2 = hl + 0.03f, wTop = hw + 0.02f;
+        Cb(g, "Mat_Tren", new Vector3(cx, y0, cz), new Vector3(2 * hl2, 0.012f, 2 * wTop), trang);
+        Cb(g, "Dai_Do", new Vector3(cx, y0 + 0.0075f, cz), new Vector3(2 * hl2 - 0.10f, 0.004f, 0.11f), dor);
+        foreach (var s in new[] { -1f, 1f })
+            Cb(g, "Vien_Vang_Tren", new Vector3(cx, y0 + 0.0075f, cz + s * (wTop - 0.02f)), new Vector3(2 * hl2 - 0.10f, 0.004f, 0.018f), vang);
+        int n = 6;
+        float seg = 2 * hl2 / n;
+        foreach (var s in new[] { -1f, 1f })
+            for (int i = 0; i < n; i++)
+            {
+                float x = cx - hl2 + seg * (i + 0.5f);
+                float f = (i % 2 == 0) ? 0.012f : -0.004f;   // nếp: đoạn chẵn buông xa hơn đoạn lẻ
+                var p0 = new Vector3(x, y0, cz + s * wTop);
+                var p1 = new Vector3(x, y0 - 0.09f, cz + s * (hw + 0.085f + f * 0.5f));
+                var p2 = new Vector3(x, y0 - 0.38f + (i % 3) * 0.012f, cz + s * (hw + 0.16f + f));
+                Dai(g, "Vat_Ben", p0, p1, seg * 0.995f, trang);
+                Dai(g, "Vat_Ben", p1, p2, seg * 0.995f, trang);
+                Dai(g, "Vien_Vang_Gau", Vector3.Lerp(p1, p2, 0.90f), p2, seg * 0.995f, vang, 0.014f);
+            }
+        foreach (var s in new[] { -1f, 1f })
+        {
+            var q0 = new Vector3(cx + s * hl2, y0, cz);
+            var q1 = new Vector3(cx + s * (hl + 0.09f), y0 - 0.10f, cz);
+            var q2 = new Vector3(cx + s * (hl + 0.14f), y0 - 0.32f, cz);
+            Dai(g, "Vat_DauChan", q0, q1, 2 * wTop * 0.97f, trang);
+            Dai(g, "Vat_DauChan", q1, q2, 2 * wTop * 0.97f, trang);
+            Dai(g, "Vien_Vang_Gau", Vector3.Lerp(q1, q2, 0.90f), q2, 2 * wTop * 0.97f, vang, 0.014f);
+        }
+    }
+
+    // ───── [29/9 khuya] đồ phòng bố mẹ dựng lại / sửa
+    // bỏ ô gương trên cánh tủ: xoá tam giác của submesh có vật liệu tên "Guong…"
+    static void BoGuongTu(GameObject g)
+    {
+        if (!g) return;
+        foreach (var r in g.GetComponentsInChildren<MeshRenderer>(true))
+        {
+            var mf = r.GetComponent<MeshFilter>(); if (!mf || !mf.sharedMesh) continue;
+            var ms = r.sharedMaterials; Mesh m = null;
+            for (int i = 0; i < ms.Length && i < mf.sharedMesh.subMeshCount; i++)
+                if (ms[i] && ms[i].name.Contains("Guong"))
+                {
+                    if (!m) { m = Object.Instantiate(mf.sharedMesh); m.name += "_boGuong"; }
+                    m.SetTriangles(new int[0], i);
+                }
+            if (m) mf.sharedMesh = m;
+        }
+    }
+
+    // mắc áo đứng: đế tròn + cột gỗ + hai tầng móc đồng (mô hình .glb cũ không có UV nên texture bị kéo sọc)
+    static void MacAoDungMoi(float x, float z, float y)
+    {
+        var p = new GameObject("MacAoDung").transform; p.SetParent(cur, false); p.position = new Vector3(x, y, z);
+        Mark(p.gameObject, LocProp.Kieu.San);
+        var go = MT("M_MacAo_Go", "D_go.png", 1f, 1f, "#5A3B22");
+        var dong = M("M_DongThau", "#B8862B");
+        Cb(p, "De", new Vector3(0, 0.015f, 0), new Vector3(0.34f, 0.015f, 0.34f), go, PrimitiveType.Cylinder);
+        Cb(p, "Cot", new Vector3(0, 0.8f, 0), new Vector3(0.034f, 0.78f, 0.034f), go, PrimitiveType.Cylinder);
+        Cb(p, "DauCot", new Vector3(0, 1.6f, 0), Vector3.one * 0.06f, dong, PrimitiveType.Sphere);
+        for (int tier = 0; tier < 2; tier++)
+            for (int i = 0; i < 3; i++)
+            {
+                float a = (i * 120f + tier * 60f) * Mathf.Deg2Rad, yy = 1.46f - tier * 0.15f;
+                var arm = Cb(p, "Moc", new Vector3(Mathf.Sin(a) * 0.075f, yy, Mathf.Cos(a) * 0.075f), new Vector3(0.014f, 0.09f, 0.014f), dong, PrimitiveType.Cylinder);
+                arm.transform.localRotation = Quaternion.AngleAxis(a * Mathf.Rad2Deg, Vector3.up) * Quaternion.Euler(55f, 0, 0);
+            }
+    }
+
+    // vòng thanh mảnh (khung lồng quạt): n đoạn hộp nối tiếp nhau trên đường tròn bán kính r, tại z
+    static void Vong2(Transform p, Material m, float z, float r, int n, float th)
+    {
+        float len = 2f * Mathf.PI * r / n * 1.08f;
+        for (int i = 0; i < n; i++)
+        {
+            float a = i * 2f * Mathf.PI / n;
+            var s = Cb(p, "Long", new Vector3(Mathf.Cos(a) * r, Mathf.Sin(a) * r, z), new Vector3(len, th, th), m);
+            s.transform.localRotation = Quaternion.Euler(0, 0, a * Mathf.Rad2Deg + 90f);
+        }
+    }
+
+    // quạt cây (mặt quạt hướng +Z cục bộ): đế đĩa xanh, cột, đầu quạt có lồng khung + 3 cánh — bản .glb cũ chỉ có một đĩa đặc thay cho lồng
+    static void QuatCayMoi(float x, float z, float y, float yaw)
+    {
+        var p = new GameObject("QuatCayDung").transform; p.SetParent(cur, false); p.SetPositionAndRotation(new Vector3(x, y, z), Quaternion.Euler(0, yaw, 0));
+        Mark(p.gameObject, LocProp.Kieu.San);
+        var xanh = M("M_Quat_De", "#1F5A34"); var than = M("M_Quat_Than", "#8C9296"); var lgQ = M("M_Quat_Long", "#5F6468"); var canh = M("M_Quat_Canh", "#C9D3D8");
+        Cb(p, "De", new Vector3(0, 0.012f, 0), new Vector3(0.38f, 0.012f, 0.38f), xanh, PrimitiveType.Cylinder);
+        Cb(p, "Cot", new Vector3(0, 0.55f, 0), new Vector3(0.028f, 0.53f, 0.028f), than, PrimitiveType.Cylinder);
+        var head = new GameObject("Dau").transform; head.SetParent(p, false); head.localPosition = new Vector3(0, 1.12f, 0); head.localRotation = Quaternion.Euler(-8f, 0, 0);
+        var dc = Cb(head, "DongCo", new Vector3(0, 0, -0.03f), new Vector3(0.12f, 0.07f, 0.12f), than, PrimitiveType.Cylinder);
+        dc.transform.localRotation = Quaternion.Euler(90f, 0, 0);
+        Cb(head, "TamCanh", new Vector3(0, 0, 0.05f), Vector3.one * 0.05f, lgQ, PrimitiveType.Sphere);
+        for (int i = 0; i < 3; i++)
+        {
+            var rt = new GameObject("Canh").transform; rt.SetParent(head, false); rt.localPosition = new Vector3(0, 0, 0.055f); rt.localRotation = Quaternion.Euler(0, 0, 25f + i * 120f);
+            var b = Cb(rt, "LaCanh", new Vector3(0, 0.09f, 0), new Vector3(0.075f, 0.17f, 0.006f), canh);
+            b.transform.localRotation = Quaternion.Euler(0, 20f, 0);
+        }
+        Vong2(head, lgQ, 0.13f, 0.19f, 20, 0.008f);    // vành trước
+        Vong2(head, lgQ, -0.03f, 0.19f, 20, 0.008f);   // vành sau
+        Vong2(head, lgQ, 0.135f, 0.11f, 12, 0.005f);   // vành trong phía trước
+        for (int i = 0; i < 8; i++)                       // thanh dọc nối hai vành
+        {
+            float a = i * Mathf.PI / 4f;
+            var st = Cb(head, "ThanhDoc", new Vector3(Mathf.Cos(a) * 0.19f, Mathf.Sin(a) * 0.19f, 0.05f), new Vector3(0.005f, 0.005f, 0.165f), lgQ);
+        }
+        for (int i = 0; i < 4; i++)                       // nan toả từ tâm ở mặt trước
+        {
+            var sp = Cb(head, "Nan", new Vector3(0, 0, 0.133f), new Vector3(0.38f, 0.004f, 0.004f), lgQ);
+            sp.transform.localRotation = Quaternion.Euler(0, 0, i * 45f);
+        }
+    }
+
+    // cửa ra sân phơi (phòng thờ T3): GLB dựng cánh hé ~16°; đóng sát khung rồi cho mở ra phía sân phơi (−Z). Bản lề = gốc nút "CuaSanPhoi_Canh".
+    static void CuaSanPhoiMo(GameObject cs)
+    {
+        if (!cs) return;
+        var canh = cs.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "CuaSanPhoi_Canh");
+        if (!canh) return;
+        Vector3 Tam() { var rs = canh.GetComponentsInChildren<Renderer>(); var b = rs[0].bounds; foreach (var r in rs) b.Encapsulate(r.bounds); return b.center; }
+        float yaw = canh.eulerAngles.y, snap = Mathf.Round(yaw / 180f) * 180f;
+        canh.RotateAround(canh.position, Vector3.up, snap - yaw);   // đóng khít khung
+        var c0 = Tam(); canh.RotateAround(canh.position, Vector3.up, 90f); var c1 = Tam(); canh.RotateAround(canh.position, Vector3.up, -90f);
+        // "Canh_VienNgoai" trong .glb là tấm đặc 0,88 × 2,08 che kín ô kính → đục rỗng: ẩn tấm, dựng lại hai nẹp đứng + nẹp trên + ván chân (kính trà Canh_Kinh lộ ra)
+        var vn = canh.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "Canh_VienNgoai");
+        var vr = vn ? vn.GetComponent<Renderer>() : null;
+        if (vr)
+        {
+            var lb = LocSceneAudit.LocalBounds(vn, canh); var mat = vr.sharedMaterial; vr.enabled = false;
+            void R(string n, Vector3 c, Vector3 sz)
+            {
+                var g = GameObject.CreatePrimitive(PrimitiveType.Cube); Object.DestroyImmediate(g.GetComponent<Collider>());
+                g.name = n; g.transform.SetParent(canh, false); g.transform.localPosition = c; g.transform.localScale = sz;
+                g.GetComponent<Renderer>().sharedMaterial = mat;
+            }
+            const float w = 0.05f;
+            R("Nep_1", new Vector3(lb.min.x + w / 2, lb.center.y, lb.center.z), new Vector3(w, lb.size.y, lb.size.z));
+            R("Nep_2", new Vector3(lb.max.x - w / 2, lb.center.y, lb.center.z), new Vector3(w, lb.size.y, lb.size.z));
+            R("Nep_Tren", new Vector3(lb.center.x, lb.max.y - 0.075f, lb.center.z), new Vector3(lb.size.x - 2 * w, 0.15f, lb.size.z));   // [30/9] nằm giữa hai nẹp đứng, không chồng mặt
+            R("Van_Chan", new Vector3(lb.center.x, lb.min.y + 0.135f, lb.center.z), new Vector3(lb.size.x - 2 * w, 0.27f, lb.size.z));
+        }
+        Mo(canh, 0f, false, "cửa ra sân phơi", c1.z < c0.z ? 100f : -100f);   // mở về phía −Z (sân phơi)
+    }
+
+    // ───── công tắc điện
+    static Material MEm(string name, string hex, string emHex, float k)
+    {
+        var m = M(name, hex);
+        m.SetColor("_EmissionColor", Hex(emHex) * k);
+        m.EnableKeyword("_EMISSION");
+        m.globalIlluminationFlags = MaterialGlobalIlluminationFlags.None;
+        EditorUtility.SetDirty(m);
+        return m;
+    }
+
+    // Cụm công tắc rõ ràng: ván ốp gỗ tối (nổi trên tường vôi ố) + mặt nhựa trắng + phím bập bênh lồi + đèn neon cam (thấy được trong tối)
+    // + biểu tượng bóng đèn phía trên từng phím (núm chỉnh quạt có biểu tượng cánh quạt). Không gắn LocProp: rà soát/texture chi tiết không đụng tới.
+    // (x, z) = điểm trên mặt tường · yc = độ cao TÂM cụm · yaw như A() (0 → mặt quay +Z, 180 → −Z, 90 → +X, −90 → −X) · n = số phím đèn.
+    static LocCongTac CongTac(string ten, float x, float z, float yc, float yaw, int n, bool quat = false)
+    {
+        var p = new GameObject("CongTac_" + ten).transform;
+        p.SetParent(cur, false);
+        p.SetPositionAndRotation(new Vector3(x, yc, z), Quaternion.Euler(0, yaw, 0));
+        var goToi = M("M_CT_GoToi", "#3B281C");
+        var nhua = M("M_CT_NhuaTrang", "#EFEBDD");
+        var lom = M("M_CT_VienLom", "#A9A392");
+        var phim = M("M_CT_Phim", "#FAF8F0");
+        var bong = M("M_CT_BieuTuongDen", "#F2D25E");
+        var xam = M("M_CT_BieuTuongQuat", "#9FB4C0");
+        var nut = M("M_CT_NutDen", "#2A2622");
+        var neon = MEm("M_CT_Neon", "#FF8A3D", "#FF7A2E", 2.2f);
+        int k = n + (quat ? 1 : 0);
+        const float pitch = 0.058f;
+        float pw = pitch * k + 0.03f;
+        Cb(p, "VanOp", new Vector3(0, 0, 0.007f), new Vector3(pw + 0.05f, 0.235f, 0.014f), goToi);
+        Cb(p, "MatNhua", new Vector3(0, -0.03f, 0.019f), new Vector3(pw, 0.125f, 0.010f), nhua);
+        for (int i = 0; i < k; i++)
+        {
+            float px = (i - (k - 1) / 2f) * pitch;
+            if (quat && i == k - 1)
+            {
+                var d = Cb(p, "NutQuat", new Vector3(px, -0.03f, 0.026f), new Vector3(0.046f, 0.003f, 0.046f), phim, PrimitiveType.Cylinder);
+                d.transform.localRotation = Quaternion.Euler(90f, 0, 0);
+                Cb(p, "NutQuat_Vach", new Vector3(px + 0.004f, -0.018f, 0.0295f), new Vector3(0.004f, 0.022f, 0.004f), nut);
+                var a1 = Cb(p, "BieuTuong_Quat", new Vector3(px, 0.076f, 0.017f), new Vector3(0.036f, 0.009f, 0.006f), xam);
+                a1.transform.localRotation = Quaternion.Euler(0, 0, 35f);
+                var a2 = Cb(p, "BieuTuong_Quat", new Vector3(px, 0.076f, 0.017f), new Vector3(0.036f, 0.009f, 0.006f), xam);
+                a2.transform.localRotation = Quaternion.Euler(0, 0, 125f);
+                Cb(p, "BieuTuong_TamQuat", new Vector3(px, 0.076f, 0.018f), new Vector3(0.011f, 0.011f, 0.011f), nut, PrimitiveType.Sphere);
+            }
+            else
+            {
+                Cb(p, "Phim_Lom", new Vector3(px, -0.03f, 0.0245f), new Vector3(0.042f, 0.078f, 0.006f), lom);
+                var ph = Cb(p, "Phim", new Vector3(px, -0.03f, 0.031f), new Vector3(0.034f, 0.070f, 0.014f), phim);
+                ph.transform.localRotation = Quaternion.Euler(-7f, 0, 0);
+                Cb(p, "DenNeon", new Vector3(px, -0.082f, 0.026f), new Vector3(0.007f, 0.007f, 0.004f), neon);
+                Cb(p, "BieuTuong_Den", new Vector3(px, 0.082f, 0.017f), new Vector3(0.024f, 0.024f, 0.024f), bong, PrimitiveType.Sphere);
+                Cb(p, "BieuTuong_DeDen", new Vector3(px, 0.064f, 0.017f), new Vector3(0.013f, 0.009f, 0.009f), xam);
+            }
+        }
+        // [29/9 khuya] bật/tắt được: nhìn vào cụm rồi nhấn E (LocFirstPerson) — lật phím; nối đèn qua LocCongTac.dens
+        var bcs = p.gameObject.AddComponent<BoxCollider>();
+        bcs.center = new Vector3(0, 0, 0.02f); bcs.size = new Vector3(pw + 0.05f, 0.235f, 0.06f);
+        var lct = p.gameObject.AddComponent<LocCongTac>(); lct.ten = "công tắc";
+        return lct;
+    }
+
+    // Toàn bộ công tắc trong nhà: mỗi phòng/hành lang có cụm riêng cạnh cửa ra vào, tâm cao 1,45 m — thấp hơn mắt người chơi (1,65 m) ~20 cm nên nhìn thẳng là thấy,
+    // không phải cúi hay ngẩng. Tên "CongTac_<chỗ>" để script game tìm và gán đèn tương ứng.
+    static void CongTacToanNha()
+    {
+        cur = G("CongTac");
+        const float m = 1.45f;
+        // Tầng 1 (sàn 0)
+        CongTac("Hien", 2.10f, 0.0f, m, 0, 2);                       // mặt tường trong cạnh cửa chính (trái): đèn hiên + đèn rạp
+        CongTac("PhongKhach", 5.30f, 7.4f, m, 180, 3, quat: true);   // cạnh ô thông sảnh sau: đèn tuýp · đèn chùm · đèn cuối phòng + núm quạt trần
+        CongTac("SanhSau", 4.75f, 10.9f, m, 180, 2);                 // sảnh sau, cạnh lối vào bếp: đèn sảnh + đèn chiếu nghỉ thang
+        CongTac("Bep_Cua", 4.75f, 11.0f, m, 0, 2);                   // trong bếp, cạnh lối từ sảnh: đèn bếp + đèn giếng trời
+        CongTac("Bep_GiengTroi", 3.10f, 16.4f, m, 180, 1);           // cuối bếp, cạnh cửa giếng trời
+        CongTac("WC_T1", 4.6f, 21.3f, m, -90, 1);                    // hành lang khối sau, cạnh cửa WC
+        // Tầng 2 (sàn +3,4)
+        const float t2 = 3.4f + m;
+        CongTac("BoMe", 3.25f, 5.4f, t2, 180, 2);                    // trong phòng bố mẹ, cạnh cửa
+        CongTac("HanhLang_ChieuNghi", 3.1f, 10.4f, t2, -90, 2);      // hành lang T2, đầu thang: đèn chiếu nghỉ + đèn hành lang
+        CongTac("HanhLang_Khoi", 3.1f, 13.0f, t2, -90, 1);           // hành lang T2, trước cửa phòng Khôi
+        CongTac("PhongNhim", 3.2f, 10.15f, t2, 90, 1);               // trong phòng Nhím, cạnh cửa
+        CongTac("PhongKhoi", 3.2f, 14.45f, t2, 90, 2);               // trong phòng Khôi, cạnh cửa: đèn trần + đèn bàn
+        // Tầng 3 (sàn +6,6)
+        const float t3 = 6.6f + m;
+        CongTac("PhongTho", 7.05f, 6.4f, t3, 180, 2);                // trong phòng thờ, cạnh cửa: hai đèn ống
+        CongTac("Sanh_T3", 5.45f, 6.5f, t3, 0, 1);                   // sảnh T3, cạnh cửa phòng thờ
+        // Hầm: công tắc đặt trên tường ĐỐI DIỆN cửa sắt (mở cửa ra là thấy), tâm cao 1,45 m, chữ BẬT ĐIỆN ngay bên cạnh (dựng ở Ham())
+        var ctHam = CongTac("Ham", W, 6.9f, m, -90, 1);
+        var denHam = root.Find("Ham/Den_BongDayToc_Ham");
+        if (denHam) ctHam.dens = new[] { denHam.GetComponent<Light>() };
+    }
+
+    // ═════════════════════════ HELPERS
+    static Transform G(string path)
+    {
+        var t = root;
+        foreach (var part in path.Split('/'))
+        {
+            var c = t.Find(part);
+            if (!c) { c = new GameObject(part).transform; c.SetParent(t, false); }
+            t = c;
+        }
+        return t;
+    }
+
+    static GameObject Box(string n, float x0, float x1, float y0, float y1, float z0, float z1, Material m, bool col = true)
+    {
+        var g = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        g.name = n;
+        g.transform.SetParent(cur, false);
+        g.transform.position = new Vector3((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2);
+        g.transform.localScale = new Vector3(Mathf.Abs(x1 - x0), Mathf.Abs(y1 - y0), Mathf.Abs(z1 - z0));
+        boxObjs.Add(g);
+        g.GetComponent<Renderer>().sharedMaterial = m;
+        if (m && m.name == "M_KinhTrong") g.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        if (m && tileOf.TryGetValue(m.name, out var tl))
+        {
+            g.GetComponent<MeshFilter>().sharedMesh = WorldUVBox(g.transform.position, g.transform.localScale, tl.u, tl.v, tl.top);
+            if (tl.top) g.GetComponent<Renderer>().sharedMaterials = new[] { m, Tran };
+        }
+        if (!col) Object.DestroyImmediate(g.GetComponent<Collider>());
+        GameObjectUtility.SetStaticEditorFlags(g, StaticEditorFlags.ContributeGI | StaticEditorFlags.BatchingStatic |
+                                                  StaticEditorFlags.OccluderStatic | StaticEditorFlags.OccludeeStatic);
+        return g;
+    }
+
+    static void Slab(float x0, float x1, float z0, float z1, float top, Material m, float th = 0.2f)
+        => Box("San", x0, x1, top - th, top, z0, z1, m);
+
+    // tường chạy theo X (mỏng theo Z) / chạy theo Z (mỏng theo X). holes: nhóm 4 số (a0, a1, cao0, cao1)
+    static void WallX(string n, float z0, float z1, float x0, float x1, float y0, float y1, Material m, params float[] holes)
+        => Wall(true, n, z0, z1, x0, x1, y0, y1, m, holes);
+    static void WallZ(string n, float x0, float x1, float z0, float z1, float y0, float y1, Material m, params float[] holes)
+        => Wall(false, n, x0, x1, z0, z1, y0, y1, m, holes);
+
+    static void Wall(bool alongX, string n, float t0, float t1, float a0, float a1, float y0, float y1, Material m, float[] h)
+    {
+        var hs = new List<(float a0, float a1, float h0, float h1)>();
+        for (int i = 0; i + 3 < h.Length; i += 4) hs.Add((h[i], h[i + 1], h[i + 2], h[i + 3]));
+        hs.Sort((p, q) => p.a0.CompareTo(q.a0));
+        int k = 0; float c = a0;
+        void Seg(float s0, float s1, float v0, float v1)
+        {
+            if (s1 - s0 < 0.001f || v1 - v0 < 0.001f) return;
+            if (alongX) Box($"{n}_{k++}", s0, s1, v0, v1, t0, t1, m);
+            else Box($"{n}_{k++}", t0, t1, v0, v1, s0, s1, m);
+        }
+        foreach (var o in hs) { Seg(c, o.a0, y0, y1); Seg(o.a0, o.a1, y0, o.h0); Seg(o.a0, o.a1, o.h1, y1); c = o.a1; }
+        Seg(c, a1, y0, y1);
+    }
+
+    // một vế thang: risers bậc, rise âm = đi xuống. Bậc là tấm dày (rise + 0,12) để gầm thang còn trống.
+    static void Flight(string n, float x0, float x1, float zs, int dir, float baseY, float rise, int risers, float run, Material m)
+    {
+        for (int i = 0; i < risers - 1; i++)
+        {
+            float top = baseY + rise * (i + 1), za = zs + dir * run * i, zb = zs + dir * run * (i + 1);
+            Box($"{n}_Bac{i + 1:00}", x0, x1, top - Mathf.Abs(rise) - 0.12f, top, Mathf.Min(za, zb), Mathf.Max(za, zb), m);
+        }
+    }
+
+    static void Rail(string n, float x, float z0, float y0, float z1, float y1)
+    {
+        var a = new Vector3(x, y0, z0); var b = new Vector3(x, y1, z1);
+        var g = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        g.name = n; g.transform.SetParent(cur, false);
+        Object.DestroyImmediate(g.GetComponent<Collider>());
+        g.transform.position = (a + b) / 2;
+        g.transform.rotation = Quaternion.LookRotation(b - a);
+        g.transform.localScale = new Vector3(0.06f, 0.05f, Vector3.Distance(a, b));
+        g.GetComponent<Renderer>().sharedMaterial = Go;
+    }
+
+    // ───── [29/9 khuya] cửa mở được: gắn LocDoor + BoxCollider lên cánh (nhìn vào cánh, nhấn E). Tư thế dựng sẵn = trạng thái đầu.
+    // yawKhac = yaw (như Leaf) của trạng thái CÒN LẠI; goc = độ quay từ tư thế dựng sẵn sang trạng thái đó (mặc định quay ngắn nhất tới yawKhac).
+    // banLe = bản lề theo toạ độ cục bộ của cánh (mặc định gốc cánh — Leaf/LeafM/CuaChinhLa đều đặt gốc tại bản lề).
+    static LocDoor Mo(Transform leaf, float yawKhac, bool dungSanLaMo = true, string ten = "cửa", float? goc = null, Vector3? banLe = null)
+    {
+        if (!leaf) return null;
+        var d = leaf.gameObject.AddComponent<LocDoor>();
+        d.ten = ten; d.dungSanLaMo = dungSanLaMo;
+        d.goc = goc ?? Mathf.DeltaAngle(leaf.eulerAngles.y, yawKhac);
+        d.banLe = banLe ?? Vector3.zero;
+        var lb = LocSceneAudit.LocalBounds(leaf, leaf);
+        if (lb.size.sqrMagnitude > 0)
+        {
+            var bc = leaf.gameObject.AddComponent<BoxCollider>();
+            bc.center = lb.center; bc.size = new Vector3(Mathf.Max(lb.size.x, 0.05f), lb.size.y, Mathf.Max(lb.size.z, 0.06f));
+        }
+        return d;
+    }
+
+    static Transform Leaf(string n, float hx, float hz, float y, float w, float h, float yaw, Material m)
+    {
+        var p = new GameObject(n).transform;
+        p.SetParent(cur, false);
+        p.SetPositionAndRotation(new Vector3(hx, y, hz), Quaternion.Euler(0, yaw, 0));
+        var c = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        Object.DestroyImmediate(c.GetComponent<Collider>());
+        c.name = "Canh"; c.transform.SetParent(p, false);
+        c.transform.localPosition = new Vector3(w / 2, h / 2, 0);
+        c.transform.localScale = new Vector3(w, h, 0.04f);
+        c.GetComponent<Renderer>().sharedMaterial = m;
+        return p;
+    }
+
+    static void L(string n, float x, float y, float z, string hex, float range, float intensity, bool shadow = false)
+    {
+        var g = new GameObject("Den_" + n);
+        g.transform.SetParent(cur, false);
+        g.transform.position = new Vector3(x, y, z);
+        var l = g.AddComponent<Light>();
+        l.type = LightType.Point; l.color = Hex(hex); l.range = range; l.intensity = intensity;
+        l.shadows = shadow ? LightShadows.Soft : LightShadows.None;
+    }
+
+    // ───── asset từ HMAsset
+    static GameObject FindModel(string name)
+    {
+        if (index == null)
+        {
+            index = new Dictionary<string, string>();
+            foreach (var folder in ModelFolders)
+            {
+                if (!AssetDatabase.IsValidFolder(folder)) continue;
+                foreach (var guid in AssetDatabase.FindAssets("t:GameObject", new[] { folder }))
+                {
+                    var p = AssetDatabase.GUIDToAssetPath(guid);
+                    var key = System.IO.Path.GetFileNameWithoutExtension(p);
+                    if (!index.ContainsKey(key)) index[key] = p;
+                }
+            }
+        }
+        return index.TryGetValue(name, out var path) ? AssetDatabase.LoadAssetAtPath<GameObject>(path) : null;
+    }
+
+    static bool IsZUp(string name) => FindModel(name) && index[name].Contains("/NoiThat/");
+
+    // gl = độ lệch trong toạ độ gốc của file .glb (x, y, z với z hướng lên) — dùng khi ráp nhiều file chung một khung
+    static GameObject Inst(string name, string[] hide = null, Vector3? gl = null)
+    {
+        var a = FindModel(name);
+        if (!a) { missing.Add(name); return null; }
+        found.Add(name);
+        var g = (GameObject)PrefabUtility.InstantiatePrefab(a, cur);
+        foreach (var t in g.GetComponentsInChildren<Transform>(true))
+            if (t != g.transform && (HideRefs.Any(h => t.name.StartsWith(h)) || (hide != null && hide.Any(h => t.name.StartsWith(h))))) t.gameObject.SetActive(false);
+        if (!IsZUp(name)) return g;
+        // GLB NoiThat_Game_Fixed đã đổi Z-up → Y-up ngay trong file (x,y,z)→(x,z,−y) và có sẵn vật liệu, nên không xoay/tô màu nữa.
+        // Sau glTFast (lật X) mặt trước (−y của file gốc) vẫn = +Z cục bộ. Độ lệch gl vẫn tính theo toạ độ file gốc (z hướng lên).
+        var w = new GameObject(name);
+        w.transform.SetParent(cur, false);
+        g.transform.SetParent(w.transform, false);
+        g.transform.localRotation = Quaternion.identity;
+        var o = gl ?? Vector3.zero;
+        g.transform.localPosition = new Vector3(-o.x, o.z, -o.y);
+        if (name is "GheAn_bo" or "GheAn_khoi") Tint(w, name);   // hai ghế này trong file .glb bị trắng, ép về màu gỗ như GheAn_me / GheAn_nhim
+        return w;
+    }
+
+    // ~60 file .glb của GĐ5 không kèm vật liệu/UV → tô màu phẳng theo chất liệu để khỏi trắng xoá
+    static readonly Dictionary<string, string> NoMatColor = new()
+    {
+        ["BanAn"] = "#6B4A2E", ["GheAn_me"] = "#6B4A2E", ["GheAn_nhim"] = "#6B4A2E", ["GheAn_bo"] = "#6B4A2E", ["GheAn_khoi"] = "#6B4A2E", ["BeRua"] = "#C9C4B6", ["ChauInox"] = "#B8BCBF",
+        ["BeGiat"] = "#8C877D", ["BinhNongLanh"] = "#E6E3DA", ["CocBanChai_TreEm"] = "#E07A5F", ["DepToOng"] = "#E8E6DE",
+        ["DoBep_Gop"] = "#8A8378", ["KeKinh_DoBoMe"] = "#CFCAC0", ["LongBan"] = "#5A9E6F", ["NoiComDien"] = "#D9D2C3",
+        ["PhichHoa"] = "#B84A3A", ["ThungNuoc_Nap"] = "#3F6FA8", ["TuLanh"] = "#E4E1D6", ["TuLanh_Canh"] = "#E4E1D6",
+        ["XiBet"] = "#ECE9E1", ["XoGao_Up"] = "#4A7FB5", ["BanChaiCo_XaPhong"] = "#D8C27A", ["BangDienChinh"] = "#DAD6C8",
+        ["BongCompact"] = "#F4F4F0", ["DenBanHoc"] = "#3F6E4F", ["DenChum_5Tay"] = "#C9A64A", ["DenNgu_BoMe"] = "#E8D9B8",
+        ["DenOpTran"] = "#EFEDE6", ["DenTuyp_120"] = "#F2F2EE", ["DenTuyp_60"] = "#F2F2EE", ["QuatTreoTuong_DauQuat"] = "#DCD8CC",
+        ["ChoiLau_Gop"] = "#B89A5A", ["DoKe_Gop"] = "#7A7A74", ["GheDau_Nhua"] = "#C43A2F", ["GocKho_DoGio"] = "#9C8A6A",
+        ["GocKho_DoNha"] = "#8C877D", ["GocKho_DoTet"] = "#B0463A", ["MocChiaKhoa"] = "#8A6B3E", ["TuThap_Sanh"] = "#6B4A2E",
+        ["XeDap_Khoi"] = "#2F4F6F", ["AnhCuoi"] = "#B89A5A", ["AnhNho_Nhim3Tuoi"] = "#B89A5A", ["BanTrangDiem"] = "#5C3A24",
+        ["DoBanTrangDiem"] = "#C98E8E", ["DoTuDauGiuong_Bo"] = "#8C7A5C", ["DoTuDauGiuong_Me"] = "#9C6B8A", ["GioQuanAo"] = "#A88B5A",
+        ["GiuongDoi"] = "#5C3A24", ["Guong"] = "#5C3A24", ["MacAoDung"] = "#6B4A2E", ["ManTuyn_Buoc"] = "#E6E6DF",
+        ["ManTuyn_Buoc_Tuong"] = "#E6E6DF", ["TuDauGiuong"] = "#5C3A24", ["AnhGiaDinh"] = "#8C7A5C", ["BangGDVH"] = "#C9A94A",
+        ["DoTrongTuKinh"] = "#B8A070", ["DongHoQuaLac"] = "#5C3A24", ["Loa_Thung"] = "#3A2A1E", ["Salon_BanNuoc"] = "#5C3A24",
+        ["TV_CRT"] = "#2A2A2A", ["TranhTheu"] = "#7A5A3A", ["TuTV_CanhKinh_Phai"] = "#9FB3B0", ["TuTV_CanhKinh_Trai"] = "#9FB3B0",
+        ["TuTV_Dung"] = "#5C3A24", ["BanHoc_Khoi"] = "#6B4A2E", ["MocDongPhuc"] = "#E8E8EE", ["TuAo_Khoi"] = "#6B4A2E",
+        ["TuNhua_Nhim"] = "#5B8FC7",
+    };
+
+    static void Tint(GameObject g, string name)
+    {
+        if (!NoMatColor.TryGetValue(name, out var hex)) return;
+        var m = M("M_NT_" + hex.TrimStart('#'), hex);
+        foreach (var r in g.GetComponentsInChildren<Renderer>(true))
+            r.sharedMaterials = Enumerable.Repeat(m, Mathf.Max(1, r.sharedMaterials.Length)).ToArray();
+    }
+
+    // âm nền lặp 3D gắn vào món; play=false: có sẵn AudioSource, chờ script game bật
+    static void Amb(GameObject g, string clip, float vol, float min, float max, bool play = true)
+    {
+        if (!g) return;
+        var au = g.AddComponent<AudioSource>();
+        au.clip = AssetDatabase.LoadAssetAtPath<AudioClip>($"Assets/LOC_House/Audio/{clip}");
+        au.loop = true; au.playOnAwake = play; au.spatialBlend = 1; au.minDistance = min; au.maxDistance = max; au.volume = vol;
+    }
+
+    static GameObject Mark(GameObject g, LocProp.Kieu k)
+    {
+        if (!g) return g;
+        var lp = g.GetComponent<LocProp>();
+        if (!lp) lp = g.AddComponent<LocProp>();
+        lp.kieu = k;
+        return g;
+    }
+
+    // đặt asset: mặc định canh theo bounds (tâm XZ + đáy), pivot:true = đặt đúng gốc toạ độ của file
+    // top:true = canh MẶT TRÊN của món tại y (đồ treo trần) · pivot:true = đặt đúng gốc toạ độ của file
+    static GameObject A(string name, float x, float z, float y, float yaw = 0, Vector3? ph = null, bool pivot = false, string label = null,
+                        string[] hide = null, LocProp.Kieu? k = null, bool top = false)
+    {
+        var kind = k ?? (pivot ? LocProp.Kieu.CoDinh : top ? LocProp.Kieu.Treo : LocProp.Kieu.San);
+        var g = Inst(name, hide);
+        if (!g)
+        {
+            var s = ph ?? new Vector3(0.3f, 0.3f, 0.3f);
+            return P((label ?? name) + " [thiếu file]", s.x, s.y, s.z, x, z, top ? y - s.y : y, yaw, XANH, true, kind);
+        }
+        g.transform.rotation = Quaternion.Euler(0, yaw, 0);
+        if (pivot) g.transform.position = new Vector3(x, y, z); else Align(g, x, y, z, top);
+        return Mark(g, kind);
+    }
+
+    // nhiều file ráp chung một khung. Phần tử "Ten@x,y,z" = lệch theo toạ độ gốc của file (m, z hướng lên).
+    static GameObject Set(string n, string[] parts, float x, float z, float y, float yaw, bool pivot = false, LocProp.Kieu k = LocProp.Kieu.San)
+    {
+        var p = new GameObject(n);
+        p.transform.SetParent(cur, false);
+        var old = cur; cur = p.transform;
+        foreach (var s in parts)
+        {
+            var bits = s.Split('@');
+            Vector3? off = null;
+            if (bits.Length > 1)
+            {
+                var f = bits[1].Split(',').Select(v => float.Parse(v, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+                off = new Vector3(f[0], f[1], f[2]);
+            }
+            Inst(bits[0], null, off);
+        }
+        cur = old;
+        p.transform.rotation = Quaternion.Euler(0, yaw, 0);
+        if (pivot) p.transform.position = new Vector3(x, y, z); else Align(p, x, y, z);
+        return Mark(p, k);
+    }
+
+    static void Align(GameObject g, float x, float y, float z, bool top = false)
+    {
+        var rs = g.GetComponentsInChildren<Renderer>(false);
+        if (rs.Length == 0) { g.transform.position = new Vector3(x, y, z); return; }
+        var b = rs[0].bounds;
+        foreach (var r in rs) b.Encapsulate(r.bounds);
+        g.transform.position += new Vector3(x - b.center.x, y - (top ? b.max.y : b.min.y), z - b.center.z);
+    }
+
+    // cánh cửa/cổng bằng mesh thật: bản lề tại (hx, y, hz), yaw như Leaf(); cánh tự quay cho nằm về phía +X của bản lề
+    static Transform LeafM(string asset, string n, float hx, float hz, float y, float yaw, float w, float h, Material fb)
+    {
+        if (!FindModel(asset)) { missing.Add(asset); return Leaf(n, hx, hz, y, w, h, yaw, fb); }
+        var p = new GameObject(n).transform;
+        p.SetParent(cur, false);
+        p.SetPositionAndRotation(new Vector3(hx, y, hz), Quaternion.Euler(0, yaw, 0));
+        var old = cur; cur = p;
+        var g = Inst(asset);
+        cur = old;
+        g.transform.localPosition = Vector3.zero;
+        g.transform.localRotation = Quaternion.identity;
+        if (LocSceneAudit.LocalBounds(g.transform, p).center.x < 0) g.transform.localRotation = Quaternion.Euler(0, 180, 0);
+        Mark(p.gameObject, LocProp.Kieu.Cua);
+        return p;
+    }
+
+    // placeholder: w theo X cục bộ, d theo Z cục bộ (mặt trước = +Z), đáy tại y
+    static GameObject P(string label, float w, float h, float d, float x, float z, float y, float yaw = 0, Color? col = null, bool solid = true,
+                        LocProp.Kieu? k = null)
+    {
+        placeholders.Add(label.Trim());
+        var p = new GameObject("PH_" + label.Trim());
+        p.AddComponent<LocProp>().kieu = k ?? (solid ? LocProp.Kieu.San : LocProp.Kieu.Treo);
+        p.transform.SetParent(cur, false);
+        p.transform.SetPositionAndRotation(new Vector3(x, y, z), Quaternion.Euler(0, yaw, 0));
+        var c = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        c.name = "Khoi"; c.transform.SetParent(p.transform, false);
+        c.transform.localPosition = new Vector3(0, h / 2, 0);
+        c.transform.localScale = new Vector3(w, h, d);
+        c.GetComponent<Renderer>().sharedMaterial = PhMat(col ?? VANG);
+        if (!solid) Object.DestroyImmediate(c.GetComponent<Collider>());
+
+        var t = new GameObject("Nhan");
+        t.SetActive(false);   // nhãn chữ vẽ đè qua tường → mặc định tắt, bật bằng menu LOC
+        t.transform.SetParent(p.transform, false);
+        t.transform.localPosition = new Vector3(0, h + 0.05f, d / 2);
+        t.transform.localRotation = Quaternion.Euler(0, 180, 0);
+        var tm = t.AddComponent<TextMesh>();
+        tm.text = label.Trim(); tm.font = font; tm.fontSize = 48; tm.characterSize = 0.008f;
+        tm.anchor = TextAnchor.LowerCenter; tm.color = Hex("#1A1A1A");
+        t.GetComponent<MeshRenderer>().sharedMaterial = font.material;
+        return p;
+    }
+
+    static Material PhMat(Color c) => M("M_PH_" + ColorUtility.ToHtmlStringRGB(c), "#" + ColorUtility.ToHtmlStringRGB(c));
+
+    static readonly Dictionary<string, (float u, float v, bool top)> tileOf = new();
+
+    static Material MT(string name, string tex, float tu, float tv, string tint = "#FFFFFF", bool topOnly = false)
+    {
+        tileOf[name] = (tu, tv, topOnly);
+        if (mats.TryGetValue(name, out var m0) && m0) return m0;
+        var path = $"{MatFolder}/{name}.mat";
+        var m = AssetDatabase.LoadAssetAtPath<Material>(path);
+        if (!m)
+        {
+            System.IO.Directory.CreateDirectory(MatFolder);
+            var sh = Shader.Find("Universal Render Pipeline/Simple Lit") ?? Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard");
+            m = new Material(sh);
+            var t = AssetDatabase.LoadAssetAtPath<Texture2D>($"{TexFolder}/{tex}");
+            if (t) { m.SetTexture("_BaseMap", t); m.mainTexture = t; }
+            m.SetColor("_BaseColor", Hex(tint)); m.color = Hex(tint);
+            AssetDatabase.CreateAsset(m, path);
+        }
+        return mats[name] = m;
+    }
+
+    // hộp có UV tính theo mét trong không gian thế giới → gạch/vôi không bị kéo giãn theo kích thước tấm
+    static Mesh WorldUVBox(Vector3 c, Vector3 s, float tu, float tv, bool topOnly = false)
+    {
+        var vs = new List<Vector3>(); var ns = new List<Vector3>(); var uvs = new List<Vector2>(); var tr = new List<int>(); var tr2 = new List<int>();
+        void Face(Vector3 n, Vector3 a, Vector3 b, Vector3 d, Vector3 e)
+        {
+            var p = new[] { a, b, d, e };
+            if (Vector3.Dot(Vector3.Cross(p[1] - p[0], p[2] - p[0]), n) < 0) { p = new[] { a, e, d, b }; }   // Unity: mặt trước = thuận chiều kim đồng hồ ⇒ cross cùng hướng pháp tuyến
+            int i0 = vs.Count;
+            foreach (var q in p)
+            {
+                var w = c + Vector3.Scale(q, s);
+                vs.Add(q); ns.Add(n);
+                uvs.Add(Mathf.Abs(n.x) > 0.5f ? new Vector2(w.z / tu, w.y / tv) : Mathf.Abs(n.z) > 0.5f ? new Vector2(w.x / tu, w.y / tv) : new Vector2(w.x / tu, w.z / tu));
+            }
+            (topOnly && n != Vector3.up ? tr2 : tr).AddRange(new[] { i0, i0 + 1, i0 + 2, i0, i0 + 2, i0 + 3 });
+        }
+        var h = 0.5f;
+        Face(Vector3.right, new(h, -h, -h), new(h, h, -h), new(h, h, h), new(h, -h, h));
+        Face(Vector3.left, new(-h, -h, h), new(-h, h, h), new(-h, h, -h), new(-h, -h, -h));
+        Face(Vector3.up, new(-h, h, -h), new(-h, h, h), new(h, h, h), new(h, h, -h));
+        Face(Vector3.down, new(-h, -h, h), new(-h, -h, -h), new(h, -h, -h), new(h, -h, h));
+        Face(Vector3.forward, new(h, -h, h), new(h, h, h), new(-h, h, h), new(-h, -h, h));
+        Face(Vector3.back, new(-h, -h, -h), new(-h, h, -h), new(h, h, -h), new(h, -h, -h));
+        var m = new Mesh { name = "BoxWorldUV" };
+        m.SetVertices(vs); m.SetNormals(ns); m.SetUVs(0, uvs);
+        if (topOnly) { m.subMeshCount = 2; m.SetTriangles(tr, 0); m.SetTriangles(tr2, 1); } else m.SetTriangles(tr, 0);
+        m.RecalculateBounds();
+        return m;
+    }
+
+    // decal cắt alpha dán lên tường/trần: yaw như A() (mặt trước = +Z), x/z = vị trí mặt dán, y = mép dưới
+    static void Decal(string tex, string matName, float x, float y, float z, float yaw, float w, float h)
+    {
+        var path = $"{MatFolder}/{matName}.mat";
+        var m = AssetDatabase.LoadAssetAtPath<Material>(path);
+        if (!m)
+        {
+            var sh = Shader.Find("Universal Render Pipeline/Simple Lit") ?? Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard");
+            m = new Material(sh);
+            var t = AssetDatabase.LoadAssetAtPath<Texture2D>(tex.Contains("/") ? tex : $"{TexFolder}/{tex}");
+            if (t) { m.SetTexture("_BaseMap", t); m.mainTexture = t; }
+            m.SetFloat("_AlphaClip", 1); m.SetFloat("_Cutoff", 0.5f); m.EnableKeyword("_ALPHATEST_ON");
+            m.SetOverrideTag("RenderType", "TransparentCutout"); m.renderQueue = 2450;
+            System.IO.Directory.CreateDirectory(MatFolder);
+            AssetDatabase.CreateAsset(m, path);
+        }
+        var q = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        q.name = "Decal_" + System.IO.Path.GetFileNameWithoutExtension(tex);
+        Object.DestroyImmediate(q.GetComponent<Collider>());
+        q.transform.SetParent(cur, false);
+        q.transform.SetPositionAndRotation(new Vector3(x, y + h / 2, z), Quaternion.Euler(0, yaw + 180, 0));   // Quad nhìn về −Z nên xoay thêm 180°
+        q.transform.localScale = new Vector3(w, h, 1);
+        q.GetComponent<Renderer>().sharedMaterial = m;
+    }
+
+    // ───── decal mềm (alpha mờ) hoặc cắt (cut) dán tường/sàn/trần. yaw như A(): mặt trước = +Z.
+    static Material DecalMat(string tex, string matName, bool cut)
+    {
+        var path = $"{MatFolder}/{matName}.mat";
+        var m = AssetDatabase.LoadAssetAtPath<Material>(path);
+        if (m) return m;
+        m = new Material(Shader.Find("Universal Render Pipeline/Simple Lit") ?? Shader.Find("Standard"));
+        var t = AssetDatabase.LoadAssetAtPath<Texture2D>(tex.Contains("/") ? tex : $"{TexFolder}/{tex}");
+        if (t) { m.SetTexture("_BaseMap", t); m.mainTexture = t; }
+        m.SetColor("_SpecColor", new Color(0, 0, 0, 1));
+        if (cut)
+        {
+            m.SetFloat("_AlphaClip", 1); m.SetFloat("_Cutoff", 0.5f); m.EnableKeyword("_ALPHATEST_ON");
+            m.SetOverrideTag("RenderType", "TransparentCutout"); m.renderQueue = 2450;
+        }
+        else
+        {
+            m.SetFloat("_Surface", 1); m.SetFloat("_Blend", 0);
+            m.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha); m.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            m.SetFloat("_ZWrite", 0); m.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            m.SetOverrideTag("RenderType", "Transparent"); m.renderQueue = 3000; m.SetShaderPassEnabled("ShadowCaster", false);
+        }
+        System.IO.Directory.CreateDirectory(MatFolder);
+        AssetDatabase.CreateAsset(m, path);
+        return m;
+    }
+
+    static void DecalQ(string tex, string matName, bool cut, Vector3 pos, Quaternion rot, float w, float h)
+    {
+        var q = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        q.name = "Decal_" + System.IO.Path.GetFileNameWithoutExtension(tex);
+        Object.DestroyImmediate(q.GetComponent<Collider>());
+        q.transform.SetParent(cur, false);
+        q.transform.SetPositionAndRotation(pos, rot); q.transform.localScale = new Vector3(w, h, 1);
+        var r = q.GetComponent<Renderer>(); r.sharedMaterial = DecalMat(tex, matName, cut);
+        r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+    }
+    // tường: (x, y = mép dưới, z) là điểm trên mặt tường
+    static void DW(string tex, string mat, float x, float y, float z, float yaw, float w, float h, bool cut = false)
+        => DecalQ(tex, mat, cut, new Vector3(x, y + h / 2, z), Quaternion.Euler(0, yaw + 180, 0), w, h);
+    // sàn: (x, y, z) tâm; w theo X, h theo Z (sau khi xoay yaw)
+    static void DF(string tex, string mat, float x, float y, float z, float yaw, float w, float h)
+        => DecalQ(tex, mat, false, new Vector3(x, y, z), Quaternion.Euler(90, yaw, 0), w, h);
+    // trần: quay xuống dưới
+    static void DC(string tex, string mat, float x, float y, float z, float w, float h, float yaw)
+        => DecalQ(tex, mat, false, new Vector3(x, y, z), Quaternion.Euler(-90, yaw, 0), w, h);
+
+    // vệt mòn giữa mặt bậc, một tấm mỗi bậc (cùng thông số Flight)
+    static void MonBac(float x0, float x1, float zs, int dir, float baseY, float rise, int risers, float run)
+    {
+        for (int i = 0; i < risers - 1; i++)
+        {
+            float top = baseY + rise * (i + 1), zc = zs + dir * run * (i + 0.5f);
+            DF("Decal_BacThang_Mon.png", "M_Decal_BacThangMon", (x0 + x1) / 2, top + 0.002f, zc, 0, (x1 - x0) * 0.8f, run * 0.9f);
+        }
+    }
+
+    // vật liệu kính: bán trong suốt, không đổ bóng, không ghi độ sâu → nhìn xuyên được từ cả hai phía
+    static Material MG(string name, string hex, float alpha)
+    {
+        if (mats.TryGetValue(name, out var m0) && m0) return m0;
+        var path = $"{MatFolder}/{name}.mat";
+        var m = AssetDatabase.LoadAssetAtPath<Material>(path);
+        if (!m)
+        {
+            System.IO.Directory.CreateDirectory(MatFolder);
+            var sh = Shader.Find("Universal Render Pipeline/Simple Lit") ?? Shader.Find("Standard");
+            m = new Material(sh);
+            var c = Hex(hex); c.a = alpha;
+            m.SetColor("_BaseColor", c); m.color = c;
+            m.SetFloat("_Surface", 1); m.SetFloat("_Blend", 0);
+            m.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            m.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            m.SetFloat("_ZWrite", 0);
+            m.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            m.SetOverrideTag("RenderType", "Transparent");
+            m.renderQueue = 3000;
+            m.SetShaderPassEnabled("ShadowCaster", false);
+            AssetDatabase.CreateAsset(m, path);
+        }
+        return mats[name] = m;
+    }
+
+    static Material M(string name, string hex)
+    {
+        if (mats.TryGetValue(name, out var m) && m) return m;
+        var path = $"{MatFolder}/{name}.mat";
+        m = AssetDatabase.LoadAssetAtPath<Material>(path);
+        if (!m)
+        {
+            System.IO.Directory.CreateDirectory(MatFolder);
+            var sh = Shader.Find("Universal Render Pipeline/Simple Lit") ?? Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard");
+            m = new Material(sh);
+            m.SetColor("_BaseColor", Hex(hex));
+            m.color = Hex(hex);
+            AssetDatabase.CreateAsset(m, path);
+        }
+        return mats[name] = m;
+    }
+
+    static Color Hex(string h) => ColorUtility.TryParseHtmlString(h, out var c) ? c : Color.magenta;
+
+    static void WriteReport()
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine($"BÁO CÁO DỰNG NHÀ LỘC — {System.DateTime.Now:dd/MM/yyyy HH:mm}");
+        sb.AppendLine($"Scene: {ScenePath}\n");
+        sb.AppendLine($"ASSET ĐÃ ĐẶT ({found.Distinct().Count()}):");
+        foreach (var s in found.Distinct().OrderBy(s => s)) sb.AppendLine("  ✓ " + s);
+        sb.AppendLine($"\nASSET KHÔNG TÌM THẤY → đã thay bằng khối XANH ({missing.Distinct().Count()}):");
+        foreach (var s in missing.Distinct().OrderBy(s => s)) sb.AppendLine("  ✗ " + s);
+        var notUsed = index.Where(kv => kv.Value.Contains("/NoiThat/") && !found.Contains(kv.Key)).Select(kv => kv.Key).OrderBy(s => s).ToList();
+        sb.AppendLine($"\nĐỒ NỘI THẤT GĐ5 ĐÃ NHẬP NHƯNG CHƯA ĐẶT VÀO SCENE ({notUsed.Count}) — cửa sổ, song sắt, tay vịn, công tắc, ổ cắm, nẹp dây…:");
+        sb.AppendLine("  " + string.Join(", ", notUsed));
+        sb.AppendLine($"\nPLACEHOLDER ({placeholders.Count}):");
+        foreach (var s in placeholders) sb.AppendLine("  □ " + s);
+        System.IO.File.WriteAllText("Assets/LOC_House/BaoCao_DungNha.txt", sb.ToString());
+        Debug.Log($"[LOC] Dựng xong. {found.Distinct().Count()} asset, {placeholders.Count} placeholder, thiếu {missing.Distinct().Count()} file. Xem Assets/LOC_House/BaoCao_DungNha.txt");
+    }
+}

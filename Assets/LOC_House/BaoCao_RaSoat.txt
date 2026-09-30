@@ -1,0 +1,162 @@
+TỔNG: 10 món kéo khỏi tường · 83 món chỉnh chạm mặt đỡ · 59 cặp chồng lấn đã tách · 1 chỗ cần xử lý tay
+
+RÀ SOÁT NHÀ LỘC — 30/09/2026 17:09
+
+① XUYÊN TƯỜNG / BẬC THANG
+  → Tang_1/KhoiSau/ThungCarton_Chong: kéo 0,10 m ra khỏi tường
+  → Tang_1/Bep/TuLanh_Bo: kéo 0,02 m ra khỏi tường
+  → Tang_1/PhongKhach/LOC_DongDoCungTang: kéo 0,04 m ra khỏi tường
+  → Tang_2/SanhHanhLang/ChauCayKieng_LaTo: kéo 0,01 m ra khỏi tường
+  → Tang_2/SanhHanhLang/ThungCarton_Chong: kéo 0,13 m ra khỏi tường
+  → Tang_3/PhongTho/BanThoGiaTien_Set: kéo 0,03 m ra khỏi tường
+  → Tang_2/PhongNhim/CapSach_TieuHoc: kéo 0,10 m ra khỏi tường
+  ⚠ Tang_1/PhongKhach/QuanTai_LOC đâm vào Vat_Ben — đẩy 0,07 m vẫn chưa ra, CẦN XỬ LÝ TAY
+  → Tang_3/PhongTho/BinhHoaLon_Gom: kéo 0,09 m ra khỏi tường
+  → Tang_1/SanhSau/GiaDep_Bo: kéo 0,04 m ra khỏi tường
+  → Tang_3/PhongTho/MamDong_HoaQuaTho: kéo 0,03 m ra khỏi tường
+
+② CHẠM MẶT ĐỠ (thả xuống / nhấc lên)
+  ↑ nhấc SanTruoc/Dem1/SM_BurnBasin_Burning: 13,6 cm
+  ↑ nhấc SanTruoc/Dem3/SM_BurnBasin_Ash: 12,5 cm
+  ↑ nhấc SanTruoc/Dem3/SM_PlasticTable_TableCover: 1,4 cm
+  ↑ nhấc SanTruoc/Dem1/SM_PlasticChair_Red: 3,2 cm
+  ↑ nhấc SanTruoc/Dem2/SM_PlasticTable_TableCover: 4,4 cm
+  ↑ nhấc Tang_1/PhongKhach/ChieuMen_KhachO: 15,0 cm
+  ↓ thả Tang_1/PhongKhach/Salon_Dem_NgoiDon: 28,0 cm
+  ↓ thả Tang_1/Bep/BatDia_DangUp_Ban: 26,9 cm
+  ↓ thả Tang_1/PhongKhach/Salon_Dem_NgoiDai_GanTV: 28,0 cm
+  ↓ thả Tang_1/PhongKhach/Salon_Dem_NgoiDai_Kia: 28,0 cm
+  ↓ thả Tang_1/PhongKhach/Salon_Dem_NgoiDon: 28,0 cm
+  ↓ thả Tang_1/PhongKhach/DieuKhien: 24,2 cm
+  ↓ thả Tang_1/PhongKhach/KhayAmChen: 24,2 cm
+  ↓ thả SanTruoc/Dem2/KhayTra_LyThuyTinh: 17,6 cm
+  ↑ nhấc SanTruoc/Dem3/KhayTra_LyThuyTinh: 4,4 cm
+  ↓ thả SanTruoc/Dem1/KhayTra_LyThuyTinh: 17,6 cm
+  ↓ thả SanTruoc/Dem2/DiaKeoBanh_HatDua: 13,2 cm
+  ↓ thả SanTruoc/Dem1/KhayTra_LyThuyTinh: 17,6 cm
+  ↓ thả SanTruoc/Dem1/DiaKeoBanh_HatDua: 17,6 cm
+  ↓ thả SanTruoc/Dem1/DiaKeoBanh_HatDua: 17,6 cm
+  ↑ nhấc Bep/Dem2/BatChao_An: 3,5 cm
+  ↑ nhấc Bep/Dem2/BatChao_An: 3,3 cm
+  ↑ nhấc Bep/Dem1/LongBan: 3,0 cm
+  ↑ nhấc Bep/Dem1/BatChao_An: 3,3 cm
+  ↑ nhấc Bep/Dem2/LongBan: 3,0 cm
+  ↓ thả Bep/Dem3/MamDoCungMan: 0,5 cm
+  ↑ nhấc Bep/Dem1/BatChao_An: 3,1 cm
+  ↓ thả Tang_1/Bep/BepGas_Doi: 3,5 cm
+  ↓ thả Tang_1/Bep/NoiChao_Rong: 3,8 cm
+  ↓ thả Tang_1/PhongKhach/BangCassette_Hop: 56,0 cm
+  ↓ thả Tang_1/PhongKhach/BaoCu_TrenBan: 58,0 cm
+  ↓ thả SanTruoc/SoPhungViengTang: 47,6 cm
+  ↓ thả Tang_1/Bep/PhichHoa: 33,5 cm
+  ↓ thả Tang_1/Bep/NoiComDien: 33,5 cm
+  ↑ nhấc Tang_1/PhongKhach/GatTan_ThuyTinh: 2,9 cm
+  ↓ thả Tang_1/PhongKhach/KhayHoaQua_Nhua: 74,2 cm
+  ↓ thả Tang_1/Bep/CocBanChai_TreEm: 40,0 cm
+  ↓ thả Tang_1/PhongKhach/HopKhanGiay_Nhua: 74,2 cm
+  ↓ thả Tang_1/Bep/AmNhom: 38,2 cm
+  ↓ thả Tang_1/Bep/BatDia_TrongChau: 40,0 cm
+  ↓ thả Tang_1/Bep/GiaBatUp: 40,0 cm
+  ↓ thả Tang_1/Bep/LonSuaDac_DungBut: 40,0 cm
+  ↓ thả Tiem/BanHang/QuatBan_SatCu: 34,9 cm
+  ↓ thả Tiem/BanHang/SoHoaDon_Quay: 34,9 cm
+  ↓ thả Tang_1/KhoiSau/BanChaiCo_XaPhong: 122,0 cm
+  ↓ thả Tang_1/KhoiSau/BaoBotGiat_XaPhong: 132,0 cm
+  ↓ thả Tang_1/Bep/BinhThuy_Phich: 39,9 cm
+  ↓ thả Tang_1/Bep/ChaiNuocMam_Lo: 80,0 cm
+  ↓ thả Tang_1/Bep/HopBanhQuy_ThiecTaiDung: 80,0 cm
+  ↓ thả Tang_1/PhongKhach/RadioCassette_2Loa: 70,0 cm
+  ↓ thả Tang_1/PhongKhach/DiaVCD_XepChong: 70,0 cm
+  ↓ thả Tang_1/PhongKhach/LoHoaGia_Nhua: 70,0 cm
+  ↓ thả Tang_2/SanhHanhLang/Tham_Chieu_Hoa: 5,0 cm
+  ↓ thả Tang_2/PhongBoMe/Tham_Do_1m2: 5,0 cm
+  ↓ thả Tang_2/PhongBoMe/DoTuDauGiuong_Me: 30,0 cm
+  ↓ thả Tang_2/PhongBoMe/TuiXachMe_ViTien: 65,0 cm
+  ↓ thả Tang_2/PhongKhoi/DenBanHoc: 26,9 cm
+  ↓ thả Tang_2/PhongKhoi/TamNilon_PhuBui: 54,0 cm
+  ↓ thả Tang_2/PhongBoMe/KeKinh_DoBoMe: 11,0 cm
+  ↓ thả Tang_2/PhongBoMe/KhungAnh_CuoiNho: 25,0 cm
+  ↓ thả Tang_2/PhongBoMe/ThuocBo_LoThuocNam: 70,0 cm
+  ↓ thả Tang_2/PhongNhim/BangTayGay: 86,8 cm
+  ↓ thả Tang_2/PhongBoMe/DenNgu_BoMe: 70,0 cm
+  ↓ thả Tang_2/PhongBoMe/Nokia_DoChuong: 42,5 cm
+  ↓ thả Tang_2/PhongNhim/DenNgu_Nhim: 65,0 cm
+  ↓ thả Tang_2/PhongBoMe/KinhLao_HopKinh: 45,0 cm
+  ↓ thả Tang_2/PhongNhim/GauBong_Cu: 93,0 cm
+  ↓ thả Tang_2/PhongBoMe/DongHoDeBan_BaoThuc: 80,0 cm
+  ↓ thả Tang_2/PhongBoMe/HopKimChi_Me: 57,0 cm
+  ↓ thả Tang_2/GocLamViec/ChongSoSach_Cu: 55,0 cm
+  ↓ thả Tang_2/PhongBoMe/CocBanChai_NguoiLon: 41,0 cm
+  ↓ thả Tang_2/GocLamViec/BanTinh_Go: 55,0 cm
+  ↓ thả Tang_2/GocLamViec/ConDau_HopMuc: 55,0 cm
+  ↓ thả Tang_2/GocLamViec/MayTinhBoTui: 55,0 cm
+  ↓ thả Tang_2/PhongBoMe/ChanMenBong_GapGon: 69,0 cm
+  ↓ thả Tang_2/PhongKhoi/Walkman_BangCu: 56,9 cm
+  ↓ thả Tang_2/PhongKhoi/GiayBaoNhapHoc: 56,9 cm
+  ↓ thả Tang_2/PhongBoMe/DoTuDauGiuong_Bo: 83,0 cm
+  ↑ nhấc Tang_3/SanPhoi/CotPhoi: 4,3 cm
+  ↓ thả Tang_3/VoNha/BonNuocMai: 0,4 cm
+  ↓ thả Tang_3/PhongTho/AoTangGap: 64,0 cm
+  ↓ thả Tang_3/PhongTho/MamDong_HoaQuaTho: 45,5 cm
+  ↓ thả Tang_3/PhongTho/BinhHoaTho: 26,8 cm
+
+③ CHỒNG LẤN (hai đồ cùng mặt đỡ đè lên nhau)
+  ↔ Tang_2/PhongBoMe/DongHoDeBan_BaoThuc ↔ Tang_2/PhongBoMe/ThuocBo_LoThuocNam: đè 0,09 m → tách 0,11 m
+  ↔ Tang_3/PhongTho/ThungCarton_Chong ↔ Tang_3/SanhGocKho/GocKho_DoNha_Fix: đè 0,07 m → tách 0,09 m
+  ↔ Tang_3/PhongTho/ThungCarton_Chong ↔ Tang_3/SanhGocKho/ChauCayKieng_LaTo: đè 0,09 m → tách 0,11 m
+  ↔ SanTruoc/SM_PlasticChair_Red ↔ SanTruoc/SM_PlasticTable_TableCover: đè 0,05 m → tách 0,07 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Red ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover: đè 0,10 m → tách 0,12 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Red: đè 0,11 m → tách 0,13 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Red: đè 0,09 m → tách 0,11 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,10 m → tách 0,12 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,09 m → tách 0,11 m
+  ↔ Tang_1/PhongKhach/LOC_BanNhoDatMay ↔ Tang_1/PhongKhach/ChauCayKieng_LaTo: đè 0,09 m → tách 0,11 m
+  ↔ PhongKhoi/Dem3/BaloKhoi_XanhLa ↔ Tang_2/PhongKhoi/GiuongDon_Khoi: đè 0,05 m → tách 0,07 m
+  ↔ Tang_3/PhongTho/KeGiayDep_Go ↔ Tang_3/PhongTho/ChauCayKieng_LaTo: đè 0,19 m → tách 0,21 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Green ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover: đè 0,21 m → tách 0,23 m
+  ↔ Tang_1/KhoiSau/ThungCarton_Chong ↔ Tang_1/KhoiSau/ThungCarton_Chong: đè 0,03 m → tách 0,05 m
+  ↔ Tang_2/PhongBoMe/TuDauGiuong ↔ Tang_2/PhongBoMe/GiuongDoi_Bo: đè 0,08 m → tách 0,10 m
+  ↔ Tang_2/PhongBoMe/GiuongDoi_Bo ↔ Tang_2/PhongBoMe/TuDauGiuong: đè 0,10 m → tách 0,12 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Red ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover: đè 0,15 m → tách 0,17 m
+  ↔ Tang_1/PhongKhach/KhayHoaQua_Nhua ↔ Tang_1/PhongKhach/KhayAmChen: đè 0,13 m → tách 0,15 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Red: đè 0,18 m → tách 0,20 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,06 m → tách 0,08 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,09 m → tách 0,11 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Red: đè 0,16 m → tách 0,18 m
+  ↔ Tiem/Kho/XeRua ↔ Tiem/Kho/CayChoi: đè 0,25 m → tách 0,27 m
+  ↔ Tang_2/SanhHanhLang/KeGiayDep_Go ↔ Tang_2/SanhHanhLang/ThungCarton_Chong: đè 0,07 m → tách 0,09 m
+  ↔ SanTruoc/Dem3/SM_PlasticChair_Green ↔ SanTruoc/Dem3/SM_PlasticTable_TableCover: đè 0,06 m → tách 0,08 m
+  ↔ SanTruoc/Dem2/SM_PlasticChair_Red ↔ SanTruoc/Dem2/SM_PlasticTable_TableCover: đè 0,13 m → tách 0,15 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Red ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover: đè 0,04 m → tách 0,06 m
+  ↔ SanTruoc/Dem3/SM_PlasticChair_Red ↔ SanTruoc/Dem3/SM_PlasticTable_TableCover: đè 0,06 m → tách 0,08 m
+  ↔ SanTruoc/Dem2/SM_PlasticChair_Green ↔ SanTruoc/Dem2/SM_PlasticTable_TableCover: đè 0,11 m → tách 0,13 m
+  ↔ Tang_2/PhongKhoi/GiuongDon_Khoi ↔ PhongKhoi/Dem2/BaloKhoi_XanhLa: đè 0,05 m → tách 0,07 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Red ↔ SanTruoc/Dem1/SM_PlasticChair_Red: đè 0,08 m → tách 0,10 m
+  ↔ Tang_1/KhoiSau/BaoBotGiat_XaPhong ↔ Tang_1/KhoiSau/BeGiat: đè 0,36 m → tách 0,38 m
+  ↔ SanTruoc/Dem2/SM_PlasticChair_Red ↔ SanTruoc/Dem2/SM_PlasticTable_TableCover: đè 0,06 m → tách 0,08 m
+  ↔ PhongKhach/Dem3/BanThoVong_Dem3 ↔ Tang_1/PhongKhach/BinhHoaLon_Gom: đè 0,18 m → tách 0,20 m
+  ↔ SanTruoc/Dem2/SM_PlasticChair_Red ↔ SanTruoc/Dem2/SM_PlasticTable_TableCover: đè 0,06 m → tách 0,08 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Green ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover: đè 0,18 m → tách 0,20 m
+  ↔ Tang_2/PhongBoMe/DoTuDauGiuong_Me ↔ Tang_2/PhongBoMe/DenNgu_BoMe: đè 0,05 m → tách 0,07 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Red ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover: đè 0,29 m → tách 0,31 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Red: đè 0,08 m → tách 0,10 m
+  ↔ SanTruoc/SM_PlasticTable_TableCover ↔ SanTruoc/SM_PlasticChair_Green: đè 0,07 m → tách 0,09 m
+  ↔ Tang_1/KhoiSau/Thau_Nhua_QuanAo ↔ Tang_1/KhoiSau/GheDau_Nhua: đè 0,08 m → tách 0,10 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Red ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,24 m → tách 0,26 m
+  ↔ SanTruoc/Dem2/SM_PlasticChair_Green ↔ SanTruoc/Dem2/SM_PlasticTable_TableCover: đè 0,27 m → tách 0,29 m
+  ↔ SanTruoc/Dem2/SM_PlasticChair_Red ↔ SanTruoc/Dem2/SM_PlasticTable_TableCover: đè 0,12 m → tách 0,14 m
+  ↔ Tang_1/KhoiSau/BeGiat ↔ Tang_1/KhoiSau/BanChaiCo_XaPhong: đè 0,20 m → tách 0,22 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,05 m → tách 0,07 m
+  ↔ Tang_3/PhongTho/ThungCarton_Chong ↔ Tang_3/SanhGocKho/GocKho_DoNha_Fix: đè 0,09 m → tách 0,11 m
+  ↔ Tang_3/PhongTho/ThungCarton_Chong ↔ Tang_3/SanhGocKho/ChauCayKieng_LaTo: đè 0,09 m → tách 0,11 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Red: đè 0,03 m → tách 0,05 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,16 m → tách 0,18 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Red ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,12 m → tách 0,14 m
+  ↔ Tang_3/PhongTho/ThungCarton_Chong ↔ Tang_3/SanhGocKho/GocKho_DoNha_Fix: đè 0,09 m → tách 0,11 m
+  ↔ Tang_3/PhongTho/ThungCarton_Chong ↔ Tang_3/SanhGocKho/ChauCayKieng_LaTo: đè 0,09 m → tách 0,11 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,09 m → tách 0,11 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Red ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,06 m → tách 0,08 m
+  ↔ Tang_3/PhongTho/ThungCarton_Chong ↔ Tang_3/SanhGocKho/GocKho_DoNha_Fix: đè 0,09 m → tách 0,11 m
+  ↔ Tang_3/PhongTho/ThungCarton_Chong ↔ Tang_3/SanhGocKho/ChauCayKieng_LaTo: đè 0,09 m → tách 0,11 m
+  ↔ SanTruoc/Dem1/SM_PlasticTable_TableCover ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,04 m → tách 0,06 m
+  ↔ SanTruoc/Dem1/SM_PlasticChair_Red ↔ SanTruoc/Dem1/SM_PlasticChair_Green: đè 0,03 m → tách 0,05 m
