@@ -63,10 +63,12 @@ public class LocFirstPerson : MonoBehaviour
             var d = hit.collider.GetComponentInParent<LocDoor>();
             var c = d ? null : hit.collider.GetComponentInParent<LocCongTac>();
             var h = d || c ? null : hit.collider.GetComponentInParent<LocHuCot>();
+            var nc = d || c || h ? null : hit.collider.GetComponentInParent<LocNhimChau>();   // [5/10] chậu nước: [E] Thay khăn
             if (h) goiY = h.GoiY;
+            if (nc) goiY = nc.GoiY;
             if (d) goiY = "[E] " + (d.DangMo ? "Đóng " : "Mở ") + d.ten;
             else if (c) goiY = "[E] " + (c.bat ? "Tắt" : "Bật") + " " + c.ten;
-            if (k.eKey.wasPressedThisFrame) { if (d) d.Toggle(); else if (c) c.Toggle(); else if (h) h.Bam(); }
+            if (k.eKey.wasPressedThisFrame) { if (d) d.Toggle(); else if (c) c.Toggle(); else if (h) h.Bam(); else if (nc && nc.GoiY.Length > 0) nc.Bam(); }
         }
 
         float f = (k.wKey.isPressed ? 1 : 0) - (k.sKey.isPressed ? 1 : 0);

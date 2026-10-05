@@ -72,7 +72,9 @@
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_SapXep.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocLenh.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocDoBounds.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocNhimImport.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_BanTho.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Nhim.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocMaImport.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_V3.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocKiemTu.cs" />

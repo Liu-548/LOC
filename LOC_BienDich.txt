@@ -109,3 +109,12 @@ Assets\LOC_House\Scripts\LocHuCot.cs(102,1): error CS1022: Type or namespace def
 14:05:20 Assembly-CSharp-Editor.dll OK
 14:06:31 Assembly-CSharp-Editor.dll OK
 14:10:56 Assembly-CSharp-Editor.dll OK
+22:33:10 Assembly-CSharp-Editor.dll OK
+22:33:10 Assembly-CSharp.dll OK
+22:47:05 Assembly-CSharp-Editor.dll OK
+22:47:05 Assembly-CSharp.dll OK
+22:56:12 Assembly-CSharp-Editor.dll OK
+23:05:46 Assembly-CSharp-Editor.dll OK
+23:23:57 Assembly-CSharp-Editor.dll OK
+23:50:11 Assembly-CSharp-Editor.dll OK
+23:50:11 Assembly-CSharp.dll OK

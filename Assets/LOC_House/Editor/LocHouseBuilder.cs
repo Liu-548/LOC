@@ -96,6 +96,7 @@ public static partial class LocHouseBuilder
         foreach (var t in root.GetComponentsInChildren<Transform>(true))
             if (t.name is "Dem2" or "Dem3") t.gameObject.SetActive(false);
         Ma();   // [3/10 v3.1] con ma lấp ló + chế độ tức giận (LocHouseBuilder_Ma)
+        Nhim();   // [5/10] em gái Nhím: model + thoại + cơ chế (LocHouseBuilder_Nhim)
 
         System.IO.Directory.CreateDirectory("Assets/Scenes");
         EditorSceneManager.SaveScene(scene, ScenePath);
@@ -884,8 +885,8 @@ public static partial class LocHouseBuilder
         A("GiuongNhim_ChieuChan", 6.64f, 8.96f, y, 0);                       // x 5,69–7,59 · z 8,51–9,41
         A("BanCanhGiuong_Thuoc", 7.38f, 9.63f, y);                           // x 7,18–7,58 · z 9,43–9,83
         A("DenNgu_Nhim", 7.38f, 9.63f, y + 1.2f);
-        A("GauBong_Cu", 7.14f, 9.06f, y + 1.2f, 200);        // thả xuống gối
-        A("BangTayGay", 6.59f, 9.01f, y + 1.2f, 15);
+        A("GauBong_Cu", 5.93f, 8.74f, y + 1.2f, 160);       // [5/10] dời xuống cuối giường — Nhím nằm chỗ gối
+        A("BangTayGay", 6.05f, 9.22f, y + 1.2f, 15);         // [5/10] dây đeo tay tháo ra, để cuối giường
         A("ChauNuoc_KhanUot", 6.66f, 9.68f, y);              // chậu nước + khăn ướt cạnh giường (Nhím đang sốt)
         A("GiuongXep_CoTam", 3.74f, 11.49f, y, 0);           // khít tường trái, ngay sau tầm quét cánh cửa
         Decal("Decal_VetButSap.png", "M_Decal_VetButSap", W - 0.005f, y + 0.2f, 10.35f, -90, 0.62f, 0.465f);   // nét bút sáp của Nhím ở chân tường
