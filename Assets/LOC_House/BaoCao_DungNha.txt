@@ -1,7 +1,7 @@
-BÁO CÁO DỰNG NHÀ LỘC — 30/09/2026 17:09
+BÁO CÁO DỰNG NHÀ LỘC — 04/10/2026 14:14
 Scene: Assets/Scenes/LOC_NhaLoc.unity
 
-ASSET ĐÃ ĐẶT (378):
+ASSET ĐÃ ĐẶT (368):
   ✓ AmNhom
   ✓ AnhCuoi_Tex
   ✓ AnhGiaDinh_Tex
@@ -36,7 +36,6 @@ ASSET ĐÃ ĐẶT (378):
   ✓ BanTrangDiem
   ✓ BaoBotGiat_XaPhong
   ✓ BaoCu_TrenBan
-  ✓ BaoTaiRong
   ✓ BaoXiMang_Chong
   ✓ BaoXiMang_Chong2
   ✓ BaoXiMang_Le
@@ -67,7 +66,6 @@ ASSET ĐÃ ĐẶT (378):
   ✓ BonHoa_SanPhoi
   ✓ BonNuocMai
   ✓ BoXoGauChau_WC
-  ✓ BuiXiMang_San
   ✓ BupBe_NhuaCu
   ✓ CanBanHang
   ✓ CapSach_TieuHoc
@@ -162,7 +160,6 @@ ASSET ĐÃ ĐẶT (378):
   ✓ DoTrongTuKinh
   ✓ DoTuDauGiuong_Bo
   ✓ DoTuDauGiuong_Me
-  ✓ GachMau_Chong
   ✓ GatTan_ThuyTinh
   ✓ GauBong_Cu
   ✓ GheAn_bo
@@ -219,7 +216,6 @@ ASSET ĐÃ ĐẶT (378):
   ✓ KeKinh_DoBoMe
   ✓ KepPhoi
   ✓ KeSachHoSo_Go
-  ✓ KetSat_KhoaSo
   ✓ KeVLo
   ✓ KeXaPhong_WC
   ✓ KhanBan_Nilon
@@ -295,7 +291,6 @@ ASSET ĐÃ ĐẶT (378):
   ✓ RoNhua_QuanAoBan
   ✓ RoRaThit
   ✓ SachGop
-  ✓ SachTruyenTranh
   ✓ Salon_BanNuoc
   ✓ Salon_Dem_NgoiDai_GanTV
   ✓ Salon_Dem_NgoiDai_Kia
@@ -326,7 +321,6 @@ ASSET ĐÃ ĐẶT (378):
   ✓ ThamChuiChan_Cua
   ✓ ThangNhom
   ✓ ThanhRem
-  ✓ ThanhSat_Bo
   ✓ ThanhTreoDungCu_Bep
   ✓ Thau_Nhua_QuanAo
   ✓ ThungCarton_Chong
@@ -336,7 +330,6 @@ ASSET ĐÃ ĐẶT (378):
   ✓ ThungNuocNgot_Khach
   ✓ ThungRac
   ✓ ThungRacNhua
-  ✓ ThungSon
   ✓ ThungSon_Cum2
   ✓ ThuocBo_LoThuocNam
   ✓ TranGiatCap_Khung
@@ -346,8 +339,6 @@ ASSET ĐÃ ĐẶT (378):
   ✓ TranhSonThuy_Khung
   ✓ TranhTheu_Tex
   ✓ TranhThuPhap_Phuc
-  ✓ TruDauThang
-  ✓ TuAo_Khoi
   ✓ TuBuffet_ChenBat
   ✓ TuDauGiuong
   ✓ TuDoTho_Fix
@@ -375,7 +366,6 @@ ASSET ĐÃ ĐẶT (378):
   ✓ VongHoa_Heo
   ✓ VongHoa_Tuoi
   ✓ Walkman_BangCu
-  ✓ XeDap_Khoi
   ✓ XeRua
   ✓ XiBet_Tron
   ✓ XoChauKhanLau
@@ -383,7 +373,14 @@ ASSET ĐÃ ĐẶT (378):
 
 ASSET KHÔNG TÌM THẤY → đã thay bằng khối XANH (0):
 
-ĐỒ NỘI THẤT GĐ5 ĐÃ NHẬP NHƯNG CHƯA ĐẶT VÀO SCENE (60) — cửa sổ, song sắt, tay vịn, công tắc, ổ cắm, nẹp dây…:
-  AnhCuoi, AnhGiaDinh, AnhNho_Nhim3Tuoi, BangGDVH, BanTron_Thap, BienHieu, CauDao_Aptomat, ChiaLenDay, CongSat_BanhXe, CongSat_Chot, CongSat_ChotMount, CongSat_KhoaMoc, CongSat_VetBanhXe_Decal, CongTac_Doi, CongTac_Don, DayDienMatTien, DepToOng, DoBep_Gop, DongHoQuaLac_KimGio, DongHoQuaLac_KimPhut, DongHoQuaLac_QuaLac, GheTua_AoBo, GocKho_DoGio, GocKho_DoNha, GocKho_DoTet, HopDieuToc, Khan, KhungOThong, LanCan_Thang, LanCan_Xien_T1, LanCan_Xien_T2, LichBloc_ToTren, LoHoaDung, MacAoDung, ManTuyn_Buoc_Tuong, MocKhan, MuiBac_Moi, NepDay_1m, NepDay_1m_BungNap, NepDay_Goc, OCam_CongTac, PhaoChi_Goc, PhaoChi_Thang, QuatCayDung, QuatTreoTuong, QuatTreoTuong_Canh, QuatTreoTuong_DauQuat, Rem_Vai_BoMe_Keo, Rem_Vai_Khoi_Keo, Salon_Dem_TuaDai_BinhThuong, Salon_Dem_TuaDai_LatMat_DayTuot, Salon_Dem_TuaDon, Salon_Don, TayVin_CutQuay, TayVin_Thang_1m, TayVin_Xien_1m_34, TayVin_Xien_1m_35, TranhTheu, TuDoTho, XiBet
+ĐỒ NỘI THẤT GĐ5 ĐÃ NHẬP NHƯNG CHƯA ĐẶT VÀO SCENE (65) — cửa sổ, song sắt, tay vịn, công tắc, ổ cắm, nẹp dây…:
+  AnhCuoi, AnhGiaDinh, AnhNho_Nhim3Tuoi, BangGDVH, BanTron_Thap, BienHieu, CauDao_Aptomat, ChiaLenDay, CongSat_BanhXe, CongSat_Chot, CongSat_ChotMount, CongSat_KhoaMoc, CongSat_VetBanhXe_Decal, CongTac_Doi, CongTac_Don, DayDienMatTien, DepToOng, DoBep_Gop, DongHoQuaLac_KimGio, DongHoQuaLac_KimPhut, DongHoQuaLac_QuaLac, GheTua_AoBo, GocKho_DoGio, GocKho_DoNha, GocKho_DoTet, HopDieuToc, KetSat_KhoaSo, Khan, KhungOThong, LanCan_Thang, LanCan_Xien_T1, LanCan_Xien_T2, LichBloc_ToTren, LoHoaDung, MacAoDung, ManTuyn_Buoc_Tuong, MocKhan, MuiBac_Moi, NepDay_1m, NepDay_1m_BungNap, NepDay_Goc, OCam_CongTac, PhaoChi_Goc, PhaoChi_Thang, QuatCayDung, QuatTreoTuong, QuatTreoTuong_Canh, QuatTreoTuong_DauQuat, Rem_Vai_BoMe_Keo, Rem_Vai_Khoi_Keo, SachTruyenTranh, Salon_Dem_TuaDai_BinhThuong, Salon_Dem_TuaDai_LatMat_DayTuot, Salon_Dem_TuaDon, Salon_Don, TayVin_CutQuay, TayVin_Thang_1m, TayVin_Xien_1m_34, TayVin_Xien_1m_35, TranhTheu, TruDauThang, TuAo_Khoi, TuDoTho, XeDap_Khoi, XiBet
 
-PLACEHOLDER (0):
+PLACEHOLDER (7):
+  □ ThungPhungDieu
+  □ KhayNhang_PhongBi
+  □ BatHuong_Vong
+  □ BaiVi_Vong
+  □ BatComQuaTrung
+  □ DenDau_GamQuanTai
+  □ KhanTang_Chong

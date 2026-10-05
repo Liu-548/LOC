@@ -1,0 +1,111 @@
+23:26:51 Assembly-CSharp-Editor.dll OK
+23:26:51 Assembly-CSharp.dll OK
+23:37:32 Assembly-CSharp-Editor.dll OK
+23:43:40 Assembly-CSharp-Editor.dll OK
+23:50:27 Assembly-CSharp-Editor.dll OK
+23:50:27 Assembly-CSharp.dll OK
+23:59:22 Assembly-CSharp-Editor.dll LỖI
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(157,21): error CS1519: Invalid token '(' in class, record, struct, or interface member declaration
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(157,22): error CS1031: Type expected
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(157,22): error CS8124: Tuple must contain at least two elements.
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(157,22): error CS1026: ) expected
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(157,22): error CS1519: Invalid token '"_BaseColor"' in class, record, struct, or interface member declaration
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(157,37): error CS1519: Invalid token ')' in class, record, struct, or interface member declaration
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(157,50): error CS1519: Invalid token '=' in class, record, struct, or interface member declaration
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(157,53): error CS1519: Invalid token ';' in class, record, struct, or interface member declaration
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(158,31): error CS1519: Invalid token '(' in class, record, struct, or interface member declaration
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(158,35): error CS8124: Tuple must contain at least two elements.
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(158,36): error CS1519: Invalid token ';' in class, record, struct, or interface member declaration
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(159,19): error CS1519: Invalid token ';' in class, record, struct, or interface member declaration
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(162,5): error CS8803: Top-level statements must precede namespace and type declarations.
+Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs(168,1): error CS1022: Type or namespace definition, or end-of-file expected
+23:59:22 Assembly-CSharp.dll OK
+00:04:21 Assembly-CSharp-Editor.dll OK
+00:12:20 Assembly-CSharp.dll OK
+00:19:37 Assembly-CSharp-Editor.dll OK
+00:19:37 Assembly-CSharp.dll OK
+00:20:46 Assembly-CSharp.dll OK
+00:29:04 Assembly-CSharp-Editor.dll OK
+00:29:04 Assembly-CSharp.dll OK
+00:32:52 Assembly-CSharp-Editor.dll OK
+00:41:32 Assembly-CSharp-Editor.dll OK
+00:41:32 Assembly-CSharp.dll OK
+00:42:25 Assembly-CSharp.dll OK
+01:16:41 Assembly-CSharp-Editor.dll OK
+01:23:29 Assembly-CSharp-Editor.dll OK
+01:23:29 Assembly-CSharp.dll OK
+01:29:01 Assembly-CSharp-Editor.dll OK
+01:29:01 Assembly-CSharp.dll OK
+11:16:22 Assembly-CSharp-Editor.dll OK
+11:16:22 Assembly-CSharp.dll OK
+11:22:39 Assembly-CSharp.dll OK
+11:26:47 Assembly-CSharp-Editor.dll OK
+11:26:47 Assembly-CSharp.dll OK
+11:44:04 Assembly-CSharp.dll LỖI
+Assets\LOC_House\Scripts\LocHuCot.cs(61,111): error CS1026: ) expected
+Assets\LOC_House\Scripts\LocHuCot.cs(61,122): error CS1002: ; expected
+Assets\LOC_House\Scripts\LocHuCot.cs(61,122): error CS1513: } expected
+Assets\LOC_House\Scripts\LocHuCot.cs(70,18): error CS1519: Invalid token '=' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(70,35): error CS1519: Invalid token ';' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(70,47): error CS1519: Invalid token '=' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(70,65): error CS1519: Invalid token '=' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(70,77): error CS1001: Identifier expected
+Assets\LOC_House\Scripts\LocHuCot.cs(70,79): error CS1031: Type expected
+Assets\LOC_House\Scripts\LocHuCot.cs(70,79): error CS1001: Identifier expected
+Assets\LOC_House\Scripts\LocHuCot.cs(70,81): error CS1031: Type expected
+Assets\LOC_House\Scripts\LocHuCot.cs(70,81): error CS1001: Identifier expected
+Assets\LOC_House\Scripts\LocHuCot.cs(70,81): error CS1003: Syntax error, ',' expected
+Assets\LOC_House\Scripts\LocHuCot.cs(70,88): error CS1031: Type expected
+Assets\LOC_House\Scripts\LocHuCot.cs(70,88): error CS1001: Identifier expected
+Assets\LOC_House\Scripts\LocHuCot.cs(70,88): error CS1003: Syntax error, ',' expected
+Assets\LOC_House\Scripts\LocHuCot.cs(70,108): error CS1519: Invalid token '=' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(70,127): error CS1519: Invalid token ';' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(70,143): error CS1519: Invalid token '=' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(71,32): error CS1519: Invalid token '=' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(71,40): error CS1519: Invalid token '+' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(71,47): error CS1519: Invalid token '0.42f' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(71,59): error CS1519: Invalid token '0.12f' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(72,15): error CS1519: Invalid token 'return' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(72,29): error CS1001: Identifier expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,33): error CS1001: Identifier expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,39): error CS1001: Identifier expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,39): error CS1003: Syntax error, ',' expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,50): error CS1026: ) expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,50): error CS1001: Identifier expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,50): error CS1003: Syntax error, ',' expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,52): error CS1003: Syntax error, ',' expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,56): error CS1001: Identifier expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,56): error CS1003: Syntax error, ',' expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,63): error CS1002: ; expected
+Assets\LOC_House\Scripts\LocHuCot.cs(72,63): error CS1519: Invalid token ',' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(73,22): error CS8124: Tuple must contain at least two elements.
+Assets\LOC_House\Scripts\LocHuCot.cs(73,22): error CS1026: ) expected
+Assets\LOC_House\Scripts\LocHuCot.cs(73,22): error CS1519: Invalid token '=' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(73,31): error CS1031: Type expected
+Assets\LOC_House\Scripts\LocHuCot.cs(73,31): error CS1003: Syntax error, ',' expected
+Assets\LOC_House\Scripts\LocHuCot.cs(73,32): error CS1003: Syntax error, '>' expected
+Assets\LOC_House\Scripts\LocHuCot.cs(73,32): error CS1519: Invalid token ';' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(73,36): error CS1519: Invalid token '+=' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(73,54): error CS1519: Invalid token '/' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(73,78): error CS1519: Invalid token '=' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(73,88): error CS1519: Invalid token ';' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(73,96): error CS1519: Invalid token 'return' in class, record, struct, or interface member declaration
+Assets\LOC_House\Scripts\LocHuCot.cs(76,9): error CS8803: Top-level statements must precede namespace and type declarations.
+Assets\LOC_House\Scripts\LocHuCot.cs(101,5): error CS1022: Type or namespace definition, or end-of-file expected
+Assets\LOC_House\Scripts\LocHuCot.cs(102,1): error CS1022: Type or namespace definition, or end-of-file expected
+11:44:32 Assembly-CSharp-Editor.dll OK
+11:44:32 Assembly-CSharp.dll OK
+12:18:32 Assembly-CSharp-Editor.dll OK
+12:18:32 Assembly-CSharp.dll OK
+12:30:50 Assembly-CSharp-Editor.dll OK
+12:30:50 Assembly-CSharp.dll OK
+13:06:47 Assembly-CSharp-Editor.dll OK
+13:06:47 Assembly-CSharp.dll OK
+13:11:12 Assembly-CSharp-Editor.dll OK
+13:11:12 Assembly-CSharp.dll OK
+13:16:38 Assembly-CSharp.dll OK
+13:45:33 Assembly-CSharp-Editor.dll OK
+13:58:38 Assembly-CSharp-Editor.dll OK
+14:05:20 Assembly-CSharp-Editor.dll OK
+14:06:31 Assembly-CSharp-Editor.dll OK
+14:10:56 Assembly-CSharp-Editor.dll OK

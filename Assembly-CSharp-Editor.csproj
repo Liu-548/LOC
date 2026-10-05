@@ -61,11 +61,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\LOC_House\Editor\LocHouseSnapshots.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_DoTang.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Kho.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocKhuPho.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocChupToaDo.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocDoChieuCaoCua.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_SapXep.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocLenh.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocDoBounds.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_BanTho.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocMaImport.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_V3.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocKiemTu.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocSceneAudit.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocChiTiet.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocChupTu.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocNhayCua.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Thang.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocDoTrongTu.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocChanDoanDen.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocTuMo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

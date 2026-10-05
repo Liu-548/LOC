@@ -1,0 +1,110 @@
+KIỂM TRA CỬA TỦ — 02/10 16:06
+collider thật trong scene: 2656; collider tạm thêm để quét: 1385
+
+== BanCanhGiuong_Thuoc  tâm (6,55,3,96,8,75) cỡ (0,40×0,72×0,40) cánh=0 hộc=0
+== BanCoHoc_Go  tâm (1,30,3,98,0,27) cỡ (1,00×0,75×0,50) cánh=3 hộc=3
+   ✓ Canh_1 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.32) dangMo=False tia: ok
+   ✓ Canh_2 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.32) dangMo=False tia: ok
+   ✓ Canh_3 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.32) dangMo=False tia: ok
+   hộc (BanCoHoc_Go) tâm (1,60,3,72,0,28) cỡ 0,33×0,17×0,40: 3 món (DoTu_TrongTu/xap_giay, DoTu_TrongTu/album_anh, DoTu_TrongTu/bia_xanh)
+   hộc (BanCoHoc_Go) tâm (1,60,3,94,0,28) cỡ 0,33×0,17×0,40: 10 món (DoTu_TrongTu/so_xanh, DoTu_TrongTu/gap, DoTu_TrongTu/so_ho_khau, DoTu_TrongTu/day_chun, DoTu_TrongTu/xap_giay)
+   hộc (BanCoHoc_Go) tâm (1,60,4,16,0,28) cỡ 0,33×0,17×0,40: 9 món (DoTu_TrongTu/keo_thanh, DoTu_TrongTu/giay_lot, DoTu_TrongTu/keo_cam, DoTu_TrongTu/hoa_don_gap, DoTu_TrongTu/but_bi, DoTu_TrongTu/hop_ghim)
+== BanGiay_Go  tâm (5,90,3,98,6,95) cỡ (1,40×0,75×0,71) cánh=1 hộc=0
+   ✓ Canh_1 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.26) dangMo=False tia: ok
+== BanHoc_Khoi_Bo  tâm (5,70,3,97,16,10) cỡ (1,10×0,73×0,56) cánh=1 hộc=0
+   ✓ Canh_1 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.30) dangMo=False tia: ok
+== BanThoGiaTien_Set  tâm (3,80,8,04,6,05) cỡ (1,55×2,08×0,71) cánh=2 hộc=0
+   ✓ Canh_1 "cửa tủ thờ" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   ✓ Canh_2 "cửa tủ thờ" goc=-100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+== BanThoThanTai  tâm (-3,88,0,54,1,62) cỡ (0,47×1,08×0,37) cánh=0 hộc=0
+== BanTrangDiem_Bo  tâm (0,21,4,40,2,45) cỡ (0,42×1,61×0,90) cánh=1 hộc=0
+   ✓ Canh_1 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.26) dangMo=False tia: ok
+== Chan_BatDiaTrongChan  tâm (0,25,0,80,12,65) cỡ (0,47×1,60×0,90) cánh=4 hộc=2
+   ✓ Canh_1 "cửa chạn" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   ✓ Canh_2 "cửa chạn" goc=-100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   ✓ Canh_3 "cửa chạn" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   ✓ Canh_4 "cửa chạn" goc=-100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   hộc (Chan_BatDiaTrongChan) tâm (0,24,1,19,12,65) cỡ 0,40×0,75×0,83: 29 món (Chan_CuaLuoi_P/Chan_Luoi_MatCao, DoTu_TrongTu/quai_noi, DoTu_TrongTu/nut_noi, DoTu_TrongTu/nap_hu, DoTu_TrongTu/co_chai, Chan_CuaLuoi_T/Chan_CanhCua_Khung)
+   hộc (Chan_BatDiaTrongChan) tâm (0,24,0,46,12,65) cỡ 0,40×0,60×0,83: 25 món (DoTu_TrongTu/nap_chai, DoTu_TrongTu/quai_noi, DoTu_TrongTu/noi, Chan_CuaGo_T/Chan_CanhGo_T, DoTu_TrongTu/nap_hu, DoTu_TrongTu/chai)
+== KetSat_KhoaSo  tâm (1,18,3,72,5,15) cỡ (0,40×0,24×0,38) cánh=1 hộc=1
+   ✓ Canh_1 "cửa két sắt" goc=-100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+   hộc (KetSat_KhoaSo) tâm (1,18,3,72,5,16) cỡ 0,35×0,19×0,31: 22 món (DoTu_TrongTu/so_nho, DoTu_TrongTu/vong_chia, DoTu_TrongTu/chia, DoTu_TrongTu/rang_chia, DoTu_TrongTu/bia_xanh, DoTu_TrongTu/phong_bi)
+== TuAo_Khoi  tâm (3,68,4,50,12,88) cỡ (0,91×1,80×0,73) cánh=2 hộc=0
+   ✓ Canh_1 "cửa tủ áo" goc=-70 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   ✓ Canh_2 "cửa tủ áo" goc=-32 truot=(0.00, 0.00, 0.00) dangMo=True tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+== TuBuffet_ChenBat  tâm (7,32,0,89,14,95) cỡ (0,47×1,78×1,04) cánh=3 hộc=2
+   ✓ Canh_1 "cửa tủ chén" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+   ✓ Canh_2 "cửa tủ chén" goc=-100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+   ✓ Canh_3 "kính tủ chén" goc=90 truot=(0.24, 0.00, 0.00) dangMo=True tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   hộc (TuBuffet_ChenBat) tâm (7,32,0,51,14,95) cỡ 0,40×0,88×0,92: 56 món (DoTu_TrongTu/nap_hu, DoTu_TrongTu/long_bat, DoTu_TrongTu/chai, DoTu_TrongTu/co_chai, DoTu_TrongTu/bat, DoTu_TrongTu/quai_noi)
+   hộc (TuBuffet_ChenBat) tâm (7,34,1,39,14,95) cỡ 0,34×0,71×0,93: 20 món (DoTu_TrongTu/chai, DoTu_TrongTu/nut_noi, DoTu_TrongTu/noi, DoTu_TrongTu/nap_noi, DoTu_TrongTu/quai_noi, DoTu_TrongTu/co_chai)
+== TuDauGiuong  tâm (7,37,3,85,0,54) cỡ (0,45×0,50×0,42) cánh=1 hộc=1
+   ✓ Canh_1 "cửa tủ đầu giường" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+   hộc (TuDauGiuong) tâm (7,36,3,88,0,54) cỡ 0,38×0,34×0,34: 16 món (DoTu_TrongTu/nap_hop, DoTu_TrongTu/nap_chai, DoTu_TrongTu/hop, DoTu_TrongTu/den_pin, DoTu_TrongTu/chai, DoTu_TrongTu/vi_thuoc)
+== TuDauGiuong  tâm (7,37,3,85,2,86) cỡ (0,46×0,50×0,42) cánh=1 hộc=1
+   ✓ Canh_1 "cửa tủ đầu giường" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   hộc (TuDauGiuong) tâm (7,36,3,88,2,86) cỡ 0,38×0,34×0,34: 14 món (DoTu_TrongTu/so_chi_tieu, DoTu_TrongTu/cuon_chi, DoTu_TrongTu/gap, DoTu_TrongTu/hu, DoTu_TrongTu/co_chai, DoTu_TrongTu/nap_hu)
+== TuDoTho_Fix  tâm (5,20,7,42,6,20) cỡ (0,72×0,85×0,35) cánh=2 hộc=1
+   ✓ Canh_1 "cửa tủ đồ thờ" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+   ✓ Canh_2 "cửa tủ đồ thờ" goc=-100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+   hộc (TuDoTho_Fix) tâm (5,20,7,44,6,20) cỡ 0,59×0,62×0,27: 30 món (DoTu_TrongTu/dau_nhang, DoTu_TrongTu/gap, DoTu_TrongTu/ly_tho, DoTu_TrongTu/co_chai, DoTu_TrongTu/nen, DoTu_TrongTu/bo_nhang)
+== TuDung_RuongChanMan  tâm (0,33,4,50,13,25) cỡ (0,65×1,80×2,32) cánh=1 hộc=1
+   ✓ Canh_1 "cửa tủ đứng" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+   hộc (TuDung_RuongChanMan) tâm (0,34,4,50,12,54) cỡ 0,55×1,68×0,81: 24 món (DoTu_TrongTu/gap, DoTu_TrongTu/nap_hop, DoTu_TrongTu/chieu_cuon, DoTu_TrongTu/hop, DoTu_TrongTu/goi, DoTu_TrongTu/nap_chieu)
+== TuHoSo_Sat  tâm (7,38,4,45,6,30) cỡ (0,48×1,70×1,20) cánh=8 hộc=8
+   ✓ Canh_1 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.31) dangMo=False tia: ok
+   ✓ Canh_2 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.31) dangMo=False tia: ok
+   ✓ Canh_3 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.31) dangMo=False tia: ok
+   ✓ Canh_4 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.31) dangMo=False tia: ok
+   ✓ Canh_5 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.31) dangMo=False tia: ok
+   ✓ Canh_6 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.31) dangMo=False tia: ok
+   ✓ Canh_7 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.31) dangMo=False tia: ok
+   ✓ Canh_8 "ngăn kéo" goc=90 truot=(0.00, 0.00, 0.31) dangMo=False tia: ok
+   hộc (TuHoSo_Sat) tâm (7,37,3,84,6,60) cỡ 0,39×0,33×0,52: 4 món (DoTu_TrongTu/sach, DoTu_TrongTu/xap_giay)
+   hộc (TuHoSo_Sat) tâm (7,37,3,84,6,00) cỡ 0,39×0,33×0,52: 13 món (DoTu_TrongTu/tui_nilon, DoTu_TrongTu/gap, DoTu_TrongTu/bia_ho_so)
+   hộc (TuHoSo_Sat) tâm (7,37,4,22,6,60) cỡ 0,39×0,33×0,52: 4 món (DoTu_TrongTu/xap_giay, DoTu_TrongTu/day_chun)
+   hộc (TuHoSo_Sat) tâm (7,37,4,22,6,00) cỡ 0,39×0,33×0,52: 4 món (DoTu_TrongTu/so_cai, DoTu_TrongTu/so_nho)
+   hộc (TuHoSo_Sat) tâm (7,37,4,60,6,60) cỡ 0,39×0,33×0,52: 46 món (DoTu_TrongTu/sach)
+   hộc (TuHoSo_Sat) tâm (7,37,4,60,6,00) cỡ 0,39×0,33×0,52: 3 món (DoTu_TrongTu/xap_giay, DoTu_TrongTu/nap_hop, DoTu_TrongTu/hop)
+   hộc (TuHoSo_Sat) tâm (7,37,4,98,6,60) cỡ 0,39×0,33×0,52: 11 món (DoTu_TrongTu/but, DoTu_TrongTu/con_dau, DoTu_TrongTu/hop_ghim, DoTu_TrongTu/de_con_dau, DoTu_TrongTu/hop_but, DoTu_TrongTu/bang_keo)
+   hộc (TuHoSo_Sat) tâm (7,37,4,98,6,00) cỡ 0,39×0,33×0,52: 3 món (DoTu_TrongTu/xap_giay, DoTu_TrongTu/tem, DoTu_TrongTu/so_nho)
+== TuKinh  tâm (-0,73,0,60,-3,90) cỡ (0,65×1,20×1,60) cánh=2 hộc=0
+   ✓ Canh_1 "kính tủ" goc=90 truot=(0.72, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   ✓ Canh_2 "kính tủ" goc=90 truot=(-0.72, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+== TuLanh_Bo  tâm (7,23,0,73,11,50) cỡ (0,74×1,45×0,58) cánh=1 hộc=1
+   ✓ Canh_1 "cửa tủ lạnh" goc=-100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   hộc (TuLanh) tâm (7,22,0,65,11,50) cỡ 0,58×1,24×0,52: 42 món (DoTu_TrongTu/nap_hop, TuLanh/TuLanh, DoTu_TrongTu/ca_chua, DoTu_TrongTu/xa_lach, DoTu_TrongTu/hu, DoTu_TrongTu/hop_sua)
+== TuNhua_Nhim  tâm (7,40,4,19,11,00) cỡ (0,39×1,18×0,45) cánh=1 hộc=1
+   ✓ Canh_1 "cửa tủ nhựa" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+   hộc (TuNhua_Nhim) tâm (7,40,3,82,11,00) cỡ 0,35×0,38×0,39: 22 món (DoTu_TrongTu/vo, DoTu_TrongTu/gap, DoTu_TrongTu/khoi_go, DoTu_TrongTu/sap_mau, DoTu_TrongTu/hop_sap)
+== TuQuanAo_GamHo  tâm (1,22,4,57,5,12) cỡ (1,38×1,94×0,60) cánh=2 hộc=1
+   ✓ Canh_1 "cửa tủ quần áo" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   ✗ Canh_2 "cửa tủ quần áo" goc=-100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok [BẢN LỀ không ở mép ngoài tủ (0,14 m từ mép)]
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   hộc (TuQuanAo_GamHo) tâm (1,20,4,66,5,11) cỡ 1,12×1,53×0,51: 47 món (DoTu_TrongTu/tay_ao, DoTu_TrongTu/gap, DoTu_TrongTu/than_giay, DoTu_TrongTu/nap_hop, DoTu_TrongTu/moc_ao, DoTu_TrongTu/mui_giay)
+== TuThap_Sanh  tâm (0,19,3,92,6,22) cỡ (0,36×0,65×0,80) cánh=2 hộc=1
+   ✓ Canh_1 "cửa tủ" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+   ✓ Canh_2 "cửa tủ" goc=-100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+   hộc (TuThap_Sanh) tâm (0,19,3,88,6,22) cỡ 0,31×0,49×0,76: 21 món (DoTu_TrongTu/than_giay, DoTu_TrongTu/mui_giay, DoTu_TrongTu/den_pin, DoTu_TrongTu/album_anh, DoTu_TrongTu/gap, DoTu_TrongTu/de_giay)
+== TuTV_Dung_Bo  tâm (7,34,0,95,4,20) cỡ (0,52×1,90×1,22) cánh=2 hộc=1
+   ✓ Canh_1 "cửa tủ TV" goc=100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   ✓ Canh_2 "cửa tủ TV" goc=-100 truot=(0.00, 0.00, 0.00) dangMo=False tia: ok
+        quét:  | (+chạm thân tủ/khung kính, bỏ qua)
+   hộc (TuTV_Dung) tâm (7,35,0,30,4,20) cỡ 0,41×0,56×1,13: 47 món (DoTu_TrongTu/hop_vcd, DoTu_TrongTu/sach, DoTu_TrongTu/long_cuon_day, DoTu_TrongTu/mat_on_ap, DoTu_TrongTu/bang_video, DoTu_TrongTu/on_ap)
+
+TỔNG cánh có vấn đề: 1

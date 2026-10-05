@@ -1,4 +1,4 @@
-TEXTURE BỀ MẶT: 2275 renderer, 459 vật liệu mới
+TEXTURE BỀ MẶT: 4375 renderer, 483 vật liệu mới
 AmNhom → son
 AnhCuoi_Tex → go
 AnhGiaDinh_Tex → go
@@ -33,7 +33,6 @@ BanTinh_Go → go
 BanTrangDiem_Bo → go
 BaoBotGiat_XaPhong → nhua
 BaoCu_TrenBan → go
-BaoTaiRong → carton
 BaoXiMang_Chong → carton
 BaoXiMang_Chong2 → carton
 BaoXiMang_Le → carton
@@ -60,7 +59,6 @@ BoMia → màu
 BonHoa_SanPhoi → xm
 BonNuocMai → màu
 BoXoGauChau_WC → vai
-BuiXiMang_San → carton
 BupBe_NhuaCu → nhua
 CanBanHang → go
 CanhBanCong_Phai → son
@@ -130,7 +128,6 @@ DongPhuc_Treo → vai
 DonTrangDiem → màu
 DoTuDauGiuong_Bo → go
 DoTuDauGiuong_Me → vai
-GachMau_Chong → xm
 GatTan_ThuyTinh → nhua
 GauBong_Cu → vai
 GheAn_bo → go
@@ -167,6 +164,7 @@ GuongTreo_Sanh → màu
 GuongWC → màu
 HanhLyKhoi_TuiVai → vai
 HoaTran → màu
+Hop_DoChoi_Nhim → nhua
 HopBanhQuy_ThiecTaiDung → nhua
 HopBut_ThuocKe → nhua
 HopCongTo → nhua
@@ -174,19 +172,23 @@ HopKhanGiay_Nhua → vai
 HopKimChi_Me → nhua
 HopThu_Cong → nhua
 HuBinhNgamRuou → nhua
+HuCot → màu
 HuongNen_DuTru → màu
 KeChenTreoTuong → go
 KeGiay_ChanCau → vai
 KeGiayDep_Go → nhua
+KeGo_Nhim → go
 KeGo_TreoTuong → go
 KeGoDai → go
 KeKinh → go
 KeKinh_DoBoMe → go
 KepPhoi → nhua
 KeSachHoSo_Go → nhua
-KetSat_KhoaSo → son
+KeTreo_Go → go
+KetSat_Dung → son
 KeVLo_DoKe → nhua
 KeXaPhong_WC → go
+Khan_Treo → vai
 KhayAmChen → nhua
 KhayHoaQua_Nhua → nhua
 KhayTra_LyThuyTinh → nhua
@@ -219,7 +221,6 @@ MocChiaKhoa → son
 MocDongPhuc → vai
 MuiBac_Mon → màu
 NenSanPhoi → chieu
-NhatKy_Dong → màu
 NoiChao_Rong → son
 NoiComDien → son
 Nokia_DoChuong → son
@@ -248,7 +249,8 @@ Rem_Voan_Khoi → vai
 Rem_Voan_PhongTho → vai
 RoNhua_QuanAoBan → dan
 RoRaThit → dan
-SachTruyenTranh → nhua
+SachGiaLe_CuaMe → nhua
+SachVo_Nhim → nhua
 Salon_BanNuoc → go
 Salon_Dem_NgoiDai_GanTV → vai
 Salon_Dem_NgoiDai_Kia → vai
@@ -267,6 +269,7 @@ SM_PlasticChair_Red → nhua
 SM_PlasticChairStack_4 → nhua
 SM_PlasticChairStack_8 → nhua
 SM_PlasticTable_TableCover → nhua
+SoCuaBo_TrongKet → go
 SoHoaDon_Quay → màu
 SongSatHoa_Bep → son
 SongSatHoa_BoMe → son
@@ -277,7 +280,6 @@ ThamChuiChan → dan
 ThamChuiChan_Cua → dan
 ThangNhom → son
 ThanhRem → vai
-ThanhSat_Bo → son
 ThanhTreoDungCu_Bep → son
 Thau_Nhua_QuanAo → thung
 ThungCarton_Chong → carton
@@ -287,12 +289,12 @@ ThungNuoc_Nap → thung
 ThungNuocNgot_Khach → thung
 ThungRac → thung
 ThungRacNhua → thung
-ThungSon → thung
+ThungSon_Chong → thung
 ThungSon_Cum2 → thung
+ThungSon_Ke → thung
 ThuocBo_LoThuocNam → nhua
 TranGiatCap_Khung → nhua
-TruDauThang → màu
-TuAo_Khoi → màu
+TuAo_Khoi_Go → màu
 TuBuffet_ChenBat → go
 TuDauGiuong → go
 TuDoTho_Fix → go
@@ -314,7 +316,6 @@ VoiSen → son
 VongHoa_Heo → màu
 VongHoa_Tuoi → go
 Walkman_BangCu → vai
-XeDap_Khoi → son
 XeRua → son
 XiBet_Tron → son
 XoChauKhanLau → thung

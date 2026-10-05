@@ -49,6 +49,8 @@ public static class LocChiTiet
     static readonly Dictionary<string, Texture2D> texs = new();
     static int nMat, nRend;
 
+    static bool TrongDoTu(Transform t) { for (var p = t.parent; p; p = p.parent) if (p.name == LocDoTrongTu.Nut) return true; return false; }
+
     public static void Apply(Transform root)
     {
         mats.Clear(); meshes.Clear(); nMat = nRend = 0;
@@ -59,6 +61,7 @@ public static class LocChiTiet
             if (skip) continue;
             foreach (var r in lp.GetComponentsInChildren<MeshRenderer>(true))
             {
+                if (r.name is "HocTu" or "DotTu" || r.name.StartsWith("Ngan_") || TrongDoTu(r.transform)) continue;   // [2/10] lòng tủ / đợt / ngăn kéo: giữ màu phẳng tối
                 var mf = r.GetComponent<MeshFilter>();
                 if (!mf || !mf.sharedMesh) continue;
                 var ms = r.sharedMaterials; var flat = new List<int>();
@@ -108,9 +111,23 @@ public static class LocChiTiet
 
     static string Class(Material m) => m.name.Split('_')[1];
 
+    // [1/10] gỗ hồng/tím/xanh → nâu gỗ; sơn hồng → kem, sơn tím → xanh bạc hà nhạt (giữ độ sáng)
+    static Color Remap(string cls, Color c)
+    {
+        Color.RGBToHSV(c, out float h, out float sat, out float v);
+        if (sat < 0.05f || v < 0.22f) return c;   // trắng/xám/đen: giữ
+        bool woodHue = h >= 0.03f && h <= 0.17f;
+        bool pink = (h >= 0.85f || h < 0.03f) && sat >= 0.08f, lilac = (h > 0.68f && h < 0.85f) || (h > 0.5f && h <= 0.68f && sat < 0.2f);   // tím nhạt + xanh lơ rất nhạt (xe đạp/bình gas xanh đậm giữ nguyên)
+        if (cls == "go" && sat >= 0.12f && !woodHue) return Color.HSVToRGB(0.07f, 0.55f, Mathf.Clamp(v, 0.38f, 0.70f));
+        if (cls == "son" && pink && v > 0.5f) return Color.HSVToRGB(0.11f, 0.16f, Mathf.Clamp(v, 0.82f, 0.92f));
+        if (cls == "son" && lilac && v > 0.4f) return Color.HSVToRGB(0.42f, 0.14f, Mathf.Clamp(v, 0.74f, 0.88f));
+        return c;
+    }
+
     static Material Get(string cls, Color c, bool doubleSided = false)
     {
         c = new Color(Mathf.Round(c.r * 10) / 10f, Mathf.Round(c.g * 10) / 10f, Mathf.Round(c.b * 10) / 10f, 1);   // gộp màu gần nhau
+        c = Remap(cls, c);
         string hex = ColorUtility.ToHtmlStringRGB(c);
         string key = (cls == "tulanh" ? "tulanh" : $"{cls}_{hex}") + (doubleSided ? "_2m" : "");
         if (mats.TryGetValue(key, out var m)) return m;

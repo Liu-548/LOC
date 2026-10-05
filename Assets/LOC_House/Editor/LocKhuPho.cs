@@ -52,9 +52,10 @@ public static class LocKhuPho
         Hang("DoiDien_1", -47f, 57f, -14.0f, 180, 13f, 3, 5, Kieu.Mat, 3.8f, 5.6f);
         Hang("DoiDien_2", -47f, 57f, -27.0f, 180, 13f, 5, 7, Kieu.Xa, 5f, 8f);
         // ── cùng bên với nhà LỘC: trái (tiệm ở giữa, đã có trong builder) và phải
-        Nha("NhaTrai_Sat", new Vector3(-10.4f, 0, -5.4f), 0, 6.0f, 30.2f, 4, Kieu.Mat, 101);
+        Nha("NhaTrai_Sat", new Vector3(-10.4f, 0, -5.4f), 0, 6.0f, 7.3f, 4, Kieu.Mat, 101);          // [2/10 tối] kho tiệm nới tới x −6,4 và dài tới z 19,3 → tách khối nhà bên trái
+        Nha("NhaTrai_SatSau", new Vector3(-10.4f, 0, 1.9f), 0, 4.0f, 22.9f, 4, Kieu.Sau, 104);
         Hang("BenTrai", -47f, -10.4f, -5.4f, 0, 30.2f, 3, 5, Kieu.Mat, 3.8f, 5.6f);
-        Nha("NhaSauTiem", new Vector3(-4.4f, 0, 7.0f), 0, 4.2f, 17.8f, 4, Kieu.Sau, 102);
+        Nha("NhaSauTiem", new Vector3(-6.4f, 0, 19.3f), 0, 6.2f, 5.5f, 4, Kieu.Sau, 102);
         Nha("NhaPhai_Sat", new Vector3(8.0f, 0, -0.2f), 0, 6.0f, 25.0f, 4, Kieu.Mat, 103);
         SanNhaPhai();
         Hang("BenPhai", 14f, 57f, -5.4f, 0, 30.2f, 3, 5, Kieu.Mat, 3.8f, 5.6f);

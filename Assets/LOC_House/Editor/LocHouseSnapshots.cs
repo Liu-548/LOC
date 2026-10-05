@@ -21,8 +21,8 @@ public static class LocHouseSnapshots
         cam.orthographic = true; cam.orthographicSize = 6.8f;
         Plan(cam, "MB_Ham", -2.3f, 2.05f);
         Plan(cam, "MB_T1", 0f, 3.1f);
-        Plan(cam, "MB_T2", 3.4f, 2.9f);
-        Plan(cam, "MB_T3", 6.6f, 2.9f);
+        Plan(cam, "MB_T2", 3.6f, 2.9f);
+        Plan(cam, "MB_T3", 7.0f, 2.9f);
         RenderSettings.ambientLight = amb;
 
         // góc mắt 1,65 — ánh sáng thật
@@ -61,8 +61,8 @@ public static class LocHouseSnapshots
         View(cam, "32_Cong_BenPhai", 8.0f, 1.3f, -9.0f, 7.2f, 1.0f, -5.4f);
         View(cam, "31_BoMe_GocQuat", 4.0f, 4.9f, 2.0f, 1.0f, 4.2f, 4.2f);
         // [29/9 tối] kiểm tra đợt sửa: vải quan tài · cổng (vòng hoa, cáo phó) · khoá cửa hầm · công tắc
-        View(cam, "40_VaiQuanTai_TuChan", 5.4f, 1.85f, 3.7f, 2.9f, 1.0f, 3.7f);
-        View(cam, "41_VaiQuanTai_TuBen", 3.0f, 1.9f, 1.4f, 3.0f, 1.0f, 3.7f);
+        View(cam, "40_VaiQuanTai_TuChan", 5.8f, 1.9f, 3.0f, 3.8f, 0.9f, 4.12f);
+        View(cam, "41_VaiQuanTai_TuBen", 1.5f, 1.9f, 6.0f, 3.8f, 1.0f, 4.12f);
         View(cam, "42_Cong_BenTrai", 1.2f, 1.5f, -8.6f, 1.2f, 0.7f, -5.5f);
         View(cam, "43_Cong_BenPhai", 6.6f, 1.5f, -8.6f, 6.4f, 0.7f, -5.5f);
         View(cam, "44_CuaHam_MatNgoai", 4.7f, 1.65f, 6.8f, 6.35f, 1.1f, 6.8f);
@@ -123,6 +123,83 @@ public static class LocHouseSnapshots
         View(cam, "s16_CuaChinh_BanLe", 3.4f, 1.3f, 0.6f, 2.9f, 1.2f, 0.0f);
         Object.DestroyImmediate(go);
         Debug.Log("[LOC] Đã chụp kiểm tra sửa 30-9 → " + Out);
+    }
+
+    [MenuItem("LOC/Chụp kiểm tra 1-10")]
+    public static void Shoot0110()
+    {
+        System.IO.Directory.CreateDirectory(Out);
+        var go = new GameObject("_CamKiemTra");
+        var cam = go.AddComponent<Camera>();
+        cam.clearFlags = CameraClearFlags.SolidColor; cam.backgroundColor = new Color(0.05f, 0.06f, 0.09f);
+        cam.fieldOfView = 70; cam.nearClipPlane = 0.03f; cam.farClipPlane = 60;
+        const float t2 = 3.6f;
+        // gầm giường bố mẹ (đầu giường tường phải +X, giường x 5,46–7,46 · z 0,7–2,7)
+        View(cam, "t01_GamGiuong_ChanGiuong", 4.4f, t2 + 0.30f, 1.7f, 6.6f, t2 + 0.12f, 1.7f);
+        View(cam, "t02_GamGiuong_BenTrai", 6.0f, t2 + 0.30f, 0.45f, 6.4f, t2 + 0.15f, 1.7f);
+        View(cam, "t03_GamGiuong_BenPhai", 6.0f, t2 + 0.30f, 2.95f, 6.4f, t2 + 0.15f, 1.7f);
+        View(cam, "t04_GamGiuong_Tren", 4.6f, t2 + 1.65f, 1.7f, 6.4f, t2 + 0.5f, 1.7f);
+        // cánh cửa phòng làm việc (hai cánh mở vào phòng, bản lề z 6,0 / 7,2 trên tường x 3,1)
+        View(cam, "t05_CuaLamViec_TuHanhLang", 1.9f, t2 + 1.65f, 6.6f, 4.5f, t2 + 1.2f, 6.6f);
+        View(cam, "t06_CuaLamViec_TuTrongVao", 5.0f, t2 + 1.65f, 6.6f, 3.2f, t2 + 1.2f, 6.6f);
+        View(cam, "t07_CuaLamViec_CanhTrai", 4.2f, t2 + 1.4f, 6.5f, 3.3f, t2 + 1.1f, 6.1f);
+        View(cam, "t08_CuaLamViec_CanhPhai", 4.2f, t2 + 1.4f, 6.7f, 3.3f, t2 + 1.1f, 7.1f);
+        // cầu thang
+        View(cam, "u01_T1_Ve1_TuSanh", 3.2f, 1.5f, 8.0f, 1.3f, 1.1f, 8.9f);
+        View(cam, "u02_T1_GamThang", 3.2f, 0.5f, 9.4f, 1.2f, 1.0f, 8.6f);
+        View(cam, "u03_T1_ChieuNghi_Xuong", 0.45f, 2.7f, 10.6f, 0.45f, 1.7f, 8.2f);
+        View(cam, "u04_T1_Ve2_Len", 0.45f, 1.0f, 8.0f, 0.45f, 2.2f, 10.0f);
+        View(cam, "u05_T2_Ve1_TuSanh", 3.3f, t2 + 1.5f, 8.0f, 1.3f, t2 + 1.1f, 8.9f);
+        View(cam, "u06_T2_ChieuNghi", 0.45f, t2 + 3.2f, 10.6f, 0.45f, t2 + 1.8f, 8.0f);
+        View(cam, "u07_ThangHam", 7.3f, 0.9f, 7.5f, 7.3f, -1.5f, 9.8f);
+        View(cam, "u08_T1_LanCan_ChieuNghi", 3.8f, 1.5f, 10.2f, 1.8f, 1.6f, 9.9f);
+        Object.DestroyImmediate(go);
+        Debug.Log("[LOC] Đã chụp kiểm tra 1-10 → " + Out);
+    }
+
+    [MenuItem("LOC/Chụp kiểm tra thang 2-10")]
+    public static void Shoot0210()
+    {
+        System.IO.Directory.CreateDirectory(Out);
+        var go = new GameObject("_CamKiemTra");
+        var cam = go.AddComponent<Camera>();
+        cam.clearFlags = CameraClearFlags.SolidColor; cam.backgroundColor = new Color(0.05f, 0.06f, 0.09f);
+        cam.fieldOfView = 70; cam.nearClipPlane = 0.03f; cam.farClipPlane = 60;
+        const float t2 = 3.6f, t3 = 7.0f;
+        View(cam, "w01_T1_SanhSau_TuongThang", 4.6f, 1.55f, 9.2f, 1.95f, 1.5f, 9.2f);
+        View(cam, "w02_T1_SanhSau_Rong", 5.5f, 1.65f, 7.7f, 2.0f, 1.5f, 10.2f);
+        View(cam, "w03_T1_TuPhongKhach_VaoThang", 1.45f, 1.6f, 4.5f, 1.45f, 1.7f, 8.8f);
+        View(cam, "w04_T1_Ve1_TrongThang", 1.45f, 1.5f, 7.65f, 1.45f, 2.2f, 9.6f);
+        View(cam, "w05_T1_ChieuNghi", 0.45f, 2.7f, 10.6f, 0.45f, 1.7f, 8.2f);
+        View(cam, "w06_T2_HanhLang_DocTuong", 2.5f, t2 + 1.5f, 7.7f, 2.5f, t2 + 1.4f, 10.6f);
+        View(cam, "w07_T2_ChieuNghi", 0.45f, t2 + 3.2f, 10.6f, 0.45f, t2 + 1.8f, 8.0f);
+        View(cam, "w08_T3_SanhGocKho", 3.8f, t3 + 1.5f, 7.8f, 2.0f, t3 + 1.4f, 9.6f);
+        View(cam, "w09_T3_DauThang", 3.5f, t3 + 1.6f, 6.0f, 1.0f, t3 + 0.5f, 8.3f);
+        Object.DestroyImmediate(go);
+        Debug.Log("[LOC] Đã chụp kiểm tra thang 2-10 → " + Out);
+    }
+
+    [MenuItem("LOC/Chụp kiểm tra nâng nhà 2-10")]
+    public static void Shoot0210b()
+    {
+        System.IO.Directory.CreateDirectory(Out);
+        var go = new GameObject("_CamKiemTra");
+        var cam = go.AddComponent<Camera>();
+        cam.clearFlags = CameraClearFlags.SolidColor; cam.backgroundColor = new Color(0.05f, 0.06f, 0.09f);
+        cam.fieldOfView = 70; cam.nearClipPlane = 0.03f; cam.farClipPlane = 80;
+        const float t2 = 3.6f, t3 = 7.0f;
+        View(cam, "x01_NgoaiDuong", 3.8f, 1.5f, -12f, 3.8f, 4.5f, 0f);
+        View(cam, "x02_PhongKhach_Tran", 3.8f, 1.5f, 0.9f, 3.8f, 2.9f, 5.5f);
+        View(cam, "x03_PhongKhach_Chum", 3.8f, 1.5f, 6.8f, 3.8f, 2.9f, 4.1f);
+        View(cam, "x04_SanhSau_Bep", 4.0f, 1.5f, 8.0f, 4.0f, 1.8f, 13.0f);
+        View(cam, "x05_T2_BoMe", 6.0f, t2 + 1.5f, 0.6f, 2.0f, t2 + 1.6f, 4.0f);
+        View(cam, "x06_T2_CuaKhoi", 2.0f, t2 + 1.55f, 12.4f, 3.3f, t2 + 1.0f, 13.9f);
+        View(cam, "x07_T2_CuaBoMe", 2.6f, t2 + 1.55f, 7.0f, 2.6f, t2 + 1.0f, 5.4f);
+        View(cam, "x08_T3_PhongTho", 3.8f, t3 + 1.5f, 3.4f, 3.8f, t3 + 2.2f, 6.2f);
+        View(cam, "x09_T3_CuaPhongTho", 5.5f, t3 + 1.55f, 7.8f, 6.3f, t3 + 1.0f, 6.45f);
+        View(cam, "x10_T3_SanPhoi_Mai", 3.8f, t3 + 1.5f, 1.0f, 3.8f, t3 + 3.4f, 5.0f);
+        Object.DestroyImmediate(go);
+        Debug.Log("[LOC] Đã chụp kiểm tra nâng nhà 2-10 → " + Out);
     }
 
     static void View(Camera cam, string name, float x, float y, float z, float tx, float ty, float tz)

@@ -1,0 +1,80 @@
+RÀ NHÁY — mặt đồng phẳng cùng hướng (lệch ≤ 0,4 mm) chồng nhau ≥ 2 mm
+33 cửa
+
+── 01_CanhCong_Phai__mở_  (cổng)  [NhaLoc/SanTruoc]
+   OK
+── 02_CanhCong_Trai__mở_  (cổng)  [NhaLoc/SanTruoc]
+   OK
+── 03_CuaNgachCong__mở_  (cửa ngách cổng)  [NhaLoc/SanTruoc]
+   OK
+── 04_CuaSatKinh__mở_  (cửa sắt kính ra giếng trời)  [NhaLoc/Tang_1/Bep]
+   OK
+── 05_CuaSo_Bep_Phai  (cửa sổ)  [NhaLoc/Tang_1/Bep]
+   OK
+── 06_CuaSo_Bep_Trai  (cửa sổ)  [NhaLoc/Tang_1/Bep]
+   OK
+── 07_CuaKho__mở_  (cửa kho)  [NhaLoc/Tang_1/KhoiSau]
+   OK
+── 08_CuaWC_T1__mở_  (cửa WC)  [NhaLoc/Tang_1/KhoiSau]
+   OK
+── 09_CuaChinh_Phai__mở_ra_ngoài_  (cửa chính)  [NhaLoc/Tang_1/PhongKhach]
+   OK
+── 10_CuaChinh_Trai__mở_ra_ngoài_  (cửa chính)  [NhaLoc/Tang_1/PhongKhach]
+   OK
+── 11_CuaSatHam__mở_  (cửa sắt xuống hầm)  [NhaLoc/Tang_1/PhongKhach]
+   OK
+── 12_CuaLamViec_Phai__mở_  (cửa phòng làm việc)  [NhaLoc/Tang_2/GocLamViec]
+   OK
+── 13_CuaLamViec_Trai__mở_  (cửa phòng làm việc)  [NhaLoc/Tang_2/GocLamViec]
+   OK
+── 14_CanhBanCong_Phai  (cửa ban công)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 15_CanhBanCong_Trai  (cửa ban công)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 16_CuaBoMe__mở_  (cửa phòng bố mẹ)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 17_CuaSo_BoMe_Phai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 18_CuaSo_BoMe_Phai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 19_CuaSo_BoMe_Trai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 20_CuaSo_BoMe_Trai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 21_CuaWC_BoMe__mở_  (cửa WC)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 22_CuaKhoi__mở_  (cửa phòng Khôi)  [NhaLoc/Tang_2/PhongKhoi]
+   OK
+── 23_CuaSo_Khoi_Phai  (cửa sổ)  [NhaLoc/Tang_2/PhongKhoi]
+   OK
+── 24_CuaSo_Khoi_Trai  (cửa sổ)  [NhaLoc/Tang_2/PhongKhoi]
+   OK
+── 25_CuaSo_Khoi_Phai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+   OK
+── 26_CuaSo_Khoi_Phai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+   OK
+── 27_CuaSo_Khoi_Trai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+   OK
+── 28_CuaSo_Khoi_Trai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+   OK
+── 29_CuaPhongTho__mở_  (cửa phòng thờ)  [NhaLoc/Tang_3/VoNha]
+   OK
+── 30_CuaNgach_Tiem__mở_  (cửa ngách tiệm)  [NhaLoc/Tiem/VoNha]
+   OK
+── 31_CuaSatXep_Dong  (cửa sắt xếp tiệm)  [NhaLoc/Tiem/VoNha]
+   OK
+── 32_CanhCua  (cửa phòng Nhím)  [NhaLoc/Tang_2/PhongNhim/CuaPhongNhim_FullAssembly]
+   OK
+── 33_CuaSanPhoi_Canh  (cửa ra sân phơi)  [NhaLoc/Tang_3/PhongTho/CuaSanPhoi]
+   OK
+── CauThang_T1_T3
+   OK
+── CauThang_Ham
+   OK
+
+── CẢ NHÀ: 36 cặp tam giác
+   NhaLoc/KhuPho/BenPhai_02  ↔  NhaLoc/KhuPho/BenPhai_03   13 cặp
+   NhaLoc/KhuPho/NhaSauTiem  ↔  NhaLoc/KhuPho/Sau_1_08   13 cặp
+   NhaLoc/KhuPho/BenPhai_04  ↔  NhaLoc/KhuPho/BenPhai_03   4 cặp
+   NhaLoc/KhuPho/BenPhai_03  ↔  NhaLoc/KhuPho/BenPhai_02   3 cặp
+   NhaLoc/KhuPho/Sau_1_03  ↔  NhaLoc/KhuPho/BenTrai_03   3 cặp

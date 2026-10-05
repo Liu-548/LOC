@@ -61,18 +61,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\LOC_House\Scripts\LocProp.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocMa.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocHuCot.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocDoor.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocCongTac.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocDongHo.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocFirstPerson.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocLuaNhapNhay.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\LOC_House\BaoCao_TuMo.txt" />
+    <None Include="Assets\LOC_House\BaoCao_ChieuCaoCua.txt" />
     <None Include="Assets\LOC_House\BaoCao_DungNha.txt" />
     <None Include="Assets\LOC_House\BaoCao_ViTriBiDoi.txt" />
+    <None Include="Assets\LOC_House\BaoCao_KiemTu.txt" />
+    <None Include="Assets\LOC_House\Shaders\LOC_MaKhoi.shader" />
     <None Include="Assets\LOC_House\BaoCao_TextureBeMat.txt" />
     <None Include="Assets\LOC_House\BaoCao_RaSoat.txt" />
+    <None Include="Assets\LOC_House\BaoCao_Ma.txt" />
+    <None Include="Assets\LOC_House\BaoCao_DebugTu.txt" />
     <None Include="Assets\LOC_House\BaoCao_LanCan.txt" />
+    <None Include="Assets\LOC_House\BaoCao_SuaNhay.txt" />
+    <None Include="Assets\LOC_House\BaoCao_NhayCua.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -20,3 +20,11 @@ crashlytics-build.mtl
 *.aab
 *.unitypackage
 *.app
+
+# backup/rac sinh tu dong (git da la ban backup)
+LOC_Backup/
+Assets/_Recovery/
+Assets/_Recovery.meta
+LOC_KiemTra/
+*.csproj
+*.sln

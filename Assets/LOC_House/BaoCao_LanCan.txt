@@ -1,5 +1,3 @@
 LAN CAN CẮM VÀO KẾT CẤU (xuyên > 1 cm)
 LanCan_BanCong_Phu  ↔  Collider [LanCan_BanCong_Hong_Phai]  xuyên 4,0 cm  đẩy (0,00,0,00,-1,00)
 LanCan_BanCong_Hong_Phai  ↔  Collider [LanCan_BanCong_Phu]  xuyên 4,0 cm  đẩy (0,00,0,00,1,00)
-LanCan_OThang_T3  ↔  Collider [LanCan_DauThang_T3]  xuyên 4,0 cm  đẩy (1,00,0,00,0,00)
-LanCan_DauThang_T3  ↔  Collider [LanCan_OThang_T3]  xuyên 4,0 cm  đẩy (-1,00,0,00,0,00)
