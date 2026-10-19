@@ -28,6 +28,17 @@ public class LocDongHo : MonoBehaviour
         if (kimGio) kimGio.localRotation = gocGio * Quaternion.Euler(0, 0, -0.5f * phut);
     }
 
+    // Mini game chỉnh đồng hồ gọi khi thắng: đặt kim đúng giờ rồi đứng yên (kimChay = false).
+    // Tư thế dựng sẵn của model là 8 giờ 20 → xoay kim so với tư thế đó (cùng chiều quay với phần kimChay phía trên).
+    public void DatGio(int gio, int phut)
+    {
+        kimChay = false;
+        float tong = (gio % 12) * 60f + phut;
+        const float goc820 = 8f * 60f + 20f;
+        if (kimPhut) kimPhut.localRotation = gocPhut * Quaternion.Euler(0, 0, -6f * (phut - 20f));
+        if (kimGio) kimGio.localRotation = gocGio * Quaternion.Euler(0, 0, -0.5f * (tong - goc820));
+    }
+
     static Transform Tim(Transform t, string ten)
     {
         foreach (var c in t.GetComponentsInChildren<Transform>(true)) if (c.name == ten) return c;

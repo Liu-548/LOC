@@ -620,6 +620,7 @@ public class LocMa : MonoBehaviour
 
     // ───── Death Ending: cắt đen ngay → chén nứt, ba giây, vỡ → NHÀ NÀY CÒN MỘT CÁI CHÉN.
     // ponytail: chưa dựng khung hình tĩnh bàn thờ hầm với chén số 4 vỡ — thêm khi có biến thể chén vỡ trong scene
+    public static void BatChet() { if (I) I.Chet(); }
     void Chet() { if (!dangChet) StartCoroutine(CanhChet()); }
     IEnumerator CanhChet()
     {

@@ -10,6 +10,7 @@ public class LocDoor : MonoBehaviour
     public float goc = 90f;
     public bool dungSanLaMo = true;  // tư thế dựng sẵn là MỞ?
     public float thoiGian = 0.7f;    // giây
+    public string cauKhoa = "Cửa khoá.";  // phụ đề khi nhấn E lúc đang khoá (LocFirstPerson)
     public bool khoa;                // script game đặt true để khoá (Toggle không làm gì)
     public float gapX;               // > 0: cửa xếp/kéo — thay vì quay, thu chiều ngang (scale X) về tỉ lệ này quanh gốc
     public Vector3 truot;            // ≠ 0: ngăn kéo / kính lùa — tịnh tiến (toạ độ cục bộ của cha) thay vì quay
@@ -22,7 +23,7 @@ public class LocDoor : MonoBehaviour
     void Awake() { lp0 = transform.localPosition; p0 = transform.position; r0 = transform.rotation; s0 = transform.localScale; hinge = transform.TransformPoint(banLe); CapNhatChan(); }
 
     public bool DangMo => (dich < 0.5f) == dungSanLaMo;
-    public void Toggle() { if (khoa) return; dich = dich < 0.5f ? 1f : 0f; CapNhatChan(); }
+    public void Toggle() { if (khoa) { if (!string.IsNullOrEmpty(cauKhoa)) LocFirstPerson.PhuDe(cauKhoa, 1.8f); return; } dich = dich < 0.5f ? 1f : 0f; CapNhatChan(); }
     void CapNhatChan()
     {
         if (anKhiMo == null || anKhiMo.Length == 0) return;

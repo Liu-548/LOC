@@ -45,7 +45,7 @@ public class LocFirstPerson : MonoBehaviour
         var k = Keyboard.current; var m = Mouse.current;
         if (k == null || m == null) return;
         if (k.escapeKey.wasPressedThisFrame) Cursor.lockState = CursorLockMode.None;
-        if (m.leftButton.wasPressedThisFrame) Cursor.lockState = CursorLockMode.Locked;
+        if (m.leftButton.wasPressedThisFrame && !khoa) Cursor.lockState = CursorLockMode.Locked;
         goiY = "";
         if (khoa) return;
 
@@ -60,13 +60,16 @@ public class LocFirstPerson : MonoBehaviour
         // tương tác: nhìn vào cánh cửa / công tắc / hũ rồi nhấn E
         if (cam && Physics.Raycast(cam.position, cam.forward, out var hit, 2.6f, ~0, QueryTriggerInteraction.Ignore))
         {
-            var d = hit.collider.GetComponentInParent<LocDoor>();
-            var c = d ? null : hit.collider.GetComponentInParent<LocCongTac>();
-            var h = d || c ? null : hit.collider.GetComponentInParent<LocHuCot>();
+            var tt = hit.collider.GetComponentInParent<LocTuongTac>();
+            if (tt && !tt.HienDuoc) tt = null;
+            var d = tt ? null : hit.collider.GetComponentInParent<LocDoor>();
+            var c = tt || d ? null : hit.collider.GetComponentInParent<LocCongTac>();
+            var h = tt || d || c ? null : hit.collider.GetComponentInParent<LocHuCot>();
+            if (tt) goiY = tt.GoiY;
             if (h) goiY = h.GoiY;
             if (d) goiY = "[E] " + (d.DangMo ? "Đóng " : "Mở ") + d.ten;
             else if (c) goiY = "[E] " + (c.bat ? "Tắt" : "Bật") + " " + c.ten;
-            if (k.eKey.wasPressedThisFrame) { if (d) d.Toggle(); else if (c) c.Toggle(); else if (h) h.Bam(); }
+            if (k.eKey.wasPressedThisFrame) { if (tt) tt.Bam(); else if (d) d.Toggle(); else if (c) c.Toggle(); else if (h) h.Bam(); }
         }
 
         float f = (k.wKey.isPressed ? 1 : 0) - (k.sKey.isPressed ? 1 : 0);
