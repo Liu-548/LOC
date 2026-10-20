@@ -1,4 +1,4 @@
-﻿// Dựng ngôi nhà LỘC theo prompt-gui-claude-design-gd5/00-thiet-ke-noi-that-ngoi-nha.md (phương án ★),
+// Dựng ngôi nhà LỘC theo prompt-gui-claude-design-gd5/00-thiet-ke-noi-that-ngoi-nha.md (phương án ★),
 // BẢN 8 × 25 + TIỆM TÁCH RIÊNG bên trái (bản vẽ đã duyệt 27/9/2026). Cao độ, thang, hầm 2,40 × 3,00 giữ nguyên số GĐ1–5.
 // Menu: LOC → Dựng nhà LỘC. Tạo lại Assets/Scenes/LOC_NhaLoc.unity mỗi lần chạy.
 //
@@ -98,6 +98,7 @@ public static partial class LocHouseBuilder
         Ma();   // [3/10 v3.1] con ma lấp ló + chế độ tức giận (LocHouseBuilder_Ma)
         Nhim();   // [5/10] em gái Nhím: model + thoại + cơ chế (LocHouseBuilder_Nhim)
         GamePlay();   // [6/10] túi đồ, món nhặt/đọc, két khoá số, cửa hầm khoá (LocHouseBuilder_GamePlay)
+        LocMiniGameBuilder.DungVaoScene();   // [21/10] hệ mini game (nhánh claude/minigame-system)
 
         System.IO.Directory.CreateDirectory("Assets/Scenes");
         EditorSceneManager.SaveScene(scene, ScenePath);

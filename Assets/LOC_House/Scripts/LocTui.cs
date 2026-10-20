@@ -11,9 +11,10 @@ public class LocTui : MonoBehaviour
 {
     static readonly List<string> ids = new();          // món trong túi, theo thứ tự nhặt
     static readonly HashSet<string> co = new();        // cờ cốt truyện: "doc:<id>", "ket_mo"…
+    static readonly Dictionary<string, string> tenRieng = new();   // tên món nhận qua Nhan() (mini game) — không có LocVatPham trong nhà
     static List<string> idsDauDem = new(); static HashSet<string> coDauDem = new(); static int demChup = -1;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void Reset0() { ids.Clear(); co.Clear(); idsDauDem.Clear(); coDauDem.Clear(); demChup = -1; }
+    static void Reset0() { ids.Clear(); co.Clear(); tenRieng.Clear(); idsDauDem.Clear(); coDauDem.Clear(); demChup = -1; DangCam = null; }
 
     public static LocTui I;
     public static bool CoMon(string id) => ids.Contains(id);
@@ -37,6 +38,21 @@ public class LocTui : MonoBehaviour
             if (ids.Contains(v.id)) v.gameObject.SetActive(false);
         }
     }
+
+    // ───── [21/10 gộp] API cho hệ mini game (LocTuongTacMG, LocMG_*): món theo id, không cần LocVatPham
+    public static string DangCam;   // id món đang cầm (LocTuongTacMG tự cầm khi dùng), hoặc null
+    public static string TenMon(string id) => I && I.mon.TryGetValue(id, out var v) ? v.ten : tenRieng.TryGetValue(id, out var t) ? t : LocId.Ten(id);
+    public static void Nhan(string id, string ten = null, bool bao = true)   // ten = null: lấy LocId.Ten · bao: phụ đề "Nhặt được"
+    {
+        if (string.IsNullOrEmpty(id) || ids.Contains(id)) return;
+        ids.Add(id);
+        if (!string.IsNullOrEmpty(ten)) tenRieng[id] = ten;
+        if (bao) LocFirstPerson.PhuDe("Nhặt được: " + TenMon(id), 2f, false);
+    }
+    public static void Bo(string id) { ids.Remove(id); if (DangCam == id) DangCam = null; }
+    public static void BoTatCa(string[] d) { if (d != null) foreach (var id in d) Bo(id); }
+    public static bool CoTatCa(string[] d) { if (d != null) foreach (var id in d) if (!ids.Contains(id)) return false; return true; }
+    public static int DemCo(string[] d) { int n = 0; if (d != null) foreach (var id in d) if (ids.Contains(id)) n++; return n; }
 
     public static void Them(LocVatPham v) { if (!ids.Contains(v.id)) ids.Add(v.id); if (I) I.mon[v.id] = v; }
 
@@ -128,7 +144,7 @@ public class LocTui : MonoBehaviour
             if (ids.Count == 0) GUI.Label(new Rect(W * 0.06f, H * 0.16f, W * 0.3f, 30), "(chưa có gì)", sMuc);
             for (int i = 0; i < ids.Count; i++)
             {
-                var ten = mon.TryGetValue(ids[i], out var v) ? v.ten : ids[i];
+                var ten = TenMon(ids[i]);
                 var st = new GUIStyle(sMuc); if (i == chon) { st.normal.textColor = Color.white; st.fontStyle = FontStyle.Bold; }
                 GUI.Label(new Rect(W * 0.06f, H * 0.16f + i * 34, W * 0.3f, 32), (i == chon ? "›  " : "   ") + ten, st);
             }

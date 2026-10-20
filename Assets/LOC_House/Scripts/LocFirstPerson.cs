@@ -45,7 +45,7 @@ public class LocFirstPerson : MonoBehaviour
         var k = Keyboard.current; var m = Mouse.current;
         if (k == null || m == null) return;
         if (k.escapeKey.wasPressedThisFrame && !LocTui.Mo) Cursor.lockState = CursorLockMode.None;
-        if (m.leftButton.wasPressedThisFrame) Cursor.lockState = CursorLockMode.Locked;
+        if (m.leftButton.wasPressedThisFrame && !khoa) Cursor.lockState = CursorLockMode.Locked;   // mini game cần chuột tự do
         goiY = "";
         if (khoa || LocTui.Mo) return;
 
