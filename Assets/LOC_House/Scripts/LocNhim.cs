@@ -376,7 +376,7 @@ public class LocNhim : MonoBehaviour
         if (chan) chan.SetActive(false); if (chanVo) chanVo.SetActive(false); if (khanKho) khanKho.SetActive(false); if (khanUot) khanUot.SetActive(false);
         if (dayDeo) dayDeo.SetActive(true);
         if (cua) cua.Mo();
-        thuc = true; tNham = 0; tHe = 0; tNhau = 0; tChat = 0; tCuoi = 85; Clip("Ngoi_VayTay", 0f);
+        thuc = true; tNham = 0; tHe = 0; tNhau = 0; tChat = 0; tCuoi = 85; Clip("Ngoi_NoiChuyen", 0f);
         if (fp && head) fp.DatTuThe(choBanAn, head.position);
         yield return new WaitForSeconds(0.4f);
         yield return Den(0.8f, 0);

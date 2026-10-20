@@ -1,7 +1,7 @@
-BÁO CÁO DỰNG NHÀ LỘC — 05/10/2026 23:53
+BÁO CÁO DỰNG NHÀ LỘC — 08/10/2026 11:48
 Scene: Assets/Scenes/LOC_NhaLoc.unity
 
-ASSET ĐÃ ĐẶT (368):
+ASSET ĐÃ ĐẶT (379):
   ✓ AmNhom
   ✓ AnhCuoi_Tex
   ✓ AnhGiaDinh_Tex
@@ -34,6 +34,7 @@ ASSET ĐÃ ĐẶT (368):
   ✓ BanThoVong_Dem3
   ✓ BanTinh_Go
   ✓ BanTrangDiem
+  ✓ BanTron_Thap
   ✓ BaoBotGiat_XaPhong
   ✓ BaoCu_TrenBan
   ✓ BaoXiMang_Chong
@@ -89,6 +90,7 @@ ASSET ĐÃ ĐẶT (368):
   ✓ ChoiCauBonCau
   ✓ ChoiLau_Gop
   ✓ ChoiQuet_Ky
+  ✓ ChongGhe
   ✓ ChongSoSach_Cu
   ✓ ChongTre
   ✓ ChuongDien_Chuong
@@ -168,6 +170,7 @@ ASSET ĐÃ ĐẶT (368):
   ✓ GheAn_nhim
   ✓ GheBanGiay
   ✓ GheBanHoc_Go
+  ✓ GheDau
   ✓ GheDau_Go
   ✓ GheDau_Nhua
   ✓ GheNhua_Nhim
@@ -298,16 +301,23 @@ ASSET ĐÃ ĐẶT (368):
   ✓ Salon_GheDai
   ✓ Salon_GheDon
   ✓ SapGo
+  ✓ SapVangMa
   ✓ SM_BurnBasin_Ash
   ✓ SM_BurnBasin_Burning
   ✓ SM_EnvelopeTray_day
   ✓ SM_FuneralGate
   ✓ SM_FuneralTent_300
+  ✓ SM_MournHat
+  ✓ SM_MourningCloth_Stack_Can
+  ✓ SM_MourningCloth_Stack_Voi
+  ✓ SM_MourningRobe_Hung
   ✓ SM_ObituaryBoard
+  ✓ SM_PaperHouse
   ✓ SM_PlasticChair_Green
   ✓ SM_PlasticChair_Red
   ✓ SM_PlasticChairStack_4
   ✓ SM_PlasticChairStack_8
+  ✓ SM_PlasticTable
   ✓ SM_PlasticTable_TableCover
   ✓ SoHoaDon_Quay
   ✓ SongSatHoa_Bep
@@ -365,6 +375,7 @@ ASSET ĐÃ ĐẶT (368):
   ✓ VoiSen
   ✓ VongHoa_Heo
   ✓ VongHoa_Tuoi
+  ✓ VongHoaTang_1
   ✓ Walkman_BangCu
   ✓ XeRua
   ✓ XiBet_Tron
@@ -373,8 +384,8 @@ ASSET ĐÃ ĐẶT (368):
 
 ASSET KHÔNG TÌM THẤY → đã thay bằng khối XANH (0):
 
-ĐỒ NỘI THẤT GĐ5 ĐÃ NHẬP NHƯNG CHƯA ĐẶT VÀO SCENE (65) — cửa sổ, song sắt, tay vịn, công tắc, ổ cắm, nẹp dây…:
-  AnhCuoi, AnhGiaDinh, AnhNho_Nhim3Tuoi, BangGDVH, BanTron_Thap, BienHieu, CauDao_Aptomat, ChiaLenDay, CongSat_BanhXe, CongSat_Chot, CongSat_ChotMount, CongSat_KhoaMoc, CongSat_VetBanhXe_Decal, CongTac_Doi, CongTac_Don, DayDienMatTien, DepToOng, DoBep_Gop, DongHoQuaLac_KimGio, DongHoQuaLac_KimPhut, DongHoQuaLac_QuaLac, GheTua_AoBo, GocKho_DoGio, GocKho_DoNha, GocKho_DoTet, HopDieuToc, KetSat_KhoaSo, Khan, KhungOThong, LanCan_Thang, LanCan_Xien_T1, LanCan_Xien_T2, LichBloc_ToTren, LoHoaDung, MacAoDung, ManTuyn_Buoc_Tuong, MocKhan, MuiBac_Moi, NepDay_1m, NepDay_1m_BungNap, NepDay_Goc, OCam_CongTac, PhaoChi_Goc, PhaoChi_Thang, QuatCayDung, QuatTreoTuong, QuatTreoTuong_Canh, QuatTreoTuong_DauQuat, Rem_Vai_BoMe_Keo, Rem_Vai_Khoi_Keo, SachTruyenTranh, Salon_Dem_TuaDai_BinhThuong, Salon_Dem_TuaDai_LatMat_DayTuot, Salon_Dem_TuaDon, Salon_Don, TayVin_CutQuay, TayVin_Thang_1m, TayVin_Xien_1m_34, TayVin_Xien_1m_35, TranhTheu, TruDauThang, TuAo_Khoi, TuDoTho, XeDap_Khoi, XiBet
+ĐỒ NỘI THẤT GĐ5 ĐÃ NHẬP NHƯNG CHƯA ĐẶT VÀO SCENE (64) — cửa sổ, song sắt, tay vịn, công tắc, ổ cắm, nẹp dây…:
+  AnhCuoi, AnhGiaDinh, AnhNho_Nhim3Tuoi, BangGDVH, BienHieu, CauDao_Aptomat, ChiaLenDay, CongSat_BanhXe, CongSat_Chot, CongSat_ChotMount, CongSat_KhoaMoc, CongSat_VetBanhXe_Decal, CongTac_Doi, CongTac_Don, DayDienMatTien, DepToOng, DoBep_Gop, DongHoQuaLac_KimGio, DongHoQuaLac_KimPhut, DongHoQuaLac_QuaLac, GheTua_AoBo, GocKho_DoGio, GocKho_DoNha, GocKho_DoTet, HopDieuToc, KetSat_KhoaSo, Khan, KhungOThong, LanCan_Thang, LanCan_Xien_T1, LanCan_Xien_T2, LichBloc_ToTren, LoHoaDung, MacAoDung, ManTuyn_Buoc_Tuong, MocKhan, MuiBac_Moi, NepDay_1m, NepDay_1m_BungNap, NepDay_Goc, OCam_CongTac, PhaoChi_Goc, PhaoChi_Thang, QuatCayDung, QuatTreoTuong, QuatTreoTuong_Canh, QuatTreoTuong_DauQuat, Rem_Vai_BoMe_Keo, Rem_Vai_Khoi_Keo, SachTruyenTranh, Salon_Dem_TuaDai_BinhThuong, Salon_Dem_TuaDai_LatMat_DayTuot, Salon_Dem_TuaDon, Salon_Don, TayVin_CutQuay, TayVin_Thang_1m, TayVin_Xien_1m_34, TayVin_Xien_1m_35, TranhTheu, TruDauThang, TuAo_Khoi, TuDoTho, XeDap_Khoi, XiBet
 
 PLACEHOLDER (7):
   □ ThungPhungDieu

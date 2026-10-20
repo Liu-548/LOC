@@ -44,10 +44,10 @@ public class LocFirstPerson : MonoBehaviour
     {
         var k = Keyboard.current; var m = Mouse.current;
         if (k == null || m == null) return;
-        if (k.escapeKey.wasPressedThisFrame) Cursor.lockState = CursorLockMode.None;
+        if (k.escapeKey.wasPressedThisFrame && !LocTui.Mo) Cursor.lockState = CursorLockMode.None;
         if (m.leftButton.wasPressedThisFrame) Cursor.lockState = CursorLockMode.Locked;
         goiY = "";
-        if (khoa) return;
+        if (khoa || LocTui.Mo) return;
 
         if (Cursor.lockState == CursorLockMode.Locked)
         {
@@ -61,14 +61,18 @@ public class LocFirstPerson : MonoBehaviour
         if (cam && Physics.Raycast(cam.position, cam.forward, out var hit, 2.6f, ~0, QueryTriggerInteraction.Ignore))
         {
             var d = hit.collider.GetComponentInParent<LocDoor>();
-            var c = d ? null : hit.collider.GetComponentInParent<LocCongTac>();
-            var h = d || c ? null : hit.collider.GetComponentInParent<LocHuCot>();
-            var nc = d || c || h ? null : hit.collider.GetComponentInParent<LocNhimChau>();   // [5/10] chậu nước: [E] Thay khăn
+            var tt = hit.collider.GetComponentInParent<LocTuongTac>();   // [6/10] món đồ, két sắt…
+            if (tt && tt.GoiY.Length == 0) tt = null;
+            if (d && tt) { if (tt.transform.IsChildOf(d.transform)) d = null; else tt = null; }   // món nằm trong ngăn kéo/cánh tủ → món; cánh két nằm trong két → cánh
+            var c = d || tt ? null : hit.collider.GetComponentInParent<LocCongTac>();
+            var h = d || tt || c ? null : hit.collider.GetComponentInParent<LocHuCot>();
+            var nc = d || tt || c || h ? null : hit.collider.GetComponentInParent<LocNhimChau>();   // [5/10] chậu nước: [E] Thay khăn
+            if (tt) goiY = tt.GoiY;
             if (h) goiY = h.GoiY;
             if (nc) goiY = nc.GoiY;
-            if (d) goiY = "[E] " + (d.DangMo ? "Đóng " : "Mở ") + d.ten;
+            if (d) goiY = d.khoa && d.khiKhoa ? d.khiKhoa.GoiY : "[E] " + (d.DangMo ? "Đóng " : "Mở ") + d.ten;
             else if (c) goiY = "[E] " + (c.bat ? "Tắt" : "Bật") + " " + c.ten;
-            if (k.eKey.wasPressedThisFrame) { if (d) d.Toggle(); else if (c) c.Toggle(); else if (h) h.Bam(); else if (nc && nc.GoiY.Length > 0) nc.Bam(); }
+            if (k.eKey.wasPressedThisFrame) { if (d) d.Bam(); else if (c) c.Toggle(); else if (h) h.Bam(); else if (nc && nc.GoiY.Length > 0) nc.Bam(); else if (tt) tt.Bam(); }
         }
 
         float f = (k.wKey.isPressed ? 1 : 0) - (k.sKey.isPressed ? 1 : 0);

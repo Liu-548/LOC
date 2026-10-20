@@ -60,6 +60,8 @@
     <Analyzer Include="C:\Game\6000.3.7f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\LOC_House\Scripts\LocTuongTac.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocCotTruyen.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocProp.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocMa.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocNhimChau.cs" />
@@ -67,8 +69,13 @@
     <Compile Include="Assets\LOC_House\Scripts\LocDoor.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocCongTac.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocDongHo.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocTuKiemGamePlay.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocNhim.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocKetSat.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocTui.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocViec.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocVatPham.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocFirstPerson.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocLuaNhapNhay.cs" />
   </ItemGroup>

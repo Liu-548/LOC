@@ -1,6 +1,6 @@
 # Tư thế của Nhím (khung thân: trái +X, trước −Y, lên +Z). G = hướng toàn cục.
 # Gốc đối tượng: Nam_*/Ngoi_DauGap = tâm mặt đệm giường (trục dài giường theo X, đầu giường +X, phía phòng +Y);
-#                Ngoi_VayTay = sàn dưới tâm mặt ghế; Dung_DauGap = sàn chỗ đứng.
+#                Ngoi_NoiChuyen = sàn dưới tâm mặt ghế; Dung_DauGap = sàn chỗ đứng.
 import numpy as np
 from mathutils import Matrix, Vector
 

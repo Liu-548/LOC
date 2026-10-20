@@ -33,7 +33,7 @@ public static class LocHouseSnapshots
         View(cam, "03_TrongTiem_Quay", -0.9f, 1.65f, -1.2f, -3.3f, 0.9f, -2.3f);
         View(cam, "04_CuaChinh_PhongKhach", 3.8f, 1.65f, 0.3f, 1.5f, 1.0f, 4.5f);
         View(cam, "05_TruocCuaHam", 5.6f, 1.65f, 6.8f, 6.4f, 1.2f, 6.8f);
-        View(cam, "06_Bep_GoodEnding", 3.4f, 1.65f, 11.2f, 4.25f, 0.9f, 15.5f);
+        View(cam, "06_Bep_BanAn", 3.4f, 1.65f, 11.2f, 3.8f, 0.9f, 13.7f);
         View(cam, "07_Ham", 7.1f, -0.7f, 10.2f, 6.4f, -1.6f, 13.4f);
         View(cam, "08_PhongBoMe_GamTu", 1.2f, 5.05f, 2.85f, 1.2f, 3.55f, 5.1f);
         View(cam, "09_CuaPhongNhim", 2.5f, 5.05f, 9.4f, 5.3f, 3.9f, 9.0f);

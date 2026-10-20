@@ -77,11 +77,11 @@ public static partial class LocHouseBuilder
         n.choThayKhan = new Vector3(n.neoGiuong.x + 0.40f, san2, bg.max.z + 0.40f);
 
         // ── Good: Nhím KHÔNG rời phòng — sáng hôm sau ngồi dậy ở mép giường (phía phòng), chân thả xuống sàn.
-        //    Clip Ngoi_VayTay có mông ở cao 0,50 trên gốc → hạ gốc để mông chạm mặt giường.
+        //    Clip Ngoi_NoiChuyen có mông ở cao 0,50 trên gốc → hạ gốc để mông chạm mặt giường.
         float matGiuong = n.neoGiuong.y;
         n.neoGhe = new Vector3(bg.center.x - 0.15f, matGiuong - 0.50f, bg.max.z - 0.16f);
         go.transform.position = n.neoGhe;
-        n.yawGhe = Mathf.Round(Yaw("Ngoi_VayTay", Vector3.forward) / 90f) * 90f;
+        n.yawGhe = Mathf.Round(Yaw("Ngoi_NoiChuyen", Vector3.forward) / 90f) * 90f;
         n.choBanAn = new Vector3(n.neoGhe.x + 0.2f, san2, bg.max.z + 1.35f);
         log.AppendLine($"Good (mép giường): gốc {n.neoGhe:F2} · yaw {n.yawGhe:F0}° · chỗ đứng nhìn {n.choBanAn:F2}");
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 // Cánh cửa / cổng / cửa sổ mở được (phục vụ tìm kiếm & giải đố).
 // Tư thế dựng sẵn = trạng thái đầu. goc = số độ quay quanh trục đứng đi qua bản lề để sang trạng thái còn lại (dấu như Quaternion.Euler(0, goc, 0)).
@@ -11,6 +11,10 @@ public class LocDoor : MonoBehaviour
     public bool dungSanLaMo = true;  // tư thế dựng sẵn là MỞ?
     public float thoiGian = 0.7f;    // giây
     public bool khoa;                // script game đặt true để khoá (Toggle không làm gì)
+    // [6/10] người chơi bấm E vào cánh đang khoá (Bam): có món canVatPham trong túi → mở khoá; có khiKhoa (khoá số…) → chuyển cho nó; còn lại nói loiKhoa
+    public string canVatPham;
+    public string loiKhoa = "Khóa rồi.", loiMoKhoa = "";
+    public LocTuongTac khiKhoa;
     public float gapX;               // > 0: cửa xếp/kéo — thay vì quay, thu chiều ngang (scale X) về tỉ lệ này quanh gốc
     public Vector3 truot;            // ≠ 0: ngăn kéo / kính lùa — tịnh tiến (toạ độ cục bộ của cha) thay vì quay
     public LocDoor[] cungCua;        // các cánh cùng ô cửa (cửa sổ 2 cánh)
@@ -22,6 +26,16 @@ public class LocDoor : MonoBehaviour
     void Awake() { lp0 = transform.localPosition; p0 = transform.position; r0 = transform.rotation; s0 = transform.localScale; hinge = transform.TransformPoint(banLe); CapNhatChan(); }
 
     public bool DangMo => (dich < 0.5f) == dungSanLaMo;
+    public void Bam()
+    {
+        if (khoa)
+        {
+            if (khiKhoa) { khiKhoa.Bam(); return; }
+            if (string.IsNullOrEmpty(canVatPham) || !LocTui.CoMon(canVatPham)) { LocTui.Noi(loiKhoa); return; }
+            khoa = false; LocTui.Noi(loiMoKhoa);
+        }
+        Toggle();
+    }
     public void Toggle() { if (khoa) return; dich = dich < 0.5f ? 1f : 0f; CapNhatChan(); }
     void CapNhatChan()
     {
@@ -33,10 +47,17 @@ public class LocDoor : MonoBehaviour
     public void Mo() { if (!DangMo) Toggle(); }
     public void Dong() { if (DangMo) Toggle(); }
 
+    // [8/10] đặt ngay trạng thái mở/đóng, không chạy hoạt cảnh, bỏ qua khoá (đầu đêm)
+    public void DatNgay(bool mo) { dich = mo == dungSanLaMo ? 0f : 1f; t = dich; ApT(); CapNhatChan(); }
+
     void Update()
     {
         if (Mathf.Approximately(t, dich)) return;
         t = Mathf.MoveTowards(t, dich, Time.deltaTime / Mathf.Max(0.05f, thoiGian));
+        ApT();
+    }
+    void ApT()
+    {
         float e = Mathf.SmoothStep(0f, 1f, t);
         if (truot != Vector3.zero) { transform.localPosition = lp0 + truot * e; return; }
         if (gapX > 0f) { transform.localScale = new Vector3(Mathf.Lerp(s0.x, s0.x * gapX, e), s0.y, s0.z); return; }

@@ -70,6 +70,7 @@
     <Compile Include="Assets\LOC_House\Editor\LocDoChieuCaoCua.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Ma.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_SapXep.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_GamePlay.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocLenh.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocDoBounds.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocNhimImport.cs" />

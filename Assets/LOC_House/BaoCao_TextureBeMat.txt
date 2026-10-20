@@ -1,4 +1,4 @@
-TEXTURE BỀ MẶT: 4375 renderer, 483 vật liệu mới
+TEXTURE BỀ MẶT: 4510 renderer, 487 vật liệu mới
 AmNhom → son
 AnhCuoi_Tex → go
 AnhGiaDinh_Tex → go
@@ -31,6 +31,7 @@ BanThoVong_Dem2 → vai
 BanThoVong_Dem3 → vai
 BanTinh_Go → go
 BanTrangDiem_Bo → go
+BanTron_Thap → go
 BaoBotGiat_XaPhong → nhua
 BaoCu_TrenBan → go
 BaoXiMang_Chong → carton
@@ -82,6 +83,7 @@ ChieuCoi_PhongTho → chieu
 ChieuMen_KhachO → chieu
 ChoiCauBonCau → nhua
 ChoiQuet_Ky → dan
+ChongGhe → go
 ChongSoSach_Cu → go
 ChongTre → go
 ChuongDien_Chuong → son
@@ -136,6 +138,7 @@ GheAn_me → go
 GheAn_nhim → go
 GheBanGiay → go
 GheBanHoc_Go → go
+GheDau → go
 GheDau_Go → go
 GheDau_Nhua → nhua
 GheNhua_Nhim → nhua
@@ -258,16 +261,23 @@ Salon_Dem_NgoiDon → vai
 Salon_GheDai → go
 Salon_GheDon → go
 SapGo → chieu
+SapVangMa → go
 SM_BurnBasin_Ash → màu
 SM_BurnBasin_Burning → màu
 SM_EnvelopeTray_day → màu
 SM_FuneralGate → nhua
 SM_FuneralTent_300 → màu
+SM_MournHat → màu
+SM_MourningCloth_Stack_Can → màu
+SM_MourningCloth_Stack_Voi → son
+SM_MourningRobe_Hung → màu
 SM_ObituaryBoard → màu
+SM_PaperHouse → màu
 SM_PlasticChair_Green → nhua
 SM_PlasticChair_Red → nhua
 SM_PlasticChairStack_4 → nhua
 SM_PlasticChairStack_8 → nhua
+SM_PlasticTable → nhua
 SM_PlasticTable_TableCover → nhua
 SoCuaBo_TrongKet → go
 SoHoaDon_Quay → màu
@@ -315,6 +325,7 @@ VaiChePhuGuong_WC → màu
 VoiSen → son
 VongHoa_Heo → màu
 VongHoa_Tuoi → go
+VongHoaTang_1 → màu
 Walkman_BangCu → vai
 XeRua → son
 XiBet_Tron → son

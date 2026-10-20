@@ -75,15 +75,15 @@ SIT = {"Spine": {"d": (0, 0.03, 1)}, "Chest": {"d": (0, 0.02, 1)}, "Neck": {"d":
        "UpperLeg_L": {"d": (0.10, -1, -0.06)}, "UpperLeg_R": {"d": (-0.10, -1, -0.06)},
        "LowerLeg_L": {"d": (0.02, 0.28, -1)}, "LowerLeg_R": {"d": (-0.02, 0.22, -1)},
        "Foot_L": {"d": (0, -0.55, -0.85)}, "Foot_R": {"d": (0, -0.55, -0.85)},
-       "UpperArm_R": {"d": (-0.55, -0.35, 0.55)}}
-VA = merge(SIT, {"LowerArm_R": {"d": (-0.38, -0.12, 0.92)}, "Hand_R": {"d": (-0.45, -0.1, 0.88)}})
-VB = merge(SIT, {"LowerArm_R": {"d": (0.18, -0.12, 0.98)}, "Hand_R": {"d": (0.25, -0.1, 0.96)}})
+       # [6/10] bỏ vẫy tay: tay phải buông, cẳng tay đặt dọc đùi phải
+       "UpperArm_R": {"d": (-0.10, -0.28, -0.95)}, "LowerArm_R": {"d": (0.10, -0.93, -0.35)}, "Hand_R": {"d": (0.08, -0.9, -0.42)}}
+THO = merge(SIT, {"Chest": {"d": (0, 0.0, 1)}, "Neck": {"d": (0, -0.09, 1)}})   # hít vào nhẹ
 def buttock(o, i, W):
     w, names = W
     j = names.index("Hips") if "Hips" in names else None
     return j is not None and w[i, j] > 0.5
 seat = place_floor(SIT, Matrix(), contact=0.50, names=("Quan",), filt=buttock, xy=(0, 0.02))
-clip("Ngoi_VayTay", [(0, VA), (9, VB), (18, VA), (27, VB), (36, VA)], Matrix(), seat, loop=True)
+clip("Ngoi_NoiChuyen", [(0, SIT), (60, THO), (120, SIT)], Matrix(), seat, loop=True)
 
 # ── Bad: ngồi quỳ trên giường mặt vào đầu giường, đầu gập nghiêng; rồi đứng ở góc, mặt vào tường
 GAP = {"Spine": {"d": (0, 0.05, 1)}, "Chest": {"d": (0, 0.08, 1)}, "Neck": {"d": (0.42, 0.06, 0.9)}, "Head": {"d": (0.86, 0.12, 0.5)},

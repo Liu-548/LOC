@@ -321,11 +321,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Ngoi_VayTay
-      takeName: NhimRig|Ngoi_VayTay
-      internalID: -8811047467252620904
+      name: Ngoi_NoiChuyen
+      takeName: NhimRig|Ngoi_NoiChuyen
+      internalID: -5726491954654287565
       firstFrame: 0
-      lastFrame: 36
+      lastFrame: 120
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

@@ -8,8 +8,8 @@ using UnityEngine;
 public class LocNhimImport : AssetPostprocessor
 {
     public const string DIR = "Assets/LOC_House/Models/Nhim/";
-    public static readonly string[] CLIP = { "Nam_Ngu", "Nam_Thuc", "Nam_TroMinh", "Nam_NgocDau", "Nam_NgheDau", "Nam_ThayKhan", "Nam_So", "Nam_NuaTinh", "Ngoi_VayTay", "Ngoi_DauGap", "Dung_DauGap" };
-    static readonly string[] LAP = { "Nam_Ngu", "Nam_Thuc", "Ngoi_VayTay" };
+    public static readonly string[] CLIP = { "Nam_Ngu", "Nam_Thuc", "Nam_TroMinh", "Nam_NgocDau", "Nam_NgheDau", "Nam_ThayKhan", "Nam_So", "Nam_NuaTinh", "Ngoi_NoiChuyen", "Ngoi_DauGap", "Dung_DauGap" };
+    static readonly string[] LAP = { "Nam_Ngu", "Nam_Thuc", "Ngoi_NoiChuyen" };
 
     bool LaNhim => assetPath.Replace('\\', '/').StartsWith(DIR);
 
