@@ -98,7 +98,8 @@ public static partial class LocHouseBuilder
         Ma();   // [3/10 v3.1] con ma lấp ló + chế độ tức giận (LocHouseBuilder_Ma)
         Nhim();   // [5/10] em gái Nhím: model + thoại + cơ chế (LocHouseBuilder_Nhim)
         GamePlay();   // [6/10] túi đồ, món nhặt/đọc, két khoá số, cửa hầm khoá (LocHouseBuilder_GamePlay)
-        LocMiniGameBuilder.DungVaoScene();   // [21/10] hệ mini game (nhánh claude/minigame-system)
+        try { LocMiniGameBuilder.DungVaoScene(); }   // [21/10] mini game — lỗi ở đây không được chặn việc lưu scene
+        catch (System.Exception e) { Debug.LogException(e); }
 
         System.IO.Directory.CreateDirectory("Assets/Scenes");
         EditorSceneManager.SaveScene(scene, ScenePath);
@@ -1061,7 +1062,8 @@ public static partial class LocHouseBuilder
         p.transform.SetParent(root, false);
         p.transform.position = new Vector3(3.8f, -0.15f, -4.7f);
         var cc = p.AddComponent<CharacterController>();
-        cc.height = 1.65f; cc.radius = 0.25f; cc.center = new Vector3(0, 0.825f, 0);   // [30/9] hạ thấp (cao 1,65 m, mắt 1,52 m) cc.stepOffset = 0.3f; cc.slopeLimit = 50;
+        cc.height = 1.65f; cc.radius = 0.25f; cc.center = new Vector3(0, 0.825f, 0);   // [30/9] hạ thấp (cao 1,65 m, mắt 1,52 m)
+        cc.stepOffset = 0.3f; cc.slopeLimit = 50;   // [21/10] hai lệnh này trước nằm lạc trong dòng chú thích nên không chạy
         var camGo = new GameObject("Camera_1m52");
         camGo.tag = "MainCamera";
         camGo.transform.SetParent(p.transform, false);

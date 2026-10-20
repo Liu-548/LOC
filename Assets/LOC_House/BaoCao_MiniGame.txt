@@ -1,0 +1,7 @@
+[LocMiniGameBuilder] 10/21/2026 1:44:00 AM
+  bàn học      Đêm 1–3  trên BanHoc_Khoi_Bo  tại (5.70, 4.45, 16.10)
+  bàn ăn       Đêm 2–3  trên BanAn_Bo  tại (3.80, 0.88, 13.70)
+  Dán chén     Đêm 2–2  trên Bo_Chen_Tren_De  tại (-2.00, -1.42, 11.22)
+  Bày mâm      Đêm 3–3  trên BanThoHam  tại (-2.00, -1.50, 11.27)
+  Giữ nhang    Đêm 3–3  trên BanThoHam  tại (-2.00, -1.50, 11.27)
+Xong: 5 điểm. Bỏ qua mini game: nút [Bỏ qua] hoặc phím B (LocMiniGame.choBoQua).

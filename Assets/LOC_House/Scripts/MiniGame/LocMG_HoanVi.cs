@@ -15,6 +15,7 @@ public abstract class LocMG_HoanVi : LocMiniGame
     // y = 0 là HÀNG DƯỚI CÙNG của ảnh (như Texture2D)
     protected abstract void VeAnh(Color32[] px, int n);
     protected virtual void DatLuoi() { }   // lớp con đổi cot/hang (ví dụ theo đêm)
+    protected virtual void KhiXepXong() { Thang(cauXong); }   // lớp con chơi nhiều lượt (dán hai chén)
 
     protected override void VaoGame()
     {
@@ -34,7 +35,7 @@ public abstract class LocMG_HoanVi : LocMiniGame
 
     bool DaXep() { for (int i = 0; i < vt.Length; i++) if (vt[i] != i) return false; return true; }
 
-    void Xao()
+    protected void Xao()
     {
         int c = cot * hang;
         vt = new int[c];
@@ -73,7 +74,7 @@ public abstract class LocMG_HoanVi : LocMiniGame
                 {
                     int t = vt[chon]; vt[chon] = vt[i]; vt[i] = t;
                     chon = -1;
-                    if (DaXep()) { Thang(cauXong); return; }
+                    if (DaXep()) { KhiXepXong(); return; }
                 }
             }
         }

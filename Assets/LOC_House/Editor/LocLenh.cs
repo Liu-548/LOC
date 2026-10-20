@@ -10,6 +10,12 @@ public static class LocLenh
     static LocLenh()
     {
         EditorApplication.update += Tick;
+        // [21/10] lỗi/ngoại lệ Console (cả Play mode) → LOC_Console.txt, đọc được từ ngoài Unity
+        Application.logMessageReceived += (msg, stack, type) =>
+        {
+            if (type == LogType.Log || type == LogType.Warning) return;
+            System.IO.File.AppendAllText("LOC_Console.txt", $"{System.DateTime.Now:HH:mm:ss} {type} {msg}\n{stack}\n");
+        };
         // [3/10] ghi lỗi biên dịch ra LOC_BienDich.txt (đọc được từ ngoài Unity)
         UnityEditor.Compilation.CompilationPipeline.assemblyCompilationFinished += (asm, msgs) =>
         {

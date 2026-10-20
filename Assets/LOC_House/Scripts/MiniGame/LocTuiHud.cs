@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// [21/10 gộp] Túi đồ dùng chung là LocTui (Scripts/LocTui.cs, Tab). File này chỉ còn phím thử + dòng "Đang cầm".
-// Phím thử (chỉ Editor / bản Development): F7 cho đủ đồ mini game · F8 thắng ngay mini game đang mở.
+// [21/10 gộp] Túi đồ dùng chung là LocTui (Scripts/LocTui.cs, Tab). File này chỉ còn phím B + dòng "Đang cầm".
+// B: thắng ngay mini game đang mở (LocMiniGame.choBoQua — giai đoạn phát triển, chạy cả bản build).
 public class LocTuiHud : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -10,15 +10,8 @@ public class LocTuiHud : MonoBehaviour
 
     void Update()
     {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        var k = Keyboard.current; if (k == null) return;
-        if (k.f7Key.wasPressedThisFrame)
-        {
-            foreach (var id in LocId.TatCa()) LocTui.Nhan(id, null, false);
-            LocFirstPerson.PhuDe("[thử] Đã cho đủ đồ trong túi", 2f, false);
-        }
-        if (k.f8Key.wasPressedThisFrame) LocMiniGame.BoQua();
-#endif
+        var k = Keyboard.current;
+        if (k != null && k.bKey.wasPressedThisFrame) LocMiniGame.BoQua();   // B = bỏ qua (F7–F12 đã là phím thử của LocNhim)
     }
 
     void OnGUI()

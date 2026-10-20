@@ -63,6 +63,33 @@ public class LocTuKiemGamePlay : MonoBehaviour
         yield return new WaitForSeconds(0.5f); yield return Chup("08_dau_dem2");
     }
 
+    // [21/10] mini game: đứng cách điểm ~1,1 m, tia nhìn trúng điểm, có gợi ý → bấm E mở → bỏ qua → cờ bật, trả điều khiển
+    static LocTuongTacMG MG(string id) { foreach (var t in FindObjectsByType<LocTuongTacMG>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (t.id == id) return t; return null; }
+    IEnumerator ThuMiniGame(string id, string anh)
+    {
+        var t = MG(id); var fp = FindAnyObjectByType<LocFirstPerson>();
+        Kt(t && t.gameObject.activeInHierarchy, $"mini game {id} có trong scene, đang bật"); if (!t || !fp || !t.gameObject.activeInHierarchy) yield break;
+        yield return null;   // Update bật lại va chạm theo đêm
+        var m = t.transform.position; bool toi = false;
+        foreach (var dir in new[] { Vector3.forward, Vector3.back, Vector3.left, Vector3.right })
+        {
+            if (!Physics.Raycast(m + dir * 1.1f + Vector3.up * 0.3f, Vector3.down, out var san, 4f, ~0, QueryTriggerInteraction.Ignore) || san.point.y > m.y - 0.5f) continue;
+            var mat = san.point + Vector3.up * 1.52f;
+            if (Physics.Raycast(mat, (m - mat).normalized, out var h, 2.6f, ~0, QueryTriggerInteraction.Ignore) && h.collider.transform == t.transform)
+            { fp.DatTuThe(san.point + Vector3.up * 0.05f, m); toi = true; break; }
+        }
+        Kt(toi, $"{id}: đứng cách ~1,1 m nhìn trúng điểm @ ({m.x:0.00},{m.y:0.00},{m.z:0.00})");
+        yield return new WaitForSeconds(0.4f);
+        string trung = fp.Tia(fp.cam.forward, 2.6f, out var hc) ? hc.collider.name : "(không trúng gì)";
+        Kt(t.GoiY.Length > 0 && fp.GoiYDangHien == t.GoiY, $"{id}: màn hình hiện gợi ý \"{fp.GoiYDangHien}\" (cần \"{t.GoiY}\"; tia nhìn trúng {trung}, khoa={LocFirstPerson.khoa}, túi mở={LocTui.Mo})");
+        yield return Chup(anh + "_a_goi_y");
+        t.Bam(); yield return new WaitForSeconds(0.3f);
+        Kt(LocMiniGame.hienTai == t.miniGame && LocFirstPerson.khoa, $"{id}: E mở mini game, khoá điều khiển");
+        yield return Chup(anh + "_b_mo");
+        LocMiniGame.BoQua(); yield return new WaitForSeconds(0.3f);
+        Kt(LocMiniGame.hienTai == null && !LocFirstPerson.khoa && t.xong && LocTui.Co(id) && t.GoiY == "", $"{id}: Bỏ qua → xong, bật cờ, trả điều khiển, hết gợi ý");
+    }
+
     IEnumerator Start()
     {
         System.IO.Directory.CreateDirectory("LOC_KiemTra/GamePlay");
@@ -70,6 +97,12 @@ public class LocTuKiemGamePlay : MonoBehaviour
         LocMa.dem = 1; yield return null;
         sb.AppendLine("TỰ KIỂM GAMEPLAY " + System.DateTime.Now.ToString("dd/MM HH:mm:ss"));
         Kt(LocTui.I, "LocTui có trên người chơi");
+        LocFirstPerson.ngoi = true; yield return new WaitForSeconds(0.6f);
+        var fp0 = FindAnyObjectByType<LocFirstPerson>();
+        Kt(fp0 && Mathf.Abs(fp0.cam.localPosition.y - fp0.matNgoi) < 0.02f, $"ngồi: mắt hạ xuống {fp0.cam.localPosition.y:0.00} m");
+        Kt(!fp0.Tia(Vector3.up, 0.7f, out _), "ngồi giữa sân: trên đầu trống (không tự vướng vào mình)");
+        LocFirstPerson.ngoi = false; yield return new WaitForSeconds(0.6f);
+        Kt(fp0.cam.localPosition.y > 1.5f, "đứng dậy: mắt về 1,52 m");
         foreach (var id in new[] { "so_thu_chi_2002", "chia_ham", "so_cua_bo", "sach_gia_le", "bat_gao", "bat_muoi", "bo_mia" })
         { var v = V(id); Kt(v && v.GetComponent<Collider>(), $"món {id} có trong scene + có va chạm" + (v ? $" @ ({v.transform.position.x:0.00},{v.transform.position.y:0.00},{v.transform.position.z:0.00})" : "")); }
         var ks = FindAnyObjectByType<LocKetSat>(); var cuaHam = GameObject.Find("CuaSatHam (mở)")?.GetComponent<LocDoor>();
@@ -101,6 +134,9 @@ public class LocTuKiemGamePlay : MonoBehaviour
         LocTui.I.DatChe(1); yield return new WaitForSeconds(0.3f); yield return Chup("03_tui_dem1");
         LocTui.I.DatChe(0); yield return null;
         yield return CotTruyenDem1();   // [8/10] hết Đêm 1 → tự sang Đêm 2
+        yield return ThuMiniGame("mg_ban_hoc", "10_ban_hoc");   // sau phần Đêm 1 (đầu Đêm 1 phải còn đứng ngoài cổng)
+        yield return ThuMiniGame("mg_ban_an", "11_ban_an");
+        yield return ThuMiniGame("dan_chen", "12_dan_chen");
         LocTui.I.DatChe(1); yield return new WaitForSeconds(0.3f); yield return Chup("04_tui_dem2_doc_so");
         Kt(V("so_cua_bo").DocDuoc, "Đêm 2 đọc được sổ của bố (" + V("so_cua_bo").trang.Length + " trang)");
         LocTui.I.DatChe(0); yield return null;
@@ -108,6 +144,10 @@ public class LocTuKiemGamePlay : MonoBehaviour
         V("sach_gia_le").Bam(); Kt(!LocTui.CoMon("sach_gia_le"), "Đêm 2 chưa lấy sách (đồ thờ, đừng lục)");
         LocMa.dem = 3; yield return null; V("sach_gia_le").Bam(); yield return null;
         Kt(LocTui.CoMon("sach_gia_le"), "Đêm 3 lấy được sách");
+        Kt(!MG("dan_chen").HienDuoc, "Đêm 3 không còn dán chén");
+        Kt(MG("nl_giu_nhang") && !MG("nl_giu_nhang").gameObject.activeSelf, "giữ nhang ẩn tới khi bày mâm xong");
+        yield return ThuMiniGame("nl_bay_mam", "13_bay_mam");
+        yield return ThuMiniGame("nl_giu_nhang", "14_giu_nhang");
 
         sb.AppendLine(loi == 0 ? "KẾT QUẢ: ĐẠT" : $"KẾT QUẢ: {loi} LỖI");
         System.IO.File.WriteAllText("LOC_KiemTra/GamePlay/BaoCao.txt", sb.ToString());

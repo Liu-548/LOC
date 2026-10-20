@@ -1,4 +1,4 @@
-// Mini game 7 — XẾP CHỖ NGỒI quanh bàn ăn. Đặt bốn cái chén vào bốn ghế, đọc dấu vết từng ghế mà suy ra.
+// [21/10] Tuỳ chọn, Đêm 2–3, bàn ăn giữa bếp. Mini game 7 — XẾP CHỖ NGỒI quanh bàn ăn. Đặt bốn cái chén vào bốn ghế, đọc dấu vết từng ghế mà suy ra.
 // Dấu vết lấy từ chính bốn ghế đã dựng trong bếp: ghế Khôi sạch nhất (hai năm không ai ngồi), ghế Nhím có gối kê.
 public class LocMG_XepGhe : LocMG_XepVao
 {
@@ -17,6 +17,6 @@ public class LocMG_XepGhe : LocMG_XepVao
             new UnityEngine.Vector2(0.5f, 0.12f), new UnityEngine.Vector2(0.14f, 0.5f), new UnityEngine.Vector2(0.86f, 0.5f), new UnityEngine.Vector2(0.5f, 0.88f)
         };
         dapAn = new[] { 0, 1, 2, 3 };
-        cauXong = "Bốn cái chén đã về đúng chỗ.";
+        cauXong = "Bốn chỗ ngồi. Giờ còn hai.";
     }
 }

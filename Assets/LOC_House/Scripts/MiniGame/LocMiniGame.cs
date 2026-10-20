@@ -12,6 +12,8 @@ using UnityEngine.InputSystem;
 public abstract class LocMiniGame : MonoBehaviour
 {
     public static LocMiniGame hienTai;
+    // shortcut: nút "Bỏ qua" + phím B cho giai đoạn phát triển (cả bản build) — đặt false trước khi phát hành
+    public static bool choBoQua = true;
     public string tieuDe;
     [TextArea] public string goiY;
     public bool choLap;                    // chơi lại được nhiều lần (ráp chén mỗi đêm)
@@ -64,8 +66,8 @@ public abstract class LocMiniGame : MonoBehaviour
         StartCoroutine(KhoaChuot());
     }
 
-    // phím thử F8 (LocTuiHud): thắng ngay mini game đang mở
-    public static void BoQua() { if (hienTai != null) hienTai.Thang("[thử] bỏ qua mini game"); }
+    // nút Bỏ qua / phím B (LocTuiHud): thắng ngay mini game đang mở
+    public static void BoQua() { if (hienTai != null && choBoQua) hienTai.Thang("[thử] bỏ qua mini game"); }
 
     // đợi 1 khung: Esc của LocFirstPerson cũng nhả chuột trong cùng khung, khoá lại ngay sẽ bị đè
     IEnumerator KhoaChuot() { yield return null; Cursor.visible = false; Cursor.lockState = CursorLockMode.Locked; }
@@ -99,6 +101,7 @@ public abstract class LocMiniGame : MonoBehaviour
         if (!string.IsNullOrEmpty(thongBao))
             GUI.Label(new Rect(r.x + 20, r.yMax - 76, r.width - 40, 30), thongBao, KieuChu(15, TextAnchor.MiddleCenter, FontStyle.Italic, new Color(1f, 0.82f, 0.55f), true));
         if (GUI.Button(new Rect(r.xMax - 120, r.yMax - 42, 100, 28), "Đóng [Esc]")) Dong();
+        if (choBoQua && GUI.Button(new Rect(r.x + 20, r.yMax - 42, 130, 28), "Bỏ qua ▶ [B]")) { BoQua(); GUI.matrix = m0; return; }
         GUI.matrix = m0;
     }
 

@@ -1,40 +1,21 @@
 using UnityEngine;
 
-// Nghi thức mỗi đêm — RÁP LẠI CHÉN VỠ ở bàn thờ hầm. Cần đủ các mảnh chén của đêm đó (LocId.ManhDem), ráp xong là xong nghi thức.
-// Đêm 1: 2×2 mảnh · Đêm 2: 3×2 · Đêm 3: 3×3. LocTuongTac đặt trên bàn thờ hầm dùng lapLai = true (mỗi đêm một lần).
+// [21/10] Đêm 2 — DÁN CHÉN dưới hầm (kịch bản v3.2 B3.9, C5 Đêm 2): ghép lại chén 1 (bố) rồi chén 2 (mẹ), mỗi chén 3×2 mảnh.
+// Bấm hai mảnh để đổi chỗ cho tới khi khít. Xong cả hai thì bật cờ "dan_chen".
+// shortcut: chưa đòi lọ keo (cửa tiệm) và chén số 3 (tầng 3) — thêm canId khi hai món đó được dựng
 public class LocMG_GhepChen : LocMG_HoanVi
 {
-    int dem = 1;
+    int daDan;
 
-    protected override string TenMacDinh() { return "Ráp lại chén"; }
-    protected override string GoiYMacDinh() { return "Ráp từng mảnh lại cho khít, đừng để vết nứt lệch."; }
+    protected override string TenMacDinh() { return daDan == 0 ? "Dán chén của bố" : "Dán chén của mẹ"; }
+    protected override string GoiYMacDinh() { return "Ráp từng mảnh cho khít. Chén chỉ cần chứa được nước."; }
 
-    int DemHienTai() { return Mathf.Clamp(LocMa.dem, 1, 3); }
+    protected override void DatLuoi() { cot = 3; hang = 2; daDan = 0; cauXong = "Hai cái chén dán xong. Đường keo còn ướt."; }
 
-    public override bool DuDieuKien(out string cau)
+    protected override void KhiXepXong()
     {
-        int d = DemHienTai();
-        if (LocNghiThuc.Xong(d)) { cau = "Nghi thức đêm nay đã xong."; return false; }
-        var can = LocId.ManhDem(d);
-        int co = LocTui.DemCo(can);
-        if (co < can.Length) { cau = "Còn thiếu mảnh chén. Đã có " + co + "/" + can.Length + "."; return false; }
-        cau = ""; return true;
-    }
-
-    protected override void DatLuoi()
-    {
-        dem = DemHienTai();
-        cauXong = "Chiếc chén liền lại. Nghi thức đêm " + dem + " đã xong.";
-        if (dem == 1) { cot = 2; hang = 2; }
-        else if (dem == 2) { cot = 3; hang = 2; }
-        else { cot = 3; hang = 3; }
-    }
-
-    protected override void KhiThang()
-    {
-        LocTui.BoTatCa(LocId.ManhDem(dem));
-        LocTui.Dat("NghiThuc" + dem);
-        if (LocNghiThuc.DaXong != null) LocNghiThuc.DaXong(dem);
+        if (++daDan < 2) { thongBao = "Xong chén của bố. Còn chén của mẹ."; Xao(); return; }
+        Thang(cauXong);
     }
 
     protected override void VeAnh(Color32[] px, int n)

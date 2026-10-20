@@ -30,6 +30,7 @@ public class LocKetSat : LocTuongTac
         if (!dangNhap) return;
         var k = Keyboard.current; if (k == null) return;
         if (k.escapeKey.wasPressedThisFrame) { Dong(); return; }
+        if (LocMiniGame.choBoQua && k.bKey.wasPressedThisFrame) { GoMa(ma); return; }   // [21/10] bỏ qua (giai đoạn phát triển)
         if (sai > 0) { sai -= Time.deltaTime; if (sai <= 0) nhap = ""; return; }
         for (int i = 0; i < 10; i++) if ((k[so[i]].wasPressedThisFrame || k[soNp[i]].wasPressedThisFrame) && nhap.Length < 4) nhap += i;
         if (k.backspaceKey.wasPressedThisFrame && nhap.Length > 0) nhap = nhap[..^1];
@@ -63,7 +64,7 @@ public class LocKetSat : LocTuongTac
             GUI.Label(r, phim[i], nut);
         }
         var g = new GUIStyle(GUI.skin.label) { fontSize = 15, alignment = TextAnchor.MiddleCenter }; g.normal.textColor = new Color(0.7f, 0.7f, 0.68f);
-        GUI.Label(new Rect(0, y + h + 10, W, 26), "Gõ 4 số    [Backspace] xoá    [Esc] thôi", g);
+        GUI.Label(new Rect(0, y + h + 10, W, 26), LocMiniGame.choBoQua ? "Gõ 4 số    [Backspace] xoá    [Esc] thôi    [B] bỏ qua" : "Gõ 4 số    [Backspace] xoá    [Esc] thôi", g);
         GUI.matrix = Matrix4x4.identity;
     }
 }

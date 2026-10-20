@@ -40,10 +40,16 @@ public class LocTuongTacMG : LocTuongTac
     public bool HienDuoc { get { return (lapLai || !xong) && LocMa.dem >= demTu && LocMa.dem <= demDen; } }
     public override string GoiY { get { return !HienDuoc ? "" : loai == Loai.Nhat ? "[E] Nhặt " + ten : "[E] " + ten; } }
 
+    // [21/10] chưa tới đêm / đã xong thì tắt va chạm để tia nhìn không bị cục đánh dấu chặn
+    Collider vc;
+    void Update() { if (vc) vc.enabled = HienDuoc; }
+
     void Start()
     {
+        vc = GetComponent<Collider>();
         if (loai == Loai.Nhat && LocTui.CoMon(id)) { xong = true; if (!giuVat) gameObject.SetActive(false); return; }
         if (!lapLai && !string.IsNullOrEmpty(id) && LocTui.Co(id)) xong = true;
+        if (xong && hien != null) foreach (var g in hien) if (g) g.SetActive(true);   // chơi lại đầu đêm: vòng sau đã mở thì vẫn mở
         if (!khoaLucDau || moKhoa == null || xong || LocMa.dem < demTu) return;
         foreach (var d in moKhoa) if (d) d.khoa = true;
     }

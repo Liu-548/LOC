@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Đi bộ góc nhìn thứ nhất để kiểm tra nhà LỘC. WASD + chuột, Shift chạy, Esc nhả chuột, click để khoá lại.
+// Đi bộ góc nhìn thứ nhất để kiểm tra nhà LỘC. WASD + chuột, Shift chạy, C/Ctrl ngồi, Esc nhả chuột, click để khoá lại.
 [RequireComponent(typeof(CharacterController))]
 public class LocFirstPerson : MonoBehaviour
 {
@@ -9,7 +9,22 @@ public class LocFirstPerson : MonoBehaviour
     public float speed = 2.2f, look = 0.12f;
     CharacterController cc;
     float pitch, vy;
+    // [21/10] ngồi xổm (C hoặc Ctrl, bấm bật/tắt): mắt 1,52 → 0,95 m, đi chậm một nửa — để nhìn/bấm đồ dưới thấp (gầm bàn thờ, ngăn tủ dưới)
+    public static bool ngoi;
+    public float matNgoi = 0.95f;
+    float matDung, camY, ccCao; Vector3 ccTam;
     string goiY = "";   // dòng gợi ý "[E] ..." khi đang nhìn cửa/công tắc
+    public string GoiYDangHien => goiY;   // tự kiểm đọc
+    // [21/10] tia từ mắt, bỏ qua va chạm của chính người chơi (mắt 1,52 nằm trong đầu khối CharacterController nên tia nhìn xuống trúng chính mình)
+    static readonly RaycastHit[] tiaHB = new RaycastHit[16];
+    public bool Tia(Vector3 huong, float xa, out RaycastHit hit)
+    {
+        hit = default; float gan = float.MaxValue; bool co = false;
+        int n = Physics.RaycastNonAlloc(cam.position, huong, tiaHB, xa, ~0, QueryTriggerInteraction.Ignore);
+        for (int i = 0; i < n; i++)
+            if (tiaHB[i].collider != cc && tiaHB[i].distance < gan) { gan = tiaHB[i].distance; hit = tiaHB[i]; co = true; }
+        return co;
+    }
 
     // [3/10] cảnh khoá + phụ đề + màn đen (LocMa dùng)
     public static bool khoa;            // true: không nhìn/đi/tương tác
@@ -17,7 +32,7 @@ public class LocFirstPerson : MonoBehaviour
     public static string chuGiua;       // chữ trắng giữa màn hình (Death Ending)
     static string phuDe; static bool phuDeNghieng; static float phuDeHet;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void Reset0() { khoa = false; den = 0; chuGiua = null; phuDe = null; }
+    static void Reset0() { khoa = false; den = 0; chuGiua = null; phuDe = null; ngoi = false; }
     // nghieng = độc thoại nội tâm (chữ nghiêng, xám nhạt, không tên) — kịch bản 6.2
     public static void PhuDe(string s, float giay, bool nghieng = true) { phuDe = s; phuDeNghieng = nghieng; phuDeHet = Time.time + giay; }
 
@@ -38,6 +53,7 @@ public class LocFirstPerson : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
+        matDung = camY = cam ? cam.localPosition.y : 1.52f; ccCao = cc.height; ccTam = cc.center;
     }
 
     void Update()
@@ -49,6 +65,16 @@ public class LocFirstPerson : MonoBehaviour
         goiY = "";
         if (khoa || LocTui.Mo) return;
 
+        if (k.cKey.wasPressedThisFrame || k.leftCtrlKey.wasPressedThisFrame)
+        {
+            if (!ngoi) ngoi = true;
+            else if (!Tia(Vector3.up, matDung - camY + 0.12f, out _)) ngoi = false;   // trên đầu vướng thì chưa đứng được
+        }
+        float cao = ngoi ? matNgoi + 0.1f : ccCao;
+        cc.height = cao; cc.center = new Vector3(ccTam.x, ccTam.y - (ccCao - cao) / 2f, ccTam.z);   // giữ nguyên đáy
+        camY = Mathf.MoveTowards(camY, ngoi ? matNgoi : matDung, Time.deltaTime * 2.6f);
+        cam.localPosition = new Vector3(cam.localPosition.x, camY, cam.localPosition.z);
+
         if (Cursor.lockState == CursorLockMode.Locked)
         {
             var d = m.delta.ReadValue() * look;
@@ -58,7 +84,7 @@ public class LocFirstPerson : MonoBehaviour
         }
 
         // tương tác: nhìn vào cánh cửa / công tắc / hũ rồi nhấn E
-        if (cam && Physics.Raycast(cam.position, cam.forward, out var hit, 2.6f, ~0, QueryTriggerInteraction.Ignore))
+        if (cam && Tia(cam.forward, 2.6f, out var hit))
         {
             var d = hit.collider.GetComponentInParent<LocDoor>();
             var tt = hit.collider.GetComponentInParent<LocTuongTac>();   // [6/10] món đồ, két sắt…
@@ -77,7 +103,7 @@ public class LocFirstPerson : MonoBehaviour
 
         float f = (k.wKey.isPressed ? 1 : 0) - (k.sKey.isPressed ? 1 : 0);
         float r = (k.dKey.isPressed ? 1 : 0) - (k.aKey.isPressed ? 1 : 0);
-        var mv = (transform.forward * f + transform.right * r).normalized * speed * (k.leftShiftKey.isPressed ? 1.8f : 1f);
+        var mv = (transform.forward * f + transform.right * r).normalized * speed * (ngoi ? 0.5f : k.leftShiftKey.isPressed ? 1.8f : 1f);
         vy = cc.isGrounded ? -1f : vy + Physics.gravity.y * Time.deltaTime;
         cc.Move((mv + Vector3.up * vy) * Time.deltaTime);
     }
