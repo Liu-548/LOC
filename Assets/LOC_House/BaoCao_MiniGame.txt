@@ -1,4 +1,4 @@
-[LocMiniGameBuilder] 10/21/2026 12:50:24 PM
+[LocMiniGameBuilder] 22/10/2026 12:46:09 SA
   bàn học      Đêm 1–3  trên BanHoc_Khoi_Bo  tại (5.70, 4.45, 16.10)
   bàn ăn       Đêm 2–3  trên BanAn_Bo  tại (3.80, 0.88, 13.70)
   Dán chén     Đêm 2–2  trên Bo_Chen_Tren_De  tại (-2.00, -1.42, 11.22)
