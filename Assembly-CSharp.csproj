@@ -65,7 +65,9 @@
     <Compile Include="Assets\LOC_House\Scripts\LocCongTac.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_Radio.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocDongHo.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocDi.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_GiuLua.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocChanDoanNhay.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocTuKiemGamePlay.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_GhepChen.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocTuiHud.cs" />

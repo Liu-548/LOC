@@ -1,6 +1,6 @@
 MÓN BỊ RÀ SOÁT DỜI > 25 CM SO VỚI TOẠ ĐỘ ĐẶT
 1.40 m  BaoBotGiat_XaPhong  (7.20,1.40,24.30) → (7.20,0.00,24.30)  [KhoiSau]
-1.32 m  BanChaiCo_XaPhong  (6.74,1.30,24.04) → (6.74,0.00,24.26)  [KhoiSau]
+1.36 m  BanChaiCo_XaPhong  (6.74,1.30,24.04) → (6.39,0.00,23.83)  [KhoiSau]
 1.01 m  TuiXachMe_ViTien  (0.75,4.60,2.62) → (0.80,3.60,2.74)  [PhongBoMe]
 0.87 m  BangTayGay  (6.05,4.80,9.19) → (6.05,3.93,9.19)  [PhongNhim]
 0.87 m  GauBong_Cu  (5.92,4.81,8.75) → (5.92,3.94,8.75)  [PhongNhim]
@@ -41,9 +41,9 @@ MÓN BỊ RÀ SOÁT DỜI > 25 CM SO VỚI TOẠ ĐỘ ĐẶT
 0.40 m  BinhThuy_Phich  (7.25,1.70,11.50) → (7.25,1.30,11.50)  [Bep]
 0.38 m  BeGiat  (6.60,0.00,24.13) → (6.60,0.00,23.74)  [KhoiSau]
 0.38 m  AmNhom  (0.91,1.20,16.10) → (0.91,0.82,16.10)  [Bep]
-0.35 m  SM_PlasticChair_Green  (1.58,-0.15,-2.48) → (1.60,-0.15,-2.13)  [Dem1]
 0.35 m  QuatBan_SatCu  (-3.30,1.30,-1.50) → (-3.30,0.95,-1.50)  [BanHang]
 0.35 m  SoHoaDon_Quay  (-3.31,1.30,-2.98) → (-3.31,0.95,-2.98)  [BanHang]
+0.34 m  SM_PlasticChair_Green  (1.58,-0.15,-2.48) → (1.61,-0.15,-2.14)  [Dem1]
 0.34 m  NoiComDien  (1.50,1.10,16.12) → (1.50,0.77,16.12)  [Bep]
 0.34 m  PhichHoa  (1.72,1.10,15.98) → (1.72,0.77,15.98)  [Bep]
 0.33 m  SM_BurnBasin_Burning  (7.30,-0.15,-4.85) → (7.30,0.18,-4.85)  [Dem1]

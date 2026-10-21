@@ -1,2 +1,1 @@
-01:44:01 OK LOC/Dựng nhà LỘC (tạo scene)
-01:44:01 OK LOC/Tự kiểm gameplay (Play)
+22:48:18 OK LOC/Đo bao đồ vật

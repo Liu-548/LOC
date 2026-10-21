@@ -33,13 +33,22 @@ public class LocTuKiemGamePlay : MonoBehaviour
         yield return Chup("05_dau_dem1_ngoai_cong");
 
         LocViec viec = null; foreach (var v in FindObjectsByType<LocViec>(FindObjectsSortMode.None)) if (v.id == "thap_huong") viec = v;
-        Kt(viec && viec.GetComponentInChildren<Collider>() && viec.GoiY == "[E] Thắp hương", "bàn thờ vong: [E] Thắp hương");
+        Kt(viec && viec.GetComponentInChildren<Collider>(), "bàn thờ vong có chỗ bấm");
         if (!viec) yield break;
+        var di = LocDi.I; Kt(di && di.gameObject.activeInHierarchy, "Đêm 1: người dì đứng ở phòng khách");
+        // [21/10] đứng chéo → không cho thắp
+        fp.DatTuThe(ct.demSauDung + new Vector3(0.9f, 0, 0), ct.demSauNhin); yield return new WaitForSeconds(0.3f);
+        Kt(!ct.DungChinhDien() && !viec.GoiY.StartsWith("[E]"), $"đứng chéo trước bàn thờ: không cho thắp hương (gợi ý: \"{viec.GoiY}\")");
+        viec.Bam(); yield return null;
+        Kt(!LocTui.Co("thap_huong"), "đứng chéo bấm E: không có gì xảy ra");
+        yield return Chup("06a_dung_cheo");
         fp.DatTuThe(ct.demSauDung, ct.demSauNhin); yield return new WaitForSeconds(0.3f);
+        Kt(viec.GoiY == "[E] Thắp hương", "đứng chính diện: [E] Thắp hương");
         viec.Bam(); yield return new WaitForSeconds(2f); yield return Chup("06_thap_huong");
         Kt(LocFirstPerson.khoa && viec.GoiY == "", "thắp hương: khoá điều khiển, giữ camera trên ảnh, hết gợi ý");
         float t0 = Time.time; while (!LocTui.Co("ho_hang_ve") && Time.time - t0 < 60f) yield return null;
         Kt(LocTui.Co("ho_hang_ve") && !LocFirstPerson.khoa, $"thoại người họ hàng chạy hết ({Time.time - t0:0}s), trả điều khiển");
+        if (di) { yield return new WaitForSeconds(1.5f); yield return Chup("06b_di_ve"); }
 
         fp.DatTuThe(new Vector3(-2.0f, -2.25f, 13.8f), new Vector3(-2.0f, -1.6f, 11.0f));
         cham.Dat(true); yield return new WaitForSeconds(1.0f);
@@ -50,6 +59,7 @@ public class LocTuKiemGamePlay : MonoBehaviour
         yield return new WaitForSeconds(3f);
         Kt(LocMa.dem == 1, "chưa thăm Nhím → chưa hết Đêm 1");
 
+        if (di) { t0 = Time.time; while (!di.daVe && Time.time - t0 < 30f) yield return null; Kt(di.daVe && !di.gameObject.activeSelf, $"người dì đã ra cổng và biến mất ({Time.time - t0:0}s)"); }
         LocNhim.daTham[1] = true;
         t0 = Time.time; while (LocMa.dem == 1 && Time.time - t0 < 25f) yield return null;
         Kt(LocMa.dem == 2, "đã xuống hầm + thăm Nhím → tự sang Đêm 2");

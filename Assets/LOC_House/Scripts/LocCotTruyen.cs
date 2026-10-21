@@ -25,7 +25,7 @@ public class LocCotTruyen : MonoBehaviour
     public Bounds hopThang = new(new Vector3(-0.85f, -1.0f, 17.05f), new Vector3(1.5f, 3.0f, 4.5f));
 
     static readonly string[] tenCong = { "CanhCong_Trai (mở)", "CanhCong_Phai (mở)", "CuaNgachCong (mở)" };
-    LocFirstPerson fp; LocCongTac ctHam; readonly List<LocDoor> cong = new();
+    LocFirstPerson fp; LocCongTac ctHam; Transform banThoVong; readonly List<LocDoor> cong = new();
     int demDangAp = -1; bool dangCanh, dangNoiHam;
     readonly Dictionary<string, int> bacGoiY = new();
 
@@ -34,6 +34,7 @@ public class LocCotTruyen : MonoBehaviour
     void Start()
     {
         ctHam = GameObject.Find("CongTac_Ham")?.GetComponent<LocCongTac>();
+        banThoVong = GameObject.Find("BanThoVong_Dem1")?.transform;
         foreach (var n in tenCong) { var d = GameObject.Find(n)?.GetComponent<LocDoor>(); if (d) cong.Add(d); }
         ApDem(LocMa.dem); DauDem();
     }
@@ -105,8 +106,26 @@ public class LocCotTruyen : MonoBehaviour
         dangNoiHam = false;
     }
 
-    public string GoiY(string id) => id == "thap_huong" && LocMa.dem == 1 && !LocTui.Co("thap_huong") && !dangCanh ? "[E] Thắp hương" : "";
-    public void Bam(LocViec v) { if (GoiY(v.id).Length > 0 && v.id == "thap_huong") StartCoroutine(ThapHuong(v.transform)); }
+    public string GoiY(string id)
+    {
+        if (id != "thap_huong" || LocMa.dem != 1 || LocTui.Co("thap_huong") || dangCanh) return "";
+        return DungChinhDien() ? "[E] Thắp hương" : "Đứng thẳng trước bàn thờ để thắp hương";
+    }
+    public void Bam(LocViec v) { if (v.id == "thap_huong" && GoiY(v.id).StartsWith("[E]")) StartCoroutine(ThapHuong(v.transform)); }
+
+    // [21/10] thắp hương phải đứng chính diện, không cho đứng chéo: ngay trước mặt bàn thờ (0,4–1,9 m tính từ tâm bàn),
+    //         lệch ngang ≤ 0,25 m so với trục giữa, mặt hướng thẳng vào bàn thờ (lệch ≤ 20°)
+    public bool DungChinhDien()
+    {
+        if (!banThoVong || !fp) return true;
+        var c = banThoVong.position; c.y = 0;
+        var truoc = banThoVong.forward; truoc.y = 0; truoc.Normalize();
+        if (Vector3.Dot(truoc, demSauDung - c) < 0) truoc = -truoc;   // mặt bàn thờ = phía cửa chính
+        var d = fp.transform.position - c; d.y = 0;
+        float doc = Vector3.Dot(d, truoc), ngang = Vector3.Dot(d, Vector3.Cross(Vector3.up, truoc));
+        var nhin = fp.cam.forward; nhin.y = 0;
+        return doc > 0.4f && doc < 1.9f && Mathf.Abs(ngang) <= 0.25f && Vector3.Angle(nhin, -truoc) <= 20f;
+    }
 
     IEnumerator ThapHuong(Transform ban)
     {
@@ -119,12 +138,13 @@ public class LocCotTruyen : MonoBehaviour
         yield return new WaitForSeconds(4.5f);   // "lâu hơn mức thoải mái"; Khôi không nói gì
         LocFirstPerson.khoa = false; LocMa.tamDung = false; dangCanh = false;
         yield return new WaitForSeconds(1.2f);
-        // ponytail: người họ hàng chưa có model — chỉ có phụ đề; tên để "NGƯỜI HỌ HÀNG" tới khi chốt TL-03
+        // [21/10] người họ hàng có model (người dì, LocDi); tên phụ đề vẫn để "NGƯỜI HỌ HÀNG" tới khi chốt TL-03
         yield return Thoai(("KHÔI", "Cháu cảm ơn cô mấy hôm nay đã trông nhà."),
             ("NGƯỜI HỌ HÀNG", "Ừ. Cô chia buồn với con. Cũng chẳng ai ngờ."),
             ("NGƯỜI HỌ HÀNG", "Con Nhím vẫn nằm trên gác. Tay còn bó, sốt thì chưa dứt. Bác sĩ trả về, bảo cứ theo dõi ở nhà."),
             ("NGƯỜI HỌ HÀNG", "À, hôm qua có ông nào gọi về hỏi nhà còn ai lớn không. Cô bảo còn thằng lớn sắp về. Ông ấy không xưng tên."),
             ("NGƯỜI HỌ HÀNG", "Lát con sang phòng bố mẹ xem có giấy tờ gì cần cất riêng không. Cô về đây, nhà cô còn con nhỏ."));
+        if (LocDi.I) { LocDi.I.Noi(false); LocDi.I.Ve(); }   // "Cô về đây" — đi ra cổng
         LocTui.Dat("ho_hang_ve");
     }
 
@@ -134,6 +154,7 @@ public class LocCotTruyen : MonoBehaviour
         foreach (var (ai, cau) in dong)
         {
             float t = 1.2f + 0.06f * cau.Length;
+            if (LocDi.I) LocDi.I.Noi(ai == "NGƯỜI HỌ HÀNG");   // dì quay về người chơi, gật nhẹ khi tới câu của dì
             LocFirstPerson.PhuDe($"{ai}: {cau}", t, false);
             yield return new WaitForSeconds(t + 0.4f);
         }

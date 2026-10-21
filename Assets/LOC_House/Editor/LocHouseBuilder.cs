@@ -97,6 +97,7 @@ public static partial class LocHouseBuilder
             if (t.name is "Dem2" or "Dem3") t.gameObject.SetActive(false);
         Ma();   // [3/10 v3.1] con ma lấp ló + chế độ tức giận (LocHouseBuilder_Ma)
         Nhim();   // [5/10] em gái Nhím: model + thoại + cơ chế (LocHouseBuilder_Nhim)
+        Di();     // [21/10] người dì (người họ hàng Đêm 1): model low-poly + đi ra cổng (LocHouseBuilder_Di)
         GamePlay();   // [6/10] túi đồ, món nhặt/đọc, két khoá số, cửa hầm khoá (LocHouseBuilder_GamePlay)
         try { LocMiniGameBuilder.DungVaoScene(); }   // [21/10] mini game — lỗi ở đây không được chặn việc lưu scene
         catch (System.Exception e) { Debug.LogException(e); }
