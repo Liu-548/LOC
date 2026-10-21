@@ -89,6 +89,7 @@ public static partial class LocHouseBuilder
                        .Select(kv => $"{(kv.Key.transform.position - kv.Value).magnitude:0.00} m  {kv.Key.name}  ({kv.Value.x:0.00},{kv.Value.y:0.00},{kv.Value.z:0.00}) → ({kv.Key.transform.position.x:0.00},{kv.Key.transform.position.y:0.00},{kv.Key.transform.position.z:0.00})  [{kv.Key.transform.parent?.name}]");
         System.IO.File.WriteAllText("Assets/LOC_House/BaoCao_ViTriBiDoi.txt", "MÓN BỊ RÀ SOÁT DỜI > 25 CM SO VỚI TOẠ ĐỘ ĐẶT\n" + string.Join("\n", moved));
         var hamLog = HamSach();   // [29/9 tối] hầm chỉ giữ đồ thiết kế gốc
+        PhongKhoiBoKhong();   // [21/10] bụi, ố vàng, mạng nhện — sau rà soát để bụi nằm đúng mặt đồ đã thả
         System.IO.File.AppendAllText("Assets/LOC_House/BaoCao_ViTriBiDoi.txt", "\n\nĐỒ LỌT VÀO HẦM ĐÃ NHẤC RA (hầm chỉ giữ đồ thiết kế gốc):\n" + (hamLog.Length > 0 ? hamLog : "  (không có)\n"));
 
         System.IO.File.WriteAllText("Assets/LOC_House/BaoCao_LanCan.txt", LanCanRaSoat());   // [30/9] lan can nào cắm vào kết cấu
@@ -216,9 +217,10 @@ public static partial class LocHouseBuilder
             Box("TuongRao_Thap", rx0, rx1, y, y + 0.45f, -5.35f, -5.15f, TuongNgoai);
             LanCan("RaoSong", new Vector3(rx0 + 0.05f, y + 0.45f, -5.25f), new Vector3(rx1 - 0.05f, y + 0.45f, -5.25f), 0.75f);
         }
-        Mo(LeafM("CongSat_CanhTrai", "CanhCong_Trai (mở)", 2.36f, -5.25f, y, -75.5f, 1.5f, 1.8f, PhMat(VANG)), 0f, true, "cổng");
-        Mo(LeafM("CongSat_CanhPhai", "CanhCong_Phai (mở)", 5.24f, -5.25f, y, -104.5f, 1.5f, 1.8f, PhMat(VANG)), 180f, true, "cổng");
-        Mo(LeafM("CongSat_CuaNgach", "CuaNgachCong (mở)", 6.34f, -5.25f, y, -90, 0.8f, 1.8f, PhMat(VANG)), 180f, true, "cửa ngách cổng");
+        // [21/10] đóng khít: mặt trụ 2,356 · 5,244 · 5,556 · 6,344 — cánh .glb dài 1,35 (đóng hở nhau 18 cm), cửa ngách 0,90 (đóng cắm vào trụ giữa) → kéo đúng ô, chừa 4 mm
+        Mo(Dai(LeafM("CongSat_CanhTrai", "CanhCong_Trai (mở)", 2.36f, -5.25f, y, -75.5f, 1.5f, 1.8f, PhMat(VANG)), 3.798f - 2.36f), 0f, true, "cổng");
+        Mo(Dai(LeafM("CongSat_CanhPhai", "CanhCong_Phai (mở)", 5.24f, -5.25f, y, -104.5f, 1.5f, 1.8f, PhMat(VANG)), 5.24f - 3.802f), 180f, true, "cổng");
+        Mo(Dai(LeafM("CongSat_CuaNgach", "CuaNgachCong (mở)", 6.34f, -5.25f, y, -90, 0.8f, 1.8f, PhMat(VANG)), 6.34f - 5.56f), 180f, true, "cửa ngách cổng");
         A("HopCongTo", 7.3f, -0.28f, 1.9f, 180, top: true);
         A("DongHoNuoc_HopCong", 7.3f, -0.2f, 1.1f, 180, pivot: true);   // dưới hộp công tơ điện, ống PVC xanh
         A("BienSoNha", 2.2f, -5.4f, 1.55f, 180, pivot: true);            // biển số nhà tráng men trên trụ cổng, quay ra đường
@@ -399,6 +401,8 @@ public static partial class LocHouseBuilder
         Box("Kinh_MatTien_1", 0.6f, 1.8f, 0.9f, 2.3f, -0.12f, -0.08f, Kinh);
         Box("Kinh_MatTien_2", 5.8f, 7.0f, 0.9f, 2.3f, -0.12f, -0.08f, Kinh);
         WallX("PhongKhach_SanhSau", 7.4f, 7.5f, 0, W, 0, C1, Tuong, 1.0f, 1.9f, 0, 2.0f, 2.4f, 4.6f, 0, 2.0f);   // khoét ô x 1,0–1.9 đúng làn vế 1 để chân thang thông ra phòng khách; [2/10 tối] cả hai ô cao 2,0 m
+        // [21/10] bậc 1 cách lanh tô 10 cm: bước lên bậc 2 thì đỉnh khối người chơi (bán kính 0,25 lùi sau tâm) chạm lanh tô cao 2,0 → kẹt cả lên lẫn xuống. Bỏ va chạm lanh tô, giữ hình 2,0 m.
+        Object.DestroyImmediate(cur.Find("PhongKhach_SanhSau_1").GetComponent<Collider>());
         // [6/10] bỏ hẳn hộp thang hầm cũ (góc sau phải phòng khách + dải phải sảnh sau x 6,3–W): hầm đã dời xuống dưới kho tiệm từ 2/10; tường phòng khách–sảnh sau kéo tới tường phải
         WallX("SanhSau_Bep", 10.9f, 11.0f, 0, W, 0, C1, Tuong, 2.4f, 4.4f, 0, 2.2f);
         WallX("Bep_GiengTroi", 16.4f, 16.5f, -0.2f, W + 0.2f, 0, Y2, TuongNgoai,
@@ -755,6 +759,10 @@ public static partial class LocHouseBuilder
             A("LanCan_BanCong", 7.4f, -1.175f, y, 0, pivot: true);
             A("GoBanCong", 3.65f, -1.175f, y, 0, pivot: true);   // gờ bê tông 3,90 dưới chân mỗi đoạn
             A("GoBanCong", 7.45f, -1.175f, y, 0, pivot: true);
+            // [21/10] hai đoạn lan can .glb không có va chạm → một hộp chắn dọc x −0,11…7,40 (nối giữa hông trái và đoạn phụ), cao 1,10
+            var vc = new GameObject("LanCan_BanCong_VaCham").transform; vc.SetParent(cur, false);
+            var col = new GameObject("Collider"); col.transform.SetParent(vc, false); col.transform.position = new Vector3(3.645f, y + 0.6f, -1.175f);   // đáy 3,69 — trên mặt gờ bê tông (3,68), không báo xuyên
+            col.AddComponent<BoxCollider>().size = new Vector3(7.51f, 1.02f, 0.08f);
         }
         else Box("LanCan_BanCong", -0.2f, W + 0.2f, y, y + 1.1f, -1.2f, -1.15f, Sat);
         // ban công T2: đoạn đầu hồi bên phải (7,4→7,8) và hai đầu hông chưa có lan can
@@ -1869,6 +1877,18 @@ public static partial class LocHouseBuilder
         if (LocSceneAudit.LocalBounds(g.transform, p).center.x < 0) g.transform.localRotation = Quaternion.Euler(0, 180, 0);
         Mark(p.gameObject, LocProp.Kieu.Cua);
         return p;
+    }
+
+    // [21/10] kéo cánh (LeafM/Leaf, gốc tại bản lề, nằm về +X) cho mép tự do cách bản lề đúng `dai` m
+    static Transform Dai(Transform leaf, float dai)
+    {
+        float hien = LocSceneAudit.LocalBounds(leaf, leaf).max.x;
+        if (hien > 0.01f) foreach (Transform c in leaf)
+            {
+                float k = dai / hien;   // cả vị trí (Leaf đặt khối giữa cánh tại w/2) lẫn bề ngang
+                c.localPosition = Vector3.Scale(c.localPosition, new Vector3(k, 1, 1)); c.localScale = Vector3.Scale(c.localScale, new Vector3(k, 1, 1));
+            }
+        return leaf;
     }
 
     // placeholder: w theo X cục bộ, d theo Z cục bộ (mặt trước = +Z), đáy tại y
