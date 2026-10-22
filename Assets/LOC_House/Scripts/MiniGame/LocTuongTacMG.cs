@@ -37,7 +37,15 @@ public class LocTuongTacMG : LocTuongTac
     public bool lapLai;                    // làm được nhiều lần (ráp chén mỗi đêm)
     public bool xong;
 
-    public bool HienDuoc { get { return (lapLai || !xong) && LocMa.dem >= demTu && LocMa.dem <= demDen; } }
+    [Header("[22/10] Điều kiện cờ + cảnh hé lộ")]
+    public string sauCo;                   // chỉ hiện khi đã có cờ này (vd "ho_hang_ve": dọn bàn nước sau khi cô về)
+    public Transform nhinVao;              // xong thì camera từ từ quay về vật này …
+    [TextArea] public string[] cauPhatHien;   // … và Khôi nghĩ mấy dòng này (chữ nghiêng). Khoá điều khiển tới khi nói xong.
+    public static bool dangPhatHien;
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    static void Reset0() { dangPhatHien = false; }
+
+    public bool HienDuoc { get { return (lapLai || !xong) && LocMa.dem >= demTu && LocMa.dem <= demDen && (string.IsNullOrEmpty(sauCo) || LocTui.Co(sauCo) || LocMa.dem > demTu); } }   // sauCo chỉ chặn trong đêm đầu (F2/F3 nhảy đêm vẫn chơi được)
     public override string GoiY { get { return !HienDuoc ? "" : loai == Loai.Nhat ? "[E] Nhặt " + ten : "[E] " + ten; } }
 
     // [21/10] chưa tới đêm / đã xong thì tắt va chạm để tia nhìn không bị cục đánh dấu chặn
@@ -50,6 +58,7 @@ public class LocTuongTacMG : LocTuongTac
         if (loai == Loai.Nhat && LocTui.CoMon(id)) { xong = true; if (!giuVat) gameObject.SetActive(false); return; }
         if (!lapLai && !string.IsNullOrEmpty(id) && LocTui.Co(id)) xong = true;
         if (xong && hien != null) foreach (var g in hien) if (g) g.SetActive(true);   // chơi lại đầu đêm: vòng sau đã mở thì vẫn mở
+        if (xong && an != null) foreach (var g in an) if (g) g.SetActive(false);
         if (!khoaLucDau || moKhoa == null || xong || LocMa.dem < demTu) return;
         foreach (var d in moKhoa) if (d) d.khoa = true;
     }
@@ -94,5 +103,25 @@ public class LocTuongTacMG : LocTuongTac
         if (nhanThuong) cau += (cau.Length > 0 ? " — " : "") + "Nhặt được: " + (string.IsNullOrEmpty(thuongTen) ? LocId.Ten(thuongId) : thuongTen);
         if (cau.Length > 0 && loai != Loai.Nhat) LocFirstPerson.PhuDe(cau, 3f, false);
         if (loai == Loai.Nhat && !giuVat) gameObject.SetActive(false);
+        if (nhinVao && cauPhatHien != null && cauPhatHien.Length > 0 && gameObject.activeInHierarchy) StartCoroutine(PhatHien());
+    }
+
+    // [22/10] cảnh hé lộ sau mini game: không bật bảng chữ — camera tự quay về món đồ, Khôi nghĩ vài dòng rồi trả điều khiển
+    System.Collections.IEnumerator PhatHien()
+    {
+        dangPhatHien = true; LocFirstPerson.khoa = true; LocMa.tamDung = true;
+        yield return null;   // đợi bảng mini game đóng hẳn
+        var fp = FindAnyObjectByType<LocFirstPerson>();
+        if (fp && fp.cam)
+        {
+            Vector3 tu = fp.cam.position + fp.cam.forward, den = nhinVao.position;
+            for (float t = 0; t < 1; t += Time.deltaTime / 0.9f) { fp.DatTuThe(fp.transform.position, Vector3.Lerp(tu, den, t * t * (3 - 2 * t))); yield return null; }
+            fp.DatTuThe(fp.transform.position, den);
+        }
+        yield return new WaitForSeconds(0.4f);
+        LocTui.Noi(cauPhatHien);
+        float tong = 0; foreach (var d in cauPhatHien) tong += Mathf.Max(1.8f, d.Length * 0.07f) + 0.15f;   // nhịp của LocTui.Noi
+        yield return new WaitForSeconds(tong + 0.4f);
+        LocFirstPerson.khoa = false; LocMa.tamDung = false; dangPhatHien = false;
     }
 }

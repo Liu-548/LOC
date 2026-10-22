@@ -74,6 +74,23 @@ public class LocTuKiemGamePlay : MonoBehaviour
     }
 
     // [21/10] mini game: đứng cách điểm ~1,1 m, tia nhìn trúng điểm, có gợi ý → bấm E mở → bỏ qua → cờ bật, trả điều khiển
+    static GameObject Tim(string ten) { foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (t.name == ten) return t.gameObject; return null; }
+    // đứng chéo phía trên nhóm đồ ~1,3 m, nhìn xuống rồi chụp (so trước/sau)
+    IEnumerator ChupVao(Transform g, string ten)
+    {
+        var fp = FindAnyObjectByType<LocFirstPerson>(); if (!fp) yield break;
+        var rs = g.GetComponentsInChildren<Renderer>(true); if (rs.Length == 0) yield break;
+        var b = rs[0].bounds; foreach (var r in rs) b.Encapsulate(r.bounds);
+        foreach (var dir in new[] { Vector3.back, Vector3.left, Vector3.right, Vector3.forward })
+        {
+            var dung = b.center + dir * 1.2f; dung.y = b.min.y + 0.3f;
+            if (!Physics.Raycast(dung, Vector3.down, out var san, 3f, ~0, QueryTriggerInteraction.Ignore)) continue;
+            var mat = san.point + Vector3.up * 1.52f;
+            if (Physics.Linecast(mat, b.center, ~0, QueryTriggerInteraction.Ignore) && (b.center - mat).magnitude > 0.5f && Physics.Linecast(mat, b.center, out var h, ~0, QueryTriggerInteraction.Ignore) && h.distance < (b.center - mat).magnitude - 0.4f) continue;
+            fp.DatTuThe(san.point + Vector3.up * 0.05f, b.center); break;
+        }
+        yield return new WaitForSeconds(0.3f); yield return Chup(ten);
+    }
     static LocTuongTacMG MG(string id) { foreach (var t in FindObjectsByType<LocTuongTacMG>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (t.id == id) return t; return null; }
     IEnumerator ThuMiniGame(string id, string anh)
     {
@@ -97,6 +114,13 @@ public class LocTuKiemGamePlay : MonoBehaviour
         Kt(LocMiniGame.hienTai == t.miniGame && LocFirstPerson.khoa, $"{id}: E mở mini game, khoá điều khiển");
         yield return Chup(anh + "_b_mo");
         LocMiniGame.BoQua(); yield return new WaitForSeconds(0.3f);
+        if (LocTuongTacMG.dangPhatHien)   // [22/10] cảnh hé lộ: chụp lúc camera đã quay tới món đồ, đợi Khôi nghĩ xong
+        {
+            yield return new WaitForSeconds(1.6f); yield return Chup(anh + "_c_he_lo");
+            Kt(LocFirstPerson.khoa && t.nhinVao, $"{id}: cảnh hé lộ khoá điều khiển, camera nhìn {(t.nhinVao ? t.nhinVao.name : "?")}");
+            float cho = 0; while (LocTuongTacMG.dangPhatHien && cho < 20f) { cho += Time.deltaTime; yield return null; }
+            yield return new WaitForSeconds(0.2f);
+        }
         Kt(LocMiniGame.hienTai == null && !LocFirstPerson.khoa && t.xong && LocTui.Co(id) && t.GoiY == "", $"{id}: Bỏ qua → xong, bật cờ, trả điều khiển, hết gợi ý");
     }
 
@@ -146,6 +170,19 @@ public class LocTuKiemGamePlay : MonoBehaviour
         yield return CotTruyenDem1();   // [8/10] hết Đêm 1 → tự sang Đêm 2
         yield return ThuMiniGame("mg_ban_hoc", "10_ban_hoc");   // sau phần Đêm 1 (đầu Đêm 1 phải còn đứng ngoài cổng)
         yield return ThuMiniGame("mg_ban_an", "11_ban_an");
+        // [22/10] ba mini game sắp xếp: nhà đổi theo sau khi làm xong
+        foreach (var (id, truoc, sau, anh) in new[] { ("mg_ban_nuoc", "TruocDon_BanNuoc", "SauDon_BanNuoc", "15_ban_nuoc"), ("mg_quan_ao", "TruocRut_DayPhoi", "SauRut_DoGap", "16_quan_ao"), ("mg_ho_so", "TruocXep_HoSo", "SauXep_BiaKhoi", "17_ho_so") })
+        {
+            var gT = GameObject.Find("LOC_MiniGame/" + truoc); var gS = Tim(sau);
+            yield return null;
+            Kt(gT && gT.activeSelf && gS && !gS.activeSelf, $"{id}: Đêm 2 trước khi làm — đồ bừa hiện, đồ đã xếp ẩn");
+            if (gT) yield return ChupVao(gT.transform, anh + "_0_truoc");
+            yield return ThuMiniGame(id, anh);
+            yield return null;
+            Kt(gT && !gT.activeSelf && gS && gS.activeSelf, $"{id}: làm xong — đồ bừa ẩn, đồ đã xếp hiện");
+            if (gS) yield return ChupVao(gS.transform, anh + "_9_sau");
+        }
+        Kt(!GameObject.Find("AoTang_Phoi_01"), "rút quần áo xong: áo tang không còn trên dây");
         yield return ThuMiniGame("dan_chen", "12_dan_chen");
         LocTui.I.DatChe(1); yield return new WaitForSeconds(0.3f); yield return Chup("04_tui_dem2_doc_so");
         Kt(V("so_cua_bo").DocDuoc, "Đêm 2 đọc được sổ của bố (" + V("so_cua_bo").trang.Length + " trang)");

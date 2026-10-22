@@ -52,7 +52,7 @@ public abstract class LocMiniGame : MonoBehaviour
     {
         if (!choLap) daXong = true;
         KhiThang();
-        if (!string.IsNullOrEmpty(cau)) LocFirstPerson.PhuDe(cau, 2.6f, false);
+        if (!string.IsNullOrEmpty(cau)) LocTui.Noi(cau);   // [22/10] câu kết là độc thoại của Khôi → chữ nghiêng (kịch bản C1.2)
         var c = chu;
         Dong();
         if (c) c.HoanThanh();
