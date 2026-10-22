@@ -86,26 +86,20 @@ public static class LocMiniGameBuilder
             var rd = new System.Random(5);
             float R(float a) => (float)(rd.NextDouble() * 2 - 1) * a;
             var truoc = Nhom("TruocDon_BanNuoc");
-            for (int i = 0; i < 5; i++) { var p = new Vector3(c.x + R(ex), y, c.z + R(ez)); Tru(truoc, "ChenTra", p, 0.055f, 0.04f, "#E8E2CF"); Tru(truoc, "NuocCheDong", p + Vector3.up * 0.032f, 0.044f, 0.004f, "#6B4A1E"); }
-            Tru(truoc, "AmTra_Nguoi", new Vector3(c.x + ex * 0.3f, y, c.z - ez * 0.5f), 0.13f, 0.1f, "#CDBE98");
-            Hop(truoc, "VoiAm", new Vector3(c.x + ex * 0.3f + 0.08f, y + 0.06f, c.z - ez * 0.5f), new Vector3(0.07f, 0.018f, 0.018f), "#CDBE98", 20);
-            var dia = new Vector3(c.x - ex * 0.4f, y, c.z + ez * 0.3f);
-            Tru(truoc, "DiaVoHatDua", dia, 0.17f, 0.012f, "#F2EEE6");
-            for (int i = 0; i < 26; i++) Hop(truoc, "VoHatDua", dia + new Vector3(R(0.06f), 0.014f + i * 0.0006f, R(0.06f)), new Vector3(0.012f, 0.003f, 0.007f), i % 3 == 0 ? "#2A1814" : "#8E2A22", R(180));
-            string[] mauKeo = { "#C9372C", "#E3B23C", "#3F7CAC", "#5FA35A", "#D96FA0" };
-            for (int i = 0; i < 9; i++) Hop(truoc, "GiayKeo", new Vector3(c.x + R(ex), y + 0.002f, c.z + R(ez)), new Vector3(0.035f, 0.002f, 0.025f), mauKeo[i % 5], R(180));
-            for (int i = 0; i < 4; i++) Hop(truoc, "GiayKeo_DuoiSan", new Vector3(c.x + R(ex * 1.6f), 0.004f, c.z + R(ez * 1.6f)), new Vector3(0.035f, 0.002f, 0.025f), mauKeo[(i + 2) % 5], R(180));
-            Hop(truoc, "BanhIn_KeoLac", new Vector3(c.x - ex * 0.1f, y, c.z - ez * 0.1f), new Vector3(0.09f, 0.025f, 0.05f), "#D8C9A4", 12);
-            Hop(truoc, "GoiHatDua", new Vector3(c.x + ex * 0.6f, y, c.z + ez * 0.6f), new Vector3(0.12f, 0.03f, 0.18f), "#B8302A", -25);
+            for (int i = 0; i < 5; i++) Mo(truoc, "MG_ChenTra", new Vector3(c.x + R(ex), y, c.z + R(ez)), R(180));
+            Mo(truoc, "MG_AmTra", new Vector3(c.x + ex * 0.3f, y, c.z - ez * 0.5f), 70);
+            Mo(truoc, "MG_DiaVoHatDua", new Vector3(c.x - ex * 0.4f, y, c.z + ez * 0.3f), R(180));
+            string[] keo = { "MG_GiayKeo_do", "MG_GiayKeo_vang", "MG_GiayKeo_lam" };
+            for (int i = 0; i < 9; i++) Mo(truoc, keo[i % 3], new Vector3(c.x + R(ex), y, c.z + R(ez)), R(180));
+            for (int i = 0; i < 4; i++) Mo(truoc, keo[(i + 1) % 3], new Vector3(c.x + R(ex * 1.6f), b.min.y, c.z + R(ez * 1.6f)), R(180));   // rơi dưới sàn
+            Mo(truoc, "MG_BanhKeoThua", new Vector3(c.x - ex * 0.1f, y, c.z - ez * 0.1f), 12);
+            Mo(truoc, "MG_GoiHatDua", new Vector3(c.x + ex * 0.6f, y, c.z + ez * 0.6f), -25);
             var sau = Nhom("SauDon_BanNuoc");
-            Tru(sau, "HopBanhKeo_Nap", new Vector3(c.x - ex * 0.2f, y, c.z + ez * 0.2f), 0.24f, 0.07f, "#A8291F");
-            Tru(sau, "HopBanhKeo_VienVang", new Vector3(c.x - ex * 0.2f, y + 0.07f, c.z + ez * 0.2f), 0.2f, 0.003f, "#D9A53A");
+            Mo(sau, "MG_HopBanhKeo", new Vector3(c.x - ex * 0.2f, y, c.z + ez * 0.2f), 0);
             // cốc của bố — có ở cả hai trạng thái, không thuộc nhóm nào
             var cocP = new Vector3(c.x + ex * 0.55f, y, c.z - ez * 0.1f);
             var coc = Nhom("CocCuaBo_Up"); coc.transform.position = cocP;
-            Tru(coc, "DiaLot", cocP, 0.11f, 0.008f, "#E8E2CF");
-            Tru(coc, "Coc", cocP + Vector3.up * 0.008f, 0.075f, 0.09f, "#6B3E22");
-            Hop(coc, "QuaiCoc", cocP + new Vector3(0.05f, 0.05f, 0), new Vector3(0.012f, 0.05f, 0.02f), "#6B3E22");
+            Mo(coc, "MG_CocUp", cocP, 200);
             Muc(truoc, 1, null, "mg_ban_nuoc"); Muc(sau, 1, "mg_ban_nuoc", null);
 
             var d = Diem("Salon_BanNuoc", "dọn bàn nước", Game<LocMG_DonBanNuoc>("DonBanNuoc"), 1, 3, 0f);
@@ -123,69 +117,101 @@ public static class LocMiniGameBuilder
         var be = Tim("BeNuoc_Nap");
         if (day && be)
         {
-            var bd = Bao(day); float yd = bd.center.y; float zd = bd.center.z + 0.03f;
+            var bd = Bao(day); float yd = bd.center.y; float zd = bd.center.z + 0.02f;
+            log.AppendLine($"  dây phơi x {bd.min.x:0.00}–{bd.max.x:0.00}");
             var truoc = Nhom("TruocRut_DayPhoi");
             float[] xs = { 3.09f, 3.57f, 4.05f, 4.53f, 5.05f };   // khe giữa năm áo tang (x 2,85 + 0,48·i)
-            var ao = HopTex(truoc, "AoHoa_Nhim_Phoi", new Vector3(xs[0], yd - 0.17f, zd), new Vector3(0.30f, 0.32f, 0.008f), "T_MG_AoHoa_Nhim.png");
-            Hop(truoc, "QuanDui_Nhim", new Vector3(xs[1], yd - 0.13f, zd), new Vector3(0.22f, 0.24f, 0.008f), "#5B7FA8");
-            Hop(truoc, "TatTreCon_1", new Vector3(xs[2] - 0.04f, yd - 0.08f, zd), new Vector3(0.05f, 0.14f, 0.006f), "#F0F0EA");
-            Hop(truoc, "TatTreCon_2", new Vector3(xs[2] + 0.04f, yd - 0.08f, zd), new Vector3(0.05f, 0.14f, 0.006f), "#F0F0EA");
-            Hop(truoc, "KhanMat", new Vector3(xs[3], yd - 0.16f, zd), new Vector3(0.25f, 0.32f, 0.006f), "#7FB6C9");
-            Hop(truoc, "KhanLauTay", new Vector3(xs[4], yd - 0.14f, zd), new Vector3(0.22f, 0.26f, 0.006f), "#E9D7A8");
+            string[] treo = { "MG_AoHoaPhoi", "MG_QuanDuiPhoi", "MG_TatPhoi", "MG_KhanMatPhoi", "MG_KhanLauPhoi" };
+            for (int i = 0; i < treo.Length; i++) Mo(truoc, treo[i], new Vector3(xs[i], yd, zd), 0);
             Muc(truoc, 2, null, "mg_quan_ao");
             for (int i = 1; i <= 5; i++) { var a = Tim("AoTang_Phoi_0" + i); if (a) Muc(a.gameObject, 1, null, "mg_quan_ao"); }
 
             var bb = Bao(be); float yb = bb.max.y; var cb = bb.center;
             var sau = Nhom("SauRut_DoGap");
-            float t = yb;
-            for (int i = 0; i < 4; i++) t = HopDay(sau, "DoTang_Gap", new Vector3(cb.x - 0.18f, t, cb.z), new Vector3(0.30f, 0.025f, 0.24f), i % 2 == 0 ? "#F4F1E8" : "#E9E5DA", i * 3 - 4);
-            t = HopDay(sau, "QuanDui_Gap", new Vector3(cb.x + 0.2f, yb, cb.z), new Vector3(0.18f, 0.02f, 0.15f), "#5B7FA8", 6);
-            var aoGap = HopTex(sau, "AoHoa_Nhim_Gap", new Vector3(cb.x + 0.2f, t + 0.009f, cb.z), new Vector3(0.20f, 0.018f, 0.17f), "T_MG_AoHoa_Nhim.png", -3);
-            Hop(sau, "DuongCatTay_Vien", new Vector3(cb.x + 0.2f - 0.09f, t + 0.019f, cb.z), new Vector3(0.006f, 0.002f, 0.16f), "#FFFFFF", -3);   // mép cắt viền chỉ trắng
-            HopDay(sau, "Khan_Gap", new Vector3(cb.x + 0.02f, yb, cb.z + 0.2f), new Vector3(0.16f, 0.03f, 0.12f), "#7FB6C9", 10);
+            Mo(sau, "MG_DoTangGap", new Vector3(cb.x - 0.17f, yb, cb.z), 4);
+            Mo(sau, "MG_QuanDuiGap", new Vector3(cb.x + 0.2f, yb, cb.z), 6);
+            var aoGap = Mo(sau, "MG_AoHoaGap", new Vector3(cb.x + 0.2f, yb + 0.02f, cb.z), -3);
+            Mo(sau, "MG_KhanGap", new Vector3(cb.x + 0.02f, yb, cb.z + 0.2f), 10);
             Muc(sau, 2, "mg_quan_ao", null);
+            var huong = bd.center - cb; huong.y = 0; huong.Normalize();   // đứng giữa bể nước và dây phơi, cách bể 0,75 m
+            var dung = Nhom("DungXem_DoGap"); dung.transform.position = new Vector3(cb.x, bb.min.y, cb.z) + huong * (Mathf.Max(bb.extents.x, bb.extents.z) + 0.75f);
 
             var d = Diem("DayPhoi", "rút quần áo", Game<LocMG_RutQuanAo>("RutQuanAo"), 2, 3, 0f);
-            if (d)
+            if (d && aoGap)
             {
-                d.id = "mg_quan_ao"; d.nhinVao = aoGap.transform;
+                d.id = "mg_quan_ao"; d.nhinVao = aoGap.transform; d.dungXem = dung.transform;
                 d.cauPhatHien = new[] { "Tay áo bị cắt cho vừa cái bột.", "Mũi khâu nhỏ, đều tăm tắp.", "Chỉ mẹ mới khâu kiểu này." };
             }
         }
 
-        // ── phòng làm việc của bố: giấy tờ bị lục ra từ Đêm 1 (bàn + sàn) → xếp vào tủ; bìa "KHÔI" để lại trên bàn, mở sẵn
+        // ── phòng làm việc của bố: giấy tờ bị lục ra từ Đêm 1 (bàn + sàn) → xếp vào tủ; bìa "KHÔI" để lại trên bàn, cuống phiếu xoè bên cạnh
         var banGiay = Tim("BanGiay_Go");
-        if (banGiay && Tim("TuHoSo_Sat"))
+        var tuHs = Tim("TuHoSo_Sat");
+        if (banGiay && tuHs)
         {
             var b = Bao(banGiay); float y = b.max.y; var c = b.center;
             var rd = new System.Random(9);
             float R(float a) => (float)(rd.NextDouble() * 2 - 1) * a;
             var truoc = Nhom("TruocXep_HoSo");
-            for (int i = 0; i < 6; i++) HopTex(truoc, "HoaDon_Roi", new Vector3(c.x + R(0.35f), y + 0.002f + i * 0.0015f, c.z + R(0.12f)), new Vector3(0.15f, 0.0015f, 0.21f), "T_MG_HoaDon.png", R(40));
-            HopDay(truoc, "SoHang_2000", new Vector3(c.x - 0.3f, y, c.z + 0.05f), new Vector3(0.21f, 0.02f, 0.30f), "#7A4E2E", 8);
-            HopDay(truoc, "SoThuChi_1999", new Vector3(c.x + 0.28f, y, c.z - 0.02f), new Vector3(0.21f, 0.018f, 0.30f), "#8C6E3E", -14);
-            var tu = Bao(Tim("TuHoSo_Sat"));
-            for (int i = 0; i < 4; i++) HopTex(truoc, "HoaDon_DuoiSan", new Vector3(tu.min.x - 0.35f + R(0.15f), b.min.y + 0.003f + i * 0.0015f, tu.center.z + R(0.3f)), new Vector3(0.15f, 0.0015f, 0.21f), "T_MG_HoaDon.png", R(60));
-            HopDay(truoc, "BiaHoSo_DuoiSan", new Vector3(tu.min.x - 0.45f, b.min.y, tu.center.z + 0.15f), new Vector3(0.24f, 0.012f, 0.32f), "#C4A066", 30);
+            for (int i = 0; i < 6; i++) Mo(truoc, "MG_HoaDon", new Vector3(c.x + R(0.35f), y + i * 0.0012f, c.z + R(0.12f)), R(40));
+            Mo(truoc, "MG_SoHang", new Vector3(c.x - 0.3f, y + 0.008f, c.z + 0.05f), 8);
+            Mo(truoc, "MG_SoThuChi", new Vector3(c.x + 0.28f, y + 0.008f, c.z - 0.02f), -14);
+            var tu = Bao(tuHs);
+            for (int i = 0; i < 4; i++) Mo(truoc, "MG_HoaDon", new Vector3(tu.min.x - 0.35f + R(0.15f), b.min.y + i * 0.0012f, tu.center.z + R(0.3f)), R(60));
+            Mo(truoc, "MG_BiaHoSo", new Vector3(tu.min.x - 0.45f, b.min.y + 0.006f, tu.center.z + 0.15f), 30);
             Muc(truoc, 2, null, "mg_ho_so");
 
             var sau = Nhom("SauXep_BiaKhoi");
-            var p0 = new Vector3(c.x - 0.05f, y, b.min.z + 0.2f);   // mép bàn phía ghế — chỗ trống, không đè chồng sổ cũ / bàn tính
-            HopTex(sau, "BiaKhoi_TrangTrai", p0 + new Vector3(-0.13f, 0, 0), new Vector3(0.25f, 0.004f, 0.33f), "T_MG_BiaHoSo_Khoi.png", 180);
-            float t = y;
-            for (int i = 0; i < 7; i++) t = HopDay(sau, "CuongPhieu_Xap", new Vector3(p0.x + 0.13f, t, p0.z), new Vector3(0.21f, 0.0012f, 0.15f), "#E8E0C6", (i % 3 - 1) * 2.5f);
-            var cuong = HopTex(sau, "CuongPhieu_TrenCung", new Vector3(p0.x + 0.13f, t, p0.z), new Vector3(0.21f, 0.0015f, 0.15f), "T_MG_CuongPhieu.png", 182);
+            // bìa KHÔI + xấp cuống đặt chồng lên mép bìa: tìm chỗ trống trên mặt bàn (không đè bàn tính, hộp dấu, chồng sổ…), mặt chữ quay về phía người đứng
+            var (p0, yaw) = ChoTrong(banGiay, new Vector2(0.30f, 0.36f), c.z > Bao(Tim("GheBanGiay") ?? banGiay).center.z ? 0f : 180f);
+            Quaternion q = Quaternion.Euler(0, yaw, 0), qm = Quaternion.Euler(0, yaw + 180f, 0);   // FBX vào Unity: mặt chữ đọc từ phía +Z cục bộ → xoay 180° cho chữ quay về người đứng
+            Mo(sau, "MG_BiaKhoi", p0 + qm * new Vector3(-0.03f, 0, 0.01f), yaw + 183);
+            var cuong = Mo(sau, "MG_CuongPhieuXap", p0 + qm * new Vector3(0.04f, 0.0115f, -0.11f), yaw + 174);
             Muc(sau, 2, "mg_ho_so", null);
+            var dung = Nhom("DungXem_HoSo"); dung.transform.position = new Vector3(p0.x, b.min.y, p0.z) + q * Vector3.back * 0.62f;
 
             var d = Diem("TuHoSo_Sat", "xếp lại giấy tờ", Game<LocMG_XepHoSo>("XepHoSo"), 2, 3, 0f);
-            if (d)
+            if (d && cuong)
             {
-                d.id = "mg_ho_so"; d.nhinVao = cuong.transform;
+                d.id = "mg_ho_so"; d.nhinVao = cuong.transform; d.dungXem = dung.transform;
                 d.cauPhatHien = new[] { "Phiếu chuyển tiền. Tháng nào cũng có, từ tháng chín năm 2000.", "Người gửi: Nguyễn Thị Liên.", "...Chữ bố." };
             }
         }
         tt.muc = muc.ToArray();
         log.AppendLine("  trạng thái trước/sau: " + muc.Count + " mục");
+    }
+
+    // chỗ trống trên mặt bàn cho một món kt (x × z ở yaw 0): dò lưới 2 cm, né bao của mọi đồ đang đặt trên mặt bàn; thử yaw ưu tiên rồi xoay 90°.
+    // Trả về tâm đáy + yaw. Không có chỗ thì đặt giữa bàn (ghi vào báo cáo).
+    static (Vector3, float) ChoTrong(Transform ban, Vector2 kt, float yawUuTien)
+    {
+        var b = Bao(ban); float y = b.max.y;
+        var vuong = new List<Bounds>();
+        foreach (var r in Object.FindObjectsByType<Renderer>(FindObjectsSortMode.None))
+        {
+            if (r.transform.IsChildOf(ban) || r.transform.IsChildOf(root)) continue;
+            var rb = r.bounds;
+            if (rb.max.y < y + 0.002f || rb.min.y > y + 0.6f || rb.max.x < b.min.x || rb.min.x > b.max.x || rb.max.z < b.min.z || rb.min.z > b.max.z) continue;
+            vuong.Add(rb);
+        }
+        foreach (float yaw in new[] { yawUuTien, yawUuTien + 90f })
+        {
+            var s = Mathf.Abs(Mathf.Sin(yaw * Mathf.Deg2Rad)) > 0.5f ? new Vector2(kt.y, kt.x) : kt;
+            var mepNguoi = Quaternion.Euler(0, yaw, 0) * Vector3.back;   // ưu tiên ô sát mép phía người đọc
+            Vector3? tot = null; float diem = float.MaxValue;
+            for (float x = b.min.x + s.x / 2 + 0.03f; x <= b.max.x - s.x / 2 - 0.03f; x += 0.02f)
+                for (float z = b.min.z + s.y / 2 + 0.03f; z <= b.max.z - s.y / 2 - 0.03f; z += 0.02f)
+                {
+                    var o = new Bounds(new Vector3(x, y + 0.05f, z), new Vector3(s.x + 0.02f, 0.1f, s.y + 0.02f));
+                    bool trung = false; foreach (var v in vuong) if (v.Intersects(o)) { trung = true; break; }
+                    if (trung) continue;
+                    float d = Vector3.Dot(new Vector3(x, 0, z) - new Vector3(b.center.x, 0, b.center.z), mepNguoi);
+                    if (-d < diem) { diem = -d; tot = new Vector3(x, y, z); }
+                }
+            if (tot.HasValue) { log.AppendLine($"  bìa KHÔI: chỗ trống ({tot.Value.x:0.00}, {tot.Value.z:0.00}) yaw {yaw:0} — né {vuong.Count} món trên bàn"); return (tot.Value, yaw); }
+        }
+        log.AppendLine("! bàn giấy không còn chỗ trống cho bìa KHÔI — đặt giữa bàn");
+        return (new Vector3(b.center.x, y, b.center.z), yawUuTien);
     }
 
     static Transform Tim(string ten)
@@ -207,40 +233,27 @@ public static class LocMiniGameBuilder
     }
     static GameObject Nhom(string ten) { var g = new GameObject(ten); g.transform.SetParent(root, false); return g; }
 
-    static readonly Dictionary<string, Material> mats = new();
-    static Material Mau(string hex, string tex = null)
+    // model đồ mini game (LOC_Nguon/MiniGame/build_mg.py → Models/MiniGame/*.fbx), một vật liệu atlas cho tất cả; gốc model = tâm đáy (đồ phơi: điểm treo)
+    static Material atlas;
+    static GameObject Mo(GameObject cha, string ten, Vector3 p, float yaw)
     {
-        string k = hex + tex;
-        if (mats.TryGetValue(k, out var m) && m) return m;
-        ColorUtility.TryParseHtmlString(hex, out var c);
-        m = new Material(Shader.Find("Universal Render Pipeline/Simple Lit")) { name = "M_MG_" + (tex ?? hex.TrimStart('#')) };
-        m.SetColor("_BaseColor", c); m.SetFloat("_Smoothness", 0.1f);
-        if (tex != null)
+        var fbx = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/LOC_House/Models/MiniGame/{ten}.fbx");
+        if (!fbx) { log.AppendLine("! thiếu model " + ten); return null; }
+        if (!atlas)
         {
-            string p = "Assets/LOC_House/Textures/MiniGame/" + tex;
-            if (AssetImporter.GetAtPath(p) is TextureImporter ti && ti.filterMode != FilterMode.Point) { ti.filterMode = FilterMode.Point; ti.SaveAndReimport(); }
-            var tx = AssetDatabase.LoadAssetAtPath<Texture2D>(p);
-            if (tx) m.SetTexture("_BaseMap", tx); else log.AppendLine("! thiếu texture " + p);
+            const string tp = "Assets/LOC_House/Textures/MiniGame/T_MG_Atlas.png", mp = "Assets/LOC_House/Materials/M_MG_Atlas.mat";
+            if (AssetImporter.GetAtPath(tp) is TextureImporter ti && ti.filterMode != FilterMode.Point) { ti.filterMode = FilterMode.Point; ti.SaveAndReimport(); }
+            atlas = AssetDatabase.LoadAssetAtPath<Material>(mp);
+            if (!atlas) { atlas = new Material(Shader.Find("Universal Render Pipeline/Simple Lit")); AssetDatabase.CreateAsset(atlas, mp); }
+            var tx = AssetDatabase.LoadAssetAtPath<Texture2D>(tp);
+            atlas.SetTexture("_BaseMap", tx); atlas.mainTexture = tx; atlas.SetColor("_BaseColor", Color.white); atlas.SetFloat("_Smoothness", 0.15f);
+            EditorUtility.SetDirty(atlas);
         }
-        return mats[k] = m;
-    }
-    // hộp tâm tại p (p.y = đáy); không va chạm — đồ trang trí, không chặn tia nhìn
-    static GameObject Hop(GameObject cha, string ten, Vector3 p, Vector3 kt, string hex, float yaw = 0, string tex = null)
-    {
-        var g = GameObject.CreatePrimitive(PrimitiveType.Cube); Object.DestroyImmediate(g.GetComponent<Collider>());
-        g.name = ten; g.transform.SetParent(cha.transform, true);
-        g.transform.SetPositionAndRotation(p + Vector3.up * kt.y / 2f, Quaternion.Euler(0, yaw, 0)); g.transform.localScale = kt;
-        g.GetComponent<Renderer>().sharedMaterial = Mau(hex, tex);
+        var g = Object.Instantiate(fbx, cha.transform); g.name = ten;
+        g.transform.SetPositionAndRotation(p, Quaternion.Euler(0, yaw, 0) * fbx.transform.rotation);
+        foreach (var r in g.GetComponentsInChildren<Renderer>(true)) r.sharedMaterial = atlas;
+        foreach (var k in g.GetComponentsInChildren<Collider>(true)) Object.DestroyImmediate(k);   // đồ trang trí, không chặn tia nhìn
         return g;
-    }
-    static GameObject HopTex(GameObject cha, string ten, Vector3 p, Vector3 kt, string tex, float yaw = 0) => Hop(cha, ten, p, kt, "#FFFFFF", yaw, tex);
-    static float HopDay(GameObject cha, string ten, Vector3 p, Vector3 kt, string hex, float yaw = 0) { Hop(cha, ten, p, kt, hex, yaw); return p.y + kt.y; }
-    static void Tru(GameObject cha, string ten, Vector3 p, float dk, float cao, string hex)
-    {
-        var g = GameObject.CreatePrimitive(PrimitiveType.Cylinder); Object.DestroyImmediate(g.GetComponent<Collider>());
-        g.name = ten; g.transform.SetParent(cha.transform, true);
-        g.transform.position = p + Vector3.up * cao / 2f; g.transform.localScale = new Vector3(dk, cao / 2f, dk);
-        g.GetComponent<Renderer>().sharedMaterial = Mau(hex);
     }
 
     static T Game<T>(string ten) where T : LocMiniGame

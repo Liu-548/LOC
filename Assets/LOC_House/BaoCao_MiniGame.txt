@@ -1,11 +1,13 @@
-[LocMiniGameBuilder] 22/10/2026 12:50:39 CH
+[LocMiniGameBuilder] 22/10/2026 3:29:31 CH
   bàn học      Đêm 1–3  trên BanHoc_Khoi_Bo  tại (5.70, 4.45, 16.10)
   bàn ăn       Đêm 2–3  trên BanAn_Bo  tại (3.80, 0.88, 13.70)
   Dán chén     Đêm 2–2  trên Bo_Chen_Tren_De  tại (-2.00, -1.42, 11.22)
   Bày mâm      Đêm 3–3  trên BanThoHam  tại (-2.00, -1.50, 11.27)
   Giữ nhang    Đêm 3–3  trên BanThoHam  tại (-2.00, -1.50, 11.27)
   dọn bàn nước Đêm 1–3  trên Salon_BanNuoc  tại (6.28, 0.58, 1.95)
+  dây phơi x 2,50–5,10
   rút quần áo  Đêm 2–3  trên DayPhoi  tại (3.80, 8.77, 1.80)
+  bìa KHÔI: chỗ trống (5,73, 7,11) yaw 90 — né 6 món trên bàn
   xếp lại giấy tờ Đêm 2–3  trên TuHoSo_Sat  tại (7.38, 5.42, 6.30)
   trạng thái trước/sau: 11 mục
 Xong: 8 điểm. Bỏ qua mini game: nút [Bỏ qua] hoặc phím B (LocMiniGame.choBoQua).

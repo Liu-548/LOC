@@ -40,6 +40,7 @@ public class LocTuongTacMG : LocTuongTac
     [Header("[22/10] Điều kiện cờ + cảnh hé lộ")]
     public string sauCo;                   // chỉ hiện khi đã có cờ này (vd "ho_hang_ve": dọn bàn nước sau khi cô về)
     public Transform nhinVao;              // xong thì camera từ từ quay về vật này …
+    public Transform dungXem;              // … (tuỳ chọn) đồng thời Khôi bước tới chỗ này (chân, trên sàn) để không bị đồ khác che
     [TextArea] public string[] cauPhatHien;   // … và Khôi nghĩ mấy dòng này (chữ nghiêng). Khoá điều khiển tới khi nói xong.
     public static bool dangPhatHien;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -114,9 +115,10 @@ public class LocTuongTacMG : LocTuongTac
         var fp = FindAnyObjectByType<LocFirstPerson>();
         if (fp && fp.cam)
         {
-            Vector3 tu = fp.cam.position + fp.cam.forward, den = nhinVao.position;
-            for (float t = 0; t < 1; t += Time.deltaTime / 0.9f) { fp.DatTuThe(fp.transform.position, Vector3.Lerp(tu, den, t * t * (3 - 2 * t))); yield return null; }
-            fp.DatTuThe(fp.transform.position, den);
+            Vector3 tu = fp.cam.position + fp.cam.forward, den = nhinVao.position, p0 = fp.transform.position, p1 = dungXem ? dungXem.position : p0;
+            float tg = dungXem ? 1.4f : 0.9f;
+            for (float t = 0; t < 1; t += Time.deltaTime / tg) { float e = t * t * (3 - 2 * t); fp.DatTuThe(Vector3.Lerp(p0, p1, e), Vector3.Lerp(tu, den, e)); yield return null; }
+            fp.DatTuThe(p1, den);
         }
         yield return new WaitForSeconds(0.4f);
         LocTui.Noi(cauPhatHien);
