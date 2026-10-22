@@ -1,7 +1,7 @@
-BÁO CÁO DỰNG NHÀ LỘC — 22/10/2026 00:46
+BÁO CÁO DỰNG NHÀ LỘC — 23/10/2026 01:23
 Scene: Assets/Scenes/LOC_NhaLoc.unity
 
-ASSET ĐÃ ĐẶT (379):
+ASSET ĐÃ ĐẶT (385):
   ✓ AmNhom
   ✓ AnhCuoi_Tex
   ✓ AnhGiaDinh_Tex
@@ -37,6 +37,7 @@ ASSET ĐÃ ĐẶT (379):
   ✓ BanTron_Thap
   ✓ BaoBotGiat_XaPhong
   ✓ BaoCu_TrenBan
+  ✓ BaoTaiRong
   ✓ BaoXiMang_Chong
   ✓ BaoXiMang_Chong2
   ✓ BaoXiMang_Le
@@ -50,6 +51,7 @@ ASSET ĐÃ ĐẶT (379):
   ✓ BeGiat
   ✓ BeNuoc_Nap
   ✓ BepGas_Doi
+  ✓ BepGas_Kieng_BinhGas
   ✓ BeRua
   ✓ BienSoNha
   ✓ BinhGas
@@ -173,6 +175,7 @@ ASSET ĐÃ ĐẶT (379):
   ✓ GheDau
   ✓ GheDau_Go
   ✓ GheDau_Nhua
+  ✓ GheDauNho
   ✓ GheNhua_Nhim
   ✓ GheTua_AoBo_Fix
   ✓ GiaBatUp
@@ -227,6 +230,7 @@ ASSET ĐÃ ĐẶT (379):
   ✓ KhayHoaQua_Nhua
   ✓ KhayTra_LyThuyTinh
   ✓ KhoaCua_Hasp
+  ✓ KhoaiLuoc_Dia
   ✓ KhungAnh_CuoiNho
   ✓ KhungAnhOngBa
   ✓ KhungNho_Khoi
@@ -263,6 +267,7 @@ ASSET ĐÃ ĐẶT (379):
   ✓ MocDongPhuc
   ✓ MocKhoaCuaHam
   ✓ MuiBac_Mon
+  ✓ NapNoi
   ✓ NenSanPhoi
   ✓ NhatKy_Dong
   ✓ NoiChao_Rong
@@ -276,6 +281,7 @@ ASSET ĐÃ ĐẶT (379):
   ✓ OngNuocMua_GiengTroi
   ✓ OThoang_BongGio
   ✓ PhichHoa
+  ✓ PorridgeBowl_Tron
   ✓ Poster_BanNhac
   ✓ QuanTai_LOC
   ✓ QuatBan_SatCu

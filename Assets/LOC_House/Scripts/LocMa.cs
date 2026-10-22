@@ -18,7 +18,8 @@ public class LocMa : MonoBehaviour
     public static bool huDaHe, maTucGian, tamDung;   // tamDung: cảnh khoá / đang mở Tab — script khác đặt true để ma không làm gì
     static bool khoiTao;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void Reset0() { khoiTao = false; huDaHe = maTucGian = tamDung = false; dem = 0; }
+    public static void Reset0() { khoiTao = false; huDaHe = maTucGian = tamDung = false; dem = 0; }
+    public static void VaoDem(int d) { Reset0(); dem = d; khoiTao = true; }   // [22/10] LocMenu: vào game ở đêm d
 
     [Header("Đêm khi bấm Play (đổi trong game bằng F1/F2/F3)")]
     public int demBatDau = 2;
@@ -624,24 +625,22 @@ public class LocMa : MonoBehaviour
     void Chet() { if (!dangChet) StartCoroutine(CanhChet()); }
     IEnumerator CanhChet()
     {
-        dangChet = true; LocFirstPerson.khoa = true; LocFirstPerson.den = 1; An();
+        dangChet = true; LocFirstPerson.khoa = true;
+        LocMenu.DatKet("death"); yield return null;   // [22/10] chụp khung cuối (đôi mắt) cho màn Ending trước khi cắt đen
+        LocFirstPerson.den = 1; An();
         if (chenVo) am.PlayOneShot(chenVo, 1f);
         yield return new WaitForSeconds(5.2f);
         LocFirstPerson.chuGiua = "NHÀ NÀY CÒN MỘT CÁI CHÉN.";
         yield return new WaitForSeconds(2.5f);
-        LocFirstPerson.chuGiua += "\n\n\n\n[R]  Chơi lại từ đầu đêm";
+        LocMenu.ManChet();   // [22/10] hai lựa chọn: chơi lại từ đầu đêm / về menu chính (R vẫn chơi lại)
         choR = true;
     }
 
-    void ChoiLai()
+    public static void ChoiLai()
     {
         huDaHe = false; maTucGian = false; tamDung = false;
         LocFirstPerson.khoa = false; LocFirstPerson.den = 0; LocFirstPerson.chuGiua = null;
-#if UNITY_EDITOR
-        UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode(SceneManager.GetActiveScene().path, new LoadSceneParameters(LoadSceneMode.Single));
-#else
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-#endif
+        LocMenu.NapLai();
     }
 
     // ───── phím thử
@@ -660,7 +659,7 @@ public class LocMa : MonoBehaviour
 
     void OnGUI()
     {
-        if (!hienDebug) return;
+        if (!hienDebug || LocMenu.DangChe) return;
         var st = new GUIStyle(GUI.skin.label) { fontSize = 13 }; st.normal.textColor = new Color(1, 1, 1, 0.55f);
         string s = $"[thử] Đêm {dem} · {(maTucGian ? "tức giận" : "bình thường")} · F1-F3 đêm · F4 tức giận · F5 ló · F6 tắt đèn";
         if (Time.time < dbgHet) s += "\n→ " + dbg;

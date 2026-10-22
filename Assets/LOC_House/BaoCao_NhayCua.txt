@@ -1,80 +1,179 @@
 RÀ NHÁY — mặt đồng phẳng cùng hướng (lệch ≤ 0,4 mm) chồng nhau ≥ 2 mm
-33 cửa
+73 cửa
 
-── 01_CanhCong_Phai__mở_  (cổng)  [NhaLoc/SanTruoc]
+── 01_Canh_1  (ngăn kéo)  [PhongKhoi/BanHoc_Khoi_Bo/BanHoc_Khoi/BanHoc_Khoi]
    OK
-── 02_CanhCong_Trai__mở_  (cổng)  [NhaLoc/SanTruoc]
+── 02_Canh_1  (ngăn kéo)  [PhongBoMe/BanTrangDiem_Bo/BanTrangDiem/BanTrangDiem]
    OK
-── 03_CuaNgachCong__mở_  (cửa ngách cổng)  [NhaLoc/SanTruoc]
+── 03_Canh_1  (cửa tủ chén)  [Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat]
    OK
-── 04_CuaSatKinh__mở_  (cửa sắt kính ra giếng trời)  [NhaLoc/Tang_1/Bep]
+── 04_Canh_2  (cửa tủ chén)  [Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat]
    OK
-── 05_CuaSo_Bep_Phai  (cửa sổ)  [NhaLoc/Tang_1/Bep]
+── 05_Canh_3  (kính tủ chén)  [Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat]
    OK
-── 06_CuaSo_Bep_Trai  (cửa sổ)  [NhaLoc/Tang_1/Bep]
+── 06_Canh_1  (cửa tủ lạnh)  [Tang_1/Bep/TuLanh_Bo/TuLanh_Canh]
    OK
-── 07_CuaKho__mở_  (cửa kho)  [NhaLoc/Tang_1/KhoiSau]
+── 07_Canh_1  (ngăn kéo)  [Tang_2/GocLamViec/BanGiay_Go/BanGiay_Go]
+   [đóng] Tang_2/GocLamViec/ChongSoSach_Cu/ChongSoSach_Cu  ↔  LOC_MiniGame/TruocXep_HoSo/MG_SoThuChi   3 cặp tam giác
+   [đóng] LOC_MiniGame/TruocXep_HoSo/MG_HoaDon  ↔  Tang_2/GocLamViec/BanTinh_Go/BanTinh_Go   2 cặp tam giác
+   [đóng] LOC_MiniGame/SauXep_BiaKhoi/MG_BiaKhoi  ↔  LOC_MiniGame/TruocXep_HoSo/MG_HoaDon   1 cặp tam giác
+   [mở] Tang_2/GocLamViec/ChongSoSach_Cu/ChongSoSach_Cu  ↔  LOC_MiniGame/TruocXep_HoSo/MG_SoThuChi   3 cặp tam giác
+   [mở] LOC_MiniGame/TruocXep_HoSo/MG_HoaDon  ↔  Tang_2/GocLamViec/BanTinh_Go/BanTinh_Go   2 cặp tam giác
+   [mở] LOC_MiniGame/SauXep_BiaKhoi/MG_BiaKhoi  ↔  LOC_MiniGame/TruocXep_HoSo/MG_HoaDon   1 cặp tam giác
+── 08_Canh_1  (ngăn kéo)  [Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat]
    OK
-── 08_CuaWC_T1__mở_  (cửa WC)  [NhaLoc/Tang_1/KhoiSau]
+── 09_Canh_2  (ngăn kéo)  [Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat]
    OK
-── 09_CuaChinh_Phai__mở_ra_ngoài_  (cửa chính)  [NhaLoc/Tang_1/PhongKhach]
+── 10_Canh_3  (ngăn kéo)  [Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat]
    OK
-── 10_CuaChinh_Trai__mở_ra_ngoài_  (cửa chính)  [NhaLoc/Tang_1/PhongKhach]
+── 11_Canh_4  (ngăn kéo)  [Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat]
    OK
-── 11_CuaSatHam__mở_  (cửa sắt xuống hầm)  [NhaLoc/Tang_1/PhongKhach]
+── 12_Canh_5  (ngăn kéo)  [Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat]
    OK
-── 12_CuaLamViec_Phai__mở_  (cửa phòng làm việc)  [NhaLoc/Tang_2/GocLamViec]
+── 13_Canh_6  (ngăn kéo)  [Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat]
    OK
-── 13_CuaLamViec_Trai__mở_  (cửa phòng làm việc)  [NhaLoc/Tang_2/GocLamViec]
+── 14_Canh_7  (ngăn kéo)  [Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat]
    OK
-── 14_CanhBanCong_Phai  (cửa ban công)  [NhaLoc/Tang_2/PhongBoMe]
+── 15_Canh_8  (ngăn kéo)  [Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat]
    OK
-── 15_CanhBanCong_Trai  (cửa ban công)  [NhaLoc/Tang_2/PhongBoMe]
+── 16_CanhCong_Phai__mở_  (cổng)  [NhaLoc/SanTruoc]
    OK
-── 16_CuaBoMe__mở_  (cửa phòng bố mẹ)  [NhaLoc/Tang_2/PhongBoMe]
+── 17_CanhCong_Trai__mở_  (cổng)  [NhaLoc/SanTruoc]
    OK
-── 17_CuaSo_BoMe_Phai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
+── 18_CuaNgachCong__mở_  (cửa ngách cổng)  [NhaLoc/SanTruoc]
    OK
-── 18_CuaSo_BoMe_Phai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
+── 19_CuaSatKinh__mở_  (cửa sắt kính ra giếng trời)  [NhaLoc/Tang_1/Bep]
    OK
-── 19_CuaSo_BoMe_Trai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
+── 20_CuaSo_Bep_Phai  (cửa sổ)  [NhaLoc/Tang_1/Bep]
    OK
-── 20_CuaSo_BoMe_Trai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
+── 21_CuaSo_Bep_Trai  (cửa sổ)  [NhaLoc/Tang_1/Bep]
    OK
-── 21_CuaWC_BoMe__mở_  (cửa WC)  [NhaLoc/Tang_2/PhongBoMe]
+── 22_CuaSatHam__mở_  (cửa sắt xuống hầm)  [NhaLoc/Tang_1/GiengTroi]
    OK
-── 22_CuaKhoi__mở_  (cửa phòng Khôi)  [NhaLoc/Tang_2/PhongKhoi]
+── 23_CuaKho__mở_  (cửa kho)  [NhaLoc/Tang_1/KhoiSau]
    OK
-── 23_CuaSo_Khoi_Phai  (cửa sổ)  [NhaLoc/Tang_2/PhongKhoi]
+── 24_CuaWC_T1__mở_  (cửa WC)  [NhaLoc/Tang_1/KhoiSau]
    OK
-── 24_CuaSo_Khoi_Trai  (cửa sổ)  [NhaLoc/Tang_2/PhongKhoi]
+── 25_CuaChinh_Phai__mở_  (cửa chính)  [NhaLoc/Tang_1/PhongKhach]
    OK
-── 25_CuaSo_Khoi_Phai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+── 26_CuaChinh_Trai__mở_  (cửa chính)  [NhaLoc/Tang_1/PhongKhach]
    OK
-── 26_CuaSo_Khoi_Phai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+── 27_CuaLamViec_Phai__mở_  (cửa phòng làm việc)  [NhaLoc/Tang_2/GocLamViec]
    OK
-── 27_CuaSo_Khoi_Trai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+── 28_CuaLamViec_Trai__mở_  (cửa phòng làm việc)  [NhaLoc/Tang_2/GocLamViec]
    OK
-── 28_CuaSo_Khoi_Trai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+── 29_CanhBanCong_Phai  (cửa ban công)  [NhaLoc/Tang_2/PhongBoMe]
    OK
-── 29_CuaPhongTho__mở_  (cửa phòng thờ)  [NhaLoc/Tang_3/VoNha]
+── 30_CanhBanCong_Trai  (cửa ban công)  [NhaLoc/Tang_2/PhongBoMe]
    OK
-── 30_CuaNgach_Tiem__mở_  (cửa ngách tiệm)  [NhaLoc/Tiem/VoNha]
+── 31_CuaBoMe__mở_  (cửa phòng bố mẹ)  [NhaLoc/Tang_2/PhongBoMe]
    OK
-── 31_CuaSatXep_Dong  (cửa sắt xếp tiệm)  [NhaLoc/Tiem/VoNha]
+── 32_CuaSo_BoMe_Phai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
    OK
-── 32_CanhCua  (cửa phòng Nhím)  [NhaLoc/Tang_2/PhongNhim/CuaPhongNhim_FullAssembly]
+── 33_CuaSo_BoMe_Phai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
    OK
-── 33_CuaSanPhoi_Canh  (cửa ra sân phơi)  [NhaLoc/Tang_3/PhongTho/CuaSanPhoi]
+── 34_CuaSo_BoMe_Trai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 35_CuaSo_BoMe_Trai  (cửa sổ)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 36_CuaWC_BoMe__mở_  (cửa WC)  [NhaLoc/Tang_2/PhongBoMe]
+   OK
+── 37_CuaKhoi__mở_  (cửa phòng Khôi)  [NhaLoc/Tang_2/PhongKhoi]
+   OK
+── 38_CuaSo_Khoi_Phai  (cửa sổ)  [NhaLoc/Tang_2/PhongKhoi]
+   OK
+── 39_CuaSo_Khoi_Trai  (cửa sổ)  [NhaLoc/Tang_2/PhongKhoi]
+   OK
+── 40_CuaSo_Khoi_Phai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+   OK
+── 41_CuaSo_Khoi_Phai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+   OK
+── 42_CuaSo_Khoi_Trai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+   OK
+── 43_CuaSo_Khoi_Trai  (cửa sổ)  [NhaLoc/Tang_3/PhongTho]
+   OK
+── 44_CuaPhongTho__mở_  (cửa phòng thờ)  [NhaLoc/Tang_3/VoNha]
+   OK
+── 45_CuaNgach_Tiem__mở_  (cửa ngách tiệm)  [NhaLoc/Tiem/VoNha]
+   OK
+── 46_Canh_1  (ngăn kéo)  [Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go]
+   OK
+── 47_Canh_2  (ngăn kéo)  [Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go]
+   OK
+── 48_Canh_3  (ngăn kéo)  [Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go]
+   OK
+── 49_Canh_1  (cửa tủ đầu giường)  [Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong]
+   OK
+── 50_Canh_1  (cửa tủ đầu giường)  [Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong]
+   OK
+── 51_Canh_1  (cửa tủ quần áo)  [Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo]
+   OK
+── 52_Canh_2  (cửa tủ quần áo)  [Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo]
+   OK
+── 53_Canh_1  (cửa tủ nhựa)  [Tang_2/PhongNhim/TuNhua_Nhim/TuNhua_Nhim]
+   OK
+── 54_Canh_1  (cửa tủ thờ)  [Tang_3/PhongTho/BanThoGiaTien_Set/BanThoGiaTien]
+   OK
+── 55_Canh_2  (cửa tủ thờ)  [Tang_3/PhongTho/BanThoGiaTien_Set/BanThoGiaTien]
+   OK
+── 56_Canh_1  (cửa tủ đồ thờ)  [Tang_3/PhongTho/TuDoTho_Fix/TuDoTho_Fix]
+   OK
+── 57_Canh_2  (cửa tủ đồ thờ)  [Tang_3/PhongTho/TuDoTho_Fix/TuDoTho_Fix]
+   OK
+── 58_Canh_1  (cửa tủ đứng)  [Tang_2/SanhHanhLang/TuDung_RuongChanMan/TuDung_RuongChanMan]
+   OK
+── 59_Canh_1  (cửa tủ)  [Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh]
+   OK
+── 60_Canh_2  (cửa tủ)  [Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh]
+   OK
+── 61_Canh_1  (cửa chạn)  [NhaLoc/Tang_1/Bep/Chan_BatDiaTrongChan]
+   OK
+── 62_Canh_2  (cửa chạn)  [NhaLoc/Tang_1/Bep/Chan_BatDiaTrongChan]
+   OK
+── 63_Canh_3  (cửa chạn)  [NhaLoc/Tang_1/Bep/Chan_BatDiaTrongChan]
+   OK
+── 64_Canh_4  (cửa chạn)  [NhaLoc/Tang_1/Bep/Chan_BatDiaTrongChan]
+   OK
+── 65_KetSat_Canh  (cửa két sắt)  [NhaLoc/Tang_2/PhongBoMe/KetSat_Dung]
+   OK
+── 66_CanhTuKhoi_Phai  (cửa tủ áo)  [NhaLoc/Tang_2/PhongKhoi/TuAo_Khoi_Go]
+   OK
+── 67_CanhTuKhoi_Trai  (cửa tủ áo)  [NhaLoc/Tang_2/PhongKhoi/TuAo_Khoi_Go]
+   OK
+── 68_CanhCua  (cửa phòng Nhím)  [NhaLoc/Tang_2/PhongNhim/CuaPhongNhim_FullAssembly]
+   OK
+── 69_CuaSanPhoi_Canh  (cửa ra sân phơi)  [NhaLoc/Tang_3/PhongTho/CuaSanPhoi]
+   OK
+── 70_Canh_1  (kính tủ)  [NhaLoc/Tiem/BanHang/TuKinh]
+   OK
+── 71_Canh_2  (kính tủ)  [NhaLoc/Tiem/BanHang/TuKinh]
+   OK
+── 72_Canh_1  (cửa tủ TV)  [PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung]
+   OK
+── 73_Canh_2  (cửa tủ TV)  [PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung]
    OK
 ── CauThang_T1_T3
    OK
 ── CauThang_Ham
    OK
 
-── CẢ NHÀ: 36 cặp tam giác
+── CẢ NHÀ: 168 cặp tam giác
    NhaLoc/KhuPho/BenPhai_02  ↔  NhaLoc/KhuPho/BenPhai_03   13 cặp
-   NhaLoc/KhuPho/NhaSauTiem  ↔  NhaLoc/KhuPho/Sau_1_08   13 cặp
+   NhaLoc/KhuPho/BenTrai_07  ↔  NhaLoc/KhuPho/NhaTrai_Sat   13 cặp
    NhaLoc/KhuPho/BenPhai_04  ↔  NhaLoc/KhuPho/BenPhai_03   4 cặp
+   NhaLoc/KhuPho/BenTrai_07  ↔  NhaLoc/KhuPho/Sau_1_06   4 cặp
    NhaLoc/KhuPho/BenPhai_03  ↔  NhaLoc/KhuPho/BenPhai_02   3 cặp
-   NhaLoc/KhuPho/Sau_1_03  ↔  NhaLoc/KhuPho/BenTrai_03   3 cặp
+   Tang_2/GocLamViec/ChongSoSach_Cu/ChongSoSach_Cu  ↔  LOC_MiniGame/TruocXep_HoSo/MG_SoThuChi   3 cặp
+   LOC_MiniGame/TruocXep_HoSo/MG_SoHang  ↔  Tang_2/GocLamViec/BanTinh_Go/BanTinh_Go   1 cặp
+   LOC_MiniGame/SauDon_BanNuoc/MG_HopBanhKeo  ↔  LOC_MiniGame/TruocDon_BanNuoc/MG_DiaVoHatDua   51 cặp
+   LOC_MiniGame/TruocXep_HoSo/MG_HoaDon  ↔  Tang_2/GocLamViec/BanTinh_Go/BanTinh_Go   2 cặp
+   LOC_MiniGame/TruocDon_BanNuoc/MG_BanhKeoThua  ↔  LOC_MiniGame/SauDon_BanNuoc/MG_HopBanhKeo   17 cặp
+   LOC_MiniGame/TruocDon_BanNuoc/MG_BanhKeoThua  ↔  Tang_1/PhongKhach/KhayAmChen/KhayAmChen   8 cặp
+   LOC_MiniGame/SauXep_BiaKhoi/MG_BiaKhoi  ↔  LOC_MiniGame/TruocXep_HoSo/MG_HoaDon   1 cặp
+   LOC_MiniGame/TruocDon_BanNuoc/MG_BanhKeoThua  ↔  (trong cùng model)   6 cặp
+   LOC_MiniGame/TruocDon_BanNuoc/MG_ChenTra  ↔  LOC_MiniGame/TruocDon_BanNuoc/MG_ChenTra   28 cặp
+   LOC_MiniGame/TruocRut_DayPhoi/MG_QuanDuiPhoi  ↔  (trong cùng model)   2 cặp
+   LOC_MiniGame/TruocDon_BanNuoc/MG_GiayKeo_do  ↔  LOC_MiniGame/TruocDon_BanNuoc/MG_AmTra   4 cặp
+   LOC_MiniGame/TruocDon_BanNuoc/MG_GiayKeo_vang  ↔  LOC_MiniGame/SauDon_BanNuoc/MG_HopBanhKeo   2 cặp
+   LOC_MiniGame/TruocDon_BanNuoc/MG_GiayKeo_vang  ↔  LOC_MiniGame/TruocDon_BanNuoc/MG_GiayKeo_do   4 cặp
+   LOC_MiniGame/SauDon_BanNuoc/MG_HopBanhKeo  ↔  LOC_MiniGame/TruocDon_BanNuoc/MG_ChenTra   2 cặp

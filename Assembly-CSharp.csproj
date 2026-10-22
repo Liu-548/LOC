@@ -71,11 +71,15 @@
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_HoanVi.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocThuCauThang.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocNhimChau.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocTuKiemCua.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocHuCot.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocTuongTacMG.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_XepHoSo.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_XepLaiBan.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocDoor.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_PhanLoai.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocCongTac.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_DonBanNuoc.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_Radio.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocDongHo.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocDi.cs" />
@@ -96,9 +100,13 @@
     <Compile Include="Assets\LOC_House\Scripts\LocVatPham.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_LenDay.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocFirstPerson.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_RutQuanAo.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocBanNgay.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMiniGame.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocLuaNhapNhay.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocMenu.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_NoiDay.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocTrangThaiMG.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_GiaiChuGuong.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -111,7 +119,9 @@
     <None Include="Assets\LOC_House\BaoCao_TextureBeMat.txt" />
     <None Include="Assets\LOC_House\BaoCao_RaSoat.txt" />
     <None Include="Assets\LOC_House\BaoCao_Nhim.txt" />
+    <None Include="Assets\LOC_House\BaoCao_KeDo.txt" />
     <None Include="Assets\LOC_House\BaoCao_Ma.txt" />
+    <None Include="Assets\LOC_House\BaoCao_CuaGan.txt" />
     <None Include="Assets\LOC_House\BaoCao_DebugTu.txt" />
     <None Include="Assets\LOC_House\BaoCao_LanCan.txt" />
     <None Include="Assets\LOC_House\BaoCao_SuaNhay.txt" />

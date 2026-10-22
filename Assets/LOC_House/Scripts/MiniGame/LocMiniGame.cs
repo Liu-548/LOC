@@ -25,7 +25,7 @@ public abstract class LocMiniGame : MonoBehaviour
     LocTuongTacMG chu;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void Reset0() { hienTai = null; }
+    public static void Reset0() { hienTai = null; }
 
     protected virtual string TenMacDinh() { return "Mini game"; }
     protected virtual string GoiYMacDinh() { return ""; }

@@ -1,4 +1,4 @@
-TEXTURE BỀ MẶT: 4510 renderer, 487 vật liệu mới
+TEXTURE BỀ MẶT: 4883 renderer, 497 vật liệu mới
 AmNhom → son
 AnhCuoi_Tex → go
 AnhGiaDinh_Tex → go
@@ -34,6 +34,7 @@ BanTrangDiem_Bo → go
 BanTron_Thap → go
 BaoBotGiat_XaPhong → nhua
 BaoCu_TrenBan → go
+BaoTaiRong → carton
 BaoXiMang_Chong → carton
 BaoXiMang_Chong2 → carton
 BaoXiMang_Le → carton
@@ -47,6 +48,7 @@ BauCuaSo_Granito_Khoi → go
 BeGiat → son
 BeNuoc_Nap → xm
 BepGas_Doi → son
+BepGas_Kieng_BinhGas → nhua
 BeRua_Bo → son
 BienSoNha → màu
 BinhGas → nhua
@@ -74,6 +76,7 @@ Chan_BatDiaTrongChan → vai
 ChanMenBong_GapGon → vai
 ChauCay_SanPhoi → xm
 ChauCayKieng_LaTo → xm
+ChauInox → nhua
 ChauLuoiHo → xm
 ChauNhua → thung
 ChauNhua_Up → thung
@@ -141,6 +144,7 @@ GheBanHoc_Go → go
 GheDau → go
 GheDau_Go → go
 GheDau_Nhua → nhua
+GheDauNho → go
 GheNhua_Nhim → nhua
 GheTua_AoBo_Fix → go
 GiaBatUp → màu
@@ -195,6 +199,7 @@ Khan_Treo → vai
 KhayAmChen → nhua
 KhayHoaQua_Nhua → nhua
 KhayTra_LyThuyTinh → nhua
+KhoaiLuoc_Dia → nhua
 LanCan_BanCong → son
 LanCanSanPhoi → son
 Lavabo → son
@@ -223,9 +228,11 @@ MocAo_KhanTam → vai
 MocChiaKhoa → son
 MocDongPhuc → vai
 MuiBac_Mon → màu
+NapNoi → son
 NenSanPhoi → chieu
 NoiChao_Rong → son
 NoiComDien → son
+NoiNhom_To → son
 Nokia_DoChuong → son
 NonLa_TreoTuong → dan
 OCam_Doi → màu
@@ -235,6 +242,7 @@ OngNuoc_Nam → son
 OngNuocMua_GiengTroi → son
 OThoang_BongGio → dan
 PhichHoa → son
+PorridgeBowl_Tron → màu
 Poster_BanNhac → go
 QuanTai_LOC → màu
 QuatBan_SatCu → son

@@ -46,6 +46,9 @@ public class LocCotTruyen : MonoBehaviour
         if (dangCanh) return;
         var k = Keyboard.current;
         if (k != null && k.hKey.wasPressedThisFrame && !LocFirstPerson.khoa && !LocTui.Mo) GoiYH();
+#if UNITY_EDITOR
+        if (k != null && k.digit9Key.wasPressedThisFrame && LocMa.dem < 3 && !LocFirstPerson.khoa && !LocMenu.DangChe) StartCoroutine(HetDemThu());   // [22/10] thử: phím 9 = hết đêm ngay (xem cảnh ban ngày)
+#endif
         if (LocMa.dem == 1) Dem1();
     }
 
@@ -64,13 +67,14 @@ public class LocCotTruyen : MonoBehaviour
     void DauDem()
     {
         int d = LocMa.dem;
+        LocMenu.DauDem(d);   // [22/10] tự lưu + thẻ đêm
         if (fp) { if (d <= 1) fp.DatTuThe(dem1Dung, dem1Nhin); else fp.DatTuThe(demSauDung, demSauNhin); }
         if (d == 1 && !LocTui.Co("d1_mo_dau")) StartCoroutine(SauKhiSang("d1_mo_dau", 1.5f, "Hai năm rồi mới về.", "Hồi đó nói được câu tử tế thì đã không đến nỗi.", "Ai ngờ gặp lại kiểu này."));
         if (d == 2 && !LocTui.Co("d2_mo_dau")) StartCoroutine(SauKhiSang("d2_mo_dau", 1.0f, "Chắc giờ này chẳng còn ai nữa.", "Xem con bé thế nào đã."));
     }
     IEnumerator SauKhiSang(string co, float cho, params string[] dong)
     {
-        while (LocFirstPerson.den > 0) yield return null;
+        while (LocFirstPerson.den > 0 || LocMenu.DangChe) yield return null;
         yield return new WaitForSeconds(cho);
         LocTui.Dat(co); LocTui.Noi(dong);
     }
@@ -156,11 +160,12 @@ public class LocCotTruyen : MonoBehaviour
             float t = 1.2f + 0.06f * cau.Length;
             if (LocDi.I) LocDi.I.Noi(ai == "NGƯỜI HỌ HÀNG");   // dì quay về người chơi, gật nhẹ khi tới câu của dì
             LocFirstPerson.PhuDe($"{ai}: {cau}", t, false);
-            yield return new WaitForSeconds(t + 0.4f);
+            yield return new WaitForSeconds(t * LocFirstPerson.nhanChu + 0.4f);
         }
     }
 
     // ───── hết đêm → cắt đen → đêm sau
+    IEnumerator HetDemThu() { dangNoiHam = false; LocBanNgay.chup = true; yield return HetDem(); }
     IEnumerator HetDem()
     {
         dangCanh = true;
@@ -169,9 +174,10 @@ public class LocCotTruyen : MonoBehaviour
         LocFirstPerson.khoa = true; LocMa.tamDung = true;
         for (float t = 0; t < 1; t += Time.deltaTime / 0.6f) { LocFirstPerson.den = t; yield return null; }
         LocFirstPerson.den = 1; LocFirstPerson.PhuDe("", 0.01f);
-        // ponytail: chưa có cắt cảnh ban ngày (tiếng người viếng, kèn đám, tay rót trà) — màn đen 2,5 s thay; thêm khi có âm thanh
-        yield return new WaitForSeconds(2.5f);
-        LocMa.dem++; ApDem(LocMa.dem); DauDem();
+        // [22/10] cắt cảnh ban ngày (LocBanNgay) thay màn đen; nhà đổi sang trạng thái đêm sau ngay lúc còn đen
+        var bn = GetComponent<LocBanNgay>(); int sau = LocMa.dem + 1;
+        if (bn) yield return bn.Chay(sau, () => ApDem(sau)); else yield return new WaitForSeconds(2.5f);
+        LocMa.dem = sau; ApDem(LocMa.dem); DauDem();
         yield return new WaitForSeconds(0.8f);
         for (float t = 1; t > 0; t -= Time.deltaTime / 1.2f) { LocFirstPerson.den = t; yield return null; }
         LocFirstPerson.den = 0; LocFirstPerson.khoa = false; LocMa.tamDung = false; dangCanh = false;

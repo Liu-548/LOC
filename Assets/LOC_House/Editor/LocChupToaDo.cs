@@ -21,7 +21,7 @@ public static class LocChupToaDo
         {
             var p = line.Trim().Split(' ', System.StringSplitOptions.RemoveEmptyEntries); if (p.Length < 7) continue;
             float f(int i) => float.Parse(p[i], ci);
-            cam.fieldOfView = p.Length > 7 && !p[7].StartsWith("mo=") ? f(7) : 60;
+            cam.fieldOfView = p.Length > 7 && !p[7].StartsWith("mo=") && !p[7].StartsWith("dem=") ? f(7) : 60;
             cam.transform.position = new Vector3(f(1), f(2), f(3)); cam.transform.LookAt(new Vector3(f(4), f(5), f(6)));
             var mo = p.FirstOrDefault(x => x.StartsWith("mo="));
             var doors = new LocDoor[0]; (Vector3, Quaternion, Vector3)[] luu = null;
@@ -38,7 +38,13 @@ public static class LocChupToaDo
                     else { var q = Quaternion.AngleAxis(d.goc, Vector3.up); tr.SetPositionAndRotation(hinge + q * (tr.position - hinge), q * tr.rotation); }
                 }
             }
+            // [23/10] dem=N: bật nhóm DemN, tắt hai đêm kia khi chụp (trả lại sau)
+            var demTok = p.FirstOrDefault(x => x.StartsWith("dem="));
+            var nhom = demTok == null ? new Transform[0] : Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None).Where(x => x.name is "Dem1" or "Dem2" or "Dem3").ToArray();
+            var cu = nhom.Select(x => x.gameObject.activeSelf).ToArray();
+            foreach (var x in nhom) x.gameObject.SetActive(x.name == "Dem" + demTok.Substring(4));
             cam.Render();
+            for (int k = 0; k < nhom.Length; k++) nhom[k].gameObject.SetActive(cu[k]);
             RenderTexture.active = rt;
             var tex = new Texture2D(W, H, TextureFormat.RGB24, false); tex.ReadPixels(new Rect(0, 0, W, H), 0, 0); tex.Apply();
             System.IO.File.WriteAllBytes($"{Out}/{p[0]}.png", tex.EncodeToPNG());

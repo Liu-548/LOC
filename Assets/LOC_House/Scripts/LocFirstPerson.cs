@@ -12,7 +12,10 @@ public class LocFirstPerson : MonoBehaviour
     // [21/10] ngồi xổm (C hoặc Ctrl, bấm bật/tắt): mắt 1,52 → 0,95 m, đi chậm một nửa — để nhìn/bấm đồ dưới thấp (gầm bàn thờ, ngăn tủ dưới)
     public static bool ngoi;
     public float matNgoi = 0.95f;
-    float matDung, camY, ccCao; Vector3 ccTam;
+    float matDung, camY, ccCao, camX; Vector3 ccTam;
+    // [22/10] lắc camera theo bước chân (kịch bản D1: "lắc rất nhẹ"). 0 = tắt · 1 = nhẹ · 1,8 = vừa — đặt từ Cài đặt
+    public static float lac = 1f;
+    float pha, lacW;
     string goiY = "";   // dòng gợi ý "[E] ..." khi đang nhìn cửa/công tắc
     public string GoiYDangHien => goiY;   // tự kiểm đọc
     // [21/10] tia từ mắt, bỏ qua va chạm của chính người chơi (mắt 1,52 nằm trong đầu khối CharacterController nên tia nhìn xuống trúng chính mình)
@@ -32,9 +35,11 @@ public class LocFirstPerson : MonoBehaviour
     public static string chuGiua;       // chữ trắng giữa màn hình (Death Ending)
     static string phuDe; static bool phuDeNghieng; static float phuDeHet;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void Reset0() { khoa = false; den = 0; chuGiua = null; phuDe = null; ngoi = false; }
+    public static void Reset0() { khoa = false; den = 0; chuGiua = null; phuDe = null; ngoi = false; }
     // nghieng = độc thoại nội tâm (chữ nghiêng, xám nhạt, không tên) — kịch bản 6.2
-    public static void PhuDe(string s, float giay, bool nghieng = true) { phuDe = s; phuDeNghieng = nghieng; phuDeHet = Time.time + giay; }
+    public static void PhuDe(string s, float giay, bool nghieng = true) { phuDe = s; phuDeNghieng = nghieng; phuDeHet = Time.time + giay * nhanChu; }
+    // [22/10] cài đặt (LocMenu): đảo trục dọc · cỡ chữ phụ đề (ở 1080p) · độ đậm nền sau chữ · hệ số thời gian hiện chữ
+    public static bool daoTruc; public static int coChu = 24; public static float nenChu = 0.45f, nhanChu = 1f;
 
     // dịch chuyển tức thời + quay nhìn về điểm nhin
     public void DatTuThe(Vector3 pos, Vector3 nhin)
@@ -53,7 +58,7 @@ public class LocFirstPerson : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
-        matDung = camY = cam ? cam.localPosition.y : 1.52f; ccCao = cc.height; ccTam = cc.center;
+        matDung = camY = cam ? cam.localPosition.y : 1.52f; ccCao = cc.height; ccTam = cc.center; camX = cam ? cam.localPosition.x : 0;
     }
 
     void Update()
@@ -79,7 +84,7 @@ public class LocFirstPerson : MonoBehaviour
         {
             var d = m.delta.ReadValue() * look;
             transform.Rotate(0, d.x, 0);
-            pitch = Mathf.Clamp(pitch - d.y, -85, 85);
+            pitch = Mathf.Clamp(pitch - (daoTruc ? -d.y : d.y), -85, 85);
             cam.localEulerAngles = new Vector3(pitch, 0, 0);
         }
 
@@ -106,6 +111,13 @@ public class LocFirstPerson : MonoBehaviour
         var mv = (transform.forward * f + transform.right * r).normalized * speed * (ngoi ? 0.5f : k.leftShiftKey.isPressed ? 1.8f : 1f);
         vy = cc.isGrounded ? -1f : vy + Physics.gravity.y * Time.deltaTime;
         cc.Move((mv + Vector3.up * vy) * Time.deltaTime);
+
+        // lắc: pha chạy theo quãng đường thật đi được (đâm tường thì không lắc), ~1,9 bước/giây khi đi thường
+        float v = new Vector2(cc.velocity.x, cc.velocity.z).magnitude;
+        lacW = Mathf.MoveTowards(lacW, cc.isGrounded && v > 0.3f ? 1 : 0, Time.deltaTime * 4f);
+        pha += v * Time.deltaTime * 2.7f;
+        float a = lac * lacW * (ngoi ? 0.5f : 1f);
+        cam.localPosition = new Vector3(camX + Mathf.Sin(pha) * 0.006f * a, camY + Mathf.Abs(Mathf.Sin(pha)) * 0.014f * a - 0.007f * a, cam.localPosition.z);
     }
 
     // [3/10] lớp VHS: vạch quét ngang mờ + một dải sáng trôi chậm (đi cùng hậu kỳ LOC_HinhCu: hạt phim, rút màu, nhoè xa, méo rìa)
@@ -131,17 +143,22 @@ public class LocFirstPerson : MonoBehaviour
     {
         if (Event.current.type == EventType.Repaint) VHS();
         if (den > 0) { GUI.color = new Color(0, 0, 0, den); GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Texture2D.whiteTexture); GUI.color = Color.white; }
+        float k = Screen.height / 1080f;   // [22/10] chữ co theo màn hình, font Noto Serif của menu
         if (!string.IsNullOrEmpty(chuGiua))
         {
-            var sg = new GUIStyle(GUI.skin.label) { fontSize = 30, alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold };
+            var fd = LocMenu.FontChu(2);
+            var sg = new GUIStyle(GUI.skin.label) { font = fd, fontSize = Mathf.RoundToInt(44 * k), alignment = TextAnchor.MiddleCenter, fontStyle = fd ? FontStyle.Normal : FontStyle.Bold };
             sg.normal.textColor = Color.white;
             GUI.Label(new Rect(0, 0, Screen.width, Screen.height), chuGiua, sg);
         }
         if (phuDe != null && Time.time < phuDeHet)
         {
-            var sp = new GUIStyle(GUI.skin.label) { fontSize = 24, alignment = TextAnchor.MiddleCenter, fontStyle = phuDeNghieng ? FontStyle.Italic : FontStyle.Normal };
+            var fc = LocMenu.FontChu(phuDeNghieng ? 1 : 0);
+            var sp = new GUIStyle(GUI.skin.label) { font = fc, fontSize = Mathf.RoundToInt(coChu * k), alignment = TextAnchor.MiddleCenter, fontStyle = phuDeNghieng && !fc ? FontStyle.Italic : FontStyle.Normal };
             sp.normal.textColor = phuDeNghieng ? new Color(0.78f, 0.78f, 0.78f) : Color.white;
-            GUI.Label(new Rect(0, Screen.height * 0.86f, Screen.width, 44), phuDe, sp);
+            var nd = new GUIContent(phuDe); var sz = sp.CalcSize(nd); float cy = Screen.height * 0.86f + 22 * k;
+            if (nenChu > 0 && phuDe.Length > 0) { GUI.color = new Color(0, 0, 0, nenChu); GUI.DrawTexture(new Rect((Screen.width - sz.x) / 2 - 14 * k, cy - sz.y / 2 - 4 * k, sz.x + 28 * k, sz.y + 8 * k), Texture2D.whiteTexture); GUI.color = Color.white; }
+            GUI.Label(new Rect(0, cy - sz.y / 2, Screen.width, sz.y), nd, sp);
         }
         if (string.IsNullOrEmpty(goiY)) return;
         var st = new GUIStyle(GUI.skin.label) { fontSize = 22, alignment = TextAnchor.MiddleCenter };

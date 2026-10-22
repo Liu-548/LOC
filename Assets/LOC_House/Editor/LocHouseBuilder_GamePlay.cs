@@ -33,7 +33,13 @@ public static partial class LocHouseBuilder
 
     static void GamePlay()
     {
-        var nc = Tim("NguoiChoi"); if (nc) { nc.gameObject.AddComponent<LocTui>(); nc.gameObject.AddComponent<LocCotTruyen>(); }   // [8/10] hệ thống đêm
+        var nc = Tim("NguoiChoi"); if (nc) { nc.gameObject.AddComponent<LocTui>(); nc.gameObject.AddComponent<LocCotTruyen>(); nc.gameObject.AddComponent<LocMenu>(); }   // [22/10] menu   // [8/10] hệ thống đêm
+        if (nc)   // [22/10] cắt cảnh ban ngày giữa hai đêm + âm thanh tạm (LOC_Nguon/BanNgay/am.py)
+        {
+            var bn = nc.gameObject.AddComponent<LocBanNgay>();
+            AudioClip A(string n) => UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/LOC_House/Audio/" + n + ".wav");
+            bn.tungKinh = A("BanNgay_TungKinh"); bn.nguoiVieng = A("BanNgay_NguoiVieng"); bn.kenDam = A("BanNgay_KenDam"); bn.xeMay = A("BanNgay_XeMay"); bn.rotTra = A("Tra_Rot");
+        }
         var ma = root.GetComponentInChildren<LocMa>(true); if (ma) ma.demBatDau = 1;   // [8/10] vào game là Đêm 1 (F1–F3 vẫn đổi để thử)
         var banTho = Tim("BanThoVong_Dem1"); if (banTho) { VaChamBao(banTho.gameObject); banTho.gameObject.AddComponent<LocViec>().id = "thap_huong"; }
 

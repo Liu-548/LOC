@@ -14,12 +14,16 @@ public class LocTui : MonoBehaviour
     static readonly Dictionary<string, string> tenRieng = new();   // tên món nhận qua Nhan() (mini game) — không có LocVatPham trong nhà
     static List<string> idsDauDem = new(); static HashSet<string> coDauDem = new(); static int demChup = -1;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void Reset0() { ids.Clear(); co.Clear(); tenRieng.Clear(); idsDauDem.Clear(); coDauDem.Clear(); demChup = -1; DangCam = null; }
+    public static void Reset0() { ids.Clear(); co.Clear(); tenRieng.Clear(); idsDauDem.Clear(); coDauDem.Clear(); demChup = -1; DangCam = null; }
 
     public static LocTui I;
     public static bool CoMon(string id) => ids.Contains(id);
     public static bool Co(string co_) => co.Contains(co_);
     public static void Dat(string co_) => co.Add(co_);
+    // [22/10] lưu/nạp đầu đêm (LocMenu)
+    public static string ChuoiIds => string.Join("|", ids);
+    public static string ChuoiCo => string.Join("|", co);
+    public static void Nap(IEnumerable<string> i, IEnumerable<string> c) { Reset0(); if (i != null) ids.AddRange(i); if (c != null) co.UnionWith(c); }
     public static bool Mo => I && I.che != Che.Dong;
 
     enum Che { Dong, Tui, Doc }
@@ -76,7 +80,7 @@ public class LocTui : MonoBehaviour
         foreach (var d in dong)
         {
             float t = Mathf.Max(1.8f, d.Length * 0.07f);
-            LocFirstPerson.PhuDe(d, t); yield return new WaitForSeconds(t + 0.15f);
+            LocFirstPerson.PhuDe(d, t); yield return new WaitForSeconds(t * LocFirstPerson.nhanChu + 0.15f);   // [22/10] cài đặt thời gian hiện chữ
         }
         noi = null;
     }

@@ -20,10 +20,17 @@ public class LocDoor : MonoBehaviour
     public LocDoor[] cungCua;        // các cánh cùng ô cửa (cửa sổ 2 cánh)
     public GameObject[] anKhiMo;     // vật chắn (ô kính trà…) chỉ hiện khi tất cả cánh đều đóng
 
-    Vector3 p0, hinge; Quaternion r0; float t, dich;
-
-    Vector3 s0, lp0;
-    void Awake() { lp0 = transform.localPosition; p0 = transform.position; r0 = transform.rotation; s0 = transform.localScale; hinge = transform.TransformPoint(banLe); CapNhatChan(); }
+    // [23/10] tư thế gốc lưu theo toạ độ của CHA (không phải thế giới) và lưu lười (lần đầu dùng):
+    //  trước đây lưu toạ độ thế giới trong Awake → cánh nằm trong nhóm đang ẩn mà bị DatNgay/Mo trước Awake thì bay về gốc (0,0,0),
+    //  cha bị dời sau Awake thì cánh quay quanh bản lề cũ (mở lệch, tách khỏi khung).
+    Vector3 lp0, lh, s0; Quaternion lr0; bool daLuu; float t, dich;
+    void Luu()
+    {
+        if (daLuu) return; daLuu = true;
+        lp0 = transform.localPosition; lr0 = transform.localRotation; s0 = transform.localScale;
+        var h = transform.TransformPoint(banLe); lh = transform.parent ? transform.parent.InverseTransformPoint(h) : h;
+    }
+    void Awake() { Luu(); CapNhatChan(); }
 
     public bool DangMo => (dich < 0.5f) == dungSanLaMo;
     public void Bam()
@@ -36,7 +43,7 @@ public class LocDoor : MonoBehaviour
         }
         Toggle();
     }
-    public void Toggle() { if (khoa) return; dich = dich < 0.5f ? 1f : 0f; CapNhatChan(); }
+    public void Toggle() { if (khoa) return; Luu(); dich = dich < 0.5f ? 1f : 0f; CapNhatChan(); }
     void CapNhatChan()
     {
         if (anKhiMo == null || anKhiMo.Length == 0) return;
@@ -48,7 +55,7 @@ public class LocDoor : MonoBehaviour
     public void Dong() { if (DangMo) Toggle(); }
 
     // [8/10] đặt ngay trạng thái mở/đóng, không chạy hoạt cảnh, bỏ qua khoá (đầu đêm)
-    public void DatNgay(bool mo) { dich = mo == dungSanLaMo ? 0f : 1f; t = dich; ApT(); CapNhatChan(); }
+    public void DatNgay(bool mo) { Luu(); dich = mo == dungSanLaMo ? 0f : 1f; t = dich; ApT(); CapNhatChan(); }
 
     void Update()
     {
@@ -61,7 +68,10 @@ public class LocDoor : MonoBehaviour
         float e = Mathf.SmoothStep(0f, 1f, t);
         if (truot != Vector3.zero) { transform.localPosition = lp0 + truot * e; return; }
         if (gapX > 0f) { transform.localScale = new Vector3(Mathf.Lerp(s0.x, s0.x * gapX, e), s0.y, s0.z); return; }
-        var q = Quaternion.AngleAxis(goc * e, Vector3.up);
-        transform.SetPositionAndRotation(hinge + q * (p0 - hinge), q * r0);
+        var cha = transform.parent;
+        Vector3 P(Vector3 v) => cha ? cha.TransformPoint(v) : v;
+        Quaternion r0 = cha ? cha.rotation * lr0 : lr0, q = Quaternion.AngleAxis(goc * e, Vector3.up);   // trục quay luôn là trục đứng thế giới
+        var hinge = P(lh);
+        transform.SetPositionAndRotation(hinge + q * (P(lp0) - hinge), q * r0);
     }
 }

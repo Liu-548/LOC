@@ -1,0 +1,597 @@
+═════════ ĐÊM 1
+TỔNG 73 cánh: 0 cánh có phần tĩnh · 54 món nằm trên cánh mà không gắn · 0 bản lề lệch · 45 chỗ quét xuyên
+RÀ CỬA + ĐỒ GẮN CỬA — 23/10 01:23
+── SanTruoc/CanhCong_Phai (mở)  «cổng» goc -76 dựng mở
+   ⚠ [dựng] XUYÊN 3,0 cm: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_R/SM_PipeFoot_Gate_R_Plate  cỡ 0,14×0,00×0,14
+   ⚠ [dựng] sát mặt: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_R/SM_PipeFoot_Gate_R_Collar  cỡ 0,05×0,05×0,05
+── SanTruoc/CanhCong_Trai (mở)  «cổng» goc 76 dựng mở
+   ⚠ [dựng] XUYÊN 3,0 cm: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_L/SM_PipeFoot_Gate_L_Plate  cỡ 0,14×0,00×0,14
+   ⚠ [dựng] sát mặt: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_L/SM_PipeFoot_Gate_L_Collar  cỡ 0,05×0,05×0,05
+── SanTruoc/CuaNgachCong (mở)  «cửa ngách cổng» goc -90 dựng mở
+   ⚠ [dựng] XUYÊN 0,4 cm: SanTruoc/SM_PlasticChair_Green/backrest/backrest_slat_3  cỡ 0,10×0,11×0,33
+   ✗ quét xuyên 3 cm: SanTruoc/SM_FuneralTent_300/SM_FuneralTent_300/SM_PipeKit_Assembled/SM_PipeFoot_2_R/SM_PipeFoot_2_R_Collar
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_1  «cửa chạn» goc 100 dựng đóng
+   OK
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_2  «cửa chạn» goc -100 dựng đóng
+   OK
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_3  «cửa chạn» goc 100 dựng đóng
+   OK
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_4  «cửa chạn» goc -100 dựng đóng
+   OK
+── Tang_1/Bep/CuaSatKinh (mở)  «cửa sắt kính ra giếng trời» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/Bep_GiengTroi_5
+── Tang_1/Bep/CuaSo_Bep_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/Bep_GiengTroi_0
+── Tang_1/Bep/CuaSo_Bep_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/Bep_GiengTroi_3
+── Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat/Canh_1  «cửa tủ chén» goc 100 dựng đóng
+   OK
+── Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat/Canh_2  «cửa tủ chén» goc -100 dựng đóng
+   OK
+── Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat/Canh_3  «kính tủ chén» goc 90 dựng mở trượt
+   OK
+── Tang_1/Bep/TuLanh_Bo/TuLanh_Canh/Canh_1  «cửa tủ lạnh» goc -100 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DoTu_TrongTu/rau_muong  cỡ 0,26×0,03×0,03
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DotTu  cỡ 0,57×0,02×0,53
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DoTu_TrongTu/rau_muong  cỡ 0,26×0,03×0,03
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DotTu  cỡ 0,57×0,02×0,53
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DoTu_TrongTu/rau_muong  cỡ 0,26×0,03×0,03
+   ⚠ [còn lại] XUYÊN 2,0 cm: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/top_backrest/top_backrest_post_L  cỡ 0,03×0,39×0,08
+   ⚠ [còn lại] XUYÊN 1,0 cm: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/Node-14/nested_backs  cỡ 0,33×0,26×0,13
+   ⚠ [còn lại] sát mặt: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/top_backrest/top_backrest_slat_2  cỡ 0,33×0,11×0,04
+   ⚠ [còn lại] XUYÊN 1,0 cm: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/top_backrest/top_backrest_slat_3  cỡ 0,33×0,11×0,04
+   ⚠ [còn lại] sát mặt: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/Node-14/nested_back_edge_3  cỡ 0,34×0,03×0,09
+   ✗ quét xuyên 16 cm: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/seat_edge_4
+   ✗ quét xuyên 16 cm: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/seat_edge_3
+   ✗ quét xuyên 15 cm: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/seat_edge_2
+   ✗ quét xuyên 15 cm: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/seat_edge_1
+   ✗ quét xuyên 14 cm: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/stack_body
+   ✗ quét xuyên 5 cm: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/Node-1/leg_1
+   ✗ quét xuyên 4 cm: Tang_1/Bep/Dem1/SM_PlasticChairStack_4/Node-5/leg_3
+── Tang_1/GiengTroi/CuaSatHam (mở)  «cửa sắt xuống hầm» goc 90 dựng đóng
+   OK
+── Tang_1/KhoiSau/CuaKho (mở)  «cửa kho» goc -90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/KhoiSau_Truoc_2
+── Tang_1/KhoiSau/CuaWC_T1 (mở)  «cửa WC» goc 90 dựng mở
+   ✗ quét xuyên 5 cm: Tang_1/KhoiSau/KhungCuaWC_T1/CuaWC_Khung/CuaWC_Khung
+── Tang_1/PhongKhach/CuaChinh_Phai (mở ra ngoài)  «cửa chính» goc 180 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/MatTien_T1_6
+── Tang_1/PhongKhach/CuaChinh_Trai (mở ra ngoài)  «cửa chính» goc -180 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/MatTien_T1_3
+── Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung/Canh_1  «cửa tủ TV» goc 100 dựng đóng
+   OK
+── Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung/Canh_2  «cửa tủ TV» goc -100 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung/DoTu_TrongTu/sach_huong_dan  cỡ 0,22×0,03×0,35
+   ✗ quét xuyên 2 cm: Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung
+── Tang_2/GocLamViec/BanGiay_Go/BanGiay_Go/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   OK
+── Tang_2/GocLamViec/CuaLamViec_Phai (mở)  «cửa phòng làm việc» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/HanhLang_Phai_2
+── Tang_2/GocLamViec/CuaLamViec_Trai (mở)  «cửa phòng làm việc» goc -90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/HanhLang_Phai_0
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_2  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_3  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_4  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_5  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_6  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_7  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_8  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 37,4 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+   ⚠ [còn lại] XUYÊN 5,1 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+── Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/Canh_2  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 37,4 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+   ⚠ [còn lại] XUYÊN 5,1 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+── Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/Canh_3  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 37,4 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+   ⚠ [còn lại] XUYÊN 5,1 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+── Tang_2/PhongBoMe/BanTrangDiem_Bo/BanTrangDiem/BanTrangDiem/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   OK
+── Tang_2/PhongBoMe/CanhBanCong_Phai  «cửa ban công» goc -90 dựng mở
+   OK
+── Tang_2/PhongBoMe/CanhBanCong_Trai  «cửa ban công» goc 90 dựng mở
+   OK
+── Tang_2/PhongBoMe/CuaBoMe (mở)  «cửa phòng bố mẹ» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/BoMe_Sanh_2
+── Tang_2/PhongBoMe/CuaSo_BoMe_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_2
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_8
+── Tang_2/PhongBoMe/CuaSo_BoMe_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_1
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_3
+── Tang_2/PhongBoMe/CuaSo_BoMe_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_2
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_5
+── Tang_2/PhongBoMe/CuaSo_BoMe_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_1
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_0
+── Tang_2/PhongBoMe/CuaWC_BoMe (mở)  «cửa WC» goc 90 dựng mở
+   ✗ quét xuyên 5 cm: Tang_2/PhongBoMe/KhungCuaWC_BoMe/CuaWC_Khung/CuaWC_Khung
+── Tang_2/PhongBoMe/KetSat_Dung/KetSat_Canh  «cửa két sắt» goc -90 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/KetSat_Dung/KetSat_HongA  cỡ 0,04×0,62×0,45
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/KetSat_Dung/KetSat_HongB  cỡ 0,04×0,62×0,45
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/KetSat_Dung/KetSat_Ke  cỡ 0,42×0,02×0,40
+── Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/Canh_1  «cửa tủ đầu giường» goc 100 dựng đóng
+   ⚠ [dựng] XUYÊN 3,0 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong  cỡ 0,45×0,50×0,42
+   ⚠ [dựng] XUYÊN 1,4 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/HocTu  cỡ 0,40×0,36×0,36
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/DoTu_TrongTu/so_bo  cỡ 0,16×0,02×0,12
+── Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/Canh_1  «cửa tủ đầu giường» goc 100 dựng đóng
+   ⚠ [dựng] XUYÊN 1,4 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/HocTu  cỡ 0,40×0,36×0,36
+   ⚠ [dựng] XUYÊN 3,0 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong  cỡ 0,45×0,50×0,42
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/DoTu_TrongTu/so_chi_tieu  cỡ 0,15×0,01×0,12
+── Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/Canh_1  «cửa tủ quần áo» goc 100 dựng đóng
+   OK
+── Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/Canh_2  «cửa tủ quần áo» goc -100 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/DoTu_TrongTu/ao_treo/tay_ao  cỡ 0,02×0,44×0,08
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/DoTu_TrongTu/ao_treo/tay_ao  cỡ 0,04×0,56×0,08
+── Tang_2/PhongKhoi/BanHoc_Khoi_Bo/BanHoc_Khoi/BanHoc_Khoi/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   OK
+── Tang_2/PhongKhoi/CuaKhoi (mở)  «cửa phòng Khôi» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/HanhLang_Phai_6
+── Tang_2/PhongKhoi/CuaSo_Khoi_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/T2_GiengTroi_6
+── Tang_2/PhongKhoi/CuaSo_Khoi_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/T2_GiengTroi_9
+── Tang_2/PhongKhoi/TuAo_Khoi_Go/CanhTuKhoi_Phai  «cửa tủ áo» goc 95 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_2/PhongKhoi/TuAo_Khoi_Go/dot  cỡ 0,42×0,02×0,51
+   ⚠ [dựng] sát mặt: Tang_2/PhongKhoi/TuAo_Khoi_Go/dot  cỡ 0,42×0,02×0,51
+   ⚠ [dựng] sát mặt: Tang_2/PhongKhoi/TuAo_Khoi_Go/dot  cỡ 0,42×0,02×0,51
+── Tang_2/PhongKhoi/TuAo_Khoi_Go/CanhTuKhoi_Trai  «cửa tủ áo» goc -88 dựng đóng
+   OK
+── Tang_2/PhongNhim/CuaPhongNhim_FullAssembly/CanhCua  «cửa phòng Nhím» goc 80 dựng mở
+   OK
+── Tang_2/PhongNhim/TuNhua_Nhim/TuNhua_Nhim/Canh_1  «cửa tủ nhựa» goc 100 dựng đóng
+   ⚠ [dựng] XUYÊN 0,9 cm: Tang_2/PhongNhim/TuNhua_Nhim/TuNhua_Nhim/HocTu  cỡ 0,37×0,40×0,41
+── Tang_2/SanhHanhLang/TuDung_RuongChanMan/TuDung_RuongChanMan/Canh_1  «cửa tủ đứng» goc 100 dựng đóng
+   OK
+── Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/Canh_1  «cửa tủ» goc 100 dựng đóng
+   OK
+── Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/Canh_2  «cửa tủ» goc -100 dựng đóng
+   OK
+── Tang_3/PhongTho/BanThoGiaTien_Set/BanThoGiaTien/Canh_1  «cửa tủ thờ» goc 100 dựng đóng
+   OK
+── Tang_3/PhongTho/BanThoGiaTien_Set/BanThoGiaTien/Canh_2  «cửa tủ thờ» goc -100 dựng đóng
+   OK
+── Tang_3/PhongTho/CuaSanPhoi/CuaSanPhoi_Canh  «cửa ra sân phơi» goc -100 dựng đóng
+   OK
+── Tang_3/PhongTho/CuaSo_Khoi_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_2
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_8
+── Tang_3/PhongTho/CuaSo_Khoi_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_1
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_3
+── Tang_3/PhongTho/CuaSo_Khoi_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_1
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_0
+── Tang_3/PhongTho/CuaSo_Khoi_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_2
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_5
+── Tang_3/PhongTho/TuDoTho_Fix/TuDoTho_Fix/Canh_1  «cửa tủ đồ thờ» goc 100 dựng đóng
+   OK
+── Tang_3/PhongTho/TuDoTho_Fix/TuDoTho_Fix/Canh_2  «cửa tủ đồ thờ» goc -100 dựng đóng
+   OK
+── Tang_3/VoNha/CuaPhongTho (mở)  «cửa phòng thờ» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/PhongTho_Sanh_2
+── Tiem/BanHang/TuKinh/Canh_1  «kính tủ» goc 90 dựng đóng trượt
+   ⚠ [còn lại] sát mặt: Tiem/BanHang/TuKinh/TuKinh/VetTay_Kinh  cỡ 0,00×0,34×0,50
+── Tiem/BanHang/TuKinh/Canh_2  «kính tủ» goc 90 dựng đóng trượt
+   OK
+── Tiem/VoNha/CuaNgach_Tiem (mở)  «cửa ngách tiệm» goc -90 dựng mở
+   ✗ quét xuyên 3 cm: Tiem/VoNha/Tiem_TuongPhai_3
+
+═════════ ĐÊM 2
+TỔNG 73 cánh: 0 cánh có phần tĩnh · 54 món nằm trên cánh mà không gắn · 0 bản lề lệch · 48 chỗ quét xuyên
+RÀ CỬA + ĐỒ GẮN CỬA — 23/10 01:23
+── SanTruoc/CanhCong_Phai (mở)  «cổng» goc -76 dựng mở
+   ⚠ [dựng] XUYÊN 3,0 cm: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_R/SM_PipeFoot_Gate_R_Plate  cỡ 0,14×0,00×0,14
+   ⚠ [dựng] sát mặt: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_R/SM_PipeFoot_Gate_R_Collar  cỡ 0,05×0,05×0,05
+── SanTruoc/CanhCong_Trai (mở)  «cổng» goc 76 dựng mở
+   ⚠ [dựng] XUYÊN 3,0 cm: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_L/SM_PipeFoot_Gate_L_Plate  cỡ 0,14×0,00×0,14
+   ⚠ [dựng] sát mặt: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_L/SM_PipeFoot_Gate_L_Collar  cỡ 0,05×0,05×0,05
+── SanTruoc/CuaNgachCong (mở)  «cửa ngách cổng» goc -90 dựng mở
+   ⚠ [dựng] XUYÊN 0,4 cm: SanTruoc/SM_PlasticChair_Green/backrest/backrest_slat_3  cỡ 0,10×0,11×0,33
+   ✗ quét xuyên 3 cm: SanTruoc/SM_FuneralTent_300/SM_FuneralTent_300/SM_PipeKit_Assembled/SM_PipeFoot_2_R/SM_PipeFoot_2_R_Collar
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_1  «cửa chạn» goc 100 dựng đóng
+   OK
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_2  «cửa chạn» goc -100 dựng đóng
+   OK
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_3  «cửa chạn» goc 100 dựng đóng
+   OK
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_4  «cửa chạn» goc -100 dựng đóng
+   OK
+── Tang_1/Bep/CuaSatKinh (mở)  «cửa sắt kính ra giếng trời» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/Bep_GiengTroi_5
+── Tang_1/Bep/CuaSo_Bep_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/Bep_GiengTroi_0
+── Tang_1/Bep/CuaSo_Bep_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/Bep_GiengTroi_3
+── Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat/Canh_1  «cửa tủ chén» goc 100 dựng đóng
+   OK
+── Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat/Canh_2  «cửa tủ chén» goc -100 dựng đóng
+   OK
+── Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat/Canh_3  «kính tủ chén» goc 90 dựng mở trượt
+   OK
+── Tang_1/Bep/TuLanh_Bo/TuLanh_Canh/Canh_1  «cửa tủ lạnh» goc -100 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DoTu_TrongTu/rau_muong  cỡ 0,26×0,03×0,03
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DotTu  cỡ 0,57×0,02×0,53
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DoTu_TrongTu/rau_muong  cỡ 0,26×0,03×0,03
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DotTu  cỡ 0,57×0,02×0,53
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DoTu_TrongTu/rau_muong  cỡ 0,26×0,03×0,03
+   ⚠ [còn lại] XUYÊN 2,6 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/top_backrest/top_backrest_post_L  cỡ 0,05×0,39×0,09
+   ⚠ [còn lại] XUYÊN 1,3 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/Node-14/nested_backs  cỡ 0,35×0,26×0,21
+   ⚠ [còn lại] XUYÊN 0,7 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/Node-14/nested_back_edge_3  cỡ 0,35×0,03×0,18
+   ⚠ [còn lại] XUYÊN 1,3 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/top_backrest/top_backrest_slat_3  cỡ 0,33×0,11×0,12
+   ⚠ [còn lại] sát mặt: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/top_backrest/top_backrest_slat_2  cỡ 0,33×0,11×0,12
+   ✗ quét xuyên 9 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/seat_edge_4
+   ✗ quét xuyên 8 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/seat_edge_3
+   ✗ quét xuyên 7 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/seat_edge_2
+   ✗ quét xuyên 7 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/seat_edge_1
+   ✗ quét xuyên 6 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/stack_body
+   ✗ quét xuyên 6 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/Node-14/nested_backs
+   ✗ quét xuyên 5 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/Node-14/nested_back_edge_1
+   ✗ quét xuyên 5 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/Node-14/nested_back_edge_3
+   ✗ quét xuyên 2 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/top_backrest/top_backrest_slat_1
+   ✗ quét xuyên 2 cm: Tang_1/Bep/Dem2/SM_PlasticChairStack_4/top_backrest/top_backrest_post_L
+── Tang_1/GiengTroi/CuaSatHam (mở)  «cửa sắt xuống hầm» goc 90 dựng đóng
+   OK
+── Tang_1/KhoiSau/CuaKho (mở)  «cửa kho» goc -90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/KhoiSau_Truoc_2
+── Tang_1/KhoiSau/CuaWC_T1 (mở)  «cửa WC» goc 90 dựng mở
+   ✗ quét xuyên 5 cm: Tang_1/KhoiSau/KhungCuaWC_T1/CuaWC_Khung/CuaWC_Khung
+── Tang_1/PhongKhach/CuaChinh_Phai (mở ra ngoài)  «cửa chính» goc 180 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/MatTien_T1_6
+── Tang_1/PhongKhach/CuaChinh_Trai (mở ra ngoài)  «cửa chính» goc -180 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/MatTien_T1_3
+── Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung/Canh_1  «cửa tủ TV» goc 100 dựng đóng
+   OK
+── Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung/Canh_2  «cửa tủ TV» goc -100 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung/DoTu_TrongTu/sach_huong_dan  cỡ 0,22×0,03×0,35
+   ✗ quét xuyên 2 cm: Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung
+── Tang_2/GocLamViec/BanGiay_Go/BanGiay_Go/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   OK
+── Tang_2/GocLamViec/CuaLamViec_Phai (mở)  «cửa phòng làm việc» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/HanhLang_Phai_2
+── Tang_2/GocLamViec/CuaLamViec_Trai (mở)  «cửa phòng làm việc» goc -90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/HanhLang_Phai_0
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_2  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_3  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_4  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_5  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_6  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_7  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_8  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 37,4 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+   ⚠ [còn lại] XUYÊN 5,1 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+── Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/Canh_2  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 37,4 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+   ⚠ [còn lại] XUYÊN 5,1 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+── Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/Canh_3  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 37,4 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+   ⚠ [còn lại] XUYÊN 5,1 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+── Tang_2/PhongBoMe/BanTrangDiem_Bo/BanTrangDiem/BanTrangDiem/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   OK
+── Tang_2/PhongBoMe/CanhBanCong_Phai  «cửa ban công» goc -90 dựng mở
+   OK
+── Tang_2/PhongBoMe/CanhBanCong_Trai  «cửa ban công» goc 90 dựng mở
+   OK
+── Tang_2/PhongBoMe/CuaBoMe (mở)  «cửa phòng bố mẹ» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/BoMe_Sanh_2
+── Tang_2/PhongBoMe/CuaSo_BoMe_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_2
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_8
+── Tang_2/PhongBoMe/CuaSo_BoMe_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_1
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_3
+── Tang_2/PhongBoMe/CuaSo_BoMe_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_2
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_5
+── Tang_2/PhongBoMe/CuaSo_BoMe_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_1
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_0
+── Tang_2/PhongBoMe/CuaWC_BoMe (mở)  «cửa WC» goc 90 dựng mở
+   ✗ quét xuyên 5 cm: Tang_2/PhongBoMe/KhungCuaWC_BoMe/CuaWC_Khung/CuaWC_Khung
+── Tang_2/PhongBoMe/KetSat_Dung/KetSat_Canh  «cửa két sắt» goc -90 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/KetSat_Dung/KetSat_HongA  cỡ 0,04×0,62×0,45
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/KetSat_Dung/KetSat_HongB  cỡ 0,04×0,62×0,45
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/KetSat_Dung/KetSat_Ke  cỡ 0,42×0,02×0,40
+── Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/Canh_1  «cửa tủ đầu giường» goc 100 dựng đóng
+   ⚠ [dựng] XUYÊN 3,0 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong  cỡ 0,45×0,50×0,42
+   ⚠ [dựng] XUYÊN 1,4 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/HocTu  cỡ 0,40×0,36×0,36
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/DoTu_TrongTu/so_bo  cỡ 0,16×0,02×0,12
+── Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/Canh_1  «cửa tủ đầu giường» goc 100 dựng đóng
+   ⚠ [dựng] XUYÊN 1,4 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/HocTu  cỡ 0,40×0,36×0,36
+   ⚠ [dựng] XUYÊN 3,0 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong  cỡ 0,45×0,50×0,42
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/DoTu_TrongTu/so_chi_tieu  cỡ 0,15×0,01×0,12
+── Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/Canh_1  «cửa tủ quần áo» goc 100 dựng đóng
+   OK
+── Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/Canh_2  «cửa tủ quần áo» goc -100 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/DoTu_TrongTu/ao_treo/tay_ao  cỡ 0,02×0,44×0,08
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/DoTu_TrongTu/ao_treo/tay_ao  cỡ 0,04×0,56×0,08
+── Tang_2/PhongKhoi/BanHoc_Khoi_Bo/BanHoc_Khoi/BanHoc_Khoi/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   OK
+── Tang_2/PhongKhoi/CuaKhoi (mở)  «cửa phòng Khôi» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/HanhLang_Phai_6
+── Tang_2/PhongKhoi/CuaSo_Khoi_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/T2_GiengTroi_6
+── Tang_2/PhongKhoi/CuaSo_Khoi_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/T2_GiengTroi_9
+── Tang_2/PhongKhoi/TuAo_Khoi_Go/CanhTuKhoi_Phai  «cửa tủ áo» goc 95 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_2/PhongKhoi/TuAo_Khoi_Go/dot  cỡ 0,42×0,02×0,51
+   ⚠ [dựng] sát mặt: Tang_2/PhongKhoi/TuAo_Khoi_Go/dot  cỡ 0,42×0,02×0,51
+   ⚠ [dựng] sát mặt: Tang_2/PhongKhoi/TuAo_Khoi_Go/dot  cỡ 0,42×0,02×0,51
+── Tang_2/PhongKhoi/TuAo_Khoi_Go/CanhTuKhoi_Trai  «cửa tủ áo» goc -88 dựng đóng
+   OK
+── Tang_2/PhongNhim/CuaPhongNhim_FullAssembly/CanhCua  «cửa phòng Nhím» goc 80 dựng mở
+   OK
+── Tang_2/PhongNhim/TuNhua_Nhim/TuNhua_Nhim/Canh_1  «cửa tủ nhựa» goc 100 dựng đóng
+   ⚠ [dựng] XUYÊN 0,9 cm: Tang_2/PhongNhim/TuNhua_Nhim/TuNhua_Nhim/HocTu  cỡ 0,37×0,40×0,41
+── Tang_2/SanhHanhLang/TuDung_RuongChanMan/TuDung_RuongChanMan/Canh_1  «cửa tủ đứng» goc 100 dựng đóng
+   OK
+── Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/Canh_1  «cửa tủ» goc 100 dựng đóng
+   OK
+── Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/Canh_2  «cửa tủ» goc -100 dựng đóng
+   OK
+── Tang_3/PhongTho/BanThoGiaTien_Set/BanThoGiaTien/Canh_1  «cửa tủ thờ» goc 100 dựng đóng
+   OK
+── Tang_3/PhongTho/BanThoGiaTien_Set/BanThoGiaTien/Canh_2  «cửa tủ thờ» goc -100 dựng đóng
+   OK
+── Tang_3/PhongTho/CuaSanPhoi/CuaSanPhoi_Canh  «cửa ra sân phơi» goc -100 dựng đóng
+   OK
+── Tang_3/PhongTho/CuaSo_Khoi_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_2
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_8
+── Tang_3/PhongTho/CuaSo_Khoi_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_1
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_3
+── Tang_3/PhongTho/CuaSo_Khoi_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_1
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_0
+── Tang_3/PhongTho/CuaSo_Khoi_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_2
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_5
+── Tang_3/PhongTho/TuDoTho_Fix/TuDoTho_Fix/Canh_1  «cửa tủ đồ thờ» goc 100 dựng đóng
+   OK
+── Tang_3/PhongTho/TuDoTho_Fix/TuDoTho_Fix/Canh_2  «cửa tủ đồ thờ» goc -100 dựng đóng
+   OK
+── Tang_3/VoNha/CuaPhongTho (mở)  «cửa phòng thờ» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/PhongTho_Sanh_2
+── Tiem/BanHang/TuKinh/Canh_1  «kính tủ» goc 90 dựng đóng trượt
+   ⚠ [còn lại] sát mặt: Tiem/BanHang/TuKinh/TuKinh/VetTay_Kinh  cỡ 0,00×0,34×0,50
+── Tiem/BanHang/TuKinh/Canh_2  «kính tủ» goc 90 dựng đóng trượt
+   OK
+── Tiem/VoNha/CuaNgach_Tiem (mở)  «cửa ngách tiệm» goc -90 dựng mở
+   ✗ quét xuyên 3 cm: Tiem/VoNha/Tiem_TuongPhai_3
+
+═════════ ĐÊM 3
+TỔNG 73 cánh: 0 cánh có phần tĩnh · 49 món nằm trên cánh mà không gắn · 0 bản lề lệch · 38 chỗ quét xuyên
+RÀ CỬA + ĐỒ GẮN CỬA — 23/10 01:23
+── SanTruoc/CanhCong_Phai (mở)  «cổng» goc -76 dựng mở
+   ⚠ [dựng] XUYÊN 3,0 cm: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_R/SM_PipeFoot_Gate_R_Plate  cỡ 0,14×0,00×0,14
+   ⚠ [dựng] sát mặt: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_R/SM_PipeFoot_Gate_R_Collar  cỡ 0,05×0,05×0,05
+── SanTruoc/CanhCong_Trai (mở)  «cổng» goc 76 dựng mở
+   ⚠ [dựng] XUYÊN 3,0 cm: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_L/SM_PipeFoot_Gate_L_Plate  cỡ 0,14×0,00×0,14
+   ⚠ [dựng] sát mặt: SanTruoc/SM_FuneralGate/SM_PipeFoot_Gate_L/SM_PipeFoot_Gate_L_Collar  cỡ 0,05×0,05×0,05
+── SanTruoc/CuaNgachCong (mở)  «cửa ngách cổng» goc -90 dựng mở
+   ⚠ [dựng] XUYÊN 0,4 cm: SanTruoc/SM_PlasticChair_Green/backrest/backrest_slat_3  cỡ 0,10×0,11×0,33
+   ✗ quét xuyên 3 cm: SanTruoc/SM_FuneralTent_300/SM_FuneralTent_300/SM_PipeKit_Assembled/SM_PipeFoot_2_R/SM_PipeFoot_2_R_Collar
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_1  «cửa chạn» goc 100 dựng đóng
+   OK
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_2  «cửa chạn» goc -100 dựng đóng
+   OK
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_3  «cửa chạn» goc 100 dựng đóng
+   OK
+── Tang_1/Bep/Chan_BatDiaTrongChan/Canh_4  «cửa chạn» goc -100 dựng đóng
+   OK
+── Tang_1/Bep/CuaSatKinh (mở)  «cửa sắt kính ra giếng trời» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/Bep_GiengTroi_5
+── Tang_1/Bep/CuaSo_Bep_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/Bep_GiengTroi_0
+── Tang_1/Bep/CuaSo_Bep_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/Bep_GiengTroi_3
+── Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat/Canh_1  «cửa tủ chén» goc 100 dựng đóng
+   OK
+── Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat/Canh_2  «cửa tủ chén» goc -100 dựng đóng
+   OK
+── Tang_1/Bep/TuBuffet_ChenBat/TuBuffet_ChenBat/Canh_3  «kính tủ chén» goc 90 dựng mở trượt
+   OK
+── Tang_1/Bep/TuLanh_Bo/TuLanh_Canh/Canh_1  «cửa tủ lạnh» goc -100 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DoTu_TrongTu/rau_muong  cỡ 0,26×0,03×0,03
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DotTu  cỡ 0,57×0,02×0,53
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DoTu_TrongTu/rau_muong  cỡ 0,26×0,03×0,03
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DotTu  cỡ 0,57×0,02×0,53
+   ⚠ [dựng] sát mặt: Tang_1/Bep/TuLanh_Bo/TuLanh/TuLanh/DoTu_TrongTu/rau_muong  cỡ 0,26×0,03×0,03
+── Tang_1/GiengTroi/CuaSatHam (mở)  «cửa sắt xuống hầm» goc 90 dựng đóng
+   OK
+── Tang_1/KhoiSau/CuaKho (mở)  «cửa kho» goc -90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/KhoiSau_Truoc_2
+── Tang_1/KhoiSau/CuaWC_T1 (mở)  «cửa WC» goc 90 dựng mở
+   ✗ quét xuyên 5 cm: Tang_1/KhoiSau/KhungCuaWC_T1/CuaWC_Khung/CuaWC_Khung
+── Tang_1/PhongKhach/CuaChinh_Phai (mở ra ngoài)  «cửa chính» goc 180 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/MatTien_T1_6
+── Tang_1/PhongKhach/CuaChinh_Trai (mở ra ngoài)  «cửa chính» goc -180 dựng mở
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/MatTien_T1_3
+── Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung/Canh_1  «cửa tủ TV» goc 100 dựng đóng
+   OK
+── Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung/Canh_2  «cửa tủ TV» goc -100 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung/DoTu_TrongTu/sach_huong_dan  cỡ 0,22×0,03×0,35
+   ✗ quét xuyên 2 cm: Tang_1/PhongKhach/TuTV_Dung_Bo/TuTV_Dung/TuTV_Dung
+── Tang_2/GocLamViec/BanGiay_Go/BanGiay_Go/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   OK
+── Tang_2/GocLamViec/CuaLamViec_Phai (mở)  «cửa phòng làm việc» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/HanhLang_Phai_2
+── Tang_2/GocLamViec/CuaLamViec_Trai (mở)  «cửa phòng làm việc» goc -90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/HanhLang_Phai_0
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_2  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_3  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_4  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_5  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_6  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_7  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/Canh_8  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 36,5 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+   ⚠ [còn lại] XUYÊN 5,9 cm: Tang_2/GocLamViec/TuHoSo_Sat/TuHoSo_Sat/HocTu  cỡ 0,41×0,35×0,54
+── Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 37,4 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+   ⚠ [còn lại] XUYÊN 5,1 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+── Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/Canh_2  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 37,4 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+   ⚠ [còn lại] XUYÊN 5,1 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+── Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/Canh_3  «ngăn kéo» goc 90 dựng đóng trượt
+   ⚠ [dựng] XUYÊN 37,4 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+   ⚠ [còn lại] XUYÊN 5,1 cm: Tang_2/PhongBoMe/BanCoHoc_Go/BanCoHoc_Go/HocTu  cỡ 0,35×0,19×0,42
+── Tang_2/PhongBoMe/BanTrangDiem_Bo/BanTrangDiem/BanTrangDiem/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   OK
+── Tang_2/PhongBoMe/CanhBanCong_Phai  «cửa ban công» goc -90 dựng mở
+   OK
+── Tang_2/PhongBoMe/CanhBanCong_Trai  «cửa ban công» goc 90 dựng mở
+   OK
+── Tang_2/PhongBoMe/CuaBoMe (mở)  «cửa phòng bố mẹ» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/BoMe_Sanh_2
+── Tang_2/PhongBoMe/CuaSo_BoMe_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_2
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_8
+── Tang_2/PhongBoMe/CuaSo_BoMe_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_1
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_3
+── Tang_2/PhongBoMe/CuaSo_BoMe_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_2
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_5
+── Tang_2/PhongBoMe/CuaSo_BoMe_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 14 cm: Tang_2/VoNha/Kinh_T2_1
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/MatTien_T2_0
+── Tang_2/PhongBoMe/CuaWC_BoMe (mở)  «cửa WC» goc 90 dựng mở
+   ✗ quét xuyên 5 cm: Tang_2/PhongBoMe/KhungCuaWC_BoMe/CuaWC_Khung/CuaWC_Khung
+── Tang_2/PhongBoMe/KetSat_Dung/KetSat_Canh  «cửa két sắt» goc -90 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/KetSat_Dung/KetSat_HongA  cỡ 0,04×0,62×0,45
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/KetSat_Dung/KetSat_HongB  cỡ 0,04×0,62×0,45
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/KetSat_Dung/KetSat_Ke  cỡ 0,42×0,02×0,40
+── Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/Canh_1  «cửa tủ đầu giường» goc 100 dựng đóng
+   ⚠ [dựng] XUYÊN 3,0 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong  cỡ 0,45×0,50×0,42
+   ⚠ [dựng] XUYÊN 1,4 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/HocTu  cỡ 0,40×0,36×0,36
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/DoTu_TrongTu/so_bo  cỡ 0,16×0,02×0,12
+── Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/Canh_1  «cửa tủ đầu giường» goc 100 dựng đóng
+   ⚠ [dựng] XUYÊN 1,4 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/HocTu  cỡ 0,40×0,36×0,36
+   ⚠ [dựng] XUYÊN 3,0 cm: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong  cỡ 0,45×0,50×0,42
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuDauGiuong/TuDauGiuong/DoTu_TrongTu/so_chi_tieu  cỡ 0,15×0,01×0,12
+── Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/Canh_1  «cửa tủ quần áo» goc 100 dựng đóng
+   OK
+── Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/Canh_2  «cửa tủ quần áo» goc -100 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/DoTu_TrongTu/ao_treo/tay_ao  cỡ 0,02×0,44×0,08
+   ⚠ [dựng] sát mặt: Tang_2/PhongBoMe/TuQuanAo_GamHo/TuQuanAo_GamHo/DoTu_TrongTu/ao_treo/tay_ao  cỡ 0,04×0,56×0,08
+── Tang_2/PhongKhoi/BanHoc_Khoi_Bo/BanHoc_Khoi/BanHoc_Khoi/Canh_1  «ngăn kéo» goc 90 dựng đóng trượt
+   OK
+── Tang_2/PhongKhoi/CuaKhoi (mở)  «cửa phòng Khôi» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_2/VoNha/HanhLang_Phai_6
+── Tang_2/PhongKhoi/CuaSo_Khoi_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/T2_GiengTroi_6
+── Tang_2/PhongKhoi/CuaSo_Khoi_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_1/VoNha/Kinh_GiengTroi
+   ✗ quét xuyên 3 cm: Tang_1/VoNha/T2_GiengTroi_9
+── Tang_2/PhongKhoi/TuAo_Khoi_Go/CanhTuKhoi_Phai  «cửa tủ áo» goc 95 dựng đóng
+   ⚠ [dựng] sát mặt: Tang_2/PhongKhoi/TuAo_Khoi_Go/dot  cỡ 0,42×0,02×0,51
+   ⚠ [dựng] sát mặt: Tang_2/PhongKhoi/TuAo_Khoi_Go/dot  cỡ 0,42×0,02×0,51
+   ⚠ [dựng] sát mặt: Tang_2/PhongKhoi/TuAo_Khoi_Go/dot  cỡ 0,42×0,02×0,51
+── Tang_2/PhongKhoi/TuAo_Khoi_Go/CanhTuKhoi_Trai  «cửa tủ áo» goc -88 dựng đóng
+   OK
+── Tang_2/PhongNhim/CuaPhongNhim_FullAssembly/CanhCua  «cửa phòng Nhím» goc 80 dựng mở
+   OK
+── Tang_2/PhongNhim/TuNhua_Nhim/TuNhua_Nhim/Canh_1  «cửa tủ nhựa» goc 100 dựng đóng
+   ⚠ [dựng] XUYÊN 0,9 cm: Tang_2/PhongNhim/TuNhua_Nhim/TuNhua_Nhim/HocTu  cỡ 0,37×0,40×0,41
+── Tang_2/SanhHanhLang/TuDung_RuongChanMan/TuDung_RuongChanMan/Canh_1  «cửa tủ đứng» goc 100 dựng đóng
+   OK
+── Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/Canh_1  «cửa tủ» goc 100 dựng đóng
+   OK
+── Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/Canh_2  «cửa tủ» goc -100 dựng đóng
+   OK
+── Tang_3/PhongTho/BanThoGiaTien_Set/BanThoGiaTien/Canh_1  «cửa tủ thờ» goc 100 dựng đóng
+   OK
+── Tang_3/PhongTho/BanThoGiaTien_Set/BanThoGiaTien/Canh_2  «cửa tủ thờ» goc -100 dựng đóng
+   OK
+── Tang_3/PhongTho/CuaSanPhoi/CuaSanPhoi_Canh  «cửa ra sân phơi» goc -100 dựng đóng
+   OK
+── Tang_3/PhongTho/CuaSo_Khoi_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_2
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_8
+── Tang_3/PhongTho/CuaSo_Khoi_Phai  «cửa sổ» goc -90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_1
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_3
+── Tang_3/PhongTho/CuaSo_Khoi_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_1
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_0
+── Tang_3/PhongTho/CuaSo_Khoi_Trai  «cửa sổ» goc 90 dựng đóng
+   ✗ quét xuyên 8 cm: Tang_3/VoNha/Kinh_PhongTho_2
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/SanPhoi_PhongTho_5
+── Tang_3/PhongTho/TuDoTho_Fix/TuDoTho_Fix/Canh_1  «cửa tủ đồ thờ» goc 100 dựng đóng
+   OK
+── Tang_3/PhongTho/TuDoTho_Fix/TuDoTho_Fix/Canh_2  «cửa tủ đồ thờ» goc -100 dựng đóng
+   OK
+── Tang_3/VoNha/CuaPhongTho (mở)  «cửa phòng thờ» goc 90 dựng mở
+   ✗ quét xuyên 3 cm: Tang_3/VoNha/PhongTho_Sanh_2
+── Tiem/BanHang/TuKinh/Canh_1  «kính tủ» goc 90 dựng đóng trượt
+   ⚠ [còn lại] sát mặt: Tiem/BanHang/TuKinh/TuKinh/VetTay_Kinh  cỡ 0,00×0,34×0,50
+── Tiem/BanHang/TuKinh/Canh_2  «kính tủ» goc 90 dựng đóng trượt
+   OK
+── Tiem/VoNha/CuaNgach_Tiem (mở)  «cửa ngách tiệm» goc -90 dựng mở
+   ✗ quét xuyên 3 cm: Tiem/VoNha/Tiem_TuongPhai_3
+

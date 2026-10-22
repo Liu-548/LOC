@@ -17,7 +17,7 @@ public class LocNhim : MonoBehaviour
     public static bool daHoangLoan, dangCanh;
     public static System.Action SauGood, SauBad;   // cảnh kết của hệ thống cốt truyện nối tiếp ở đây
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void Reset0() { daTham = new bool[4]; daThayKhan = new bool[4]; daQuayLai = new bool[4]; daHoangLoan = dangCanh = false; SauGood = SauBad = null; }
+    public static void Reset0() { daTham = new bool[4]; daThayKhan = new bool[4]; daQuayLai = new bool[4]; daHoangLoan = dangCanh = false; SauGood = SauBad = null; }
 
     [Header("Model (LocHouseBuilder_Nhim gán)")]
     public Animator anim;
@@ -400,7 +400,7 @@ public class LocNhim : MonoBehaviour
         yield return Den(0.8f, 0);
         yield return new WaitForSeconds(0.6f);
         yield return Noi("NHÍM", "Anh Khôi ơi!", 1.2f, 3.5f);
-        SauGood?.Invoke();   // điện thoại reo… (cảnh kết)
+        LocMenu.DatKet("good"); SauGood?.Invoke();   // điện thoại reo… (cảnh kết)
         yield return new WaitForSeconds(2f);
         yield return Den(0.8f, 1); yield return new WaitForSeconds(1f);
         TatCanh(true);
@@ -448,6 +448,7 @@ public class LocNhim : MonoBehaviour
         yield return new WaitForSeconds(0.08f);
         if (denNgu) denNgu.enabled = false; yield return new WaitForSeconds(0.1f); if (denNgu) denNgu.enabled = true;
         yield return new WaitForSeconds(2.4f);
+        LocMenu.DatKet("bad"); yield return null;   // [22/10] chụp khung em đứng góc tường trước khi tắt
         LocFirstPerson.den = 1;
         SauBad?.Invoke();    // → cảnh hầm: chén số 5 vỡ (hệ thống kết)
         yield return new WaitForSeconds(1.5f);
@@ -463,6 +464,7 @@ public class LocNhim : MonoBehaviour
     public void GoiTuTrenGac() { StartCoroutine(Evil()); }
     IEnumerator Evil()
     {
+        LocMenu.DatKet("evil");
         LocFirstPerson.PhuDe("NHÍM: Anh Khôi ơi...", 2.6f, false); yield return new WaitForSeconds(6f);
         LocFirstPerson.PhuDe("NHÍM: Anh Khôi ơi...", 2.6f, false);
     }
@@ -495,7 +497,7 @@ public class LocNhim : MonoBehaviour
     void Bao(string s) { dbg = s; dbgHet = Time.time + 3f; }
     void OnGUI()
     {
-        if (!hienDebug) return;
+        if (!hienDebug || LocMenu.DangChe) return;
         var st = new GUIStyle(GUI.skin.label) { fontSize = 13 }; st.normal.textColor = new Color(1, 1, 1, 0.55f);
         int d = Mathf.Clamp(LocMa.dem, 1, 3);
         string s = $"[thử Nhím] F7 thăm · F8 nửa tỉnh · F9 Good · F10 Bad · F11 hoảng loạn · F12 Evil · đã thăm Đ{d}: {(daTham[d] ? "rồi" : "chưa")}";

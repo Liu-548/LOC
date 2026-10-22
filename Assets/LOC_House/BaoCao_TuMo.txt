@@ -56,3 +56,17 @@ TỦ MỞ ĐƯỢC (LocTuMo)
    cánh 1 (NganKeo) ngăn kéo: goc 90°, trượt (0.00, 0.00, 0.30)
 ── BanGiay_Go: lật X có (24/0 tam giác)
    cánh 1 (NganKeo) ngăn kéo: goc 90°, trượt (0.00, 0.00, 0.26)
+
+[23/10] ĐỒ TRONG TỦ THÒ QUA CÁNH ĐÓNG → LÙI VÀO:
+  TuLanh_Bo/rau_muong: lùi 0,0 cm vào lòng tủ (cánh Canh_1)
+  TuLanh_Bo/rau_muong: lùi 0,0 cm vào lòng tủ (cánh Canh_1)
+  TuLanh_Bo/rau_muong: lùi 0,0 cm vào lòng tủ (cánh Canh_1)
+  TuQuanAo_GamHo/ao_treo: lùi 0,1 cm vào lòng tủ (cánh Canh_2)
+  TuDauGiuong/so_bo: lùi 3,1 cm vào lòng tủ (cánh Canh_1)
+  TuDauGiuong/so_chi_tieu: lùi 4,8 cm vào lòng tủ (cánh Canh_1)
+
+[23/10] LỚP MỎNG TRÊN MẶT CÁNH → GẮN VÀO CÁNH:
+  TuKinh/kinh_truoc_phai → con của cánh Canh_1
+  TuKinh/VetTay_Kinh_2 → con của cánh Canh_1
+  TuKinh/NhanGiay_HangDat → con của cánh Canh_1
+  TuKinh/kinh_truoc_trai → con của cánh Canh_2
