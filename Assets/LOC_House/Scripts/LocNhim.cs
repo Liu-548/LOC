@@ -49,6 +49,7 @@ public class LocNhim : MonoBehaviour
     int demDangAp = -1;
     bool thuc, dangThoai, trongPhong, choThay, chauKhoDangDung;
     float nhinW, chopHet, tiepChop = 2f, noiHet, hTro, hHo;
+    float nghiHet, tiepNghi = 8f; bool nam = true;   // [22/10] thỉnh thoảng nhắm mắt nghỉ (chỉ khi nằm)
     float bsNham, bsHe, bsMieng, bsCuoi, bsNhau, bsChat;   // giá trị hiện tại
     float tNham, tHe, tCuoi, tNhau, tChat;                 // mục tiêu
     Vector3 faceLocal, eyeLocalL, eyeLocalR;
@@ -92,7 +93,7 @@ public class LocNhim : MonoBehaviour
 
     // ───────── chỗ đặt + trạng thái theo đêm
     void Dat(Vector3 p, float yaw) { transform.SetPositionAndRotation(p, Quaternion.Euler(0, yaw, 0)); }
-    void Clip(string ten, float fade = 0.35f, float toc = 1f) { if (!anim) return; anim.speed = toc; anim.CrossFadeInFixedTime(ten, fade); }
+    void Clip(string ten, float fade = 0.35f, float toc = 1f) { nam = ten.StartsWith("Nam_"); if (!anim) return; anim.speed = toc; anim.CrossFadeInFixedTime(ten, fade); }
     int Muc => Mathf.Clamp(LocMa.dem, 1, 3);
     float TocTho => nhipDem[Muc] / nhipGoc;
 
@@ -158,10 +159,27 @@ public class LocNhim : MonoBehaviour
     {
         float dt = Time.deltaTime;
         // chớp mắt khi thức
-        float chop = 0;
-        if (thuc) { if (Time.time > tiepChop) { chopHet = Time.time + 0.13f; tiepChop = Time.time + Random.Range(2f, 6f); } if (Time.time < chopHet) chop = 100; }
+        // [22/10] chớp thưa hơn (đang sốt, mệt) + thỉnh thoảng nhắm mắt nghỉ vài giây; sốt càng nặng càng nhắm lâu, nhắm nhiều.
+        // Không nhắm nghỉ khi em đang nói hay ngồi (cảnh Good).
+        float chop = 0, nghi = 0;
+        bool emNoi = Time.time < noiHet;
+        if (thuc)
+        {
+            if (emNoi || !nam) { nghiHet = Mathf.Min(nghiHet, Time.time); tiepNghi = Mathf.Max(tiepNghi, Time.time + 4f); }
+            else if (Time.time > tiepNghi)
+            {
+                nghiHet = Time.time + Random.Range(1.5f, 2.8f) + 0.8f * (Muc - 1);
+                tiepNghi = nghiHet + Random.Range(10f, 18f) - 2.5f * (Muc - 1);
+                tiepChop = nghiHet + Random.Range(1.5f, 3f);
+            }
+            if (Time.time < nghiHet) nghi = 100;
+            else if (Time.time > tiepChop) { chopHet = Time.time + 0.15f; tiepChop = Time.time + Random.Range(3f, 7f); }
+            if (Time.time < chopHet) chop = 100;
+        }
         float k = 1 - Mathf.Exp(-9f * dt);
-        bsNham = Mathf.Lerp(bsNham, Mathf.Max(tNham, chop), chop > 0 ? 1 : k * 0.6f);
+        // chớp: sập ngay; nhắm nghỉ: khép từ từ (~0,4 s); mở lại: chậm như người mệt
+        float tocNham = chop > 0 ? 1 : nghi > bsNham ? 1 - Mathf.Exp(-5f * dt) : bsNham > tNham + 1 && Time.time < nghiHet + 1.5f ? 1 - Mathf.Exp(-3f * dt) : k * 0.6f;
+        bsNham = Mathf.Lerp(bsNham, Mathf.Max(tNham, chop, nghi), tocNham);
         bsHe = Mathf.Lerp(bsHe, tHe, k); bsCuoi = Mathf.Lerp(bsCuoi, tCuoi, k); bsNhau = Mathf.Lerp(bsNhau, tNhau, k); bsChat = Mathf.Lerp(bsChat, tChat, k);
         float mieng = Time.time < noiHet ? 14f + 22f * Mathf.Abs(Mathf.Sin(Time.time * 10.5f)) * Mathf.PerlinNoise(Time.time * 3f, 0.3f) : 0f;
         bsMieng = Mathf.Lerp(bsMieng, mieng, 1 - Mathf.Exp(-20f * dt));

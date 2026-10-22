@@ -103,7 +103,7 @@ public class LocNhimImport : AssetPostprocessor
     {
         var da = Mat("M_Nhim_Da", "T_Nhim_Da_1", 0.38f);
         var mat = Mat("M_Nhim_Mat", "T_Nhim_Mat_1", 0.85f);
-        var rang = Mat("M_Nhim_Rang", null, 0.4f, mau: new Color(0.80f, 0.74f, 0.68f));
+        var rang = Mat("M_Nhim_Rang", null, 0.4f, mau: new Color(0.30f, 0.13f, 0.12f));   // [22/10] lòng miệng tối (trước là màu răng → hé miệng thấy trắng toát)
         var toc = Mat("M_Nhim_Toc", "T_Nhim_Toc", 0.18f, true, true);
         var ao = Mat("M_Nhim_Ao", "T_Nhim_Ao", 0.05f, true);
         var bot = Mat("M_Nhim_Bot", "T_Nhim_Bot", 0.1f, true);
