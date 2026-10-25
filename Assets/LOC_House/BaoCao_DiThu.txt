@@ -1,0 +1,25 @@
+ĐI THỬ CẦU THANG (CharacterController cao 1,65 · R 0,25 · step 0,3 · slope 45)
+
+== Nap
+  LÊN : OK tới (x 2.52, y 0.98, z 4.12)
+  XUỐNG: OK tới (x 5.08, y 0.98, z 4.12)
+
+== Thang_T1_Ve1
+  LÊN : OK tới (x 1.45, y 1.82, z 10.39)
+  XUỐNG: OK tới (x 1.45, y 0.02, z 7.07)
+
+== Thang_T1_Ve2
+  LÊN : OK tới (x 0.45, y 3.62, z 7.07)
+  XUỐNG: OK tới (x 0.45, y 1.82, z 10.39)
+
+== Thang_T2_Ve1
+  LÊN : OK tới (x 1.45, y 5.32, z 10.15)
+  XUỐNG: OK tới (x 1.45, y 3.62, z 7.06)
+
+== Thang_T2_Ve2
+  LÊN : OK tới (x 0.45, y 7.02, z 7.06)
+  XUỐNG: OK tới (x 0.45, y 5.32, z 10.15)
+
+== ThangHam
+  LÊN : OK tới (x -0.85, y -2.28, z 14.54)
+  XUỐNG: OK tới (x -0.85, y 0.02, z 18.05)

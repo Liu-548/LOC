@@ -1,0 +1,67 @@
+KIỂM TRA LỐI ĐI CẦU THANG (capsule R=0,25 · cao 1,65)
+
+== Nap  (2 bậc)
+  ✗ chân thang −0,4 m (x 4.82 · y 0.00 · z 4.12) bị chắn bởi: Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Than_Hom  [MeshCollider]
+  ✗ chân thang −0,4 m (x 4.82 · y 0.00 · z 4.12) bị chắn bởi: Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/De_Chan  [MeshCollider]
+  ✗ chân thang −0,4 m (x 4.82 · y 0.00 · z 4.12) bị chắn bởi: Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Diem_Tua_04  [MeshCollider]
+  ✗ chân thang −0,4 m (x 4.82 · y 0.00 · z 4.12) bị chắn bởi: Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Nap_Song  [MeshCollider]
+  ✗ chân thang −0,4 m (x 4.82 · y 0.00 · z 4.12) bị chắn bởi: Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Chi_Hong_A  [MeshCollider]
+  ✗ chân thang −0,4 m (x 4.82 · y 0.00 · z 4.12) bị chắn bởi: Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Nap_Vanh  [MeshCollider]
+  ✗ bậc 02 (x 4.42 · y 1.17 · z 4.12) bị chắn bởi: Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Nap_Song  [MeshCollider]
+  ✗ bậc 02 (x 3.18 · y 1.17 · z 4.12) bị chắn bởi: Tang_1/PhongKhach/QuanTai_LOC/QuanTai_A/Nap_Song  [MeshCollider]
+
+== Thang_T1_Ve1  (9 bậc)
+  ✗ bậc 09 (x 1.45 · y 1.62 · z 9.73) bị chắn bởi: NhaLoc/Tang_1/VoNha/San  [BoxCollider]
+  ✗ đỉnh thang +0,4 m (x 1.45 · y 1.62 · z 10.23) bị chắn bởi: NhaLoc/Tang_1/VoNha/San  [BoxCollider]
+  ✗ đỉnh thang +0,9 m (x 1.45 · y 1.62 · z 10.73) bị chắn bởi: NhaLoc/Tang_1/VoNha/SanhSau_Bep_0  [BoxCollider]
+  ✗ đỉnh thang +0,9 m (x 1.45 · y 1.62 · z 10.73) bị chắn bởi: NhaLoc/Tang_1/VoNha/San  [BoxCollider]
+
+== Thang_T1_Ve2  (9 bậc)
+  ✗ bậc 09 (x 0.45 · y 3.42 · z 7.73) bị chắn bởi: NhaLoc/Tang_2/VoNha/San  [BoxCollider]
+  ✗ đỉnh thang +0,4 m (x 0.45 · y 3.42 · z 7.23) bị chắn bởi: NhaLoc/Tang_2/VoNha/San  [BoxCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 3.42 · z 6.73) bị chắn bởi: NhaLoc/Tang_2/SanhHanhLang/ChauLuoiHo/ChauLuoiHo  [MeshCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 3.42 · z 6.73) bị chắn bởi: SanhHanhLang/TuThap_Sanh/TuThap_Sanh/DoTu_TrongTu/mui_giay  [MeshCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 3.42 · z 6.73) bị chắn bởi: Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/Canh_2  [BoxCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 3.42 · z 6.73) bị chắn bởi: SanhHanhLang/TuThap_Sanh/TuThap_Sanh/DoTu_TrongTu/de_giay  [MeshCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 3.42 · z 6.73) bị chắn bởi: SanhHanhLang/TuThap_Sanh/TuThap_Sanh/Canh_2/BanCanh  [MeshCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 3.42 · z 6.73) bị chắn bởi: Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/DotTu  [MeshCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 3.42 · z 6.73) bị chắn bởi: Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/HocTu  [MeshCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 3.42 · z 6.73) bị chắn bởi: NhaLoc/Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh  [MeshCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 3.42 · z 6.73) bị chắn bởi: NhaLoc/Tang_2/VoNha/San  [BoxCollider]
+
+== Thang_T2_Ve1  (8 bậc)
+  ✗ bậc 08 (x 1.45 · y 5.11 · z 9.48) bị chắn bởi: NhaLoc/Tang_2/VoNha/San  [BoxCollider]
+  ✗ đỉnh thang +0,4 m (x 1.45 · y 5.11 · z 9.98) bị chắn bởi: NhaLoc/Tang_2/VoNha/San  [BoxCollider]
+  ✗ đỉnh thang +0,9 m (x 1.45 · y 5.11 · z 10.48) bị chắn bởi: NhaLoc/Tang_2/VoNha/San  [BoxCollider]
+
+== Thang_T2_Ve2  (8 bậc)
+  ✗ bậc 08 (x 0.45 · y 6.81 · z 7.73) bị chắn bởi: NhaLoc/Tang_3/VoNha/San  [BoxCollider]
+  ✗ đỉnh thang +0,4 m (x 0.45 · y 6.81 · z 7.23) bị chắn bởi: NhaLoc/Tang_3/VoNha/San  [BoxCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 6.81 · z 6.73) bị chắn bởi: NhaLoc/Tang_3/VoNha/PhongTho_Sanh_0  [BoxCollider]
+  ✗ đỉnh thang +0,9 m (x 0.45 · y 6.81 · z 6.73) bị chắn bởi: NhaLoc/Tang_3/VoNha/San  [BoxCollider]
+
+== ThangHam  (11 bậc)
+  ✗ bậc 01 (x -0.85 · y -0.19 · z 17.39) bị chắn bởi: NhaLoc/Tiem/VoNha/San  [BoxCollider]
+
+== TỔNG HỢP vật chắn (tên · số điểm bị chắn)
+    6 × NhaLoc/Tang_2/VoNha/San
+    3 × NhaLoc/Tang_1/VoNha/San
+    3 × NhaLoc/Tang_3/VoNha/San
+    2 × Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Nap_Song
+    1 × Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Than_Hom
+    1 × Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/De_Chan
+    1 × Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Diem_Tua_04
+    1 × Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Chi_Hong_A
+    1 × Tang_1/PhongKhach/QuanTai_LOC/QuanTai_B/Nap_Vanh
+    1 × Tang_1/PhongKhach/QuanTai_LOC/QuanTai_A/Nap_Song
+    1 × NhaLoc/Tang_1/VoNha/SanhSau_Bep_0
+    1 × NhaLoc/Tang_2/SanhHanhLang/ChauLuoiHo/ChauLuoiHo
+    1 × SanhHanhLang/TuThap_Sanh/TuThap_Sanh/DoTu_TrongTu/mui_giay
+    1 × Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/Canh_2
+    1 × SanhHanhLang/TuThap_Sanh/TuThap_Sanh/DoTu_TrongTu/de_giay
+    1 × SanhHanhLang/TuThap_Sanh/TuThap_Sanh/Canh_2/BanCanh
+    1 × Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/DotTu
+    1 × Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh/HocTu
+    1 × NhaLoc/Tang_2/SanhHanhLang/TuThap_Sanh/TuThap_Sanh
+    1 × NhaLoc/Tang_3/VoNha/PhongTho_Sanh_0
+    1 × NhaLoc/Tiem/VoNha/San
