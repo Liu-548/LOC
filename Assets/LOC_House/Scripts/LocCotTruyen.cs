@@ -69,12 +69,13 @@ public class LocCotTruyen : MonoBehaviour
         int d = LocMa.dem;
         LocMenu.DauDem(d);   // [22/10] tự lưu + thẻ đêm
         if (fp) { if (d <= 1) fp.DatTuThe(dem1Dung, dem1Nhin); else fp.DatTuThe(demSauDung, demSauNhin); }
+        if (d == 1 && LocXeBuyt.choChay && LocXeBuyt.I && fp) StartCoroutine(LocXeBuyt.I.Chay(fp));   // [25/10] mở đầu trên xe buýt → xuống xe đúng chỗ dem1Dung
         if (d == 1 && !LocTui.Co("d1_mo_dau")) StartCoroutine(SauKhiSang("d1_mo_dau", 1.5f, "Hai năm rồi mới về.", "Hồi đó nói được câu tử tế thì đã không đến nỗi.", "Ai ngờ gặp lại kiểu này."));
         if (d == 2 && !LocTui.Co("d2_mo_dau")) StartCoroutine(SauKhiSang("d2_mo_dau", 1.0f, "Chắc giờ này chẳng còn ai nữa.", "Xem con bé thế nào đã."));
     }
     IEnumerator SauKhiSang(string co, float cho, params string[] dong)
     {
-        while (LocFirstPerson.den > 0 || LocMenu.DangChe) yield return null;
+        while (LocFirstPerson.den > 0 || LocMenu.DangChe || LocXeBuyt.dangChay) yield return null;
         yield return new WaitForSeconds(cho);
         LocTui.Dat(co); LocTui.Noi(dong);
     }

@@ -105,6 +105,7 @@ public class LocMenu : MonoBehaviour
     static void Vao(int d, string[] ids, string[] co)
     {
         ResetTatCa(); LocMa.VaoDem(d);
+        LocXeBuyt.choChay = d == 1 && ids == null;   // [25/10] vào Đêm 1 từ đầu → cảnh xe buýt mở đầu
         if (ids == null && d >= 2)   // chọn đêm để thử: coi như đã chơi xong các đêm trước theo đường chính
         {
             var i = new List<string> { "chia_ham", "so_cua_bo" };
@@ -159,7 +160,7 @@ public class LocMenu : MonoBehaviour
     {
         I = this;
 #if UNITY_EDITOR
-        foreach (var k in new[] { "LOC_TuKiemGamePlay", "LOC_TuKiemNhim", "LOC_TuKiemMa", "LOC_ThuCauThang", "LOC_ChanDoanNhay" })
+        foreach (var k in new[] { "LOC_TuKiemGamePlay", "LOC_TuKiemNhim", "LOC_TuKiemMa", "LOC_ThuCauThang", "LOC_ChanDoanNhay", "LOC_ThuXeBuyt" })
             if (UnityEditor.EditorPrefs.GetBool(k, false)) tat = true;
 #endif
         if (tat) { enabled = false; return; }
