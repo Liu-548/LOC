@@ -422,7 +422,7 @@ public static partial class LocKhuPho
     // ═════════════════════════ cột điện, dây, đèn đường
     static void CotDien()
     {
-        var b = new MB(Matrix4x4.identity, new System.Random(3));
+        var b = new MB(Matrix4x4.identity, new System.Random(3)) { coDay = true };
         var bt = Mat("BeTongCot", "T_preconcrete_wall_001.jpg", 2.5f, 2.5f, "#7C7A74");
         var sat = Mat("Sat", null, 1, 1, "#22201E");
         var day = Mat("Day", null, 1, 1, "#0C0C0C", 0f, 0f);
@@ -460,7 +460,7 @@ public static partial class LocKhuPho
         foreach (var x in new[] { xs[0], xs[3], xs[4], xs[6], xs[8] })   // đèn yếu ở các cột còn lại
             DenPho(x, z - 1.55f, "#FFB868", 9f, 1.0f);
         // ba cột đèn riêng bên vỉa hè đối diện, đèn yếu rọi lên mặt tiền dãy đối diện
-        var b2 = new MB(Matrix4x4.identity, new System.Random(4));
+        var b2 = new MB(Matrix4x4.identity, new System.Random(4)) { coDay = true };
         foreach (var x in new[] { -34f, -22f, -8f, 4f, 15f, 26f, 38f, 52f, 66f, 80f, 94f, 108f, 122f, 136f })
         {
             const float zc = -13.2f;
@@ -550,6 +550,7 @@ public static partial class LocKhuPho
         readonly Dictionary<Material, Sub> subs = new();
         readonly Matrix4x4 xf;
         readonly Vector2 off;
+        public bool coDay;   // [25/10] cũng dựng mặt đáy — cho đồ nhìn từ dưới lên (trong xe buýt, đầu đèn đường)
 
         public MB(Matrix4x4 xf, System.Random r) { this.xf = xf; off = new Vector2(r.Next(100) * 0.37f, r.Next(100) * 0.53f); }
 
@@ -566,7 +567,7 @@ public static partial class LocKhuPho
             for (int ax = 0; ax < 3; ax++)
             for (int sg = -1; sg <= 1; sg += 2)
             {
-                if (ax == 1 && sg < 0 && !bottom) continue;
+                if (ax == 1 && sg < 0 && !bottom && !coDay) continue;
                 int a1 = ax == 0 ? 2 : 0, a2 = ax == 1 ? 2 : 1;
                 var nl = Vector3.zero; nl[ax] = sg;
                 var q = new Vector3[4]; var uv = new Vector2[4];

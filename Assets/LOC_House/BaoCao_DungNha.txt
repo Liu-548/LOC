@@ -1,4 +1,4 @@
-BÁO CÁO DỰNG NHÀ LỘC — 25/10/2026 14:57
+BÁO CÁO DỰNG NHÀ LỘC — 25/10/2026 15:29
 Scene: Assets/Scenes/LOC_NhaLoc.unity
 
 ASSET ĐÃ ĐẶT (385):

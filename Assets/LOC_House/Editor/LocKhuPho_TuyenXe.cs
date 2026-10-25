@@ -118,7 +118,7 @@ public static partial class LocKhuPho
         b.Commit(grp, "Song", default, false);
 
         // bảng "CẤM TẮM" + cột đèn bến — đèn vàng yếu, mặt nước hắt lại
-        var bb = new MB(Matrix4x4.identity, new System.Random(12));
+        var bb = new MB(Matrix4x4.identity, new System.Random(12)) { coDay = true };
         var trang = Mat("BangTrang", null, 1, 1, "#BDB6A6", 0.05f, 0.2f);
         bb.Box(sat, 145.05f, 145.1f, -0.15f, 1.55f, ZBen + 2.6f, ZBen + 2.65f);
         bb.Box(sat, 145.05f, 145.1f, -0.15f, 1.55f, ZBen + 3.55f, ZBen + 3.6f);
@@ -136,6 +136,7 @@ public static partial class LocKhuPho
         HangZ("BoKia", ZSong0 + 4f, ZSong1 - 4f, 26f, false, 9f, 1, 2, Kieu.Xa, 5f, 9f);
     }
 
+    static readonly List<float> zCotDong = new();   // XeMayVaQuan né các cột này
     static void CayVaDen()
     {
         var than = Mat("ThanCay", null, 1, 1, "#3B342C", 0.03f, 0.1f);
@@ -146,8 +147,9 @@ public static partial class LocKhuPho
         // bạch đàn dọc kè (tây) và cây bàng thưa bên đông, đoạn ven sông
         for (float z = ZSong0 + 4f; z < ZSong1 - 3f; z += 8.5f + (float)r.NextDouble() * 3f)
             if (Mathf.Abs(z - ZBen) > 4f && Mathf.Abs(z - ZBen - 3f) > 2f && Mathf.Abs(Mathf.Repeat(z - ZSong0 - 14f + 20f, 40f) - 20f) > 2.2f) Cay(b, than, la, new Vector3(145.55f, -0.15f, z), 0, r);
+        var cayDong = new List<float>();
         for (float z = ZSong0 + 9f; z < ZSong1 - 3f; z += 13f + (float)r.NextDouble() * 6f)
-            Cay(b, than, la2, new Vector3(154.4f, -0.15f, z), 1, r);
+        { Cay(b, than, la2, new Vector3(154.4f, -0.15f, z), 1, r); cayDong.Add(z); }
         for (float z = ZSong0 + 6f; z < ZSong1; z += 7f + (float)r.NextDouble() * 5f)   // bờ bên kia
             Cay(b, than, r.NextDouble() < 0.5 ? la : la2, new Vector3(29f + (float)r.NextDouble() * 2f, 0f, z), r.Next(2), r);
         b.Commit(grp, "Cay_TuyenXe", default, false);
@@ -156,7 +158,7 @@ public static partial class LocKhuPho
         var bt = Mat("BeTongCot", "T_preconcrete_wall_001.jpg", 2.5f, 2.5f, "#7C7A74");
         var sat = Mat("Sat", null, 1, 1, "#22201E");
         var den = Mat("DenPho", null, 1, 1, "#000000", 0f, 0f, false, new Color(1.0f, 0.62f, 0.28f) * 1.4f);
-        var b2 = new MB(Matrix4x4.identity, new System.Random(32));
+        var b2 = new MB(Matrix4x4.identity, new System.Random(32)) { coDay = true };
         void Cot(float z, float cuong, float tam)
         {
             b2.Box(bt, 145.4f, 145.64f, -0.15f, 8.2f, z - 0.12f, z + 0.12f);
@@ -167,6 +169,22 @@ public static partial class LocKhuPho
         for (float z = 4f; z < 50f; z += 24f) Cot(z, 1.6f, 12f);
         for (float z = ZSong0 + 14f; z < ZSong1; z += 40f) Cot(z, 0.9f, 10f);
         for (float z = 222f; z < 412f; z += 26f) Cot(z, 1.7f, 12f);
+        var vatDong = new List<(float, float)> { (238f, 4.5f) };   // quán trà đá đông
+        foreach (var zc in cayDong) vatDong.Add((zc, 3f));
+        zCotDong.Clear();
+        // [25/10] hàng cột đèn vỉa hè đông, tay đèn vươn ra đường, so le nửa nhịp với hàng tây; né gốc cây bàng
+        void CotDong(float z, float cuong, float tam)
+        {
+            foreach (var (zc, rc) in vatDong) if (Mathf.Abs(z - zc) < rc) z = zc + (z < zc ? -rc : rc);
+            zCotDong.Add(z);
+            b2.Box(bt, 154.36f, 154.6f, -0.15f, 8.2f, z - 0.12f, z + 0.12f);
+            b2.Box(sat, 152.8f, 154.5f, 7.3f, 7.36f, z - 0.03f, z + 0.03f);
+            b2.Box(den, 152.6f, 153.1f, 7.12f, 7.28f, z - 0.18f, z + 0.18f);
+            DenPho(152.85f, z, "#FFB060", tam, cuong, 7.0f);
+        }
+        for (float z = 16f; z < 50f; z += 24f) CotDong(z, 1.6f, 12f);
+        for (float z = ZSong0 + 34f; z < ZSong1; z += 40f) CotDong(z, 0.9f, 10f);
+        for (float z = 235f; z < 412f; z += 26f) CotDong(z, 1.7f, 12f);
         b2.Commit(grp, "CotDen_DuongNgang", default, false);
     }
 
@@ -197,6 +215,7 @@ public static partial class LocKhuPho
         for (float z = 2f; z < 50f; z += 9f + (float)r.NextDouble() * 9f) cho.Add((new Vector3(145.7f, -0.15f, z), 75f + (float)r.NextDouble() * 30f));
         for (float x = 62f; x < 140f; x += 10f + (float)r.NextDouble() * 14f) cho.Add((new Vector3(x, -0.15f, -6.0f), 170f + (float)r.NextDouble() * 20f));
         for (float x = 64f; x < 150f; x += 12f + (float)r.NextDouble() * 14f) cho.Add((new Vector3(x, -0.15f, -13.4f), -10f + (float)r.NextDouble() * 20f));
+        cho.RemoveAll(c => c.p.x > 150f && zCotDong.Exists(z => Mathf.Abs(z - c.p.z) < 1.3f));   // không dựng xe máy vào cột đèn đông
         foreach (var (p, yaw) in cho) XeMay(b, p, yaw, r);
         foreach (var (p, yaw) in new[] { (new Vector3(145.6f, -0.15f, 258f), 90f), (new Vector3(154.4f, -0.15f, 238f), -90f), (new Vector3(88f, -0.15f, -6.3f), 180f) })
         {
@@ -331,7 +350,7 @@ public static partial class LocKhuPho
         var pha = Mat("XB_DenPha", null, 1, 1, "#000000", 0f, 0f, false, new Color(1f, 0.9f, 0.7f) * 2f);
         var hau = Mat("XB_DenHau", null, 1, 1, "#000000", 0f, 0f, false, new Color(0.9f, 0.08f, 0.05f) * 1.4f);
         var kinh = KinhXe();
-        var b = new MB(Matrix4x4.identity, new System.Random(2002));
+        var b = new MB(Matrix4x4.identity, new System.Random(2002)) { coDay = true };   // [25/10] ngồi trong xe nhìn lên: phải có mặt đáy trần/nóc
 
         // ── gầm, bánh
         b.Box(den, -1.1f, 1.1f, 0.30f, 0.62f, -4.3f, 4.3f);
@@ -480,7 +499,7 @@ public static partial class LocKhuPho
         {
             var p = new Vector3(1.17f, 0.30f, zBanLe);
             var g = new GameObject(ten).transform; g.SetParent(xe, false); g.localPosition = p;
-            var bc = new MB(Matrix4x4.Translate(-p), new System.Random(3));
+            var bc = new MB(Matrix4x4.Translate(-p), new System.Random(3)) { coDay = true };
             float z0 = Mathf.Min(zBanLe, zXa), z1 = Mathf.Max(zBanLe, zXa);
             bc.Box(cot, 1.155f, 1.185f, 0.30f, 1.35f, z0, z1);
             bc.Box(soc, 1.185f, 1.19f, 1.0f, 1.12f, z0, z1);
@@ -494,7 +513,7 @@ public static partial class LocKhuPho
         var canhTruoc = Canh("CanhCua_Truoc", 0.6f, 0.0f);
         var canhSau = Canh("CanhCua_Sau", -0.6f, 0.0f);
         // cửa trước (đóng, không mở)
-        var bf = new MB(Matrix4x4.identity, new System.Random(4));
+        var bf = new MB(Matrix4x4.identity, new System.Random(4)) { coDay = true };
         bf.Box(cot, 1.155f, 1.185f, 0.30f, 1.35f, 3.4f, 4.3f);
         bf.Box(soc, 1.185f, 1.19f, 1.0f, 1.12f, 3.4f, 4.3f);
         bf.Box(cot, 1.155f, 1.185f, 1.35f, 2.45f, 3.83f, 3.87f);
