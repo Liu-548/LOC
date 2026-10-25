@@ -23,6 +23,7 @@ public class LocMenu : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     static void Reset0() { daCanhBao = vaoGame = tat = false; st = null; }
     public static bool DangChe => I && I.man != Man.Khong;   // menu / thẻ đêm đang phủ màn hình → lời mở đầu chờ
+    public static bool OMenuChinh => I && !vaoGame && I.man != Man.Khong;   // [25/10] đang ở menu chính (chưa vào game) — LocNhacMenu phát nhạc
 
     enum Man { Khong, CanhBao, Chinh, ChonDem, Ending, CaiDat, DoSang, TamDung, XacNhan, TheDem, Chet }
     Man man, nenXN, cdTu;
