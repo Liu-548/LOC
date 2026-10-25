@@ -1,14 +1,70 @@
 fileFormatVersion: 2
 guid: f95bc97fcc435ad4cb48f88dd21b9c15
 ModelImporter:
-  serializedVersion: 24200
+  serializedVersion: 24501
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_DaDau
+    second: {fileID: 2100000, guid: d2cb51a1195f2f34fa75bdb6d209e5b0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_Dau
+    second: {fileID: 2100000, guid: 1dc6a27dc9b651442ad8e250996d74c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_Den
+    second: {fileID: 2100000, guid: 57ff3573df1e5684fb2ce5af03b754d3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_Mat_DoMau
+    second: {fileID: 2100000, guid: 24edc959ecb384f42a8284dca7a8bbbf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_Mong
+    second: {fileID: 2100000, guid: 149a0dadcd0eba94586c5e8c8fb48c6a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_Rang
+    second: {fileID: 2100000, guid: a04f848b49299c640b0cf987aa9d632c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_TayAo_L
+    second: {fileID: 2100000, guid: 87f691e6211bb47469005fa9e4cd1cc2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_TayAo_R
+    second: {fileID: 2100000, guid: 87536e1c4345bed499aae16f5e427241, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_Than
+    second: {fileID: 2100000, guid: 39bfa07ee897f7944a41161544208f75, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_Toc
+    second: {fileID: 2100000, guid: c85d18cf0efe5e84f93b926ac603aac7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MaNu_Vay
+    second: {fileID: 2100000, guid: bb8936c9e1aa7ef4f8a6e188408f3715, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
+    searchTexturesGlobally: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -59,6 +115,8 @@ ModelImporter:
     generateMeshLods: 0
     meshLodGenerationFlags: 0
     maximumMeshLod: -1
+    importUVs: -1
+    importVertexColors: 1
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
@@ -78,6 +136,7 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
+    calculateBlendshapeNormalsDeltaFromImportedNormals: 1
   referencedClips: []
   importAnimation: 1
   humanDescription:

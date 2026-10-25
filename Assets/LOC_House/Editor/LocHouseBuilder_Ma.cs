@@ -116,6 +116,7 @@ public static partial class LocHouseBuilder
         var ld = Them<LensDistortion>(hc); ld.intensity.Override(-0.12f);    // rìa hơi méo (kịch bản mục 11)
         var dof = Them<DepthOfField>(hc); dof.mode.Override(DepthOfFieldMode.Gaussian);
         dof.gaussianStart.Override(3.5f); dof.gaussianEnd.Override(16f); dof.gaussianMaxRadius.Override(0.9f);   // xa thì nhoè
+        LocHinhAnh.ApB(hc);   // [6/10] phương án B: sạch hơn, nâng đen, quầng đèn ấm, hạt nhẹ (ghi đè các số ở trên)
         var g1 = new GameObject("LocHinhCu"); g1.transform.SetParent(root, false);
         var v1 = g1.AddComponent<Volume>(); v1.isGlobal = true; v1.priority = 10; v1.sharedProfile = hc;
 

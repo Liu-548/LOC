@@ -32,6 +32,23 @@ public class LocDoor : MonoBehaviour
     }
     void Awake() { Luu(); CapNhatChan(); }
 
+    // [6/10 · máy bạn] cửa đôi: các cánh QUAY cùng tên, cùng cha, cách nhau ≤ 3,3 m mở/đóng cùng lúc (ngoài danh sách cungCua khai báo).
+    //  Cánh trượt / xếp / ngăn kéo không ghép. Tắt hẳn: LocDoor.TuGhepCuaDoi = false.
+    public static bool TuGhepCuaDoi = true;
+    LocDoor[] ban;
+    bool Quay => truot == Vector3.zero && gapX <= 0f;
+    void Start()
+    {
+        if (!Quay) return;
+        var l = new System.Collections.Generic.List<LocDoor>();
+        if (cungCua != null) foreach (var c in cungCua) if (c && c != this && c.Quay) l.Add(c);
+        if (TuGhepCuaDoi && transform.parent)
+            foreach (var d in transform.parent.GetComponentsInChildren<LocDoor>())
+                if (d != this && d.ten == ten && d.Quay && d.transform.parent == transform.parent && !l.Contains(d)
+                    && Vector3.Distance(d.transform.position, transform.position) <= 3.3f) l.Add(d);
+        ban = l.ToArray();
+    }
+
     public bool DangMo => (dich < 0.5f) == dungSanLaMo;
     public void Bam()
     {
@@ -43,7 +60,11 @@ public class LocDoor : MonoBehaviour
         }
         Toggle();
     }
-    public void Toggle() { if (khoa) return; Luu(); dich = dich < 0.5f ? 1f : 0f; CapNhatChan(); }
+    public void Toggle()
+    {
+        if (khoa) return; Luu(); dich = dich < 0.5f ? 1f : 0f; CapNhatChan();
+        if (ban != null) foreach (var d in ban) if (d && !d.khoa && d.DangMo != DangMo) d.Toggle();   // cánh bạn cùng ô cửa
+    }
     void CapNhatChan()
     {
         if (anKhiMo == null || anKhiMo.Length == 0) return;

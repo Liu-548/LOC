@@ -88,8 +88,13 @@ public class LocFirstPerson : MonoBehaviour
             cam.localEulerAngles = new Vector3(pitch, 0, 0);
         }
 
+        // [23/10] radio phòng khách (trên nóc tủ tivi): nhìn vào radio rồi nhấn E → bật/tắt (hộp va chạm của tủ chắn tia nên dò riêng)
+        var rd = LocRadio.I;
+        bool radio = cam && rd && !rd.khoa && rd.NhinTrung(cam, TamVoiRadio);
+        if (radio) { goiY = rd.GoiY; if (k.eKey.wasPressedThisFrame) rd.Toggle(); }
+
         // tương tác: nhìn vào cánh cửa / công tắc / hũ rồi nhấn E
-        if (cam && Tia(cam.forward, 2.6f, out var hit))
+        if (!radio && cam && Tia(cam.forward, 2.6f, out var hit))
         {
             var d = hit.collider.GetComponentInParent<LocDoor>();
             var tt = hit.collider.GetComponentInParent<LocTuongTac>();   // [6/10] món đồ, két sắt…
@@ -121,7 +126,9 @@ public class LocFirstPerson : MonoBehaviour
     }
 
     // [3/10] lớp VHS: vạch quét ngang mờ + một dải sáng trôi chậm (đi cùng hậu kỳ LOC_HinhCu: hạt phim, rút màu, nhoè xa, méo rìa)
-    public static float vhs = 1f;
+    // [6/10 · máy bạn] BỎ dải sáng trắng trôi từ trên xuống (gây khó chịu); vạch quét tắt mặc định (vhs = 0) — đặt lại 0.3f nếu muốn thử.
+    public const float TamVoiRadio = 1.7f;   // tầm với của radio (m)
+    public static float vhs = 0f;
     static Texture2D scan;
     static void VHS()
     {
@@ -134,8 +141,6 @@ public class LocFirstPerson : MonoBehaviour
         float W = Screen.width, H = Screen.height;
         GUI.color = new Color(1, 1, 1, vhs);
         GUI.DrawTextureWithTexCoords(new Rect(0, 0, W, H), scan, new Rect(0, 0, 1, H / 4f));
-        float y = (Time.time * 38f) % (H + 160f) - 80f;
-        GUI.color = new Color(1, 1, 1, 0.03f * vhs); GUI.DrawTexture(new Rect(0, y, W, 70), Texture2D.whiteTexture);
         GUI.color = Color.white;
     }
 
