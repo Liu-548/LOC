@@ -68,7 +68,7 @@ public class LocFirstPerson : MonoBehaviour
         if (k.escapeKey.wasPressedThisFrame && !LocTui.Mo) Cursor.lockState = CursorLockMode.None;
         if (m.leftButton.wasPressedThisFrame && !khoa) Cursor.lockState = CursorLockMode.Locked;   // mini game cần chuột tự do
         goiY = "";
-        if (khoa || LocTui.Mo) return;
+        if (khoa || LocTui.Mo || LocXeBuyt.dangChay) return;   // [25/10] trên xe buýt mở đầu: LocXeBuyt tự lo nhìn
 
         if (k.cKey.wasPressedThisFrame || k.leftCtrlKey.wasPressedThisFrame)
         {

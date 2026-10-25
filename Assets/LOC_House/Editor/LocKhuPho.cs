@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public static class LocKhuPho
+public static partial class LocKhuPho
 {
     const string Dir = "Assets/LOC_House/KhuPho";
     const string MatDir = "Assets/LOC_House/Materials";
@@ -49,8 +49,9 @@ public static class LocKhuPho
         DuongPho();
 
         // ── dãy nhà đối diện (mặt tiền quay về nhà LỘC, +Z) + dãy thứ hai cao hơn phía sau để không lộ khe
-        Hang("DoiDien_1", -47f, 57f, -14.0f, 180, 13f, 3, 5, Kieu.Mat, 3.8f, 5.6f);
-        Hang("DoiDien_2", -47f, 57f, -27.0f, 180, 13f, 5, 7, Kieu.Xa, 5f, 8f);
+        // [25/10] phố mở về phía đông tới ngã ba x ≈ 150 (tuyến xe buýt mở đầu, LocKhuPho_TuyenXe) — nhà cũ quanh nhà LỘC giữ nguyên
+        Hang("DoiDien_1", -47f, 160f, -14.0f, 180, 13f, 3, 5, Kieu.Mat, 3.8f, 5.6f);
+        Hang("DoiDien_2", -47f, 160f, -27.0f, 180, 13f, 5, 7, Kieu.Xa, 5f, 8f);
         // ── cùng bên với nhà LỘC: trái (tiệm ở giữa, đã có trong builder) và phải
         Nha("NhaTrai_Sat", new Vector3(-10.4f, 0, -5.4f), 0, 6.0f, 7.3f, 4, Kieu.Mat, 101);          // [2/10 tối] kho tiệm nới tới x −6,4 và dài tới z 19,3 → tách khối nhà bên trái
         Nha("NhaTrai_SatSau", new Vector3(-10.4f, 0, 1.9f), 0, 4.0f, 22.9f, 4, Kieu.Sau, 104);
@@ -58,15 +59,17 @@ public static class LocKhuPho
         Nha("NhaSauTiem", new Vector3(-6.4f, 0, 19.3f), 0, 6.2f, 5.5f, 4, Kieu.Sau, 102);
         Nha("NhaPhai_Sat", new Vector3(8.0f, 0, -0.2f), 0, 6.0f, 25.0f, 4, Kieu.Mat, 103);
         SanNhaPhai();
-        Hang("BenPhai", 14f, 57f, -5.4f, 0, 30.2f, 3, 5, Kieu.Mat, 3.8f, 5.6f);
+        Hang("BenPhai", 14f, 132.7f, -5.4f, 0, 30.2f, 3, 5, Kieu.Mat, 3.8f, 5.6f);
         // ── phía sau nhà LỘC (lưng nhà quay về phía nhà LỘC)
-        Hang("Sau_1", -47f, 57f, 24.8f, 0, 13f, 4, 6, Kieu.Sau, 4f, 6f);
-        Hang("Sau_2", -47f, 57f, 37.8f, 0, 13f, 5, 7, Kieu.Xa, 5f, 8f);
+        Hang("Sau_1", -47f, 132.7f, 24.8f, 0, 13f, 4, 6, Kieu.Sau, 4f, 6f);
+        Hang("Sau_2", -47f, 132.7f, 37.8f, 0, 13f, 5, 7, Kieu.Xa, 5f, 8f);
         // ── bịt hai đầu phố
         HangZ("DauTrai", -40f, 51f, -47f, false, 12f, 5, 7, Kieu.Xa, 8f, 13f);
-        HangZ("DauPhai", -40f, 51f, 57f, true, 12f, 5, 7, Kieu.Xa, 8f, 13f);
+        // [25/10] bỏ dãy "DauPhai" bịt đầu phố x 57: xe buýt mở đầu đi vào từ đó. Người chơi vẫn chỉ đi tới x 57 (ChanDuong).
 
         CotDien();
+        TuyenXe();   // [25/10] đường ngang + đoạn ven sông có bến + chặn đường cho người chơi
+        XeBuyt();    // [25/10] xe buýt + cảnh mở đầu Đêm 1 (LocXeBuyt)
     }
 
     // ═════════════════════════ đường + vỉa hè
@@ -76,12 +79,13 @@ public static class LocKhuPho
         var nhua = Mat("Nhua", "T_worn_asphalt.jpg", 3f, 3f, "#8C8C90", 0.25f, 0.55f);
         var gach = Mat("ViaHe", "T_patterned_concrete_pavers_02.jpg", 2f, 2f, "#B8AAA0", 0.05f, 0.2f);
         var be = Mat("BeTong", "T_preconcrete_wall_001.jpg", 2.5f, 2.5f, "#9A9890");
-        b.Box(nhua, -50, 60, -0.65f, -0.30f, -14.0f, -5.4f, true);
-        b.Box(gach, -50, 60, -0.65f, -0.15f, -7.2f, -5.4f, true);
-        b.Box(gach, -50, 60, -0.65f, -0.15f, -14.0f, -12.4f, true);
-        b.Box(be, -50, 60, -0.30f, -0.15f, -7.4f, -7.2f);
-        b.Box(be, -50, 60, -0.30f, -0.15f, -12.6f, -12.4f);
-        b.Commit(grp, "DuongPho", new Bounds(new Vector3(5, -0.4f, -9.7f), new Vector3(110, 0.5f, 8.6f)));
+        // [25/10] kéo dài tới ngã ba với đường ngang (x 144,7…155,3): vỉa hè bắc dừng ở mép đường ngang, vỉa hè nam chạy qua ngã ba
+        b.Box(nhua, -50, 155.3f, -0.65f, -0.30f, -14.0f, -5.4f, true);
+        b.Box(gach, -50, 146.5f, -0.65f, -0.15f, -7.2f, -5.4f, true);
+        b.Box(gach, -50, 160f, -0.65f, -0.15f, -14.0f, -12.4f, true);
+        b.Box(be, -50, 146.5f, -0.30f, -0.15f, -7.4f, -7.2f);
+        b.Box(be, -50, 160f, -0.30f, -0.15f, -12.6f, -12.4f);
+        b.Commit(grp, "DuongPho", new Bounds(new Vector3(55, -0.4f, -9.7f), new Vector3(210, 0.5f, 8.6f)));
     }
 
     // sân trước của căn phải: nền xi măng, tường thấp, cổng sắt
@@ -424,7 +428,7 @@ public static class LocKhuPho
         var day = Mat("Day", null, 1, 1, "#0C0C0C", 0f, 0f);
         var den = Mat("DenPho", null, 1, 1, "#000000", 0f, 0f, false, new Color(1.0f, 0.62f, 0.28f) * 1.4f);
         var bien = Mat("BienAp", null, 1, 1, "#6E7072", 0.1f, 0.3f);
-        float[] xs = { -30f, -9f, 12f, 33f };
+        float[] xs = { -30f, -9f, 12f, 33f, 54f, 75f, 96f, 117f, 138f };   // [25/10] thêm 5 cột trên đoạn phố kéo dài
         const float z = -6.4f;
         foreach (var x in xs)
         {
@@ -451,13 +455,13 @@ public static class LocKhuPho
             }
         b.Commit(grp, "CotDien", new Bounds(new Vector3(2, 4, -6.4f), new Vector3(70, 9, 0.4f)));
 
-        foreach (var x in new[] { xs[1], xs[2] })   // đèn phố chính
+        foreach (var x in new[] { xs[1], xs[2], xs[5], xs[7] })   // đèn phố chính
             DenPho(x, z - 1.55f, "#FFB060", 12f, 2.0f);
-        foreach (var x in new[] { xs[0], xs[3] })   // đèn yếu ở hai cột còn lại
+        foreach (var x in new[] { xs[0], xs[3], xs[4], xs[6], xs[8] })   // đèn yếu ở các cột còn lại
             DenPho(x, z - 1.55f, "#FFB868", 9f, 1.0f);
         // ba cột đèn riêng bên vỉa hè đối diện, đèn yếu rọi lên mặt tiền dãy đối diện
         var b2 = new MB(Matrix4x4.identity, new System.Random(4));
-        foreach (var x in new[] { -34f, -22f, -8f, 4f, 15f, 26f, 38f })
+        foreach (var x in new[] { -34f, -22f, -8f, 4f, 15f, 26f, 38f, 52f, 66f, 80f, 94f, 108f, 122f, 136f })
         {
             const float zc = -13.2f;
             b2.Box(bt, x - 0.11f, x + 0.11f, -0.15f, 6.8f, zc - 0.11f, zc + 0.11f);
@@ -591,7 +595,7 @@ public static class LocKhuPho
             foreach (var t in mesh.triangles) s.t.Add(i0 + t);
         }
 
-        public void Commit(Transform parent, string name, Bounds col)
+        public GameObject Commit(Transform parent, string name, Bounds col, bool vaCham = true)
         {
             var mesh = new Mesh { name = name, indexFormat = UnityEngine.Rendering.IndexFormat.UInt32 };
             var vs = new List<Vector3>(); var ns = new List<Vector3>(); var uvs = new List<Vector2>();
@@ -611,8 +615,9 @@ public static class LocKhuPho
             var g = new GameObject(name); g.transform.SetParent(parent, false);
             g.AddComponent<MeshFilter>().sharedMesh = mesh;
             g.AddComponent<MeshRenderer>().sharedMaterials = keys.ToArray();
-            var bc = g.AddComponent<BoxCollider>(); bc.center = col.center; bc.size = col.size;
+            if (vaCham) { var bc = g.AddComponent<BoxCollider>(); bc.center = col.center; bc.size = col.size; }
             GameObjectUtility.SetStaticEditorFlags(g, StaticEditorFlags.ContributeGI | StaticEditorFlags.OccluderStatic | StaticEditorFlags.OccludeeStatic);
+            return g;
         }
     }
 }
