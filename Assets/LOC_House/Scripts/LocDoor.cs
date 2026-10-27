@@ -47,6 +47,69 @@ public class LocDoor : MonoBehaviour
                 if (d != this && d.ten == ten && d.Quay && d.transform.parent == transform.parent && !l.Contains(d)
                     && Vector3.Distance(d.transform.position, transform.position) <= 3.3f) l.Add(d);
         ban = l.ToArray();
+        KiemGoc();
+    }
+
+    // [27/10 chơi thử] "mở/đóng cửa chính thì cánh vụt qua cột rạp ngoài sân": cánh quay hết góc goc dù giữa đường có vật.
+    //  Lần đầu dùng, quét thử cánh theo từng bước 4° từ tư thế ĐÓNG về phía MỞ; gặp vật đầu tiên (không phải chính nó, không phải thứ đã
+    //  chạm sẵn lúc đóng như khung/tường/ngưỡng) thì dừng góc mở trước vật đó ~4°. Cánh dựng sẵn ở tư thế mở thì dời tư thế mở về góc mới.
+    //  Không chặn nếu góc còn lại < 35% (coi như đo nhầm). Tắt hẳn: LocDoor.TuChanGoc = false.
+    public static bool TuChanGoc = true;
+    bool daKiemGoc;
+    static readonly Collider[] gocHB = new Collider[32];
+    void KiemGoc()
+    {
+        if (daKiemGoc || !TuChanGoc || !Quay || Mathf.Abs(goc) < 20f) return;
+        Luu();
+        if (t > 0.001f && t < 0.999f) return;   // đang chạy hoạt cảnh: để lần sau
+        daKiemGoc = true;
+        var hops = GetComponentsInChildren<BoxCollider>();
+        if (hops.Length == 0) return;
+        var boQua = new System.Collections.Generic.HashSet<Collider>(GetComponentsInChildren<Collider>(true));
+        if (ban != null) foreach (var d in ban) if (d) foreach (var c in d.GetComponentsInChildren<Collider>(true)) boQua.Add(c);
+        float eDong = dungSanLaMo ? 1f : 0f, eMo = 1f - eDong;
+        DatTam(eDong); Quet(hops, boQua, true);
+        int n = Mathf.CeilToInt(Mathf.Abs(goc) / 4f), trung = -1;
+        for (int i = 1; i <= n && trung < 0; i++) { DatTam(Mathf.Lerp(eDong, eMo, i / (float)n)); if (Quet(hops, boQua, false)) trung = i; }
+        if (trung > 0)
+        {
+            float f = Mathf.Max(0f, (trung - 1.5f) / n);   // phần góc còn mở được
+            if (f >= 0.35f)
+            {
+                float eMoi = Mathf.Lerp(eDong, eMo, f);
+                if (dungSanLaMo) { DatTam(eMoi); lp0 = transform.localPosition; lr0 = transform.localRotation; }
+                goc *= f;
+            }
+        }
+        ApT();
+    }
+    // đặt cánh tạm ở phần góc e (0 = tư thế gốc, 1 = đã quay hết goc), không làm mượt
+    void DatTam(float e)
+    {
+        var cha = transform.parent;
+        Vector3 P(Vector3 v) => cha ? cha.TransformPoint(v) : v;
+        Quaternion r0 = cha ? cha.rotation * lr0 : lr0, q = Quaternion.AngleAxis(goc * e, Vector3.up);
+        var hinge = P(lh);
+        transform.SetPositionAndRotation(hinge + q * (P(lp0) - hinge), q * r0);
+    }
+    // ghi = true: ghi mọi thứ đang chạm vào boQua · false: có chạm thứ gì mới không
+    bool Quet(BoxCollider[] hops, System.Collections.Generic.HashSet<Collider> boQua, bool ghi)
+    {
+        foreach (var h in hops)
+        {
+            if (!h || h.isTrigger) continue;
+            var s = h.transform.lossyScale;
+            var nua = new Vector3(Mathf.Abs(h.size.x * s.x), Mathf.Abs(h.size.y * s.y), Mathf.Abs(h.size.z * s.z)) * 0.5f;
+            nua = new Vector3(Mathf.Max(0.005f, nua.x - 0.02f), Mathf.Max(0.005f, nua.y - 0.06f), Mathf.Max(0.005f, nua.z - 0.02f));   // bỏ chạm sượt sàn/khung
+            int k = Physics.OverlapBoxNonAlloc(h.transform.TransformPoint(h.center), nua, gocHB, h.transform.rotation, ~0, QueryTriggerInteraction.Ignore);
+            for (int i = 0; i < k; i++)
+            {
+                var c = gocHB[i];
+                if (boQua.Contains(c) || c is CharacterController || c.GetComponentInParent<LocDoor>()) continue;
+                if (ghi) boQua.Add(c); else return true;
+            }
+        }
+        return false;
     }
 
     public bool DangMo => (dich < 0.5f) == dungSanLaMo;
@@ -62,7 +125,7 @@ public class LocDoor : MonoBehaviour
     }
     public void Toggle()
     {
-        if (khoa) return; Luu(); dich = dich < 0.5f ? 1f : 0f; CapNhatChan();
+        if (khoa) return; Luu(); KiemGoc(); dich = dich < 0.5f ? 1f : 0f; CapNhatChan();
         if (ban != null) foreach (var d in ban) if (d && !d.khoa && d.DangMo != DangMo) d.Toggle();   // cánh bạn cùng ô cửa
     }
     void CapNhatChan()
@@ -76,7 +139,7 @@ public class LocDoor : MonoBehaviour
     public void Dong() { if (DangMo) Toggle(); }
 
     // [8/10] đặt ngay trạng thái mở/đóng, không chạy hoạt cảnh, bỏ qua khoá (đầu đêm)
-    public void DatNgay(bool mo) { Luu(); dich = mo == dungSanLaMo ? 0f : 1f; t = dich; ApT(); CapNhatChan(); }
+    public void DatNgay(bool mo) { Luu(); KiemGoc(); dich = mo == dungSanLaMo ? 0f : 1f; t = dich; ApT(); CapNhatChan(); }
 
     void Update()
     {

@@ -496,7 +496,7 @@ public class LocMa : MonoBehaviour
 
     IEnumerator Lo(ChoLo c)
     {
-        dangLo = true;
+        dangLo = true; huyLo = false;
         var b = Hien(c.kieu, c.an, c.rot, c.lat, c.chiDau);
         StartCoroutine(NhayGan(c.hien, banKinhNhay));
         for (float t = 0; t < 1; t += Time.deltaTime / 0.7f)
@@ -508,7 +508,7 @@ public class LocMa : MonoBehaviour
         StartCoroutine(PhanUngLo(b.quad[0] ? b.quad[0].position : c.hien + Vector3.up * 1.7f));
         if (Random.value < 0.6f) PhatTai(khucKhich, MatMa(b), 0.45f, 14f);   // [25/10] khúc khích nhỏ từ mép cửa
         float song = 0, nhin = 0;
-        while (song < loToiDa && !dangToi && !dangCanh && !dangChet)
+        while (song < loToiDa && !dangToi && !dangCanh && !dangChet && !huyLo)
         {
             var ph = player.position - c.hien; float dy = Mathf.Abs(ph.y); ph.y = 0;
             if (ph.magnitude < lui && dy < 2.5f) break;
@@ -522,7 +522,7 @@ public class LocMa : MonoBehaviour
             b.w.position = Vector3.Lerp(c.hien, c.an, t * t); b.than.SetFloat("_Alpha", alphaSang * (1 - t)); yield return null;
         }
         if (dangHien == b) An();
-        dangLo = false;
+        dangLo = false; huyLo = false;
     }
 
     IEnumerator NhayGan(Vector3 tam, float r)
@@ -572,6 +572,7 @@ public class LocMa : MonoBehaviour
         RenderSettings.ambientLight = ambient0;
         if (volToi) volToi.weight = 0;
         dangToi = false;
+        LocCongTac.ApTatCa();   // [27/10] đèn người chơi đã tắt bằng công tắc thì vẫn tắt, bấm trong lúc mất điện thì giờ mới áp
         if (demDoa != dem) { demDoa = dem; daDoa.Clear(); }
         if (doaBatNgo && !dangDoa && !(moiKieuMotLanMoiDem && daDoa.Contains(KieuDoa.TuongAnToan)) && Random.value < tiLeTuongAnToan && ep < 0)
             StartCoroutine(CanhTuongAnToan(Random.Range(2.6f, 3.6f)));
@@ -721,7 +722,9 @@ public class LocMa : MonoBehaviour
     }
     void DenDoa(bool on)
     {
+        denDoaTat = !on;
         Dien(batD, vatD, on);
+        if (on) LocCongTac.ApTatCa();
         RenderSettings.ambientLight = on ? ambient0 : ambient0 * ambientKhiToi;
         if (volToi) volToi.weight = on ? 0 : 1;
     }
@@ -1224,7 +1227,17 @@ public class LocMa : MonoBehaviour
             if (sh && k.digit5Key.wasPressedThisFrame && LocRadio.I) { if (LocRadio.I.DangBat) LocRadio.I.Tat(false); demBatRadio = dem; MaBatRadio(); }
         }
     }
-    void DatDem(int d) { dem = d; if (d < 3) { maTucGian = false; huDaHe = false; } Bao("Đêm " + d); }
+    void DatDem(int d) { dem = d; if (d < 3) { maTucGian = false; huDaHe = false; } Bao("Đêm " + d); LocFirstPerson.PhuDe("[thử] Đêm " + d, 2f, false); }   // [27/10] báo ngay trên màn hình (chữ thử góc trên tắt mặc định)
+
+    // [27/10 chơi thử] công tắc đèn: con ma đang lấp ló thì rụt đi ngay; lần lấp ló sau lùi lại (bấm liên tục không gọi ma ra liên tục).
+    bool huyLo, denDoaTat;
+    public static bool MatDien => I && (I.dangToi || I.denDoaTat);
+    public static void KhiBamCongTac()
+    {
+        if (!I) return;
+        if (I.dangLo) I.huyLo = true;
+        I.hLo = Mathf.Max(I.hLo, I.khoangLo.x * 0.5f);
+    }
     void Bao(string s) { dbg = s; dbgHet = Time.time + 3f; }
 
     void OnGUI()
@@ -1236,9 +1249,7 @@ public class LocMa : MonoBehaviour
         GUI.Label(new Rect(10, 8, 900, 40), s, st);
     }
 
-#if UNITY_EDITOR
-    // ───── tự kiểm (menu LOC → Tự kiểm con ma): đo đè tường bằng hình học ở MỌI chỗ ma có thể hiện + chụp từng khung lúc ma hiện → LOC_KiemTra/Ma/
-    // lấp ló cửa: truoc = đỉnh nằm TRƯỚC mặt tường phía người chơi trong phần tường (vẽ đè lên tường) · lo = đỉnh thân (không tính đầu) lộ vào ô cửa · dauRa = đỉnh đầu ló qua mép
+    // [27/10] DoCua dùng cả lúc chạy (HopLeCua0) → để ngoài #if UNITY_EDITOR, nếu không bản build sẽ không biên dịch được
     void DoCua(Bong b, int i, int k, out int truoc, out int lo, out int dauRa)
     {
         truoc = lo = dauRa = 0;
@@ -1252,6 +1263,9 @@ public class LocMa : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
+    // ───── tự kiểm (menu LOC → Tự kiểm con ma): đo đè tường bằng hình học ở MỌI chỗ ma có thể hiện + chụp từng khung lúc ma hiện → LOC_KiemTra/Ma/
+    // lấp ló cửa: truoc = đỉnh nằm TRƯỚC mặt tường phía người chơi trong phần tường (vẽ đè lên tường) · lo = đỉnh thân (không tính đầu) lộ vào ô cửa · dauRa = đỉnh đầu ló qua mép
     Vector3 ChoDung(int i, float xa)
     {
         for (float x = xa + 1.5f; x >= xa - 0.3f; x -= 0.3f)

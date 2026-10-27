@@ -185,14 +185,23 @@ public static partial class LocHouseBuilder
             TCy(p, "Chan_Nhang", x, 0.1f, z, 0.004f, 0.035f, tro);
     }
 
-    // ───────── PK-73 bài vị 0,17 × 0,10 × 0,34: tấm gỗ đứng trên đế, giấy trắng viền đen, chữ "LINH VỊ" quốc ngữ
+    // ───────── PK-73 linh vị 0,17 × 0,10 × 0,34
+    // [27/10 chơi thử] "bài vị không phải linh vị": bản cũ là tấm gỗ dày trên đế gỗ — trông như bài vị gỗ (làm sau tang, đặt bàn thờ gia tiên).
+    //  Bàn thờ vong dùng LINH VỊ: tờ giấy trắng viền đen (thầy viết lúc nhập quan) cài trong khung mỏng màu đen, dựng bằng chân chống sau.
+    //  Chữ quốc ngữ "LINH VỊ", không chữ Hán. Tên người mất để trống (kịch bản chưa chốt).
     static void XayBaiVi(Transform p)
     {
-        var go = MT("M_Tang_Go", "D_go.png", 1, 1, "#6A4A2E"); var goToi = MT("M_Tang_GoToi", "D_go.png", 1, 1, "#3E2A19");
-        TBx(p, "De", 0, 0, 0, 0.17f, 0.03f, 0.10f, goToi);
-        foreach (var s in new[] { -1f, 1f }) TBx(p, "Chan_Sau", s * 0.05f, 0.03f, -0.03f, 0.015f, 0.07f, 0.03f, goToi);
-        TBx(p, "Tam_Go", 0, 0.03f, 0, 0.15f, 0.31f, 0.014f, go);
-        TNhan(p, "Chu_BaiVi", new Vector3(0, 0.185f, 0.0081f), 0.12f, 0.27f, 32, 72, new[] { "LINH", "VỊ" }, 20, 16, "#1A1A1A", "#EFEBDD", true);
+        var den = M("M_Tang_KhungDen", "#161412"); var giay = M("M_Tang_GiayLinhVi", "#EFEBDD");
+        const float W = 0.15f, H = 0.30f, nghieng = -8f;   // ngả ra sau 8°
+        var khung = new GameObject("Khung_LinhVi").transform; khung.SetParent(p, false);
+        khung.localPosition = new Vector3(0, 0, 0.01f); khung.localRotation = Quaternion.Euler(nghieng, 0, 0);
+        TBx(khung, "Khung_Tren", 0, H - 0.012f, 0, W, 0.012f, 0.012f, den);
+        TBx(khung, "Khung_Duoi", 0, 0, 0, W, 0.012f, 0.012f, den);
+        foreach (var sx in new[] { -1f, 1f }) TBx(khung, "Khung_Canh", sx * (W / 2 - 0.006f), 0.012f, 0, 0.012f, H - 0.024f, 0.012f, den);
+        TBx(khung, "Giay_Nen", 0, 0.012f, -0.002f, W - 0.02f, H - 0.024f, 0.002f, giay);
+        TNhan(khung, "Chu_LinhVi_Giay", new Vector3(0, H / 2, 0.0015f), W - 0.026f, H - 0.03f, 32, 72, new[] { "LINH", "VỊ" }, 22, 18, "#1A1A1A", "#EFEBDD", true);
+        var chong = TBx(p, "Chan_Chong", 0, 0, -0.045f, 0.012f, 0.24f, 0.006f, den);
+        chong.transform.localRotation = Quaternion.Euler(18f, 0, 0);
     }
 
     // ───────── PK-74 bát cơm quả trứng đôi đũa 0,13 × 0,13 × 0,25: cơm đầy vun, trứng luộc, đũa cắm thẳng

@@ -18,6 +18,28 @@ public class LocDi : MonoBehaviour
     Transform nguoiChoi;
 
     void Awake() { I = this; }
+
+    // [27/10 chơi thử] "chân không chạm đất": đường đi dựng sẵn nội suy thẳng giữa các điểm (qua bậc hiên, ngưỡng cửa thì lơ lửng/lún),
+    //  và tư thế clip có thể nhấc gốc. Mỗi khung sau hoạt cảnh: đo bàn chân thấp nhất so với sàn ngay dưới, kéo cả người xuống/lên cho chạm.
+    Transform[] banChan; Collider[] cuaToi;
+    void LateUpdate()
+    {
+        if (banChan == null)
+        {
+            var l = new System.Collections.Generic.List<Transform>();
+            foreach (var t in GetComponentsInChildren<Transform>(true)) if (t.name == "Toes_L" || t.name == "Toes_R" || t.name == "Foot_L" || t.name == "Foot_R") l.Add(t);
+            banChan = l.ToArray(); cuaToi = GetComponentsInChildren<Collider>(true);
+        }
+        if (banChan.Length == 0) return;
+        float thap = float.MaxValue; foreach (var b in banChan) if (b) thap = Mathf.Min(thap, b.position.y);
+        var goc = transform.position + Vector3.up * 0.6f;
+        var hits = Physics.RaycastAll(goc, Vector3.down, 1.6f, ~0, QueryTriggerInteraction.Ignore);
+        float san = float.MinValue;
+        foreach (var h in hits) { bool cua = false; foreach (var c in cuaToi) if (h.collider == c) { cua = true; break; } if (!cua && h.point.y > san) san = h.point.y; }
+        if (san == float.MinValue) return;
+        float lech = san + 0.02f - thap;   // mũi/gót chân cách sàn 2 cm
+        if (Mathf.Abs(lech) > 0.004f && Mathf.Abs(lech) < 0.35f) transform.position += Vector3.up * Mathf.Clamp(lech, -0.6f * Time.deltaTime - 0.01f, 0.6f * Time.deltaTime + 0.01f);
+    }
     void Start()
     {
         nguoiChoi = FindAnyObjectByType<LocFirstPerson>()?.transform;
@@ -55,10 +77,11 @@ public class LocDi : MonoBehaviour
         {
             if (i == diemCong) foreach (var n in tenCong) GameObject.Find(n)?.GetComponent<LocDoor>()?.DatNgay(true);
             var dich = duongVe[i];
-            while ((dich - transform.position).sqrMagnitude > 0.04f)
+            while (new Vector2(dich.x - transform.position.x, dich.z - transform.position.z).sqrMagnitude > 0.04f)
             {
                 Quay(dich, 300f);
-                transform.position = Vector3.MoveTowards(transform.position, dich, tocDoDi * Time.deltaTime);
+                var p0 = transform.position;   // đi theo mặt phẳng, độ cao do LateUpdate bám sàn
+                transform.position = Vector3.MoveTowards(p0, new Vector3(dich.x, p0.y, dich.z), tocDoDi * Time.deltaTime);
                 if (i > diemCong + 0 && Khuat()) { XongVe(); yield break; }
                 yield return null;
             }

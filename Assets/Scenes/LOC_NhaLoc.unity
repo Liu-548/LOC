@@ -386797,7 +386797,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 716374661}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.42261826, z: 0, w: 0.90630779}
   m_LocalPosition: {x: 5.2, y: 0, z: -0.235}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -386809,7 +386809,7 @@ Transform:
   - {fileID: 1999969299}
   - {fileID: 888985057}
   m_Father: {fileID: 1070152869}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 50, z: 0}
 --- !u!65 &716374663
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -386845,7 +386845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocDoor
   ten: "c\u1EEDa ch\xEDnh"
   banLe: {x: 0, y: 0, z: 0}
-  goc: 180
+  goc: 130
   dungSanLaMo: 1
   thoiGian: 0.7
   khoa: 0
@@ -728196,7 +728196,7 @@ PrefabInstance:
       objectReference: {fileID: 395815507}
     - target: {fileID: 7729492872749588100, guid: f1721ca23a8767f48839cdfb397a7370, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.95
+      value: 2.69
       objectReference: {fileID: 0}
     - target: {fileID: 7729492872749588100, guid: f1721ca23a8767f48839cdfb397a7370, type: 3}
       propertyPath: m_LocalPosition.y
@@ -763698,7 +763698,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1405311957}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
+  m_LocalRotation: {x: 0, y: 0.90630779, z: 0, w: 0.42261826}
   m_LocalPosition: {x: 2.4, y: 0, z: -0.235}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -763710,7 +763710,7 @@ Transform:
   - {fileID: 668912764}
   - {fileID: 843933695}
   m_Father: {fileID: 1070152869}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 130, z: 0}
 --- !u!65 &1405311959
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -763746,7 +763746,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocDoor
   ten: "c\u1EEDa ch\xEDnh"
   banLe: {x: 0, y: 0, z: 0}
-  goc: -180
+  goc: -130
   dungSanLaMo: 1
   thoiGian: 0.7
   khoa: 0

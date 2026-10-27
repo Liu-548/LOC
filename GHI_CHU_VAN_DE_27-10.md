@@ -46,3 +46,27 @@ Kiểm bằng **LOC → Chơi thử một mạch (Play)** (`Assets/LOC_House/Scr
 ## 4. Chưa kiểm được bằng công cụ (cần người chơi tay)
 - Cuộc gọi thứ nhất Đêm 1: chỉ bật khi đi bộ qua hộp thang hầm.
 - Lấp ló khi đi bộ thật ở cầu thang và phòng khách. Gợi ý H, va chạm khi đi, đoạn bê mâm.
+
+## 5. Sửa sau lượt chơi tay tối 27/10 (nhánh `claude/sua-loi-test-1`)
+Theo danh sách 15 lỗi của lượt chơi tay. Kiểm bằng biên dịch toàn bộ script (bản Editor và bản build) với API Unity giả lập, **chưa chạy trong Unity**: cần chơi lại để xác nhận.
+
+| # | Lỗi | Đã sửa | Cần dựng lại nhà? |
+|---|---|---|---|
+| 1 | Cần chấm tròn giữa màn hình | `LocFirstPerson`: chấm tròn mờ giữa màn hình, to và sáng hơn khi nhìn trúng vật bấm E được. Tắt: `LocFirstPerson.chamGiua = false` | Không |
+| 2 | Chân không chạm đất | Người chơi: skin của CharacterController 0,08 → 0,03 (hết lơ lửng 8 cm, bớt mắc mép bậc). Bác (`LocDi`): mỗi khung kéo bàn chân về sát sàn ngay dưới, lúc đi ra cổng chỉ đi theo mặt phẳng | Không |
+| 3 | Công tắc bếp bật/tắt không thấy đèn đổi | Chỉ công tắc hầm từng được nối đèn. `LocCongTac` tự nối mọi công tắc với đèn của phòng theo tên (bảng `NOI`). Bếp và hành lang T2 là công tắc hai chiều. Đèn tắt thì bóng/tuýp gần đó thôi sáng. Công tắc phòng Nhím **không** nối (đèn ngủ do cốt truyện điều khiển) | Không |
+| 4, 9 | Kẹt đầu khi xuống hầm, khi lên gác | `LocFirstPerson` tự cúi xuống 1,2 m khi phía trước vướng ở tầm đầu mà thân vẫn lọt, thoáng thì tự đứng lên | Không |
+| 5, 6, 15 | Bật/tắt đèn: ma lấp ló không biến, bấm liên tục vẫn thấy ma, "reset ma" lúc được lúc không | Bấm công tắc bất kỳ: ma đang lấp ló rụt đi ngay, lần lấp ló sau lùi ít nhất nửa khoảng lấp ló (≥ 45 s). Đang mất điện (ma tức giận / dọa) thì bấm chỉ ghi nhớ, có điện lại mới áp; đèn đã tắt bằng công tắc thì có điện lại vẫn tắt | Không |
+| 7 | Cửa chính quét xuyên cột rạp ngoài sân | Cửa chính mở 130° thay vì 180° (cột rạp nằm ở ~145°), sửa cả scene và `LocHouseBuilder`. Thêm `LocDoor.KiemGoc`: lần đầu dùng, mọi cánh cửa quay tự quét thử và dừng trước vật có va chạm đầu tiên trên đường quét (tắt: `LocDoor.TuChanGoc = false`) | Không |
+| 8 | Cáo phó chặn trước cửa ngách cổng | Dời bảng sang trái cổng chính, sát trụ trái (x 2,69), sửa cả scene và builder | Không |
+| 10 | Bài vị không phải linh vị | `XayBaiVi` dựng lại thành linh vị giấy: tờ giấy trắng viền đen chữ "LINH VỊ" trong khung mỏng màu đen, có chân chống, bỏ tấm gỗ và đế gỗ. Tên người mất để trống 🗣 | **Có** |
+| 11 | Nhìn lẵng hoa bàn thờ vong vẫn chọn được | Việc "thắp hương" chỉ nhận khi tia nhìn trúng dải giữa bàn thờ (±0,55 m quanh bát hương), không nhận lẵng hoa / vòng hoa hai bên | Không |
+| 12 | Không nhảy được | Space để nhảy (cao ~0,45 m). Không nhảy khi đang ngồi / đang tự cúi | Không |
+| 13 | Đèn hầm có ánh sáng mà không có bóng, đèn một nơi ánh sáng một nơi | Đèn `Den_BongDayToc_Ham` lệch 0,7 m so với bóng của model: lúc chạy dời đèn về ngay dưới bóng và cho bóng phát sáng khi bật. Đèn chân thang hầm và đèn chiếu tới: thêm bóng dây tóc + dây điện thả từ trần (chỉ trong hầm, đúng luật dự án) | Không |
+| 14 | F1–F3 không đổi đêm | Phím vẫn chạy, nhưng chữ báo bị tắt nên không thấy gì. Nay hiện phụ đề "[thử] Đêm n". **Lưu ý:** phải bấm chuột vào cửa sổ Game trước, nếu không Unity Editor nuốt phím F2 (đổi tên trong Hierarchy) | Không |
+
+**Lỗi tương tự tìm thêm và đã sửa**
+- Mọi công tắc trong nhà (trừ hầm) đều chỉ lật phím: đã nối như mục 3.
+- Đèn có ánh sáng mà không có đèn: cuối phòng khách (dời sang x 5,2 cho tránh quạt trần), kho, phòng giặt, sảnh T2, góc làm việc, trần phòng Khôi. Đã thêm đèn trong `LocHouseBuilder` (**cần dựng lại nhà**). Đèn chiếu nghỉ T1/T2, giếng trời, sân phơi chưa thêm: không chắc trên đầu có trần để treo, hoặc là ánh sáng trời 🗣.
+- Mọi cánh cửa quay có thể quét xuyên đồ: `LocDoor.KiemGoc` như mục 7.
+- `LocMa.DoCua` nằm trong `#if UNITY_EDITOR` nhưng được gọi lúc chạy: bản build (không phải Editor) sẽ **không biên dịch được**. Đã dời ra ngoài.
