@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// [6/10] Túi đồ + trang đọc + phụ đề độc thoại nối dòng (kịch bản v3.1 mục 6.1: Tab = xem đồ đã có, không HUD).
-//  · Tab mở/đóng túi · ↑↓ chọn món · ←→ lật trang · Esc đóng.
+// [6/10] Túi đồ + trang đọc + phụ đề độc thoại nối dòng.
+// [27/10] Túi = thanh 6 ô góc phải dưới (game ít đồ, khỏi màn danh sách). Ô đang chọn = món đang cầm (DangCam).
+//  · 1–6 / lăn chuột chọn ô · Tab xem món đang chọn (đọc được thì đọc) · ←→ lật trang · Esc/Tab đóng.
 //  · Chết → "chơi lại từ đầu đêm" nạp lại scene: túi + cờ trả về đúng lúc đầu đêm, món đã nhặt tự ẩn khỏi nhà.
 [DefaultExecutionOrder(10)]
 public class LocTui : MonoBehaviour
@@ -30,6 +31,7 @@ public class LocTui : MonoBehaviour
 
     enum Che { Dong, Tui, Doc }
     Che che; LocVatPham dangDoc; int chon, trangI;
+    const int SO_O = 6; float lucDoi = -99f;   // lucDoi: lúc túi vừa đổi → thanh sáng rõ vài giây rồi mờ đi
     readonly Dictionary<string, LocVatPham> mon = new();
     Coroutine noi;
 
@@ -96,22 +98,44 @@ public class LocTui : MonoBehaviour
         if (c == Che.Dong && dangMo) LocMa.tamDung = false;
     }
 
+    static bool HienThanh => !LocFirstPerson.khoa && !LocMenu.DangChe && LocMiniGame.hienTai == null && !LocXeBuyt.dangChay;
+    int soMon = -1;
+
+    // 1–6 (không Shift: Shift+số là phím thử của LocMa), lăn chuột, ↑↓ khi đang xem
+    void ChonO(Keyboard k, bool dangXem)
+    {
+        if (ids.Count == 0) return;
+        int c0 = chon;
+        if (!k.shiftKey.isPressed)
+        {
+            var so = new[] { k.digit1Key, k.digit2Key, k.digit3Key, k.digit4Key, k.digit5Key, k.digit6Key };
+            int dau = Mathf.Clamp(chon - (SO_O - 1), 0, Mathf.Max(0, ids.Count - SO_O));   // ô 1 = món đầu của khung đang hiện
+            for (int i = 0; i < SO_O; i++) if (so[i].wasPressedThisFrame && dau + i < ids.Count) chon = dau + i;
+        }
+        var m = Mouse.current; float lan = m != null ? m.scroll.ReadValue().y : 0f;
+        if (lan < 0 || (dangXem && (k.downArrowKey.wasPressedThisFrame || k.sKey.wasPressedThisFrame))) chon = (chon + 1) % ids.Count;
+        if (lan > 0 || (dangXem && (k.upArrowKey.wasPressedThisFrame || k.wKey.wasPressedThisFrame))) chon = (chon + ids.Count - 1) % ids.Count;
+        if (c0 != chon) { trangI = 0; DangCam = ids[chon]; lucDoi = Time.unscaledTime; }
+    }
+
     void Update()
     {
         if (LocMa.dem != demChup) { demChup = LocMa.dem; idsDauDem = new List<string>(ids); coDauDem = new HashSet<string>(co); }
+        if (ids.Count != soMon) { soMon = ids.Count; lucDoi = Time.unscaledTime; }
+        if (DangCam != null) { int i = ids.IndexOf(DangCam); if (i >= 0) chon = i; }   // mini game tự cầm món → ô theo
+        chon = Mathf.Clamp(chon, 0, Mathf.Max(0, ids.Count - 1));
         var k = Keyboard.current; if (k == null) return;
         if (che == Che.Dong)
         {
-            if (k.tabKey.wasPressedThisFrame && !LocFirstPerson.khoa) { chon = Mathf.Clamp(chon, 0, Mathf.Max(0, ids.Count - 1)); trangI = 0; MoChe(Che.Tui); }
+            if (!HienThanh) return;
+            ChonO(k, false);
+            if (k.tabKey.wasPressedThisFrame && ids.Count > 0) { trangI = 0; DangCam = ids[chon]; MoChe(Che.Tui); }
             return;
         }
         if (k.escapeKey.wasPressedThisFrame || k.tabKey.wasPressedThisFrame) { MoChe(Che.Dong); dangDoc = null; return; }
         if (che == Che.Tui && ids.Count > 0)
         {
-            int c0 = chon;
-            if (k.upArrowKey.wasPressedThisFrame || k.wKey.wasPressedThisFrame) chon = (chon + ids.Count - 1) % ids.Count;
-            if (k.downArrowKey.wasPressedThisFrame || k.sKey.wasPressedThisFrame) chon = (chon + 1) % ids.Count;
-            if (c0 != chon) trangI = 0;
+            ChonO(k, true);
             dangDoc = mon.TryGetValue(ids[chon], out var v) ? v : null;
             if (dangDoc && dangDoc.DocDuoc) Dat("doc:" + dangDoc.id);
         }
@@ -141,27 +165,53 @@ public class LocTui : MonoBehaviour
         sNho = new GUIStyle(GUI.skin.label) { fontSize = 16, alignment = TextAnchor.MiddleCenter }; sNho.normal.textColor = new Color(0.7f, 0.7f, 0.68f);
     }
 
+    static GUIStyle sO, sSo;
+    // thanh 6 ô góc phải dưới; chỉ hiện khi có đồ, sáng rõ ~3 s sau khi đổi rồi mờ cho đỡ phá không khí
+    void VeThanh(float W, float H)
+    {
+        if (ids.Count == 0) return;
+        if (sO == null)
+        {
+            sO = new GUIStyle(GUI.skin.label) { fontSize = 15, wordWrap = true, alignment = TextAnchor.MiddleCenter };
+            sSo = new GUIStyle(GUI.skin.label) { fontSize = 13, alignment = TextAnchor.UpperLeft };
+        }
+        float a = che != Che.Dong || Time.unscaledTime - lucDoi < 3f ? 1f : 0.45f;
+        const float o = 118, kc = 6, cao = 72;
+        int dau = Mathf.Clamp(chon - (SO_O - 1), 0, Mathf.Max(0, ids.Count - SO_O));
+        float x0 = W - 24 - SO_O * o - (SO_O - 1) * kc, y = H - 24 - cao;
+        for (int i = 0; i < SO_O; i++)
+        {
+            int m = dau + i; var r = new Rect(x0 + i * (o + kc), y, o, cao);
+            bool dc = m == chon && m < ids.Count;
+            GUI.color = new Color(0, 0, 0, 0.55f * a); GUI.DrawTexture(r, Texture2D.whiteTexture);
+            GUI.color = dc ? new Color(0.92f, 0.88f, 0.78f, a) : new Color(0.6f, 0.58f, 0.54f, 0.5f * a);   // viền
+            float d = dc ? 2 : 1;
+            GUI.DrawTexture(new Rect(r.x, r.y, r.width, d), Texture2D.whiteTexture); GUI.DrawTexture(new Rect(r.x, r.yMax - d, r.width, d), Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(r.x, r.y, d, r.height), Texture2D.whiteTexture); GUI.DrawTexture(new Rect(r.xMax - d, r.y, d, r.height), Texture2D.whiteTexture);
+            GUI.color = Color.white;
+            sSo.normal.textColor = new Color(0.7f, 0.68f, 0.64f, a);
+            GUI.Label(new Rect(r.x + 5, r.y + 2, 20, 16), (i + 1).ToString(), sSo);
+            if (m >= ids.Count) continue;
+            var ten = TenMon(ids[m]); if (ten.Length > 0) ten = char.ToUpper(ten[0]) + ten.Substring(1);
+            sO.normal.textColor = dc ? new Color(1, 1, 1, a) : new Color(0.82f, 0.8f, 0.75f, 0.85f * a);
+            sO.fontStyle = dc ? FontStyle.Bold : FontStyle.Normal;
+            GUI.Label(new Rect(r.x + 6, r.y + 10, r.width - 12, r.height - 12), ten, sO);
+        }
+        sSo.normal.textColor = new Color(0.7f, 0.68f, 0.64f, a);
+        if (dau > 0) GUI.Label(new Rect(x0 - 22, y + cao / 2 - 10, 20, 20), "‹", sSo);
+        if (dau + SO_O < ids.Count) GUI.Label(new Rect(W - 20, y + cao / 2 - 10, 20, 20), "›", sSo);
+    }
+
     void OnGUI()
     {
-        if (che == Che.Dong) return;
+        if (che == Che.Dong && !HienThanh) return;
         KhoiStyle();
         float k = Screen.height / 1080f; GUI.matrix = Matrix4x4.Scale(new Vector3(k, k, 1));   // chữ cùng cỡ ở mọi độ phân giải (thiết kế ở 1080p)
         float W = Screen.width / k, H = 1080f;
+        if (che == Che.Dong) { VeThanh(W, H); GUI.matrix = Matrix4x4.identity; return; }
         GUI.color = new Color(0, 0, 0, 0.72f); GUI.DrawTexture(new Rect(0, 0, W, H), Texture2D.whiteTexture); GUI.color = Color.white;
-        Rect giay;
-        if (che == Che.Tui)
-        {
-            GUI.Label(new Rect(W * 0.06f, H * 0.08f, W * 0.3f, 40), "Túi đồ", sTieuDe);
-            if (ids.Count == 0) GUI.Label(new Rect(W * 0.06f, H * 0.16f, W * 0.3f, 30), "(chưa có gì)", sMuc);
-            for (int i = 0; i < ids.Count; i++)
-            {
-                var ten = TenMon(ids[i]);
-                var st = new GUIStyle(sMuc); if (i == chon) { st.normal.textColor = Color.white; st.fontStyle = FontStyle.Bold; }
-                GUI.Label(new Rect(W * 0.06f, H * 0.16f + i * 34, W * 0.3f, 32), (i == chon ? "›  " : "   ") + ten, st);
-            }
-            giay = new Rect(W * 0.40f, H * 0.08f, W * 0.52f, H * 0.74f);
-        }
-        else giay = new Rect(W * 0.24f, H * 0.08f, W * 0.52f, H * 0.74f);
+        var giay = new Rect(W * 0.24f, H * 0.08f, W * 0.52f, H * 0.74f);
+        if (che == Che.Tui) VeThanh(W, H);
 
         if (dangDoc)
         {
@@ -178,8 +228,8 @@ public class LocTui : MonoBehaviour
                 GUI.Label(new Rect(giay.x, giay.yMax - 34, giay.width - 24, 26), $"{trangI + 1} / {dangDoc.trang.Length}", sTrang);
             }
         }
-        string phim = che == Che.Tui ? "[↑↓] chọn món    [←→] lật trang    [Tab] đóng" : "[←→] lật trang    [Esc] đóng";
-        GUI.Label(new Rect(0, H * 0.9f, W, 30), phim, sNho);
+        string phim = che == Che.Tui ? "[1–6] chọn món    [←→] lật trang    [Tab] đóng" : "[←→] lật trang    [Esc] đóng";
+        GUI.Label(new Rect(0, H * 0.84f, W, 30), phim, sNho);
         GUI.matrix = Matrix4x4.identity;
     }
 }
