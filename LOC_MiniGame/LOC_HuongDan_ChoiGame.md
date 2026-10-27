@@ -27,6 +27,12 @@ Mỗi đêm có một **chiếc chén vỡ**. Các **mảnh chén** nằm sau c�
 
 Ráp chén: lưới 2×2 (đêm 1), 3×2 (đêm 2), 3×3 (đêm 3). Bấm hai mảnh để đổi chỗ cho đến khi khít.
 
+## 2b. Chơi từ đầu đến cuối
+- Đặt **Dem Bat Dau = 1** trên `LocMa`, bấm Play, không dùng phím thử.
+- Ráp xong chén đêm 1 hoặc 2: màn đen, hiện "Hết đêm thứ …", sang đêm sau và bạn về chỗ xuất phát (túi đồ giữ nguyên).
+- Ráp xong chén đêm 3: màn kết **HẾT**. Bấm **R** để chơi lại từ đầu (xoá túi đồ, về đêm 1).
+- Chết (Death Ending) thì bấm R chơi lại từ đầu đêm đó.
+
 ## 3. Mẹo chung
 - Nhìn kỹ đồ trong nhà: lịch, đồng hồ, bàn ăn, bàn học đều là manh mối của mini game khác.
 - Vật nào chưa dùng được sẽ có câu báo thiếu gì. Xem túi (Tab) để biết mình đang có gì.

@@ -16,6 +16,8 @@ public static class LocTui
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     static void Reset0() { dsDo.Clear(); cos.Clear(); DangCam = null; }
 
+    public static void XoaHet() { dsDo.Clear(); cos.Clear(); DangCam = null; }
+
     public static int Dem { get { return dsDo.Count; } }
     public static string IdCuaSo(int i) { return dsDo[i].id; }
     public static string TenCuaSo(int i) { return dsDo[i].ten; }
