@@ -737,6 +737,16 @@ public static partial class LocHouseBuilder
         HoanThienThang("ThangHam", -1.5f, -0.2f, 17.5f, -1, 0, -0.19f, 12, 0.22f, true, true, -1);
 
         A("TuongBuaMau", cx, zs, y, 0, new Vector3(2.2f, 1.42f, 0.03f), pivot: true);
+        // [27/10] tường hầm dán KÍN bùa (C0): nhân mảng bùa mẫu ra cả bốn mặt tường, hai lớp cao thấp chồng lên nhau
+        int nb = 0;
+        void Bua(float x, float z, float yy, float yaw) { var g = A("TuongBuaMau", x, z, yy, yaw, new Vector3(2.2f, 1.42f, 0.03f), pivot: true); if (g) g.name = "TuongBuaMau_" + nb++; }
+        foreach (var yy in new[] { y, y + 0.68f })
+        {
+            foreach (var x in new[] { -3.0f, -0.95f }) Bua(x, zs + 0.004f, yy, 0);          // tường sau bàn thờ
+            foreach (var z in new[] { 11.9f, 13.85f }) Bua(-3.796f, z, yy, 90);              // tường trái
+            foreach (var z in new[] { 11.9f, 13.85f }) Bua(-0.204f, z, yy, -90);             // tường phải
+            Bua(-2.75f, 14.796f, yy, 180);                                                   // tường đầu hầm (cạnh chân thang)
+        }
         var banThoHam = A("BanThoHam", cx, zs + 0.22f, y, 0);
         HuCot(banThoHam, y);   // [3/10 v3.0] hũ cốt dưới gầm bàn thờ
         A("BatNhang_FullAssembly", cx, zs + 0.13f, y + top, 0, pivot: true);

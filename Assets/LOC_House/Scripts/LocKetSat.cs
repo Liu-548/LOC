@@ -41,7 +41,7 @@ public class LocKetSat : LocTuongTac
     {
         if (nhap.Length < 4) return;
         if (nhap == ma) { Dong(); canh.khoa = false; canh.Mo(); LocTui.Dat("ket_mo"); }
-        else sai = 0.9f;
+        else { sai = 0.9f; if (nhap is "1959" or "1960" or "1982" or "1995") LocTui.Noi("Không phải."); }   // [v3.3] năm sinh người khác trong nhà
     }
 
     void OnGUI()

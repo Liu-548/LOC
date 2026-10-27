@@ -38,6 +38,7 @@ public class LocTuongTacMG : LocTuongTac
     public bool xong;
 
     [Header("[22/10] Điều kiện cờ + cảnh hé lộ")]
+    public bool truocHoangLoan;            // [v3.3 TL-25] việc nhà: chỉ mở trước đoạn hoảng loạn Đêm 2
     public string sauCo;                   // chỉ hiện khi đã có cờ này (vd "ho_hang_ve": dọn bàn nước sau khi cô về)
     public Transform nhinVao;              // xong thì camera từ từ quay về vật này …
     public Transform dungXem;              // … (tuỳ chọn) đồng thời Khôi bước tới chỗ này (chân, trên sàn) để không bị đồ khác che
@@ -46,7 +47,7 @@ public class LocTuongTacMG : LocTuongTac
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     static void Reset0() { dangPhatHien = false; }
 
-    public bool HienDuoc { get { return (lapLai || !xong) && LocMa.dem >= demTu && LocMa.dem <= demDen && (string.IsNullOrEmpty(sauCo) || LocTui.Co(sauCo) || LocMa.dem > demTu); } }   // sauCo chỉ chặn trong đêm đầu (F2/F3 nhảy đêm vẫn chơi được)
+    public bool HienDuoc { get { return (lapLai || !xong) && !(truocHoangLoan && LocNhim.daHoangLoan) && LocMa.dem >= demTu && LocMa.dem <= demDen && (string.IsNullOrEmpty(sauCo) || LocTui.Co(sauCo) || LocMa.dem > demTu); } }   // sauCo chỉ chặn trong đêm đầu (F2/F3 nhảy đêm vẫn chơi được)
     public override string GoiY { get { return !HienDuoc ? "" : loai == Loai.Nhat ? "[E] Nhặt " + ten : "[E] " + ten; } }
 
     // [21/10] chưa tới đêm / đã xong thì tắt va chạm để tia nhìn không bị cục đánh dấu chặn

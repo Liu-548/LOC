@@ -38,6 +38,13 @@ public class LocHuCot : MonoBehaviour
         c.SetPositionAndRotation(p, r);
     }
 
+    // [v3.3] nạp điểm lưu Đêm 3 sau khi đã hé: hũ để ngoài gầm, góc niêm rách vểnh lên
+    public void DatDaHe()
+    {
+        if (!than) than = transform;
+        than.position += Huong() * keoRa; DatGoc(gocDay);
+    }
+
     public IEnumerator CanhHe(Transform cam)
     {
         var am = GetComponent<AudioSource>(); if (!am) { am = gameObject.AddComponent<AudioSource>(); am.playOnAwake = false; am.spatialBlend = 0; }

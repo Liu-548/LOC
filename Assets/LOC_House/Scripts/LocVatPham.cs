@@ -13,17 +13,21 @@ public class LocVatPham : LocTuongTac
     public string chuaToi = "";               // câu nói khi chưa tới đêm ("" = không hiện gợi ý)
     public int docTuDem;                      // mở đọc trong túi trước đêm này → chuaDoc
     public string chuaDoc = "Mai hẵng đọc.";
+    public string canCo, chuaCo;              // [v3.3] cần cờ này mới lấy được (vd thắp hương ông bà trước khi mở tủ thờ)
+    bool ThieuCo => !string.IsNullOrEmpty(canCo) && !LocTui.Co(canCo);
 
     public bool Toi => LocMa.dem >= tuDem;
     public bool DocDuoc => trang != null && trang.Length > 0 && LocMa.dem >= docTuDem;
 
     public override string GoiY =>
         !Toi ? (chuaToi.Length > 0 ? "[E] " + ten : "")
+        : ThieuCo ? "[E] " + ten
         : kieu == Kieu.Nhat ? "[E] Lấy " + ten : kieu == Kieu.Doc ? "[E] Đọc " + ten : "[E] " + ten;
 
     public override void Bam()
     {
         if (!Toi) { LocTui.Noi(chuaToi); return; }
+        if (ThieuCo) { LocTui.Noi(chuaCo); return; }
         if (kieu == Kieu.Nhat) { LocTui.Them(this); gameObject.SetActive(false); }
         else if (kieu == Kieu.Doc) LocTui.Doc(this);
         LocTui.Noi(khiNhat);

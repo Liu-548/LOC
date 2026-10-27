@@ -15,9 +15,9 @@ public class LocNhim : MonoBehaviour
     public static LocNhim I;
     public static bool[] daTham = new bool[4], daThayKhan = new bool[4], daQuayLai = new bool[4];
     public static bool daHoangLoan, dangCanh;
-    public static System.Action SauGood, SauBad;   // cảnh kết của hệ thống cốt truyện nối tiếp ở đây
+    public static System.Action SauGood, SauBad, SauEvil;   // cảnh kết của hệ thống cốt truyện nối tiếp ở đây
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    public static void Reset0() { daTham = new bool[4]; daThayKhan = new bool[4]; daQuayLai = new bool[4]; daHoangLoan = dangCanh = false; SauGood = SauBad = null; }
+    public static void Reset0() { daTham = new bool[4]; daThayKhan = new bool[4]; daQuayLai = new bool[4]; daHoangLoan = dangCanh = false; SauGood = SauBad = SauEvil = null; }
 
     [Header("Model (LocHouseBuilder_Nhim gán)")]
     public Animator anim;
@@ -42,7 +42,7 @@ public class LocNhim : MonoBehaviour
     public float[] nhipDem = { 20, 22, 26, 30 };   // lần thở/phút theo đêm (0 = khỏe)
     public float[] sotDem = { 0.05f, 0.35f, 0.6f, 0.85f };
     public float gocNhin = 50f;
-    public bool hienDebug = true;
+    public bool hienDebug = false;   // chữ thử góc trên màn hình — bật trong Inspector khi cần
 
     Transform cam, player; LocFirstPerson fp;
     AudioSource amTho, am;
@@ -244,10 +244,15 @@ public class LocNhim : MonoBehaviour
             tNhau = 60; Clip("Nam_Thuc", 1.4f, TocTho);
             yield return Noi("NHÍM", "Cửa không khóa. Em chỉ muốn xem dưới đấy có gì. Tối lắm. Bố mắng em.", 1f, 0.8f);
             tNhau = 20;
+            yield return Cho(2f);
+            tNhau = 70; yield return Noi("NHÍM", "Anh Khôi ơi. Em nhớ mẹ.", 1.2f, 0f);
+            yield return Cho(3f);   // Khôi không nói gì
+            tNhau = 20;
             yield return ChoThayKhan();
             tHe = 50;
             yield return Noi("NHÍM", "Anh ngồi đây tí nữa nhé.", 1.1f, 0.2f);
             Ngu(2.5f);
+            StartCoroutine(KhoiVo());
         }
         else if (d == 2)
         {
@@ -255,8 +260,9 @@ public class LocNhim : MonoBehaviour
             yield return Noi("NHÍM", "Anh Khôi ơi. Nóng quá.", 1.1f, 0.6f);
             Clip("Nam_Thuc", 1.2f, TocTho);
             yield return ChoThayKhan();
-            yield return Noi("NHÍM", "Sao em nằm mãi mà không đỡ nhỉ.", 1.1f);
-            yield return Noi("KHÔI", "Mai anh đưa em đi viện lại. Cần gì cứ gọi anh, nghe chưa.", 1f, 0.6f);
+            yield return Noi("NHÍM", "Em muốn mẹ.", 1.1f, 0f);
+            yield return Cho(3f);
+            yield return Noi("KHÔI", "Mai anh đưa em đi viện. Cần gì cứ gọi anh, nghe chưa.", 1f, 0.6f);
             Ngu(2f);
         }
         else
@@ -291,6 +297,22 @@ public class LocNhim : MonoBehaviour
             tHe = 0;
         }
         dangThoai = false;
+    }
+
+    // [v3.3] lần duy nhất Khôi vỡ: ra tới hành lang, khép cửa, khoá ~5 s, thở nghẹn, camera cúi xuống nền gạch. Không chữ.
+    IEnumerator KhoiVo()
+    {
+        while (NguoiTrongPhong() || dangCanh) yield return null;
+        if (LocTui.Co("khoi_vo")) yield break;
+        LocTui.Dat("khoi_vo");
+        if (cua && cua.DangMo) cua.Bam();
+        LocFirstPerson.khoa = true; LocMa.tamDung = true;
+        if (khoiTho) am.PlayOneShot(khoiTho, 0.9f);
+        var tu = cam.position + cam.forward * 2f; var nen = player.position + player.forward * 0.7f;
+        for (float t = 0; t < 1; t += Time.deltaTime / 1.6f) { fp.DatTuThe(player.position, Vector3.Lerp(tu, nen, t * t * (3 - 2 * t))); yield return null; }
+        yield return new WaitForSeconds(3.4f);
+        for (float t = 0; t < 1; t += Time.deltaTime / 1f) { fp.DatTuThe(player.position, Vector3.Lerp(nen, tu, t * t * (3 - 2 * t))); yield return null; }
+        LocFirstPerson.khoa = false; LocMa.tamDung = false;
     }
 
     // ───────── thay khăn
@@ -336,7 +358,8 @@ public class LocNhim : MonoBehaviour
         if (khoiTho) am.PlayOneShot(khoiTho, 1f);
         var rung = StartCoroutine(Rung(1.6f, 1.4f));
         LocFirstPerson.PhuDe("Mùng một tháng bảy.", 1.8f); yield return new WaitForSeconds(1.9f);
-        LocFirstPerson.PhuDe("Mùng một tháng bảy là ngày kia.", 2.2f); yield return new WaitForSeconds(2.0f);
+        LocFirstPerson.PhuDe("Giỗ anh Phong.", 1.8f); yield return new WaitForSeconds(1.9f);
+        LocFirstPerson.PhuDe("...Giỗ anh Phong là ngày kia.", 2.2f); yield return new WaitForSeconds(2.0f);
         yield return Den(0.3f, 1);
         if (cua) cua.Mo();
         Ngu(0f);
@@ -348,8 +371,8 @@ public class LocNhim : MonoBehaviour
         LocFirstPerson.PhuDe("Bình tĩnh cái đã.", 2f); yield return new WaitForSeconds(2.4f);
         if (fp) fp.DatTuThe(choCuaTrong, choCuaTrong + Vector3.up * 1.4f + huongCauThang * 3f);
         LocFirstPerson.PhuDe("Bế nó đi. Đi viện, đi đâu cũng được.", 2.6f); yield return new WaitForSeconds(2.6f + 3f);
-        foreach (var c in new[] { "...Bố mẹ cũng đi.", "Đi buổi sáng, chiều thì người ta gọi về.", "Sổ bố viết. Ra khỏi cổng là hết.", "Ở đây thì còn được. Ở đây, với nó.", "Đến mùng một thôi." })
-        { LocFirstPerson.PhuDe(c, 2.4f); yield return new WaitForSeconds(2.6f); }
+        foreach (var c in new[] { "Gọi bác sĩ sang? Khám rồi. Thuốc vẫn uống. Có ăn thua gì.", "...Bố mẹ cũng đi.", "Đi buổi sáng, chiều thì người ta gọi về.", "Sổ bố viết. Ra khỏi cổng là hết.", "Thảo nào bố không cho nó đi viện.", "Ở đây thì còn được. Ở đây, với nó.", "Đến mùng một thôi." })
+        { float t = Mathf.Max(2.4f, c.Length * 0.065f); LocFirstPerson.PhuDe(c, t); yield return new WaitForSeconds(t + 0.2f); }
         daHoangLoan = true;
         TatCanh(false);
     }
@@ -467,6 +490,8 @@ public class LocNhim : MonoBehaviour
         LocMenu.DatKet("evil");
         LocFirstPerson.PhuDe("NHÍM: Anh Khôi ơi...", 2.6f, false); yield return new WaitForSeconds(6f);
         LocFirstPerson.PhuDe("NHÍM: Anh Khôi ơi...", 2.6f, false);
+        yield return new WaitForSeconds(4f);
+        SauEvil?.Invoke();
     }
 
     // ───────── khoá/mở cảnh

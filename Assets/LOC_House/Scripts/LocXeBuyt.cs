@@ -36,7 +36,7 @@ public class LocXeBuyt : MonoBehaviour
         new[] { "Phố vẫn thế. Chẳng khác gì." },
         new[] { "Mẹ gọi lên ký túc mấy lần.", "Toàn bảo bận.", "...Bận cái gì đâu." },
         new[] { "Bến sông." },
-        new[] { "Anh Phong đi tắm ở khúc này.", "...Thôi. Không nghĩ nữa." },
+        new[] { "Qua đây lần nào cũng không dám nhìn xuống nước.", "...Thôi. Không nghĩ nữa." },
         new[] { "Lúc đi còn cãi nhau với bố một trận.", "Câu cuối nói với bố là gì nhỉ.", "...Không nhớ nổi." },
         new[] { "Con Nhím chắc lớn lắm rồi." },
         new[] { "Rạp dựng rồi." },

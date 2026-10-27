@@ -53,6 +53,7 @@ public class LocMenu : MonoBehaviour
     static int DemLuu => PlayerPrefs.GetInt(K_DEM, 0);
     static string MoTaLuu => $"Đêm {DemLuu} · {NGAY[Mathf.Clamp(DemLuu, 0, 3)]}";
     static string[] Tach(string s) => string.IsNullOrEmpty(s) ? new string[0] : s.Split('|');
+    public static void LuuNgay() => Luu();   // [v3.3] điểm lưu ngầm Đêm 3
     static void Luu()
     {
         PlayerPrefs.SetInt(K_DEM, Mathf.Clamp(LocMa.dem, 1, 3));
@@ -119,6 +120,7 @@ public class LocMenu : MonoBehaviour
         vaoGame = true; NapLai();
     }
     static void VeMenu() { ResetTatCa(); vaoGame = false; NapLai(); }
+    public static void VeMenuChinh() => VeMenu();   // cảnh kết xong → về menu chính
     static void ChoiLaiDem() { Time.timeScale = 1; AudioListener.pause = false; LocMa.ChoiLai(); }
     public static void NapLai()
     {
@@ -303,7 +305,7 @@ public class LocMenu : MonoBehaviour
         {
             case 0: TiepTuc(); break;
             case 1: MoCaiDat(Man.TamDung); break;
-            case 2: XacNhan($"Chơi lại từ đầu Đêm {d}?", mat, "Chơi lại", "Ở lại", ChoiLaiDem); break;
+            case 2: XacNhan($"Chơi lại từ chỗ lưu gần nhất (Đêm {d})?", mat, "Chơi lại", "Ở lại", ChoiLaiDem); break;
             case 3: XacNhan("Về menu chính?", mat, "Về menu", "Ở lại", VeMenu); break;
             case 4: XacNhan("Thoát game?", mat, "Thoát", "Ở lại", Thoat); break;
         }
@@ -759,7 +761,7 @@ public class LocMenu : MonoBehaviour
     {
         int d = Mathf.Clamp(LocMa.dem, 1, 3);
         Chu(160, 300, $"ĐÊM {d}", 30, fDam, MO); Chu(160, 345, NGAY_DAI[d], 24, fNghieng, C(110, 104, 96));
-        int b = DanhSach(160, 450, new[] { "Tiếp tục", "Cài đặt", "Chơi lại từ đầu đêm", "Về menu chính", "Thoát game" }, null, null, sel, tt);
+        int b = DanhSach(160, 450, new[] { "Tiếp tục", "Cài đặt", "Chơi lại", "Về menu chính", "Thoát game" }, null, null, sel, tt);
         if (b >= 0) BamTamDung(b);
         GoiYPhim("E  tương tác     Tab  túi đồ     H  gợi ý     C  ngồi     Esc  tiếp tục", x: 160);
     }
@@ -801,7 +803,7 @@ public class LocMenu : MonoBehaviour
     // 12 — Death Ending: dòng chữ do LocFirstPerson.chuGiua vẽ giữa màn hình; ở đây chỉ thêm hai lựa chọn
     void VeChet()
     {
-        string[] ds = { "Chơi lại từ đầu đêm", "Về menu chính" };
+        string[] ds = { "Chơi lại", "Về menu chính" };
         for (int i = 0; i < 2; i++)
         {
             float x = W / 2 - 260 + i * 400; bool on = i == chon;

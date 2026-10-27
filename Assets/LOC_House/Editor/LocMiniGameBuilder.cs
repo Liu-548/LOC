@@ -48,6 +48,7 @@ public static class LocMiniGameBuilder
         if (chen) chen.id = "dan_chen";
 
         var mam = Diem("BanThoHam", "Bày mâm", Game<LocMG_MamCung>("BayMam"), 3, 3, 0.15f);
+        if (mam) mam.sauCo = "he_hu";   // nghi lễ chỉ sau khi đã hé hũ (Đêm 3)
         var lua = Game<LocMG_GiuLua>("GiuNhang");
         lua.tieuDe = "Giữ ngọn nhang"; lua.goiY = "Gió lạnh thổi từng đợt. Giữ SPACE (hoặc chuột phải) để che, đừng che quá lâu kẻo mỏi tay.";
         lua.cauXong = "Ngọn nhang vẫn cháy. Gió yếu dần.";
@@ -105,7 +106,7 @@ public static class LocMiniGameBuilder
             var d = Diem("Salon_BanNuoc", "dọn bàn nước", Game<LocMG_DonBanNuoc>("DonBanNuoc"), 1, 3, 0f);
             if (d)
             {
-                d.id = "mg_ban_nuoc"; d.sauCo = "ho_hang_ve"; d.nhinVao = coc.transform;
+                d.id = "mg_ban_nuoc"; d.sauCo = "ho_hang_ve"; d.truocHoangLoan = true; d.nhinVao = coc.transform;
                 var vc = d.GetComponent<BoxCollider>();   // bàn thấp (0,46 m): tia nhìn chéo xuống trúng mặt bàn trước cục 0,35 m → phủ kín mặt bàn
                 vc.size = new Vector3(b.size.x, 0.3f, b.size.z); vc.center = new Vector3(c.x - d.transform.position.x, y + 0.12f - d.transform.position.y, c.z - d.transform.position.z);
                 d.cauPhatHien = new[] { "Bố uống xong lúc nào cũng úp cốc như thế.", "Để đấy." };
@@ -139,7 +140,7 @@ public static class LocMiniGameBuilder
             var d = Diem("DayPhoi", "rút quần áo", Game<LocMG_RutQuanAo>("RutQuanAo"), 2, 3, 0f);
             if (d && aoGap)
             {
-                d.id = "mg_quan_ao"; d.nhinVao = aoGap.transform; d.dungXem = dung.transform;
+                d.id = "mg_quan_ao"; d.truocHoangLoan = true; d.nhinVao = aoGap.transform; d.dungXem = dung.transform;
                 d.cauPhatHien = new[] { "Tay áo bị cắt cho vừa cái bột.", "Mũi khâu nhỏ, đều tăm tắp.", "Chỉ mẹ mới khâu kiểu này." };
             }
         }
@@ -159,7 +160,7 @@ public static class LocMiniGameBuilder
             var tu = Bao(tuHs);
             for (int i = 0; i < 4; i++) Mo(truoc, "MG_HoaDon", new Vector3(tu.min.x - 0.35f + R(0.15f), b.min.y + i * 0.0012f, tu.center.z + R(0.3f)), R(60));
             Mo(truoc, "MG_BiaHoSo", new Vector3(tu.min.x - 0.45f, b.min.y + 0.006f, tu.center.z + 0.15f), 30);
-            Muc(truoc, 2, null, "mg_ho_so");
+            Muc(truoc, 1, "ket_mo", "mg_ho_so");   // [v3.3] mở từ Đêm 1 sau khi mở két (TL-25)
 
             var sau = Nhom("SauXep_BiaKhoi");
             // bìa KHÔI + xấp cuống đặt chồng lên mép bìa: tìm chỗ trống trên mặt bàn (không đè bàn tính, hộp dấu, chồng sổ…), mặt chữ quay về phía người đứng
@@ -167,14 +168,14 @@ public static class LocMiniGameBuilder
             Quaternion q = Quaternion.Euler(0, yaw, 0), qm = Quaternion.Euler(0, yaw + 180f, 0);   // FBX vào Unity: mặt chữ đọc từ phía +Z cục bộ → xoay 180° cho chữ quay về người đứng
             Mo(sau, "MG_BiaKhoi", p0 + qm * new Vector3(-0.03f, 0, 0.01f), yaw + 183);
             var cuong = Mo(sau, "MG_CuongPhieuXap", p0 + qm * new Vector3(0.04f, 0.0115f, -0.11f), yaw + 174);
-            Muc(sau, 2, "mg_ho_so", null);
+            Muc(sau, 1, "mg_ho_so", null);
             var dung = Nhom("DungXem_HoSo"); dung.transform.position = new Vector3(p0.x, b.min.y, p0.z) + q * Vector3.back * 0.62f;
 
-            var d = Diem("TuHoSo_Sat", "xếp lại giấy tờ", Game<LocMG_XepHoSo>("XepHoSo"), 2, 3, 0f);
+            var d = Diem("TuHoSo_Sat", "xếp lại giấy tờ", Game<LocMG_XepHoSo>("XepHoSo"), 1, 3, 0f);
             if (d && cuong)
             {
-                d.id = "mg_ho_so"; d.nhinVao = cuong.transform; d.dungXem = dung.transform;
-                d.cauPhatHien = new[] { "Phiếu chuyển tiền. Tháng nào cũng có, từ tháng chín năm 2000.", "Người gửi: Nguyễn Thị Liên.", "...Chữ bố." };
+                d.id = "mg_ho_so"; d.sauCo = "ket_mo"; d.truocHoangLoan = true; d.nhinVao = cuong.transform; d.dungXem = dung.transform;
+                d.cauPhatHien = new[] { "Phiếu chuyển tiền. Tháng nào cũng có, từ tháng chín năm 2000.", "Người gửi: Nguyễn Thị Liên.", "...Chữ bố.", "Hai năm. Không một chữ." };
             }
         }
         tt.muc = muc.ToArray();

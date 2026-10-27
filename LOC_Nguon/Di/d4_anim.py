@@ -1,4 +1,4 @@
-# DÌ — Bước 4: 3 clip (30 fps): Dung_Cho (đứng chờ, tay đan trước bụng), Dung_Noi (đứng nói, gật nhẹ), Di_Bo (đi tại chỗ — code dời người) + xuất FBX.
+# DÌ — Bước 4: 3 clip (30 fps): Dung_Cho (đứng chờ, tay đặt hờ trước bụng), Dung_Noi (đứng nói, gật nhẹ), Di_Bo (đi tại chỗ — code dời người) + xuất FBX.
 import sys, os; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bpy, json, rig
 from mathutils import Vector, Matrix
@@ -18,9 +18,9 @@ def clip(name, keys, loop):
 REST_H = arm.data.bones["Hips"].head_local.copy()
 def H(dz=0.0): return REST_H + Vector((0, 0, dz))
 
-DAN = {   # tay đan trước bụng
-    "UpperArm_L": {"d": (0.12, -0.30, -0.95)}, "LowerArm_L": {"d": (-0.72, -0.62, -0.30)}, "Hand_L": {"d": (-0.80, -0.55, -0.25)},
-    "UpperArm_R": {"d": (-0.12, -0.30, -0.95)}, "LowerArm_R": {"d": (0.72, -0.62, -0.22)}, "Hand_R": {"d": (0.80, -0.55, -0.18)},
+DAN = {   # [27/10] tay đặt hờ trước bụng, đầu ngón gần chạm, KHÔNG lồng vào nhau (đã duyệt 21/10, làm lại 27/10)
+    "UpperArm_L": {"d": (0.10, -0.28, -0.95)}, "LowerArm_L": {"d": (-0.40, -0.86, -0.32)}, "Hand_L": {"d": (-0.12, -0.32, -0.94)},
+    "UpperArm_R": {"d": (-0.10, -0.28, -0.95)}, "LowerArm_R": {"d": (0.40, -0.86, -0.32)}, "Hand_R": {"d": (0.12, -0.32, -0.94)},
     "Spine": {"d": (0, 0.02, 1)}, "Chest": {"d": (0, 0.03, 1)}, "Neck": {"d": (0, -0.30, 1)}, "Head": {"d": (0, -0.12, 1)},
     "UpperLeg_L": {"d": (0.06, 0.0, -1)}, "UpperLeg_R": {"d": (-0.06, 0.0, -1)}, "LowerLeg_L": {"d": (0.05, 0.03, -1)}, "LowerLeg_R": {"d": (-0.05, 0.03, -1)},
 }

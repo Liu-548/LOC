@@ -46,7 +46,7 @@ public class LocTuKiemGamePlay : MonoBehaviour
         Kt(viec.GoiY == "[E] Thắp hương", "đứng chính diện: [E] Thắp hương");
         viec.Bam(); yield return new WaitForSeconds(2f); yield return Chup("06_thap_huong");
         Kt(LocFirstPerson.khoa && viec.GoiY == "", "thắp hương: khoá điều khiển, giữ camera trên ảnh, hết gợi ý");
-        float t0 = Time.time; while (!LocTui.Co("ho_hang_ve") && Time.time - t0 < 60f) yield return null;
+        float t0 = Time.time; while (!LocTui.Co("ho_hang_ve") && Time.time - t0 < 100f) yield return null;
         Kt(LocTui.Co("ho_hang_ve") && !LocFirstPerson.khoa, $"thoại người họ hàng chạy hết ({Time.time - t0:0}s), trả điều khiển");
         if (di) { yield return new WaitForSeconds(1.5f); yield return Chup("06b_di_ve"); }
 
@@ -61,8 +61,13 @@ public class LocTuKiemGamePlay : MonoBehaviour
 
         if (di) { t0 = Time.time; while (!di.daVe && Time.time - t0 < 30f) yield return null; Kt(di.daVe && !di.gameObject.activeSelf, $"người dì đã ra cổng và biến mất ({Time.time - t0:0}s)"); }
         LocNhim.daTham[1] = true;
+        yield return new WaitForSeconds(2f);
+        Kt(LocMa.dem == 1, "[v3.3] xuống hầm + thăm Nhím nhưng chưa giữ hương → chưa hết Đêm 1");
+        fp.DatTuThe(ct.demSauDung, ct.demSauNhin); yield return new WaitForSeconds(0.3f);
+        Kt(viec.GoiY == "[E] Thắp nén mới", "[v3.3] cuối Đêm 1: [E] Thắp nén mới ở bàn thờ vong (" + viec.GoiY + ")");
+        viec.Bam(); yield return new WaitForSeconds(0.5f); yield return Chup("07b_giu_huong");
         t0 = Time.time; while (LocMa.dem == 1 && Time.time - t0 < 25f) yield return null;
-        Kt(LocMa.dem == 2, "đã xuống hầm + thăm Nhím → tự sang Đêm 2");
+        Kt(LocMa.dem == 2, "đã xuống hầm + thăm Nhím + giữ hương → tự sang Đêm 2");
         t0 = Time.time; while ((LocFirstPerson.khoa || LocFirstPerson.den > 0) && Time.time - t0 < 10f) yield return null;
         int sai = 0; foreach (var t in GameObject.Find("NhaLoc").GetComponentsInChildren<Transform>(true))
             if (t.name is "Dem1" or "Dem2" or "Dem3" && t.gameObject.activeSelf != (t.name == "Dem2")) sai++;
@@ -190,7 +195,10 @@ public class LocTuKiemGamePlay : MonoBehaviour
 
         V("sach_gia_le").Bam(); Kt(!LocTui.CoMon("sach_gia_le"), "Đêm 2 chưa lấy sách (đồ thờ, đừng lục)");
         LocMa.dem = 3; yield return null; V("sach_gia_le").Bam(); yield return null;
-        Kt(LocTui.CoMon("sach_gia_le"), "Đêm 3 lấy được sách");
+        Kt(!LocTui.CoMon("sach_gia_le"), "[v3.3] Đêm 3 chưa thắp hương ông bà → chưa lấy sách");
+        Kt(GameObject.Find("QuanTai_LOC") == null, "[v3.3] Đêm 3: linh cữu không còn trong phòng khách");
+        LocTui.Dat("thap_huong_t3"); V("sach_gia_le").Bam(); yield return null;
+        Kt(LocTui.CoMon("sach_gia_le"), "Đêm 3 thắp hương ông bà xong → lấy được sách");
         Kt(!MG("dan_chen").HienDuoc, "Đêm 3 không còn dán chén");
         Kt(MG("nl_giu_nhang") && !MG("nl_giu_nhang").gameObject.activeSelf, "giữ nhang ẩn tới khi bày mâm xong");
         yield return ThuMiniGame("nl_bay_mam", "13_bay_mam");

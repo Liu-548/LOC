@@ -4,7 +4,7 @@
 public class LocMG_RutQuanAo : LocMG_PhanLoai
 {
     protected override string TenMacDinh() { return "Dây phơi"; }
-    protected override string GoiYMacDinh() { return "Mẹ dặn tối không được để quần áo ngoài trời. Sắp sang tháng bảy rồi."; }
+    protected override string GoiYMacDinh() { return "Hồi bé mẹ hay dặn: tháng bảy không để quần áo qua đêm."; }
     protected override void CauHinh()
     {
         cacNgan = new[] { "Đồ tang — gấp, để lên sạp", "Đồ của Nhím", "Khăn — vắt lên móc" };

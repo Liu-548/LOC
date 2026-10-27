@@ -101,14 +101,14 @@ c = np.broadcast_to(H("#B5826A"), p.shape).copy() * (0.94 + 0.10 * noise(S, S, 4
 front = (y < -0.07) & (z > 1.36)
 EX, EZ = 0.031, 1.459   # tâm mắt (xương Eye_L)
 for s_ in (1, -1):
-    u = (x - EX * s_) / 0.0185; v = (z - EZ) / 0.0105          # mắt TO: rộng 3,7 cm, cao 2,1 cm (≈1,35× bản phác)
+    u = (x - EX * s_) / 0.0150; v = (z - EZ) / 0.0075          # [27/10] mắt rộng 3,0 cm, cao 1,5 cm — chỉ to hơn bản phác một chút
     eye = (u ** 2 + v ** 2 < 1) & front
     c = mix(c, (0.93, 0.90, 0.85), eye)
-    iris = ((x - EX * s_) ** 2 + ((z - EZ) * 1.0) ** 2 < 0.0095 ** 2) & eye
+    iris = ((x - EX * s_) ** 2 + ((z - EZ) * 1.0) ** 2 < 0.0072 ** 2) & eye
     c = mix(c, (0.20, 0.13, 0.09), iris)
     c = mix(c, (0.03, 0.02, 0.02), ((x - EX * s_) ** 2 + (z - EZ) ** 2 < 0.0045 ** 2) & eye)
     c = mix(c, (1, 1, 1), ((x - EX * s_ - 0.0035 * s_) ** 2 + (z - EZ - 0.004) ** 2 < 0.0018 ** 2) & eye)   # đốm sáng
-    lid = (np.abs(u) < 1.12) & front & (np.abs(z - (EZ + 0.0105 * np.sqrt(np.clip(1 - u ** 2, 0, 1)))) < 0.0018)
+    lid = (np.abs(u) < 1.12) & front & (np.abs(z - (EZ + 0.0075 * np.sqrt(np.clip(1 - u ** 2, 0, 1)))) < 0.0018)
     c = mix(c, (0.08, 0.06, 0.05), lid)                                                                          # viền mi trên đậm
     c = mix(c, (0.52, 0.36, 0.32), gauss(p, (EX * s_, -0.12, EZ - 0.016), (0.016, 0.03, 0.004)) * front * 0.45)  # quầng mắt (mệt, mấy hôm trông nhà)
     t = (s_ * x - 0.010) / 0.040                                                                                 # lông mày

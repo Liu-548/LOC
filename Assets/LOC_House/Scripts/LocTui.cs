@@ -20,6 +20,8 @@ public class LocTui : MonoBehaviour
     public static bool CoMon(string id) => ids.Contains(id);
     public static bool Co(string co_) => co.Contains(co_);
     public static void Dat(string co_) => co.Add(co_);
+    public static void BoCo(string dau) => co.RemoveWhere(s => s.StartsWith(dau));
+    public static void ChupDiemLuu() { idsDauDem = new List<string>(ids); coDauDem = new HashSet<string>(co); }   // [v3.3] điểm lưu ngầm Đêm 3
     // [22/10] lưu/nạp đầu đêm (LocMenu)
     public static string ChuoiIds => string.Join("|", ids);
     public static string ChuoiCo => string.Join("|", co);
@@ -118,6 +120,11 @@ public class LocTui : MonoBehaviour
             int n = dangDoc.trang.Length;
             if (k.rightArrowKey.wasPressedThisFrame || k.dKey.wasPressedThisFrame) trangI = Mathf.Min(n - 1, trangI + 1);
             if (k.leftArrowKey.wasPressedThisFrame || k.aKey.wasPressedThisFrame) trangI = Mathf.Max(0, trangI - 1);
+            if (dangDoc.id == "so_cua_bo")   // [v3.3] trang 11 là ký ức của chính Khôi; lật tới bìa sau = đọc hết → đoạn hoảng loạn (LocCotTruyen)
+            {
+                if (trangI == 11 && !Co("so_bo_11")) { Dat("so_bo_11"); Noi("Hôm đấy chẳng nhớ gì. Chỉ nhớ mẹ khóc."); }
+                if (trangI == n - 1) Dat("so_bo_het");
+            }
         }
     }
 

@@ -35,7 +35,7 @@ public class LocMa : MonoBehaviour
     public Bounds nhimPhong = new(new Vector3(5.4f, 5.2f, 10.45f), new Vector3(4.6f, 3.4f, 4.1f));
     public Vector3 nhimDung, nhimNhin; public Vector3[] nhimMa; public LocDoor nhimCua; public Light nhimDen;
     [Header("Thông số — chỉnh khi chơi thử")]
-    public Vector2 khoangLo = new(18, 40);
+    public Vector2 khoangLo = new(90, 120);   // [v3.3] 90–120 s/lần, không giới hạn số lần (chốt 25/10)
     public float lui = 3.5f, loToiDa = 14f, banKinhNhay = 7f;
     public Vector2 khoangTatDen = new(60, 120);
     public float nhayTruoc = 1f, thoiGianToi = 6f, banKinhChet = 2f;
@@ -46,7 +46,7 @@ public class LocMa : MonoBehaviour
     public float nhinLau = 1.4f;                         // bị nhìn chằm chằm quá lâu thì rụt vào
     public float ambientKhiToi = 0.5f;   // nhân với ambient gốc lúc mất điện (nhỏ hơn = tối hơn)
     public UnityEngine.Rendering.Volume volToi;   // lớp hậu kỳ "mất điện" (sập sáng, rút màu) — trọng số 0→1 khi tắt đèn
-    public bool hienDebug = true;
+    public bool hienDebug = false;   // chữ thử góc trên màn hình — bật trong Inspector khi cần
 
     const int LO_DAU = 0, TAY = 1, LAN_CAN = 2, VAN = 3, XOM = 4, TRAN = 5;
     static readonly float[] ROLL = { -20, 0, 15, 70, -10, 0 };
@@ -319,6 +319,7 @@ public class LocMa : MonoBehaviour
         if (MaBatRadioUpdate()) return;
         if (maTatRadio && !choNguoiTat && !dangLo && demTatRadio != dem && LocRadio.I && LocRadio.I.DangBat && LocRadio.I.BatDuoc > nguongTatRadio && CoTheTatRadio()) { demTatRadio = dem; StartCoroutine(CanhTatRadio()); return; }
         if (doaBatNgo && !dangLo && TrongNha() && (hDoa -= Time.deltaTime) <= 0) { hDoa = ThuDoa() ? Random.Range(khoangDoa.x, khoangDoa.y) : 4f; return; }
+        if (dem == 2 && !LocNhim.daHoangLoan) return;   // [v3.3] lấp ló chỉ bật sau đoạn hoảng loạn Đêm 2
         if (!maTucGian && !dangLo && (hLo -= Time.deltaTime) <= 0) hLo = ThuLo() ? Random.Range(khoangLo.x, khoangLo.y) : 3f;
         if (maTucGian && !dangLo && TrongNha() && (hToi -= Time.deltaTime) <= 0) { hToi = Random.Range(khoangTatDen.x, khoangTatDen.y); StartCoroutine(TatDen()); }
     }
@@ -399,8 +400,10 @@ public class LocMa : MonoBehaviour
                 if (Vector3.Angle(cam.forward, mat - cam.position) > 75f || !ThayDuoc(mat, 0.1f)) continue;
                 ds.Add(c);
             }
+        if (ds.Count > 1) ds.RemoveAll(c => (c.hien - loCu).sqrMagnitude < 0.5f);   // [v3.3] không lặp lại điểm vừa dùng
         if (ds.Count == 0) return false;
-        loCo = StartCoroutine(Lo(ds[Random.Range(0, ds.Count)]));
+        var chon = ds[Random.Range(0, ds.Count)]; loCu = chon.hien;
+        loCo = StartCoroutine(Lo(chon));
         return true;
     }
 
@@ -471,6 +474,26 @@ public class LocMa : MonoBehaviour
         return ngoai == 0 && dauRa >= 10;
     }
 
+    // [v3.3 C1.2b] phản ứng thân thể khi thấy lấp ló, nhạt dần: lần 1 camera kéo về phía nó + thở nhanh 2 s + "...Gì đấy." · lần 2 khựng + thở 1 s · lần 3 thở hắt · từ lần 4 thôi.
+    //  Đếm chung cả game, chết rồi chơi lại không đếm lại (không reset ở Reset0).
+    public static int soLanLapLo;
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset1() => soLanLapLo = 0;
+    Vector3 loCu = Vector3.one * 9999;
+    public void LoSom() { hLo = Random.Range(15f, 40f); }   // lần lấp ló đầu tiên: trong vòng một phút sau đoạn hoảng loạn
+    IEnumerator PhanUngLo(Vector3 mat)
+    {
+        int n = ++soLanLapLo; if (n > 3) yield break;
+        var tho = LocNhim.I ? LocNhim.I.khoiTho : null;
+        if (tho) am.PlayOneShot(tho, n == 3 ? 0.45f : 0.8f);
+        if (n == 3) yield break;
+        var fp = player.GetComponent<LocFirstPerson>(); if (!fp) yield break;
+        LocFirstPerson.khoa = true;
+        var tu = cam.position + cam.forward * 3f; var toi = n == 1 ? mat : Vector3.Lerp(tu, mat, 0.25f);
+        for (float t = 0; t < 1; t += Time.deltaTime / (n == 1 ? 0.5f : 0.25f)) { fp.DatTuThe(player.position, Vector3.Lerp(tu, toi, t * (2 - t))); yield return null; }
+        LocFirstPerson.khoa = false;
+        if (n == 1) LocFirstPerson.PhuDe("...Gì đấy.", 2f);
+    }
+
     IEnumerator Lo(ChoLo c)
     {
         dangLo = true;
@@ -482,6 +505,7 @@ public class LocMa : MonoBehaviour
             b.w.position = Vector3.Lerp(c.an, c.hien, e); b.than.SetFloat("_Alpha", alphaSang * e); yield return null;
         }
         b.w.position = c.hien; b.than.SetFloat("_Alpha", alphaSang);
+        StartCoroutine(PhanUngLo(b.quad[0] ? b.quad[0].position : c.hien + Vector3.up * 1.7f));
         if (Random.value < 0.6f) PhatTai(khucKhich, MatMa(b), 0.45f, 14f);   // [25/10] khúc khích nhỏ từ mép cửa
         float song = 0, nhin = 0;
         while (song < loToiDa && !dangToi && !dangCanh && !dangChet)
@@ -524,14 +548,17 @@ public class LocMa : MonoBehaviour
         Dien(bat, vat, false);
         RenderSettings.ambientLight = ambient0 * ambientKhiToi;
         if (volToi) volToi.weight = 1;
-        DatMaTrongToi(ep);
+        bool lanDau = !LocTui.Co("mat_dien_dau") && ep < 0;
+        if (lanDau) { LocTui.Dat("mat_dien_dau"); if (!DatMaTruocMat()) DatMaTrongToi(ep); LocFirstPerson.PhuDe("Đứng yên. Bố viết thế.", 3f); }
+        else DatMaTrongToi(ep);
         if (dangHien != null) PhatTai(cuoiXa, MatMa(dangHien), 0.7f, 18f);   // [25/10] cười vọng từ chỗ con ma trong tối
         for (float t = 0; t < thoiGianToi && !dangChet; t += Time.deltaTime)
         {
             if (dangHien != null)
             {
                 var ph = player.position - chanMa; float dy = Mathf.Abs(ph.y); ph.y = 0;
-                if (ph.magnitude < banKinhChet && dy < 2.6f) { Chet(); yield break; }
+                if (lanDau) { if (ph.magnitude < banKinhChet + 1.2f) break; }   // lần đầu: biến trước khi người chơi vào tới 2 m
+                else if (ph.magnitude < banKinhChet && dy < 2.6f) { Chet(); yield break; }
             }
             yield return null;
         }
@@ -559,6 +586,20 @@ public class LocMa : MonoBehaviour
         Physics.SyncTransforms();
         if (DemTrongVat(b, boQuaCha, 6) == 0) return true;
         An(); return false;
+    }
+    bool DatMaTruocMat()
+    {
+        var f = cam.forward; f.y = 0; f.Normalize();
+        for (int thu = 0; thu < 60; thu++)
+        {
+            var dir = Quaternion.Euler(0, Random.Range(-30f, 30f), 0) * f;
+            var Q = player.position + dir * (6f - thu / 10 * 0.5f);   // 6 m trước, không có chỗ thì lùi dần tới 3,5 m
+            if (!Physics.Raycast(Q + Vector3.up * 1.2f, Vector3.down, out var san, 1.8f, ~0, QueryTriggerInteraction.Ignore) || Mathf.Abs(san.point.y - player.position.y) > 0.35f) continue;
+            var G = san.point; var rot = Quaternion.LookRotation(-dir, Vector3.up);
+            if (bong[VAN] == null || Vuong(bong[VAN], G, rot) || !ThayDuoc(G + Vector3.up * 1.78f)) continue;
+            if (DatThu(VAN, G + Vector3.up * 0.03f, rot)) { chanMa = G; return true; }
+        }
+        return false;
     }
     bool DatMaTrongToi(int ep = -1)
     {
@@ -1105,6 +1146,8 @@ public class LocMa : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
         LocFirstPerson.khoa = false; dangCanh = false;
         hToi = Random.Range(40f, 60f); hLo = Random.Range(12f, 20f);
+        LocFirstPerson.PhuDe("...Nó vào phòng rồi.", 2.4f);
+        LocTui.Dat("he_hu"); LocCotTruyen.DiemLuu("diem_luu_1");   // [v3.3] điểm lưu 1
     }
 
     public string lyDoNhim = "";
@@ -1144,6 +1187,7 @@ public class LocMa : MonoBehaviour
     {
         dangChet = true; LocFirstPerson.khoa = true;
         LocMenu.DatKet("death"); yield return null;   // [22/10] chụp khung cuối (đôi mắt) cho màn Ending trước khi cắt đen
+        yield return new WaitForSeconds(0.4f);        // "Đôi mắt đỏ ngay trước mặt. Cắt đen ngay." (C3)
         LocFirstPerson.den = 1; An();
         if (chenVo) am.PlayOneShot(chenVo, 1f);
         yield return new WaitForSeconds(5.2f);
