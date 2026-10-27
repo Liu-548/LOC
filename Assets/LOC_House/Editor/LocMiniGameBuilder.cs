@@ -19,6 +19,11 @@ public static class LocMiniGameBuilder
     [MenuItem("LOC/Mini game/Dựng hệ mini game vào scene")]
     public static void Dung()
     {
+        if (EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            EditorUtility.DisplayDialog("LOC", "Đang ở chế độ Play. Bấm Play lần nữa để thoát, rồi chạy lại menu này.", "OK");
+            return;
+        }
         log = new StringBuilder("[LocMiniGameBuilder]\n");
         daGan = new List<LocTuongTac>();
         var cu = GameObject.Find(ROOT);
