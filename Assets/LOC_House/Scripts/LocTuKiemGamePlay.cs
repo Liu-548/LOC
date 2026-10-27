@@ -188,6 +188,7 @@ public class LocTuKiemGamePlay : MonoBehaviour
             if (gS) yield return ChupVao(gS.transform, anh + "_9_sau");
         }
         Kt(!GameObject.Find("AoTang_Phoi_01"), "rút quần áo xong: áo tang không còn trên dây");
+        LocTui.Nhan("lo_keo", null, false); LocTui.Nhan("chen_3", null, false);   // [27/10] dán chén cần keo + chén số ba
         yield return ThuMiniGame("dan_chen", "12_dan_chen");
         LocTui.I.DatChe(1); yield return new WaitForSeconds(0.3f); yield return Chup("04_tui_dem2_doc_so");
         Kt(V("so_cua_bo").DocDuoc, "Đêm 2 đọc được sổ của bố (" + V("so_cua_bo").trang.Length + " trang)");
@@ -202,6 +203,7 @@ public class LocTuKiemGamePlay : MonoBehaviour
         Kt(!MG("dan_chen").HienDuoc, "Đêm 3 không còn dán chén");
         Kt(MG("nl_giu_nhang") && !MG("nl_giu_nhang").gameObject.activeSelf, "giữ nhang ẩn tới khi bày mâm xong");
         yield return ThuMiniGame("nl_bay_mam", "13_bay_mam");
+        LocTui.Dat("nl_doc_van");   // [27/10] vòng 2 đọc bài khấn
         yield return ThuMiniGame("nl_giu_nhang", "14_giu_nhang");
 
         sb.AppendLine(loi == 0 ? "KẾT QUẢ: ĐẠT" : $"KẾT QUẢ: {loi} LỖI");

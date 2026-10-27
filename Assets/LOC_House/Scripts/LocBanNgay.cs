@@ -67,6 +67,35 @@ public class LocBanNgay : MonoBehaviour
         return b;
     }
 
+    // [27/10] sáng 8/8 đưa tang: (1) linh cữu giữa phòng khách, kèn đám, tụng kinh — (2) từ trong sân nhìn ra cổng mở, đường vắng, tiếng kèn xa dần.
+    //  Không thoại. Phụ đề là chữ thời gian (bản tạm, chờ chốt v3.3 🗣).
+    public Vector3 duaTangCam1 = new(3.8f, 1.55f, 0.9f), duaTangNhin1 = new(3.8f, 0.7f, 4.1f);
+    public Vector3 duaTangCam2 = new(3.8f, 1.5f, -1.2f), duaTangNhin2 = new(3.8f, 1.1f, -7f);
+    IEnumerator DuaTang(Transform cam, Camera c)
+    {
+        var kd = Nguon(kenDam, 0f, true); var tk = Nguon(tungKinh, 0f, true);
+        cam.position = duaTangCam1; cam.rotation = Quaternion.LookRotation(duaTangNhin1 - duaTangCam1, Vector3.up);
+        BatNgay(c);
+        for (float t = 0; t < 1; t += Time.deltaTime / 1.0f) { kd.volume = 0.5f * t; tk.volume = 0.35f * t; yield return null; }
+        yield return Den(1, 0, 1.0f);
+        Chup("dem2_dua_tang_1");
+        LocFirstPerson.PhuDe("Sáng 8/8. Đưa tang.", 3f, false);
+        for (float t = 0; t < 3.4f; t += Time.deltaTime) { cam.position += cam.forward * 0.04f * Time.deltaTime; yield return null; }
+        yield return Den(0, 1, 0.7f);
+        var cong = new System.Collections.Generic.List<LocDoor>();
+        foreach (var n in new[] { "CanhCong_Trai (mở)", "CanhCong_Phai (mở)" }) { var d = GameObject.Find(n)?.GetComponent<LocDoor>(); if (d) { cong.Add(d); d.DatNgay(true); } }
+        cam.position = duaTangCam2; cam.rotation = Quaternion.LookRotation(duaTangNhin2 - duaTangCam2, Vector3.up);
+        tk.volume = 0f; kd.volume = 0.3f;
+        yield return Den(1, 0, 0.8f);
+        Chup("dem2_dua_tang_2");
+        for (float t = 0; t < 3.2f; t += Time.deltaTime) { kd.volume = Mathf.Lerp(0.3f, 0.04f, t / 3.2f); yield return null; }   // kèn xa dần
+        yield return Den(0, 1, 0.8f);
+        foreach (var d in cong) if (d) d.DatNgay(false);
+        Destroy(kd); Destroy(tk);
+        TraDem(c);
+        yield return new WaitForSeconds(0.4f);
+    }
+
     // màn đã đen sẵn khi gọi; apDem: dựng trạng thái nhà của đêm sau (gọi lúc còn đen). Kết thúc cũng đen.
     public IEnumerator Chay(int demSau, System.Action apDem)
     {
@@ -74,7 +103,7 @@ public class LocBanNgay : MonoBehaviour
         if (chup) System.IO.File.AppendAllText("LOC_KiemTra/BanNgay/log.txt", $"{System.DateTime.Now:HH:mm:ss} bắt đầu cảnh sau đêm {demSau - 1}\n");
         var fp = GetComponent<LocFirstPerson>(); var cam = fp ? fp.cam : Camera.main.transform; var c = cam.GetComponent<Camera>();
         Vector3 lp = cam.localPosition; Quaternion lr = cam.localRotation;
-        apDem?.Invoke();
+        if (demSau != 3) apDem?.Invoke();   // sang Đêm 3: dựng nhà Đêm 3 SAU cảnh đưa tang (lúc đó linh cữu còn trong nhà)
 
         if (demSau == 2)
         {
@@ -102,6 +131,9 @@ public class LocBanNgay : MonoBehaviour
         }
         else
         {
+            // ── [27/10] VIEC_CON_LAI 1.2: cắt cảnh ĐƯA TANG (bản đơn giản: hai khung tĩnh + phụ đề), rồi mới tới sân vắng
+            yield return DuaTang(cam, c);
+            apDem?.Invoke();
             // ── 8/8: vắng. Sân trước, ghế nhựa đã xếp chồng, một chiếc xe máy chạy qua ngoài đường
             cam.position = sanCam; cam.rotation = Quaternion.LookRotation(sanNhin - sanCam, Vector3.up);
             BatNgay(c);

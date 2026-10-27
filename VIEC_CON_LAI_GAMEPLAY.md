@@ -6,6 +6,33 @@ File này gom mọi phần gameplay **chưa làm**, **làm dở** và **chưa te
 
 ---
 
+## Cập nhật 28/10 — nhánh `claude/gameplay-con-lai` (trên `claude/sua-loi-test-1`)
+
+Đã làm thành **cơ chế chơi được**, không cần dựng lại nhà: đồ mới dựng lúc vào scene bằng khối đơn giản, đặt theo vật có sẵn. Code ở `Scripts/LocCotTruyen_V34.cs` (phần mới của `LocCotTruyen`, lớp `partial`). **Mọi câu thoại / nội dung giấy dưới đây là bản tạm** 🗣, sửa thẳng trong file đó. Chỉ biên dịch thử ngoài Unity, **chưa chơi trong Unity**.
+
+| Mục | Đã làm | Ghi chú |
+|---|---|---|
+| 1.1 Cuộc gọi thầy Đồng | Sau cuộc gọi không lời ~35 s, điện thoại reo lại, [E] Nhấc máy → thoại thầy Đồng (cờ `goi_thay`). Không nhấc thì ~55 s sau reo lại | Phải đứng trong 16 m quanh điện thoại |
+| 1.1 Tờ giấy chép lời thầy | Vào túi sau cuộc gọi, đọc được (`giay_loi_thay`) | |
+| 1.1 Cháo, lọ keo, chén số 3, dán chén | Lọ keo trên quầy cửa hàng (`lo_keo`), chén số ba (chén anh Phong) trên bàn thờ ông bà tầng 3 (`chen_3`), bát cháo trên bàn ăn (`bat_chao`). Dán chén giờ cần keo + chén số ba. Bưng bát cháo xuống bàn thờ hầm (`cung_chao`) | Đêm 2 chỉ "thắp nén mới" được khi đã có `goi_thay`, `dan_chen`, `cung_chao` (món nào không dựng được thì bỏ điều kiện đó) |
+| 1.1 Cảnh nửa tỉnh cuối đêm | Nối vào `HetDem()` của Đêm 2 | |
+| 1.2 Kiện hàng + văn khấn | Gói giấy dầu trong cửa chính (Đêm 3). Mở ra: bài khấn (`van_khan`), hai tờ giấy gói chữ son (`giay_goi`), tờ niêm (`giay_niem`) | |
+| 1.2 Lời nhắn của mẹ | Trên bàn trang điểm phòng bố mẹ, Đêm 3 (`loi_nhan_me`, đọc tại chỗ) | Nội dung tạm: chỉ sang quyển sách trong tủ thờ |
+| 1.2 Cắt cảnh đưa tang | `LocBanNgay.DuaTang`: hai khung tĩnh (linh cữu giữa nhà, cổng mở nhìn ra đường) + kèn đám + phụ đề "Sáng 8/8. Đưa tang." rồi mới tới sân vắng | |
+| 1.3 Vòng đọc văn khấn | Sau bày mâm, đứng trong hầm, mở bài khấn trong túi và lật tới trang cuối → `nl_doc_van`. Giữ nhang chỉ mở sau đó | |
+| 1.3 Chỗ rẽ cuối | Giữ nhang xong: hũ cốt hiện **[E] Niêm hũ / [F] Xé giấy niêm**. Xé → Good. Niêm (cần tờ niêm) + đã đọc sách → Evil. Niêm + chưa đọc → Bad (c) | |
+| 1.3 Cảnh cổng sáng mùng một | Ra ngoài cổng, trời sáng, ba dòng độc thoại (Bad c / Evil) | |
+| 1.4 Good | Xé niêm, bốn lọn tóc, bùa trên tường hầm rơi, "Cảm ơn" → cảnh sáng hôm sau (đã có) → chữ cuối, điện thoại reo không ai nhấc | |
+| 1.4 Bad (a/b/c) | Bad (b): nhang tắt khi giữ nhang là hết, không châm lại. Mọi Bad → cảnh hầm, chén số năm vỡ → "Bốn năm sau." → chữ cuối | Chưa có model chén vỡ: chỉ tiếng vỡ + khung hình |
+| 1.4 Evil | Cổng sáng → chân cầu thang, tiếng gọi "Anh Khôi ơi…" (đã có) → điện thoại: "Cháu khá hơn bố cháu." → "Năm năm sau." → chữ cuối. Ẩn Nhím khỏi phòng | |
+| 1.4 Death | Khung hình tĩnh bàn thờ hầm (năm chỗ chén) trước chữ Death | Chưa có model chén số 4 vỡ |
+| 2.7 | Đổi đêm giữa lúc thăm Nhím: dừng thoại cũ | |
+| Gợi ý H | Thêm bậc gợi ý cho cuộc gọi, dán chén, bát cháo, gói hàng, bài khấn, chỗ rẽ | |
+
+**Chưa làm:** 1.5 (sổ đỏ + giấy báo nợ, ba bộ quần áo Nhím, cốc nước + vỉ thuốc, vòng khoanh ngày 9, tay Khôi, clip bác nắm tay, âm thanh thật), model thật cho lọ keo / chén số ba / gói hàng / chén vỡ, mục 2.1–2.6, 2.8, 2.10.
+
+---
+
 ## 0. Bản đồ code: muốn sửa gì thì mở file nào
 
 | Muốn làm | File chính | Ghi chú |

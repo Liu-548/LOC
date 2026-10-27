@@ -215,10 +215,13 @@ public class LocChoiThu : MonoBehaviour
         G("cháo / lọ keo / chén số 3 / thầy Đồng gọi điện có trong luồng: " + (V("lo_keo") || V("chen_3") ? "có" : "CHƯA (placeholder)"));
         var dc = MG("dan_chen"); G("dán chén: " + (dc ? (dc.HienDuoc ? "mở" : "khoá") : "không có"));
 
+        // [27/10] các việc mới của Đêm 2 (cuộc gọi thầy Đồng, dán chén, bát cháo) — chơi thử tự động bật cờ cho qua
+        G("cuộc gọi thầy / dán chén / bát cháo: " + (LocTui.Co("goi_thay") ? "đã gọi" : "chưa gọi") + " · " + (LocTui.Co("dan_chen") ? "đã dán" : "chưa dán") + " → bật cờ cho qua");
+        LocTui.Dat("goi_thay"); LocTui.Dat("dan_chen"); LocTui.Dat("cung_chao");
         Muc("ĐÊM 2 — GIỮ HƯƠNG");
         var ct = LocCotTruyen.I; Toi(ct.demSauDung, ct.demSauNhin); yield return Cho(0.5f);
         var v = Viec("thap_huong"); G("gợi ý: " + v.GoiY); v.Bam();
-        yield return ChoDen(() => LocMa.dem == 3, 40, "sang Đêm 3");
+        yield return ChoDen(() => LocMa.dem == 3, 75, "sang Đêm 3");
         yield return Cho(2); yield return Chup("ban_ngay_dem2_3");
         yield return ChoDen(() => !LocFirstPerson.khoa && LocFirstPerson.den == 0, 25, "trả điều khiển đầu Đêm 3");
     }
@@ -267,6 +270,7 @@ public class LocChoiThu : MonoBehaviour
         Muc("ĐÊM 3 — NGHI LỄ (mini game) + CHỖ RẼ CUỐI");
         foreach (var id in new[] { "nl_bay_mam", "nl_giu_nhang" })
         {
+            if (id == "nl_giu_nhang") LocTui.Dat("nl_doc_van");   // [27/10] vòng 2 đọc bài khấn
             var m = MG(id); if (!m) { Loi("không có " + id); continue; }
             yield return null; Toi(m.transform.position + Vector3.forward * 1.1f + Vector3.down * 0.6f, m.transform.position);
             G($"{id}: {(m.HienDuoc ? "mở" : "khoá")} · {m.GoiY}"); m.Bam(); yield return Cho(1); yield return Chup(id); LocMiniGame.BoQua(); yield return Cho(3);

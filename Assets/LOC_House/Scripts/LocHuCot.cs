@@ -12,13 +12,62 @@ public class LocHuCot : MonoBehaviour
     [Header("Thông số cảnh")]
     public float keoRa = 0.22f, gocMo = 150f, gocDay = 9f, cao = 0.30f, denManh = 1.7f;
 
-    public string GoiY => LocMa.dem == 3 && !LocMa.huDaHe ? "[E] Hé miệng hũ" : "[E] Cái hũ";
+    // [27/10] chỗ rẽ cuối (v3.3): giữ nhang xong → [E] Niêm hũ / [F] Xé giấy niêm. LocCotTruyen quyết kết.
+    public static bool ChoChon => LocMa.dem == 3 && LocMa.huDaHe && LocTui.Co("nl_giu_nhang") && !LocTui.Co("da_chon_hu");
+    public string GoiY => ChoChon ? "[E] Niêm hũ        [F] Xé giấy niêm" : LocMa.dem == 3 && !LocMa.huDaHe ? "[E] Hé miệng hũ" : "[E] Cái hũ";
 
     public void Bam()
     {
+        if (ChoChon) { if (LocCotTruyen.I) LocCotTruyen.I.NiemHu(this); return; }
         if (LocMa.dem == 3 && !LocMa.huDaHe && LocMa.I) LocMa.I.HeHu(this);
         else LocFirstPerson.PhuDe(LocMa.huDaHe ? "Đậy lại rồi. Đừng động vào nữa." : "Đừng động vào.", 2f);
     }
+    public void BamF() { if (ChoChon && LocCotTruyen.I) LocCotTruyen.I.XeNiem(this); }
+
+    // ───── [27/10] niêm hũ: quỳ, dán tờ niêm của thầy đè lên chỗ rách, đẩy hũ vào gầm
+    public IEnumerator CanhNiem(Transform cam)
+    {
+        if (!than) than = transform;
+        var am = Am(); var f = Huong(); var up = Vector3.up;
+        Vector3 camLP = cam.localPosition; Quaternion camLR = cam.localRotation, r0 = cam.rotation; Vector3 p0 = cam.position;
+        var mieng = than.position + up * cao;
+        var p1 = than.position + f * 0.85f + up * 0.6f;
+        yield return Bay(cam, p1, Nhin(p1, mieng), 1.1f);
+        for (float t = 0; t < 1; t += Time.deltaTime / 0.5f) { DatGoc(Mathf.Lerp(gocDay, 0f, Em(t))); yield return null; }
+        DatGoc(0f);
+        if (sot) am.PlayOneShot(sot, 0.5f);
+        LocFirstPerson.PhuDe("Miết cho phẳng.", 2f); yield return new WaitForSeconds(2.2f);
+        if (keo) am.PlayOneShot(keo, 0.8f);
+        var a = than.position; var b = a - f * keoRa;
+        for (float t = 0; t < 1; t += Time.deltaTime / 1.1f) { than.position = Vector3.Lerp(a, b, Em(t)); yield return null; }
+        than.position = b;
+        yield return new WaitForSeconds(0.6f);
+        yield return Bay(cam, p0, r0, 0.9f);
+        cam.localPosition = camLP; cam.localRotation = camLR;
+    }
+
+    // ───── [27/10] xé giấy niêm: quỳ, xé hẳn tờ niêm, lật giấy dầu — bốn lọn tóc. Để mở, không đậy lại (sách gia lễ, bước 4–5)
+    public IEnumerator CanhXe(Transform cam)
+    {
+        if (!than) than = transform;
+        var am = Am(); var f = Huong(); var up = Vector3.up;
+        var mieng = than.position + up * cao;
+        var p1 = mieng + f * 0.3f + up * 0.32f;
+        yield return Bay(cam, p1, Nhin(p1, mieng - f * 0.015f), 1.2f);
+        var den = new GameObject("Ham_DenPhu_HuCot").AddComponent<Light>();
+        den.type = LightType.Point; den.range = 1.3f; den.color = new Color(1f, 0.72f, 0.45f); den.shadows = LightShadows.None; den.intensity = denManh;
+        den.transform.position = mieng + up * 0.26f + f * 0.20f;
+        if (xe) am.PlayOneShot(xe, 1f);
+        for (float t = 0; t < 1; t += Time.deltaTime / 0.5f) { DatGoc(Mathf.Lerp(gocDay, 40f, Em(t)) + Mathf.Sin(t * 50) * 2f * (1 - t)); yield return null; }
+        if (xe) am.PlayOneShot(xe, 0.8f);
+        for (float t = 0; t < 1; t += Time.deltaTime / 0.9f) { DatGoc(Mathf.Lerp(40f, gocMo, Em(t))); yield return null; }
+        DatGoc(gocMo);
+        yield return new WaitForSeconds(0.8f);
+        LocFirstPerson.PhuDe("Bốn lọn.", 2f); yield return new WaitForSeconds(2.2f);
+        LocFirstPerson.PhuDe("Bố. Mẹ. Anh Phong. Nhím.", 3f); yield return new WaitForSeconds(3.4f);
+        Destroy(den.gameObject, 6f);
+    }
+    AudioSource Am() { var am = GetComponent<AudioSource>(); if (!am) { am = gameObject.AddComponent<AudioSource>(); am.playOnAwake = false; am.spatialBlend = 0; } return am; }
 
     Quaternion gocNghi; bool coNghi;
     Vector3 Huong() { var d = goc ? goc.position - than.position : Vector3.forward; d.y = 0; return d.sqrMagnitude > 1e-6f ? d.normalized : Vector3.forward; }

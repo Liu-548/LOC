@@ -14,7 +14,7 @@ using UnityEngine.InputSystem;
 //  · H: gợi ý C1.4 — bấm (chưa chốt bấm hay giữ, TL-05), mỗi lần lùi một bậc. Hiện có gợi ý 1 (mã két).
 //  · Cờ cốt truyện lưu trong LocTui → chết thì "chơi lại đầu đêm" tự trả về đúng lúc đầu đêm.
 [DefaultExecutionOrder(20)]
-public class LocCotTruyen : MonoBehaviour
+public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn thiếu (cuộc gọi thầy, dán chén, kiện hàng, nghi lễ, chỗ rẽ, các kết) ở LocCotTruyen_V34.cs
 {
     public static LocCotTruyen I;
     [Header("Chỗ đứng đầu đêm")]
@@ -56,6 +56,7 @@ public class LocCotTruyen : MonoBehaviour
         LocNhim.SauBad = () => StartCoroutine(KetThuc("Anh đã ở trong căn nhà này bốn năm."));
         LocNhim.SauEvil = () => StartCoroutine(KetThuc("Anh không đếm lại bao giờ."));
         foreach (var n in tenCong) { var d = GameObject.Find(n)?.GetComponent<LocDoor>(); if (d) cong.Add(d); }
+        KhoiTaoV34();
         ApDem(LocMa.dem); DauDem();
     }
 
@@ -63,6 +64,7 @@ public class LocCotTruyen : MonoBehaviour
     {
         if (LocMa.dem != demDangAp) ApDem(LocMa.dem);
         DenHam();
+        if (dangKet) { LocFirstPerson.khoa = true; LocMa.tamDung = true; }   // [27/10] phần kết: cảnh khác (LocNhim) có nhả khoá cũng giữ lại
         if (dangCanh) return;
         var k = Keyboard.current;
         if (k != null && k.hKey.wasPressedThisFrame && !LocFirstPerson.khoa && !LocTui.Mo) GoiYH();
@@ -94,6 +96,7 @@ public class LocCotTruyen : MonoBehaviour
         if (d >= 2 && LocMa.I && LocMa.I.cuaRef != null) foreach (var c in LocMa.I.cuaRef) if (c && !c.khoa) c.DatNgay(true);
         foreach (var c in cong) { c.DatNgay(false); c.khoa = d >= 2; c.loiKhoa = "Không được. Không phải bây giờ."; }
         if (ctHam) ctHam.Dat(false);
+        ApDemV34(d);
     }
 
     // đặt người chơi ở chỗ đầu đêm + lời mở đầu (chỉ lúc vào scene và lúc hết đêm)
@@ -165,7 +168,7 @@ public class LocCotTruyen : MonoBehaviour
     }
 
     // giữ hương (v3.3): Đêm 1 sau khi xuống hầm + thăm em, Đêm 2 sau đoạn hoảng loạn — thắp nén mới là việc cuối của đêm
-    bool ChoGiuHuong(int d) => d == 1 ? LocTui.Co("d1_xuong_ham") && LocNhim.daTham[1] : d == 2 && LocNhim.daHoangLoan && LocNhim.daTham[2];
+    bool ChoGiuHuong(int d) => d == 1 ? LocTui.Co("d1_xuong_ham") && LocNhim.daTham[1] : d == 2 && LocNhim.daHoangLoan && LocNhim.daTham[2] && Dem2DuViec();
     public string GoiY(string id)
     {
         if (dangCanh) return "";
@@ -266,8 +269,16 @@ public class LocCotTruyen : MonoBehaviour
         dangCanh = true;
         while (dangNoiHam || (LocTui.Co("thap_huong") && !LocTui.Co("ho_hang_ve"))) yield return null;   // không cắt ngang thoại Đêm 1
         yield return new WaitForSeconds(1.2f);   // kịp thấy đèn hầm tắt sau lưng
+        bool daNuaTinh = false;
+        if (LocMa.dem == 2 && LocNhim.I && !LocBanNgay.chup)   // [27/10] cảnh nửa tỉnh cuối Đêm 2 (đã có sẵn, nay nối vào): đi ngang cửa phòng em đang hé
+        {
+            LocNhim.I.CanhNuaTinh(true);
+            yield return null;
+            while (LocNhim.dangCanh) yield return null;
+            daNuaTinh = true;   // cảnh tự cắt đen, màn vẫn đen
+        }
         LocFirstPerson.khoa = true; LocMa.tamDung = true;
-        for (float t = 0; t < 1; t += Time.deltaTime / 0.6f) { LocFirstPerson.den = t; yield return null; }
+        if (!daNuaTinh) for (float t = 0; t < 1; t += Time.deltaTime / 0.6f) { LocFirstPerson.den = t; yield return null; }
         LocFirstPerson.den = 1; LocFirstPerson.PhuDe("", 0.01f);
         // [22/10] cắt cảnh ban ngày (LocBanNgay) thay màn đen; nhà đổi sang trạng thái đêm sau ngay lúc còn đen
         var bn = GetComponent<LocBanNgay>(); int sau = LocMa.dem + 1;
@@ -284,6 +295,7 @@ public class LocCotTruyen : MonoBehaviour
         string id = null; string[] bac = null;
         if (LocMa.dem == 1 && LocTui.Co("thu_ket") && !LocTui.Co("ket_mo"))
         { id = "ma_ket"; bac = new[] { "Bố mẹ chắc gì nhớ được mã. Phải ghi ở đâu đó.", "Giấy tờ nhà mình toàn để bên phòng làm việc của bố.", "...Sao lại có dòng ứng tiền cho anh Phong." }; }
+        if (id == null) GoiYHV34(ref id, ref bac);
         if (id == null) return;
         bacGoiY.TryGetValue(id, out int i);
         LocTui.Noi(bac[Mathf.Min(i, bac.Length - 1)]);
@@ -293,6 +305,7 @@ public class LocCotTruyen : MonoBehaviour
     // ───── Đêm 2: cuộc gọi không lời → đọc sổ → hoảng loạn → giữ hương → hết đêm
     void Dem2()
     {
+        Dem2V34();
         if (LocNhim.daTham[2] && !LocTui.Co("goi_2") && KC(dienThoai) < 6f) { LocTui.Dat("goi_2"); StartCoroutine(Reo(8, true)); }
         if (LocTui.Co("so_bo_het") && !LocNhim.daHoangLoan && !LocTui.Mo && !LocNhim.dangCanh && !LocFirstPerson.khoa && LocNhim.I)
         { LocNhim.I.CanhHoangLoan(); if (LocMa.I) LocMa.I.LoSom(); }
@@ -300,7 +313,7 @@ public class LocCotTruyen : MonoBehaviour
     }
 
     // chuông điện thoại bàn: lan hồi, lại gần (khi không cho nhấc) thì tắt; cho nhấc thì [E] Nhấc máy → tiếng rè, cái đài, không ai nói
-    IEnumerator Reo(int hoi, bool choNhac)
+    IEnumerator Reo(int hoi, bool choNhac, System.Func<IEnumerator> loi = null)
     {
         if (!cReo || !amReo) yield break;
         dangReo = true; nhacMay = choNhac;
@@ -314,6 +327,7 @@ public class LocCotTruyen : MonoBehaviour
         dangReo = false; nhacMay = false;
         if (!choNhac) { LocTui.Noi("Giờ này còn ai gọi."); yield break; }
         if (!daNhac) yield break;   // không nhấc: tắt, không hậu quả
+        if (loi != null) { dangCanh = true; LocMa.tamDung = true; yield return loi(); LocMa.tamDung = false; dangCanh = false; yield break; }   // [27/10] cuộc gọi có lời (thầy Đồng)
         dangCanh = true; LocMa.tamDung = true;
         yield return Thoai(("KHÔI", "A lô."));
         if (cRe) { amReo.PlayOneShot(cRe, 1f); yield return new WaitForSeconds(3f); }
@@ -325,6 +339,7 @@ public class LocCotTruyen : MonoBehaviour
     // ───── Đêm 3: đồng hồ quả lắc đo hạn (Bad a)
     void Dem3()
     {
+        Dem3V34();
         if (LocTui.Co("doc:sach_gia_le") && !LocTui.Co("diem_luu_2") && !LocTui.Mo) DiemLuu("diem_luu_2");
         if (gio == 0) { gio = 9; for (int g = 10; g <= gioHet; g++) if (LocTui.Co("gio" + g)) gio = g; if (gio == 9) StartCoroutine(Go(9)); }
         if (LocFirstPerson.khoa || LocMenu.DangChe || LocNhim.dangCanh || gio >= gioHet) return;

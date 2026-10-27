@@ -125,13 +125,21 @@ public class LocNhim : MonoBehaviour
     void Update()
     {
         PhimThu();
-        if (LocMa.dem != demDangAp && !dangCanh) ApDem(LocMa.dem);
+        if (LocMa.dem != demDangAp && !dangCanh)
+        {
+            // [27/10] VIEC_CON_LAI 2.7: đổi đêm giữa lúc đang thăm (phím thử) → dừng thoại cũ, không chạy chồng
+            if (coTham != null) { StopCoroutine(coTham); coTham = null; }
+            if (coQuay != null) { StopCoroutine(coQuay); coQuay = null; }
+            if (dangThoai) LocFirstPerson.PhuDe("", 0.01f);
+            dangThoai = false; choThay = false;
+            ApDem(LocMa.dem);
+        }
         bool vao = NguoiTrongPhong();
         if (!dangCanh && !dangThoai)
         {
             int d = Mathf.Clamp(LocMa.dem, 1, 3);
             if (vao && !daTham[d] && !(d == 3 && LocMa.huDaHe) && DangNhinEm(3.4f, 40f)) coTham = StartCoroutine(Tham(d));
-            else if (vao && !trongPhong && daTham[d] && !daQuayLai[d]) StartCoroutine(QuayLai(d));
+            else if (vao && !trongPhong && daTham[d] && !daQuayLai[d]) coQuay = StartCoroutine(QuayLai(d));
             // ngủ: trở mình, ho (Đêm 2–3)
             if (!thuc && d >= 2)
             {
@@ -145,7 +153,7 @@ public class LocNhim : MonoBehaviour
         if (dangThoai || dangCanh) { LocMa.tamDung = true; toiDat = true; } else if (toiDat) { LocMa.tamDung = false; toiDat = false; }
     }
     bool dangCanhKhongTho, toiDat;
-    Coroutine coTham;
+    Coroutine coTham, coQuay;
     IEnumerator VeNgu(float sau) { yield return new WaitForSeconds(sau); if (!thuc && !dangCanh && !dangThoai) Clip("Nam_Ngu", 0.6f, TocTho); }
 
     bool DangNhinEm(float xa, float goc)
@@ -386,8 +394,8 @@ public class LocNhim : MonoBehaviour
     }
 
     // ───────── cuối Đêm 2: đi ngang cửa phòng đang hé
-    public void CanhNuaTinh() { if (!dangCanh) StartCoroutine(NuaTinh()); }
-    IEnumerator NuaTinh()
+    public void CanhNuaTinh(bool giuDen = false) { if (!dangCanh) StartCoroutine(NuaTinh(giuDen)); }
+    IEnumerator NuaTinh(bool giuDen = false)
     {
         BatCanh();
         yield return Den(0.4f, 1);
@@ -405,6 +413,7 @@ public class LocNhim : MonoBehaviour
         yield return Den(0.8f, 1);              // cắt đen — Đêm 2 hết
         yield return new WaitForSeconds(1.5f);
         TatCanh(true);
+        if (giuDen) LocFirstPerson.den = 1;     // [27/10] gọi từ LocCotTruyen.HetDem: để đen nối thẳng sang cảnh ban ngày
     }
 
     // ───────── Good: sáng hôm sau — em ngồi dậy được, ở mép giường trong phòng mình (em không rời phòng)
@@ -499,7 +508,8 @@ public class LocNhim : MonoBehaviour
     void TatCanh(bool veDem)
     {
         if (veDem) { dangCanhKhongTho = false; ApDem(LocMa.dem); }
-        LocFirstPerson.den = 0; LocFirstPerson.khoa = false; dangCanh = false;
+        bool ket = LocCotTruyen.I && LocCotTruyen.I.DangKet;   // [27/10] đang phần kết: LocCotTruyen lo màn đen và khoá tiếp
+        LocFirstPerson.den = ket ? 1 : 0; LocFirstPerson.khoa = ket; dangCanh = false;
     }
 
     // ───────── phím thử

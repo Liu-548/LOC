@@ -31,6 +31,9 @@ public class LocTui : MonoBehaviour
 
     enum Che { Dong, Tui, Doc }
     Che che; LocVatPham dangDoc; int chon, trangI;
+    // [27/10] cốt truyện hỏi: đang đọc món nào, đã lật tới trang cuối chưa (vòng đọc văn khấn ở nghi lễ)
+    public static string DangDocId => I && I.che != Che.Dong && I.dangDoc ? I.dangDoc.id : null;
+    public static bool DangTrangCuoi => I && I.dangDoc && I.dangDoc.trang != null && I.trangI >= I.dangDoc.trang.Length - 1;
     const int SO_O = 6; float lucDoi = -99f;   // lucDoi: lúc túi vừa đổi → thanh sáng rõ vài giây rồi mờ đi
     readonly Dictionary<string, LocVatPham> mon = new();
     Coroutine noi;
@@ -62,6 +65,13 @@ public class LocTui : MonoBehaviour
     public static bool CoTatCa(string[] d) { if (d != null) foreach (var id in d) if (!ids.Contains(id)) return false; return true; }
     public static int DemCo(string[] d) { int n = 0; if (d != null) foreach (var id in d) if (ids.Contains(id)) n++; return n; }
 
+    // [27/10] món dựng lúc chạy (LocCotTruyen_V34): đăng ký để đọc được trong túi; đã có trong túi thì ẩn vật ngoài nhà
+    public static void DangKy(LocVatPham v)
+    {
+        if (!I || !v || string.IsNullOrEmpty(v.id)) return;
+        I.mon[v.id] = v;
+        if (ids.Contains(v.id) && v.gameObject.activeSelf) v.gameObject.SetActive(false);
+    }
     public static void Them(LocVatPham v) { if (!ids.Contains(v.id)) ids.Add(v.id); if (I) I.mon[v.id] = v; }
 
     public static void Doc(LocVatPham v)

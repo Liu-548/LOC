@@ -116,6 +116,7 @@ public class LocFirstPerson : MonoBehaviour
             if (nc) goiY = nc.GoiY;
             if (d) goiY = d.khoa && d.khiKhoa ? d.khiKhoa.GoiY : "[E] " + (d.DangMo ? "Đóng " : "Mở ") + d.ten;
             else if (c) goiY = "[E] " + (c.bat ? "Tắt" : "Bật") + " " + c.ten;
+            if (h && k.fKey.wasPressedThisFrame) h.BamF();   // [27/10] chỗ rẽ cuối: [F] Xé giấy niêm
             if (k.eKey.wasPressedThisFrame) { if (d) d.Bam(); else if (c) c.Toggle(); else if (h) h.Bam(); else if (nc && nc.GoiY.Length > 0) nc.Bam(); else if (tt) tt.Bam(); }
         }
 

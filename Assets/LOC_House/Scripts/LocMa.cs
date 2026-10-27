@@ -1193,7 +1193,25 @@ public class LocMa : MonoBehaviour
         yield return new WaitForSeconds(0.4f);        // "Đôi mắt đỏ ngay trước mặt. Cắt đen ngay." (C3)
         LocFirstPerson.den = 1; An();
         if (chenVo) am.PlayOneShot(chenVo, 1f);
-        yield return new WaitForSeconds(5.2f);
+        // [27/10] VIEC_CON_LAI 1.4 Death: khung hình tĩnh bàn thờ hầm — năm chỗ chén, cái thứ tư vừa vỡ — trước dòng chữ
+        var chen = GameObject.Find("Bo_Chen_Tren_De");
+        if (chen && cam)
+        {
+            yield return new WaitForSeconds(1.6f);
+            var rs = chen.GetComponentsInChildren<Renderer>(); var b = rs.Length > 0 ? rs[0].bounds : new Bounds(chen.transform.position, Vector3.one * 0.3f);
+            foreach (var r in rs) b.Encapsulate(r.bounds);
+            var p0 = cam.position; var q0 = cam.rotation;
+            var dung = b.center + new Vector3(0, 0.32f, 0) + Vector3.ProjectOnPlane(cam.position - b.center, Vector3.up).normalized * 0.75f;
+            if (Physics.Linecast(b.center + Vector3.up * 0.2f, dung)) dung = b.center + new Vector3(0, 0.35f, 0.75f);
+            cam.SetPositionAndRotation(dung, Quaternion.LookRotation(b.center - dung, Vector3.up));
+            var den = new GameObject("Chet_DenBanTho").AddComponent<Light>(); den.type = LightType.Point; den.range = 2.2f; den.intensity = 1.2f; den.color = new Color(1f, 0.6f, 0.3f);
+            den.transform.position = b.center + Vector3.up * 0.8f;
+            LocFirstPerson.den = 0;
+            yield return new WaitForSeconds(2.2f);   // tĩnh, không nhạc
+            LocFirstPerson.den = 1; Destroy(den.gameObject); cam.SetPositionAndRotation(p0, q0);
+            yield return new WaitForSeconds(1.4f);
+        }
+        else yield return new WaitForSeconds(5.2f);
         LocFirstPerson.chuGiua = "NHÀ NÀY CÒN MỘT CÁI CHÉN.";
         yield return new WaitForSeconds(2.5f);
         LocMenu.ManChet();   // [22/10] hai lựa chọn: chơi lại từ đầu đêm / về menu chính (R vẫn chơi lại)

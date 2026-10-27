@@ -7,6 +7,9 @@ public class LocMG_GiuLua : LocMiniGame
 {
     public float thoiGianCan = 20f;
     public string cauXong = "Lửa còn đó. Bóng nhà lay động rồi yên.";
+    // [27/10] nghi lễ vòng 3 (giữ nhang): nhang tắt là hết — Bad (b), không châm lại (kịch bản v3.3). LocCotTruyen bật cờ này lúc chạy.
+    public bool thuaLaKet;
+    public static System.Action KhiTatHan;
 
     float lua, tay, tienDo, dem, giaiDoan;   // giaiDoan: 0 yên · 1 báo gió · 2 gió thổi
     bool moi;
@@ -39,6 +42,7 @@ public class LocMG_GiuLua : LocMiniGame
         else lua = Mathf.Min(1f, lua + 0.3f * dt);
 
         tienDo += dt;
+        if (lua <= 0f && thuaLaKet) { Dong(); KhiTatHan?.Invoke(); return; }
         if (lua <= 0f) { Lai(); Sai("Lửa tắt rồi. Châm lại từ đầu."); }
         else if (tienDo >= thoiGianCan) Thang(cauXong);
     }
