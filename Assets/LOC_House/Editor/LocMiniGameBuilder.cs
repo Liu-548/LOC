@@ -44,11 +44,11 @@ public static class LocMiniGameBuilder
 
         var mam = Game<LocMG_MamCung>("MamCung_BanThoVong");
         var tMam = Gan(Tim("BanThoVong_Dem1"), "BanThoVong", new Vector3(0.9f, 1.1f, 3.70f), "bàn thờ vong (bày mâm lễ)", LocTuongTac.Loai.MoMiniGame);
-        tMam.miniGame = mam; tMam.demTu = 1; tMam.demDen = 1; tMam.thuongId = LocId.ManhChen(2);
+        tMam.miniGame = mam; tMam.demTu = 1; tMam.demDen = 3; tMam.thuongId = LocId.ManhChen(2);
 
         var ban = Game<LocMG_XepLaiBan>("XepLaiBan_Khoi");
         var tBan = Gan(Tim("BanHoc_Khoi_Bo"), "BanHoc_Khoi", new Vector3(5.70f, 4.15f, 16.10f), "bàn học của Khôi", LocTuongTac.Loai.MoMiniGame);
-        tBan.miniGame = ban; tBan.demTu = 1; tBan.demDen = 1; tBan.thuongId = LocId.ManhChen(3);
+        tBan.miniGame = ban; tBan.demTu = 1; tBan.demDen = 3; tBan.thuongId = LocId.ManhChen(3);
 
         // ───────── ĐÊM 2 — trộn kiểu: 4 mảnh chén (4–7) + chuỗi đồ
         Nhat("MocChiaKhoa", new Vector3(6.29f, 1.50f, 9.40f), LocId.ChiaLenDay, "chìa lên dây đồng hồ", 1);

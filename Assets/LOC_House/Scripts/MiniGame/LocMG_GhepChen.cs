@@ -6,6 +6,8 @@ public class LocMG_GhepChen : LocMG_HoanVi
 {
     int dem = 1;
 
+    void Awake() { choLap = true; }   // mỗi đêm ráp một lần: không khoá vĩnh viễn sau lần thắng đầu
+
     protected override string TenMacDinh() { return "Ráp lại chén"; }
     protected override string GoiYMacDinh() { return "Ráp từng mảnh lại cho khít, đừng để vết nứt lệch."; }
 

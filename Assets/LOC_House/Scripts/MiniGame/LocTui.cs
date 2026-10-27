@@ -75,6 +75,7 @@ public class LocTuiHud : MonoBehaviour
         if (k.f8Key.wasPressedThisFrame) LocMiniGame.BoQua();
 #endif
         if (LocMiniGame.hienTai != null) { mo = false; return; }
+        if (LocFirstPerson.khoa) return;
         if (k.tabKey.wasPressedThisFrame) { mo = !mo; LocMa.tamDung = mo; }
         if (!mo) return;
         for (int i = 0; i < 9 && i < LocTui.Dem; i++)

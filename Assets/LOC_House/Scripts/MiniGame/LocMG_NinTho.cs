@@ -24,8 +24,8 @@ public class LocMG_NinTho : LocMiniGame
         bool nhan = (k != null && k.spaceKey.isPressed) || (m != null && m.leftButton.isPressed);
         if (het && hoi > 0.3f) het = false;
         bool nin = nhan && !het && hoi > 0f;
-        if (nin) { hoi -= 0.16f * dt; tho = 0f; if (hoi <= 0f) { hoi = 0f; het = true; } }
-        else { hoi = Mathf.Min(1f, hoi + 0.25f * dt); tho += dt; }
+        if (nin) { hoi -= 0.14f * dt; tho = 0f; if (hoi <= 0f) { hoi = 0f; het = true; } }
+        else { hoi = Mathf.Min(1f, hoi + 0.3f * dt); tho += dt; }
         t += dt;
         float g = Gan();
         bool ongThay = !nin && g > nguong;

@@ -64,6 +64,13 @@ public class LocMG_Radio : LocMiniGame
             }
             else Sai("Chỉ ghi được nhiễu.");
         }
+        if (soLanSai >= saiThiGoiY)
+        {
+            string gy = "Gợi ý: sóng yếu quanh";
+            for (int i = 0; i < tanSo.Length; i++) gy += " " + Mathf.Round(tanSo[i]);
+            gy += " MHz";
+            GUI.Label(new Rect(r.x, r.y + 316f, r.width, 20f), gy, KieuChu(12, TextAnchor.MiddleCenter, FontStyle.Italic, new Color(1f, 0.82f, 0.55f), false));
+        }
         int n = 0; for (int i = 0; i < ghi.Length; i++) if (ghi[i]) n++;
         GUI.Label(new Rect(r.x, r.y + 296f, r.width, 24f), "Đã ghi " + n + "/" + ghi.Length, KieuChu(14, TextAnchor.MiddleCenter, FontStyle.Normal, new Color(0.8f, 0.78f, 0.72f), false));
         if (n == ghi.Length) Thang(cauXong);
