@@ -46,7 +46,8 @@ public static class LocMiniGameBuilder
         var ban = Diem("BanHoc_Khoi_Bo", "bàn học", Game<LocMG_XepLaiBan>("XepLaiBan_Khoi"), 1, 3, 0f);
         if (ban) ban.id = "mg_ban_hoc";
 
-        var ghe = Diem("BanAn_Bo", "bàn ăn", Game<LocMG_XepGhe>("XepGhe"), 2, 3, 0f);
+        var ghe = Diem("LongBan", "bàn ăn",   // [28/10] đặt trên lồng bàn giữa bàn ăn: đặt theo mặt bàn thì lồng bàn che mất tia nhìn
+             Game<LocMG_XepGhe>("XepGhe"), 2, 3, 0f);
         if (ghe) ghe.id = "mg_ban_an";
 
         var chen = Diem("Bo_Chen_Tren_De", "Dán chén", Game<LocMG_GhepChen>("DanChen"), 2, 2, 0f);
