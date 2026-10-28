@@ -52,6 +52,7 @@
     <Compile Include="Assets\LOC_House\Scripts\LocCotTruyen.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocProp.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_KhoaSo.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocVatTam.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocMa.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_GhepAnh.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_DongHo.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Assets\LOC_House\Scripts\LocNhim.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocKetSat.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocCotTruyen_V34.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocXeBuyt.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_XepVao.cs" />
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocMG_NinTho.cs" />

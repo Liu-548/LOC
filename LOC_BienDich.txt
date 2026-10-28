@@ -201,3 +201,7 @@ Assets\LOC_House\Editor\LocMiniGameBuilder.cs(167,13): error CS0819: Implicitly-
 16:59:24 Assembly-CSharp.dll OK
 17:25:03 Assembly-CSharp-Editor.dll OK
 17:25:03 Assembly-CSharp.dll OK
+22:58:47 Assembly-CSharp-Editor.dll OK
+22:58:47 Assembly-CSharp.dll OK
+23:24:57 Assembly-CSharp-Editor.dll OK
+23:24:57 Assembly-CSharp.dll OK
