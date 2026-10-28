@@ -23,6 +23,11 @@ public static class LocMiniGameBuilder
     [MenuItem("LOC/Mini game/Dựng hệ mini game vào scene")]
     public static void Dung()
     {
+        if (EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            EditorUtility.DisplayDialog("LOC", "Đang ở chế độ Play. Bấm Play lần nữa để thoát, rồi chạy lại menu này.", "OK");
+            return;
+        }
         int n = DungVaoScene();
         EditorUtility.DisplayDialog("LOC", "Đã dựng " + n + " điểm mini game. Xem Assets/LOC_House/BaoCao_MiniGame.txt.", "OK");
     }
