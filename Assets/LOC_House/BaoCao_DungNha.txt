@@ -1,7 +1,7 @@
-BÁO CÁO DỰNG NHÀ LỘC — 29/10/2026 12:44
+BÁO CÁO DỰNG NHÀ LỘC — 29/10/2026 18:19
 Scene: Assets/Scenes/LOC_NhaLoc.unity
 
-ASSET ĐÃ ĐẶT (398):
+ASSET ĐÃ ĐẶT (391):
   ✓ AmNhom
   ✓ AnhCuoi_Tex
   ✓ AnhGiaDinh_Tex
@@ -86,14 +86,7 @@ ASSET ĐÃ ĐẶT (398):
   ✓ ChauNhua_Up
   ✓ ChauNuoc_KhanUot
   ✓ ChauTrauBa
-  ✓ ChenA_GanLai
-  ✓ ChenA_Tach
-  ✓ ChenB_GanLai
-  ✓ ChenB_Tach
   ✓ ChenC_GanLai
-  ✓ ChenC_Tach
-  ✓ ChenMe
-  ✓ ChenNut
   ✓ ChieuCoi_PhongTho
   ✓ ChieuMen_KhachO
   ✓ ChieuTruc

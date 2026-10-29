@@ -53,11 +53,12 @@ public static class LocChiTiet
 
     public static void Apply(Transform root)
     {
-        mats.Clear(); meshes.Clear(); nMat = nRend = 0;
+        mats.Clear(); meshes.Clear(); d2.Clear(); d2mesh.Clear(); nMat = nRend = 0;
         var log = new List<string>();
         foreach (var lp in root.GetComponentsInChildren<LocProp>(true))
         {
             string byName = Classify(lp.name, out bool skip);
+            foreach (var r in lp.GetComponentsInChildren<MeshRenderer>(true)) ApD2(r);   // [29/10] món nâng cấp: vật liệu "<lớp>__…" → bộ PBR D2
             if (skip) continue;
             foreach (var r in lp.GetComponentsInChildren<MeshRenderer>(true))
             {
@@ -67,9 +68,9 @@ public static class LocChiTiet
                 var ms = r.sharedMaterials; var flat = new List<int>();
                 for (int i = 0; i < ms.Length; i++)
                 {
-                    var m = ms[i]; if (!m || HasTex(m) || IsEmissiveOrClear(m)) continue;
+                    var m = ms[i]; if (!m || HasTex(m) || IsEmissiveOrClear(m) || m.name.Contains("__")) continue;
                     var c = BaseColor(m);
-                    string cls = byName ?? ByColor(c);
+                    string cls = VaiCha(r.transform, lp.transform) ? "vai" : byName ?? ByColor(c);   // [29/10] vải che TV/gương nằm trong món gỗ → vải
                     if (cls == null) continue;
                     ms[i] = Get(cls, c, m.doubleSidedGI); flat.Add(i);   // giữ hai mặt cho vải/bạt/rèm (glTFast bật doubleSidedGI)
                 }
@@ -83,6 +84,12 @@ public static class LocChiTiet
         System.IO.File.WriteAllText("Assets/LOC_House/BaoCao_TextureBeMat.txt",
             $"TEXTURE BỀ MẶT: {nRend} renderer, {mats.Count} vật liệu mới\n" + string.Join("\n", log.Distinct().OrderBy(s => s)));
         Debug.Log($"[LOC] Texture bề mặt: {nRend} renderer, {mats.Count} vật liệu. Xem Assets/LOC_House/BaoCao_TextureBeMat.txt");
+    }
+
+    static bool VaiCha(Transform t, Transform lp)
+    {
+        for (var p = t; p && p != lp; p = p.parent) if (Regex.IsMatch(p.name, @"^(Vai|vai_|Khan|Rem|ManTuyn)")) return true;
+        return false;
     }
 
     static string Classify(string name, out bool skip)
@@ -167,5 +174,68 @@ public static class LocChiTiet
             }
         m.SetUVs(0, uv);
         return meshes[key] = m;
+    }
+
+    // ───────── [29/10] Bộ PBR dùng chung cho asset nâng cấp (LOC_Nguon/NangCap): vật liệu .glb tên "<lớp>__<mô tả>", UV0 = mét.
+    // Mỗi lớp: D2_<lớp>_A (albedo chi tiết) · _N (normal) · _M (R metallic, G AO, A smoothness). Lớp kinh/anh/den giữ vật liệu glTF.
+    static readonly Dictionary<string, float> D2Tile = new()
+    {
+        ["go"] = 0.8f, ["goson"] = 0.8f, ["son"] = 0.6f, ["nhua"] = 0.4f, ["thung"] = 0.4f, ["vai"] = 0.25f, ["carton"] = 0.6f, ["dan"] = 0.25f,
+        ["chieu"] = 0.5f, ["xm"] = 1.0f, ["kl"] = 0.4f, ["inox"] = 0.4f, ["dong"] = 0.3f, ["sat"] = 0.8f, ["gom"] = 0.3f, ["giay"] = 0.3f,
+        ["da"] = 0.3f, ["caosu"] = 0.3f, ["gach"] = 1.0f, ["nen"] = 0.2f, ["thuc"] = 0.2f, ["tulanh"] = 1.0f,
+    };
+    static readonly Dictionary<string, Material> d2 = new();
+    static readonly Dictionary<Mesh, Mesh> d2mesh = new();
+
+    static void ApD2(MeshRenderer r)
+    {
+        var ms = r.sharedMaterials; bool doi = false;
+        for (int i = 0; i < ms.Length; i++)
+        {
+            var m = ms[i]; if (!m) continue;
+            int k = m.name.IndexOf("__"); if (k <= 0) continue;
+            var lop = m.name.Substring(0, k);
+            if (!D2Tile.ContainsKey(lop) || HasTex(m)) continue;
+            var nm = D2Mat(lop, m); if (nm) { ms[i] = nm; doi = true; }
+        }
+        if (!doi) return;
+        r.sharedMaterials = ms;
+        var mf = r.GetComponent<MeshFilter>();
+        if (mf && mf.sharedMesh && (mf.sharedMesh.tangents == null || mf.sharedMesh.tangents.Length == 0))
+        {
+            if (!d2mesh.TryGetValue(mf.sharedMesh, out var t)) { t = Object.Instantiate(mf.sharedMesh); t.name = mf.sharedMesh.name + "_tg"; t.RecalculateTangents(); d2mesh[mf.sharedMesh] = t; }
+            mf.sharedMesh = t;
+        }
+        nRend++;
+    }
+
+    static Texture2D D2Tex(string f, bool linear, bool normal)
+    {
+        string p = $"{TexDir}/PBR/{f}";
+        if (AssetImporter.GetAtPath(p) is TextureImporter ti && (ti.sRGBTexture == linear || (normal && ti.textureType != TextureImporterType.NormalMap)))
+        {
+            ti.sRGBTexture = !linear; if (normal) ti.textureType = TextureImporterType.NormalMap;
+            ti.wrapMode = TextureWrapMode.Repeat; ti.anisoLevel = 4; ti.SaveAndReimport();
+        }
+        return AssetDatabase.LoadAssetAtPath<Texture2D>(p);
+    }
+
+    static Material D2Mat(string lop, Material src)
+    {
+        var c = BaseColor(src);
+        float rough = src.HasProperty("roughnessFactor") ? src.GetFloat("roughnessFactor") : 0.6f;
+        bool two = src.doubleSidedGI || (src.HasProperty("_CullMode") && src.GetFloat("_CullMode") == 0) || (src.HasProperty("_Cull") && src.GetFloat("_Cull") == 0);
+        string key = $"{src.name}_{ColorUtility.ToHtmlStringRGB(c)}_{rough:0.00}{(two ? "_2m" : "")}";
+        if (d2.TryGetValue(key, out var m)) return m;
+        var A = D2Tex($"D2_{lop}_A.png", false, false); var N = D2Tex($"D2_{lop}_N.png", true, true); var M = D2Tex($"D2_{lop}_M.png", true, false);
+        if (!A) return null;
+        m = new Material(Shader.Find("Universal Render Pipeline/Lit")) { name = "D2_" + src.name };
+        m.SetTexture("_BaseMap", A); m.SetColor("_BaseColor", c);
+        if (N) { m.SetTexture("_BumpMap", N); m.SetFloat("_BumpScale", 1f); m.EnableKeyword("_NORMALMAP"); }
+        if (M) { m.SetTexture("_MetallicGlossMap", M); m.EnableKeyword("_METALLICSPECGLOSSMAP"); m.SetTexture("_OcclusionMap", M); m.SetFloat("_OcclusionStrength", 0.6f); m.EnableKeyword("_OCCLUSIONMAP"); }
+        m.SetFloat("_Smoothness", Mathf.Clamp01(1 - rough)); m.SetFloat("_Metallic", 0);
+        float t = 1f / D2Tile[lop]; m.SetTextureScale("_BaseMap", new Vector2(t, t));
+        if (two) { m.SetFloat("_Cull", 0); m.doubleSidedGI = true; }
+        return d2[key] = m;   // như CT_*: chỉ nằm trong scene
     }
 }

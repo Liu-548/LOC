@@ -1,0 +1,205 @@
+{
+"BanThoVong_Dem1": [
+"BatHuong",
+"LoHoaCuc",
+"SapVangMa",
+"VongHoaTang_1"
+],
+"BanThoVong_Dem2": [
+"BatHuong",
+"LoHoaCuc",
+"SapVangMa",
+"VongHoaTang_1"
+],
+"BanThoVong_Dem3": [
+"BatHuong",
+"LoHoaCuc",
+"SapVangMa",
+"VongHoaTang_1"
+],
+"BepGas_Doi": [
+"Men_OVang_QuanhMamDot",
+"Men_OVang_QuanhMamDot.001"
+],
+"BepGas_Kieng_BinhGas": [
+"BepGas_Doi",
+"Men_OVang_QuanhMamDot",
+"Men_OVang_QuanhMamDot.001",
+"BinhGas"
+],
+"Bo_Chen_Tren_De": [
+"De"
+],
+"CanBanHang": [
+"tru"
+],
+"CayChoi": [
+"bo"
+],
+"Chan_BatDiaTrongChan": [
+"Chan"
+],
+"ChauCayKieng_LaTo": [
+"ChauCayKieng_LaTo_1",
+"ChauCayKieng_LaTo_2",
+"ChauCayKieng_LaTo_3",
+"ChauCayKieng_LaTo_4",
+"ChauCayKieng_LaTo_5"
+],
+"CuonDayDien_2": [
+"CuonDayDien"
+],
+"DenHam_FullAssembly": [
+"BongDayToc"
+],
+"DongHoQuaLac": [
+"KinhCua",
+"QuaLac",
+"KimGio",
+"KimPhut"
+],
+"GheDau_Go": [
+"GheDau_Go_1"
+],
+"KeGoDai": [
+"tru",
+"ThungSon",
+"than",
+"goNap",
+"nap",
+"quai",
+"vien_1",
+"vien_2",
+"vien_3",
+"vien_4",
+"vien_5",
+"vien_6",
+"vien_7",
+"vien_8"
+],
+"LOC_BanNhoDatMay": [
+"Mat_Ban",
+"Ngan_Duoi"
+],
+"LOC_CanhQuayHang": [
+"NganKeo",
+"LoKeo",
+"GheDau"
+],
+"LOC_DienThoai_TronBo": [
+"Mat_Loa",
+"Mat_Loa.001"
+],
+"LOC_DongDoCungTang": [
+"Day_Buoc"
+],
+"LOC_KienHang_ThayDong": [
+"GiayDau",
+"ChuongDien",
+"ChuongDien_Chuong",
+"KienHang_Mo"
+],
+"QuanTai_LOC": [
+"Cum_QuanTai_LOC",
+"Nap_Song",
+"Vai_Phu"
+],
+"SM_FuneralTent_300": [
+"SM_FuneralGate",
+"SM_ObituaryBoard"
+],
+"SM_PlasticTable_TableCover": [
+"SM_PlasticTable"
+],
+"Thau_Nhua_QuanAo": [
+"Thau_Nhua_QuanAo_1",
+"Thau_Nhua_QuanAo_2",
+"Thau_Nhua_QuanAo_3",
+"Thau_Nhua_QuanAo_4",
+"Thau_Nhua_QuanAo_5",
+"Thau_Nhua_QuanAo_6",
+"Thau_Nhua_QuanAo_7"
+],
+"ThungGo": [
+"day"
+],
+"ThungSon_Cum2": [
+"ThungSon",
+"than",
+"goNap",
+"nap",
+"quai"
+],
+"CuaPhongNhim_FullAssembly": [
+"CanhCua",
+"Socket_NamCua",
+"NamCua",
+"NamCua.001"
+],
+"KinhLao_HopKinh": [
+"KinhLao_HopKinh_1"
+],
+"RoNhua_QuanAoBan": [
+"RoNhua_QuanAoBan_1",
+"RoNhua_QuanAoBan_2",
+"RoNhua_QuanAoBan_3",
+"RoNhua_QuanAoBan_4",
+"RoNhua_QuanAoBan_5"
+],
+"SoDo_BaoNo": [
+"SoDo"
+],
+"BanThoGiaTien": [
+"TuTho_MatTu",
+"TuTho_ThanTu_DayTrong"
+],
+"CuaSanPhoi": [
+"CuaSanPhoi_Nguong",
+"CuaSanPhoi_Canh",
+"Canh_VienNgoai"
+],
+"DoTrenBanTho": [
+"BatHuong",
+"DenNen_L",
+"DenNen_R",
+"LoHoaCuc",
+"DiaQua",
+"ChenNuocTrong"
+],
+"KhanPhuBanTho": [
+"Khan_MatPhu"
+],
+"KhungAnhOngBa": [
+"KhungAnh_Ong",
+"KhungAnh_Ba"
+],
+"LanCanSanPhoi": [
+"LanCan_ThanhNgang_1",
+"LanCan_ThanhNgang_2",
+"LanCan_TruDung_1",
+"LanCan_TruDung_2",
+"LanCan_ThanhDoc_01",
+"LanCan_ThanhDoc_02",
+"LanCan_ThanhDoc_03",
+"LanCan_ThanhDoc_04",
+"LanCan_ThanhDoc_05",
+"LanCan_ThanhDoc_06",
+"LanCan_ThanhDoc_07",
+"LanCan_ThanhDoc_08",
+"LanCan_ThanhDoc_09",
+"LanCan_ThanhDoc_10",
+"LanCan_ThanhDoc_11",
+"LanCan_ThanhDoc_12",
+"LanCan_ThanhDoc_13",
+"LanCan_ThanhDoc_14",
+"LanCan_ThanhDoc_15",
+"LanCan_ThanhDoc_16",
+"LanCan_ThanhDoc_17",
+"LanCan_ThanhDoc_18",
+"LanCan_ThanhDoc_19",
+"LanCan_ThanhDoc_20",
+"LanCan_ThanhDoc_21",
+"LanCan_ThanhDoc_22",
+"LanCan_ThanhDoc_23"
+]
+}

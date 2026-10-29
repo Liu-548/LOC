@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEditor;
@@ -20,7 +20,7 @@ public static class LocNhayCua
     // ───── quét
     static List<Cap> Find(Bounds? region, IList<MeshRenderer> rends, out List<MeshRenderer> rs)
     {
-        var tris = new List<Tri>(); rs = new List<MeshRenderer>(); var dem = new List<string>();
+        var tris = new List<Tri>(); rs = new List<MeshRenderer>(); var dem = new List<string>(); var moi = new List<bool>();
         foreach (var r in rends)
         {
             if (!r || (region.HasValue && !r.bounds.Intersects(region.Value))) continue;
@@ -28,6 +28,7 @@ public static class LocNhayCua
             Vector3[] v; try { v = m.vertices; } catch { continue; }
             if (v.Length == 0) continue;
             var M = r.transform.localToWorldMatrix; int ri = rs.Count; rs.Add(r); dem.Add(Dem(r.transform));
+            moi.Add(r.sharedMaterials.Any(x => x && x.name.Contains("__")));   // [29/10] asset nâng cấp: dựng sạch, bỏ qua cặp trong cùng một lưới (lưới dày → O(n²))
             var w = new Vector3[v.Length]; for (int i = 0; i < v.Length; i++) w[i] = M.MultiplyPoint3x4(v[i]);
             for (int s = 0; s < m.subMeshCount; s++)
             {
@@ -44,22 +45,29 @@ public static class LocNhayCua
                 }
             }
         }
-        var grid = new Dictionary<(int, int, int, int), List<int>>();
+        // [29/10] chỉ ghép cặp có ít nhất một tam giác "cũ" (kết cấu, đồ chưa nâng cấp): hai lưới nâng cấp nằm cùng mặt phẳng
+        // (vd. mọi đáy đồ trên sàn z=0) không cần so với nhau — trước đây ghép N² làm bước này treo hàng chục phút.
+        var grid = new Dictionary<(int, int, int, int), List<int>>(); var gridCu = new Dictionary<(int, int, int, int), List<int>>();
         for (int i = 0; i < tris.Count; i++)
         {
             var n = tris[i].n; var k = (Mathf.RoundToInt(n.x * 40), Mathf.RoundToInt(n.y * 40), Mathf.RoundToInt(n.z * 40), Mathf.RoundToInt(tris[i].d / 0.002f));
             if (!grid.TryGetValue(k, out var l)) grid[k] = l = new List<int>(); l.Add(i);
+            if (!moi[tris[i].r]) { if (!gridCu.TryGetValue(k, out var lc)) gridCu[k] = lc = new List<int>(); lc.Add(i); }
         }
         var caps = new List<Cap>();
-        foreach (var kv in grid)
-            for (int dd = 0; dd <= 1; dd++)
+        foreach (var kv in gridCu)
+            for (int dd = -1; dd <= 1; dd++)
             {
                 if (!grid.TryGetValue((kv.Key.Item1, kv.Key.Item2, kv.Key.Item3, kv.Key.Item4 + dd), out var l2)) continue;
                 var l1 = kv.Value;
                 for (int ii = 0; ii < l1.Count; ii++)
-                for (int jj = dd == 0 ? ii + 1 : 0; jj < l2.Count; jj++)
+                for (int jj = 0; jj < l2.Count; jj++)
                 {
-                    Tri A = tris[l1[ii]], B = tris[l2[jj]];
+                    int ia = l1[ii], ib = l2[jj];
+                    if (ia == ib) continue;
+                    if (!moi[tris[ib].r] && (dd < 0 || (dd == 0 && ib < ia))) continue;   // cặp cũ–cũ: chỉ đếm một lần (như bản trước)
+                    Tri A = tris[ia], B = tris[ib];
+                    if (A.r == B.r && moi[A.r]) continue;
                     if (Vector3.Dot(A.n, B.n) < 0.9998f || Mathf.Abs(A.d - B.d) > LechMax) continue;
                     if (dem[A.r] != null && dem[B.r] != null && dem[A.r] != dem[B.r]) continue;   // bản Đêm 1/2/3 chồng chỗ nhau nhưng chỉ bật 1 bản
                     if (Mathf.Abs(Vector3.Dot(A.n, B.b) - A.d) > LechMax || Mathf.Abs(Vector3.Dot(A.n, B.c) - A.d) > LechMax) continue;

@@ -1,4 +1,4 @@
-TEXTURE BỀ MẶT: 4913 renderer, 502 vật liệu mới
+TEXTURE BỀ MẶT: 2315 renderer, 108 vật liệu mới
 AmNhom → son
 AnhCuoi_Tex → go
 AnhGiaDinh_Tex → go

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-1172492415818743467
+--- !u!114 &-1178010241196190204
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,9 +41,9 @@ MonoBehaviour:
   m_Name: LOC_MatDien
   m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.VolumeProfile
   components:
-  - {fileID: -1172492415818743467}
-  - {fileID: 7960020040712461226}
---- !u!114 &7960020040712461226
+  - {fileID: -1178010241196190204}
+  - {fileID: 4947077889262686506}
+--- !u!114 &4947077889262686506
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}

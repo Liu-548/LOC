@@ -1,6 +1,6 @@
-NHÍM — LocHouseBuilder_Nhim 29/10 12:44
+NHÍM — LocHouseBuilder_Nhim 29/10 18:18
 giường (6.64, 4.03, 8.96) · gốc (6.640, 3.934, 8.960) · yaw -180° · đầu (7.37, 4.10, 8.82) hông (6.91, 4.11, 8.73) · đầu về đầu giường ✔ · mặt ra phía phòng ✔
-Good (mép giường): gốc (6.49, 3.43, 9.25) · yaw 0° · chỗ đứng nhìn (6.69, 3.60, 10.76)
-góc: tường x=7.60 · chỗ đứng (7.15, 3.60, 10.30) → (7.29, 3.60, 10.30) · yaw 90°
-chậu nước: vật liệu CT_vai_99CCE6, CT_vai_CCE6E6, CT_vai_FFE6E6
+Good (mép giường): gốc (6.49, 3.43, 9.26) · yaw 0° · chỗ đứng nhìn (6.69, 3.60, 10.77)
+góc: tường x=7,60 · chỗ đứng (7.15, 3.60, 10.30) → (7.29, 3.60, 10.30) · yaw 90°
+chậu nước: vật liệu D2_nhua__m_chaunhua_9FCBE0
 đỉnh lưới thấp hơn mặt chăn giường >2 cm: 0/7007

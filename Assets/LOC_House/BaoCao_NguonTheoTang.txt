@@ -1,0 +1,879 @@
+gốc	đường dẫn	prefab nguồn	file lưới	số tam giác
+NhaLoc	NhaLoc/Ham/BanThoHam	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/BanThoHam.glb	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/BanThoHam.glb	92
+NhaLoc	NhaLoc/Ham/BatNhang_FullAssembly	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/BatNhang_FullAssembly.glb	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/BatNhang_FullAssembly.glb	144
+NhaLoc	NhaLoc/Ham/Bo_Chen_Tren_De	Assets/Prefab/BoChen/Bo_Chen_Tren_De.glb	Assets/Prefab/BoChen/Bo_Chen_Tren_De.glb	1240
+NhaLoc	NhaLoc/Ham/Decal_BongVoi_A	Assets/LOC_House/Models/Ham_PhongNhim_Decal/Decal_BongVoi_A.glb	Assets/LOC_House/Models/Ham_PhongNhim_Decal/Decal_BongVoi_A.glb	2
+NhaLoc	NhaLoc/Ham/Decal_ChuBatDien	Assets/LOC_House/Models/Ham_PhongNhim_Decal/Decal_ChuBatDien.glb	Assets/LOC_House/Models/Ham_PhongNhim_Decal/Decal_ChuBatDien.glb	2
+NhaLoc	NhaLoc/Ham/DenHam_FullAssembly	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/DenHam_FullAssembly.glb	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/DenHam_FullAssembly.glb	144
+NhaLoc	NhaLoc/Ham/GiayKeChan	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/GiayKeChan.glb	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/GiayKeChan.glb	12
+NhaLoc	NhaLoc/Ham/HuCot		Assets/LOC_House/Models/HuCot/HuCot.fbx ; (lưới dựng bằng code)	24460
+NhaLoc	NhaLoc/Ham/TuongBuaMau	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_0	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_1	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_10	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_11	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_12	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_13	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_2	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_3	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_4	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_5	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_6	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_7	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_8	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Ham/TuongBuaMau_9	Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/TuongBuaMau.glb	(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/SanTruoc/BienSoNha		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/BoSung/mesh/BienSoNha.glb	14
+NhaLoc	NhaLoc/SanTruoc/CanhCong_Phai (mở)		(lưới dựng bằng code)	200
+NhaLoc	NhaLoc/SanTruoc/CanhCong_Trai (mở)		(lưới dựng bằng code)	200
+NhaLoc	NhaLoc/SanTruoc/ChuongDien_Nut		(lưới dựng bằng code)	152
+NhaLoc	NhaLoc/SanTruoc/CongSat_TruGach		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/CongSat_TruGach.glb	20
+NhaLoc	NhaLoc/SanTruoc/CongSat_TruGach		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/CongSat_TruGach.glb	20
+NhaLoc	NhaLoc/SanTruoc/CongSat_TruGach		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/CongSat_TruGach.glb	20
+NhaLoc	NhaLoc/SanTruoc/CuaNgachCong (mở)		(lưới dựng bằng code)	168
+NhaLoc	NhaLoc/SanTruoc/Dem1/Dep_Khach		(lưới dựng bằng code)	184
+NhaLoc	NhaLoc/SanTruoc/Dem1/Dep_Khach		(lưới dựng bằng code)	184
+NhaLoc	NhaLoc/SanTruoc/Dem1/Dep_Khach		(lưới dựng bằng code)	184
+NhaLoc	NhaLoc/SanTruoc/Dem1/DiaKeoBanh_HatDua		(lưới dựng bằng code)	11784
+NhaLoc	NhaLoc/SanTruoc/Dem1/DiaKeoBanh_HatDua		(lưới dựng bằng code)	11784
+NhaLoc	NhaLoc/SanTruoc/Dem1/KhayTra_LyThuyTinh		(lưới dựng bằng code)	1180
+NhaLoc	NhaLoc/SanTruoc/Dem1/KhayTra_LyThuyTinh		(lưới dựng bằng code)	1180
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_BurnBasin_Burning	Assets/LOC_House/Models/DamTang_Rap_DamTang_VangMa/SM_BurnBasin_Burning.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_VangMa/SM_BurnBasin_Burning.glb	212
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticTable_TableCover	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	180
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticTable_TableCover	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	180
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticTable_TableCover	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	180
+NhaLoc	NhaLoc/SanTruoc/Dem1/SM_PlasticTable_TableCover	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	180
+NhaLoc	NhaLoc/SanTruoc/Dem1/VongHoa_Tuoi	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/VongHoa_Tuoi.glb	(lưới dựng bằng code)	294
+NhaLoc	NhaLoc/SanTruoc/Dem1/VongHoa_Tuoi	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/VongHoa_Tuoi.glb	(lưới dựng bằng code)	294
+NhaLoc	NhaLoc/SanTruoc/Dem1/VongHoa_Tuoi	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/VongHoa_Tuoi.glb	(lưới dựng bằng code)	294
+NhaLoc	NhaLoc/SanTruoc/Dem2/Dep_Khach		(lưới dựng bằng code)	184
+NhaLoc	NhaLoc/SanTruoc/Dem2/DiaKeoBanh_HatDua		(lưới dựng bằng code)	11784
+NhaLoc	NhaLoc/SanTruoc/Dem2/KhayTra_LyThuyTinh		(lưới dựng bằng code)	1180
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_BurnBasin_Ash	Assets/LOC_House/Models/DamTang_Rap_DamTang_VangMa/SM_BurnBasin_Ash.glb	(lưới dựng bằng code)	172
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_PlasticChairStack_4	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_4.glb	(lưới dựng bằng code)	204
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_PlasticChairStack_8	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_8.glb	(lưới dựng bằng code)	276
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_PlasticTable_TableCover	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	180
+NhaLoc	NhaLoc/SanTruoc/Dem2/SM_PlasticTable_TableCover	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	180
+NhaLoc	NhaLoc/SanTruoc/Dem2/VongHoa_Heo	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/VongHoa_Heo.glb	(lưới dựng bằng code)	294
+NhaLoc	NhaLoc/SanTruoc/Dem2/VongHoa_Heo	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/VongHoa_Heo.glb	(lưới dựng bằng code)	294
+NhaLoc	NhaLoc/SanTruoc/Dem2/VongHoa_Heo	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/VongHoa_Heo.glb	(lưới dựng bằng code)	294
+NhaLoc	NhaLoc/SanTruoc/Dem3/KhayTra_LyThuyTinh		(lưới dựng bằng code)	1180
+NhaLoc	NhaLoc/SanTruoc/Dem3/SM_BurnBasin_Ash	Assets/LOC_House/Models/DamTang_Rap_DamTang_VangMa/SM_BurnBasin_Ash.glb	(lưới dựng bằng code)	172
+NhaLoc	NhaLoc/SanTruoc/Dem3/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem3/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/Dem3/SM_PlasticChairStack_4	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_4.glb	(lưới dựng bằng code)	204
+NhaLoc	NhaLoc/SanTruoc/Dem3/SM_PlasticChairStack_8	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_8.glb	(lưới dựng bằng code)	276
+NhaLoc	NhaLoc/SanTruoc/Dem3/SM_PlasticChairStack_8	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_8.glb	(lưới dựng bằng code)	276
+NhaLoc	NhaLoc/SanTruoc/Dem3/SM_PlasticTable_TableCover	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	180
+NhaLoc	NhaLoc/SanTruoc/Dem3/VongHoa_Heo	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/VongHoa_Heo.glb	(lưới dựng bằng code)	294
+NhaLoc	NhaLoc/SanTruoc/Dem3/VongHoa_Heo	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/VongHoa_Heo.glb	(lưới dựng bằng code)	294
+NhaLoc	NhaLoc/SanTruoc/DenCong_ChaoTon		Assets/LOC_House/Models/NoiThat/BoSung/mesh/DenCong_ChaoTon.glb	548
+NhaLoc	NhaLoc/SanTruoc/DenCong_ChaoTon		Assets/LOC_House/Models/NoiThat/BoSung/mesh/DenCong_ChaoTon.glb	548
+NhaLoc	NhaLoc/SanTruoc/DongHoNuoc_HopCong		(lưới dựng bằng code)	408
+NhaLoc	NhaLoc/SanTruoc/HopCongTo		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/HopCongTo.glb	12
+NhaLoc	NhaLoc/SanTruoc/HopThu_Cong		(lưới dựng bằng code)	48
+NhaLoc	NhaLoc/SanTruoc/SM_EnvelopeTray_day	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_EnvelopeTray_day.glb	(lưới dựng bằng code)	120
+NhaLoc	NhaLoc/SanTruoc/SM_FuneralGate	Assets/LOC_House/Models/DamTang_Rap_DamTang_Rap/SM_FuneralGate.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_Rap/SM_FuneralGate.glb	790
+NhaLoc	NhaLoc/SanTruoc/SM_FuneralTent_300	Assets/LOC_House/Models/DamTang_Rap_DamTang_Rap/SM_FuneralTent_300.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_Rap/SM_FuneralTent_300.glb	3286
+NhaLoc	NhaLoc/SanTruoc/SM_ObituaryBoard	Assets/LOC_House/Models/DamTang_Rap_DamTang_Rap/SM_ObituaryBoard.glb	(lưới dựng bằng code)	60
+NhaLoc	NhaLoc/SanTruoc/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/SanTruoc/SM_PlasticChairStack_8	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_8.glb	(lưới dựng bằng code)	276
+NhaLoc	NhaLoc/SanTruoc/SM_PlasticTable_TableCover	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable_TableCover.glb	180
+NhaLoc	NhaLoc/SanTruoc/SoPhungViengTang		(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/SanTruoc/ThungNuocNgot_Khach		(lưới dựng bằng code)	492
+NhaLoc	NhaLoc/SanTruoc/ThungRacNhua		(lưới dựng bằng code)	876
+NhaLoc	NhaLoc/Tang_1/Bep/AmNhom		(lưới dựng bằng code)	152
+NhaLoc	NhaLoc/Tang_1/Bep/BanAn_Bo		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/KhanBan_Nilon.glb	182
+NhaLoc	NhaLoc/Tang_1/Bep/BatDia_DangUp_Ban		(lưới dựng bằng code)	508
+NhaLoc	NhaLoc/Tang_1/Bep/BatDia_TrongChau		(lưới dựng bằng code)	568
+NhaLoc	NhaLoc/Tang_1/Bep/BauCuaSo_Granito_Bep		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/BauCuaSo_Granito_Bep.glb	12
+NhaLoc	NhaLoc/Tang_1/Bep/BepGas_Doi	Assets/LOC_House/Models/Bep_TangMot/BepGas_Doi.glb	(lưới dựng bằng code)	496
+NhaLoc	NhaLoc/Tang_1/Bep/BeRua_Bo		(lưới dựng bằng code)	155
+NhaLoc	NhaLoc/Tang_1/Bep/BinhGas	Assets/LOC_House/Models/Bep_TangMot/BinhGas.glb	(lưới dựng bằng code)	360
+NhaLoc	NhaLoc/Tang_1/Bep/BinhThuy_Phich		(lưới dựng bằng code)	2996
+NhaLoc	NhaLoc/Tang_1/Bep/BoMia	Assets/LOC_House/Models/Bep_TangMot/BoMia.glb	(lưới dựng bằng code)	1616
+NhaLoc	NhaLoc/Tang_1/Bep/ChaiNuocMam_Lo		(lưới dựng bằng code)	364
+NhaLoc	NhaLoc/Tang_1/Bep/Chan_BatDiaTrongChan	Assets/LOC_House/Models/Bep_TangMot/Chan_BatDiaTrongChan.glb	(lưới dựng bằng code) ; Library/unity default resources	6620
+NhaLoc	NhaLoc/Tang_1/Bep/ChongTre		(lưới dựng bằng code)	2184
+NhaLoc	NhaLoc/Tang_1/Bep/CocBanChai_TreEm		(lưới dựng bằng code)	42
+NhaLoc	NhaLoc/Tang_1/Bep/CuaSatKinh (mở)		(lưới dựng bằng code)	150
+NhaLoc	NhaLoc/Tang_1/Bep/CuaSo_Bep_Phai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_Bep_Phai.glb	82
+NhaLoc	NhaLoc/Tang_1/Bep/CuaSo_Bep_Trai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_Bep_Trai.glb	82
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/BatChao_An		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/BatChao_An.glb	77
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/BatChao_An		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/BatChao_An.glb	77
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/BatDia_TrongChau		(lưới dựng bằng code)	568
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/BatDia_TrongChau		(lưới dựng bằng code)	568
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/BepGas_Kieng_BinhGas	Assets/LOC_House/Models/Bep_TangMot/BepGas_Kieng_BinhGas.glb	(lưới dựng bằng code)	1596
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/ChauInox		(lưới dựng bằng code)	26
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/DiaKeoBanh_HatDua		(lưới dựng bằng code)	11784
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/GheDauNho	Assets/LOC_House/Models/CuaHang_VatLieu/GheDauNho.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/GheDauNho	Assets/LOC_House/Models/CuaHang_VatLieu/GheDauNho.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/KhayTra_LyThuyTinh		(lưới dựng bằng code)	1180
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/LongBan		(lưới dựng bằng code)	44
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/NoiNhom_To		(lưới dựng bằng code)	424
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/RauQua_Ro		(lưới dựng bằng code)	232
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/SM_PlasticChairStack_4	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_4.glb	(lưới dựng bằng code)	204
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/ThungNuocNgot_Khach		(lưới dựng bằng code)	492
+NhaLoc	NhaLoc/Tang_1/Bep/Dem1/ThungNuocNgot_Khach		(lưới dựng bằng code)	492
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/BaoTaiRong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoTaiRong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoTaiRong.glb	84
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/BatChao_An		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/BatChao_An.glb	77
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/BatChao_An		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/BatChao_An.glb	77
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/BatChao_An		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/BatChao_An.glb	77
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/BatDia_TrongChau		(lưới dựng bằng code)	568
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/BatDia_TrongChau		(lưới dựng bằng code)	568
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/BatDia_TrongChau		(lưới dựng bằng code)	568
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/BepGas_Kieng_BinhGas	Assets/LOC_House/Models/Bep_TangMot/BepGas_Kieng_BinhGas.glb	(lưới dựng bằng code)	1596
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/ChauInox		(lưới dựng bằng code)	26
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/DiaKeoBanh_HatDua		(lưới dựng bằng code)	11784
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/GheDauNho	Assets/LOC_House/Models/CuaHang_VatLieu/GheDauNho.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/KhayTra_LyThuyTinh		(lưới dựng bằng code)	1180
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/KhoaiLuoc_Dia	Assets/LOC_House/Models/Bep_TangMot/KhoaiLuoc_Dia.glb	(lưới dựng bằng code)	396
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/LongBan		(lưới dựng bằng code)	44
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/NapNoi	Assets/LOC_House/Models/Bep_TangMot/NapNoi.glb	(lưới dựng bằng code)	312
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/NoiNhom_To		(lưới dựng bằng code)	264
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/PorridgeBowl_Tron	Assets/LOC_House/Models/Bep_TangMot/PorridgeBowl_Tron.glb	(lưới dựng bằng code)	187
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/SM_PlasticChair_Green	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Green.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/SM_PlasticChair_Red	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChair_Red.glb	(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/SM_PlasticChairStack_4	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_4.glb	(lưới dựng bằng code)	204
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/ThungNuocNgot_Khach		(lưới dựng bằng code)	492
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/ThungNuocNgot_Khach		(lưới dựng bằng code)	492
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/ThungNuocNgot_Khach		(lưới dựng bằng code)	492
+NhaLoc	NhaLoc/Tang_1/Bep/Dem2/ThungRacNhua		(lưới dựng bằng code)	876
+NhaLoc	NhaLoc/Tang_1/Bep/Dem3/BatDia_TrongChau		(lưới dựng bằng code)	568
+NhaLoc	NhaLoc/Tang_1/Bep/Dem3/BepGas_Kieng_BinhGas	Assets/LOC_House/Models/Bep_TangMot/BepGas_Kieng_BinhGas.glb	(lưới dựng bằng code)	1596
+NhaLoc	NhaLoc/Tang_1/Bep/Dem3/ChauInox		(lưới dựng bằng code)	26
+NhaLoc	NhaLoc/Tang_1/Bep/Dem3/MamDoCungMan	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoCung/MamDoCungMan.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DamTang_Rap_DamTang_DoCung/MamDoCungMan.glb	4102
+NhaLoc	NhaLoc/Tang_1/Bep/Dem3/NoiNhom_To		(lưới dựng bằng code)	264
+NhaLoc	NhaLoc/Tang_1/Bep/Dem3/SM_PlasticChairStack_8	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_8.glb	(lưới dựng bằng code)	276
+NhaLoc	NhaLoc/Tang_1/Bep/Dem3/ThungNuocNgot_Khach		(lưới dựng bằng code)	492
+NhaLoc	NhaLoc/Tang_1/Bep/Dem3/ThungRacNhua		(lưới dựng bằng code)	876
+NhaLoc	NhaLoc/Tang_1/Bep/DenTuyp_120		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_120.glb	68
+NhaLoc	NhaLoc/Tang_1/Bep/DongHoTreo_Vuong		Assets/LOC_House/Models/NoiThat/BoSung/mesh/DongHoTreo_Vuong.glb ; (lưới dựng bằng code)	524
+NhaLoc	NhaLoc/Tang_1/Bep/GheAn_bo		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tang_1/Bep/GheAn_khoi		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tang_1/Bep/GheAn_me		(lưới dựng bằng code)	140
+NhaLoc	NhaLoc/Tang_1/Bep/GheAn_nhim		(lưới dựng bằng code)	128
+NhaLoc	NhaLoc/Tang_1/Bep/GheDau_Go		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_1/Bep/GiaBatUp		(lưới dựng bằng code)	240
+NhaLoc	NhaLoc/Tang_1/Bep/HopBanhQuy_ThiecTaiDung		(lưới dựng bằng code)	252
+NhaLoc	NhaLoc/Tang_1/Bep/HuBinhNgamRuou		(lưới dựng bằng code)	444
+NhaLoc	NhaLoc/Tang_1/Bep/KeChenTreoTuong		(lưới dựng bằng code)	544
+NhaLoc	NhaLoc/Tang_1/Bep/LichBloc		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/LichBloc.glb	12
+NhaLoc	NhaLoc/Tang_1/Bep/LonSuaDac_DungBut		(lưới dựng bằng code)	220
+NhaLoc	NhaLoc/Tang_1/Bep/MatBepXay_180	Assets/LOC_House/Models/Bep_TangMot/MatBepXay_180.glb	(lưới dựng bằng code)	168
+NhaLoc	NhaLoc/Tang_1/Bep/MocAo_KhanTam		(lưới dựng bằng code)	96
+NhaLoc	NhaLoc/Tang_1/Bep/NoiChao_Rong	Assets/LOC_House/Models/Bep_TangMot/NoiChao_Rong.glb	(lưới dựng bằng code)	840
+NhaLoc	NhaLoc/Tang_1/Bep/NoiComDien		(lưới dựng bằng code)	76
+NhaLoc	NhaLoc/Tang_1/Bep/OCam_Doi		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/OCam_Doi.glb	24
+NhaLoc	NhaLoc/Tang_1/Bep/PhichHoa		(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_1/Bep/RauQua_Ro		(lưới dựng bằng code)	232
+NhaLoc	NhaLoc/Tang_1/Bep/RoRaThit		(lưới dựng bằng code)	988
+NhaLoc	NhaLoc/Tang_1/Bep/SongSatHoa_Bep		(lưới dựng bằng code)	288
+NhaLoc	NhaLoc/Tang_1/Bep/ThanhTreoDungCu_Bep		(lưới dựng bằng code)	268
+NhaLoc	NhaLoc/Tang_1/Bep/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tang_1/Bep/ThungRac		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/ThungRac.glb	48
+NhaLoc	NhaLoc/Tang_1/Bep/TranhHoaSen_Khung		Assets/LOC_House/Models/NoiThat/BoSung/mesh/TranhHoaSen_Khung.glb	26
+NhaLoc	NhaLoc/Tang_1/Bep/TuBuffet_ChenBat		(lưới dựng bằng code) ; Library/unity default resources	11622
+NhaLoc	NhaLoc/Tang_1/Bep/TuiGiaVi_Treo		(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/Tang_1/Bep/TuiNilon_Treo		(lưới dựng bằng code)	48
+NhaLoc	NhaLoc/Tang_1/Bep/TuLanh_Bo		(lưới dựng bằng code) ; Library/unity default resources	12528
+NhaLoc	NhaLoc/Tang_1/Bep/XoChauKhanLau		(lưới dựng bằng code)	184
+NhaLoc	NhaLoc/Tang_1/GiengTroi/ChauCayKieng_LaTo		(lưới dựng bằng code)	776
+NhaLoc	NhaLoc/Tang_1/GiengTroi/ChauTrauBa		(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_1/GiengTroi/CuaSatHam (mở)		(lưới dựng bằng code)	378
+NhaLoc	NhaLoc/Tang_1/GiengTroi/GianPhoi_Gap		(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_1/GiengTroi/KhungCuaSatHam		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSatHam_Khung.glb	40
+NhaLoc	NhaLoc/Tang_1/GiengTroi/MayBom_NuocGiengTroi		(lưới dựng bằng code)	252
+NhaLoc	NhaLoc/Tang_1/GiengTroi/OngNuocMua_GiengTroi		(lưới dựng bằng code)	864
+NhaLoc	NhaLoc/Tang_1/GiengTroi/ThungNuoc_Nap		(lưới dựng bằng code)	86
+NhaLoc	NhaLoc/Tang_1/KhoiSau/BanChaiCo_XaPhong		(lưới dựng bằng code)	36
+NhaLoc	NhaLoc/Tang_1/KhoiSau/BaoBotGiat_XaPhong		(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/Tang_1/KhoiSau/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tang_1/KhoiSau/BeGiat		(lưới dựng bằng code)	156
+NhaLoc	NhaLoc/Tang_1/KhoiSau/BoXoGauChau_WC		(lưới dựng bằng code)	492
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ChauNhua_Up		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/ChauNhua_Up.glb	56
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ChauNhua_Up		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/ChauNhua_Up.glb	56
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ChoiCauBonCau		(lưới dựng bằng code)	240
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ChongGhe	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/ChongGhe.glb	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/ChongGhe.glb	304
+NhaLoc	NhaLoc/Tang_1/KhoiSau/CuaWC_T1 (mở)		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaWC_Canh.glb	32
+NhaLoc	NhaLoc/Tang_1/KhoiSau/DenTuyp_60		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_60.glb	68
+NhaLoc	NhaLoc/Tang_1/KhoiSau/DenTuyp_60		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_60.glb	68
+NhaLoc	NhaLoc/Tang_1/KhoiSau/DenTuyp_60		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_60.glb	68
+NhaLoc	NhaLoc/Tang_1/KhoiSau/DepToOng_Fix		(lưới dựng bằng code)	288
+NhaLoc	NhaLoc/Tang_1/KhoiSau/GheDau_Go		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_1/KhoiSau/GheDau_Nhua		(lưới dựng bằng code)	96
+NhaLoc	NhaLoc/Tang_1/KhoiSau/GiayVeSinh_Treo		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_1/KhoiSau/GocKho_DoGio_Fix		(lưới dựng bằng code)	392
+NhaLoc	NhaLoc/Tang_1/KhoiSau/KeXaPhong_WC		(lưới dựng bằng code)	144
+NhaLoc	NhaLoc/Tang_1/KhoiSau/Khan_Ru		Library/unity default resources ; (lưới dựng bằng code)	1828
+NhaLoc	NhaLoc/Tang_1/KhoiSau/KhungCuaWC_T1		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaWC_Khung.glb	40
+NhaLoc	NhaLoc/Tang_1/KhoiSau/MocAo_KhanTam		(lưới dựng bằng code)	96
+NhaLoc	NhaLoc/Tang_1/KhoiSau/SM_PlasticChairStack_8	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_8.glb	(lưới dựng bằng code)	276
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ThamChuiChan		(lưới dựng bằng code)	10
+NhaLoc	NhaLoc/Tang_1/KhoiSau/Thau_Nhua_QuanAo		(lưới dựng bằng code)	1772
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ThungCarton_Chong		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ThungCarton_Chong		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ThungCarton_Chong		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ThungNuoc_Nap		(lưới dựng bằng code)	86
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ThungNuoc_Nap		(lưới dựng bằng code)	86
+NhaLoc	NhaLoc/Tang_1/KhoiSau/ThungSon_Cum2	Assets/LOC_House/Models/CuaHang_VatLieu/ThungSon_Cum2.glb	Assets/LOC_House/Models/CuaHang_VatLieu/ThungSon_Cum2.glb ; (lưới dựng bằng code)	2140
+NhaLoc	NhaLoc/Tang_1/KhoiSau/VoiSen		(lưới dựng bằng code)	120
+NhaLoc	NhaLoc/Tang_1/KhoiSau/XiBet_Tron		(lưới dựng bằng code)	1516
+NhaLoc	NhaLoc/Tang_1/KhoiSau/XoGao_Up		(lưới dựng bằng code)	48
+NhaLoc	NhaLoc/Tang_1/PhongKhach/AnhGiaDinh_Tex		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/BoSung/mesh/AnhGiaDinh_Tex.glb	74
+NhaLoc	NhaLoc/Tang_1/PhongKhach/BangCassette_Hop		(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_1/PhongKhach/BangGDVH_Tex		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/BoSung/mesh/BangGDVH_Tex.glb	74
+NhaLoc	NhaLoc/Tang_1/PhongKhach/BaoCu_TrenBan		(lưới dựng bằng code)	216
+NhaLoc	NhaLoc/Tang_1/PhongKhach/BinhHoaLon_Gom		(lưới dựng bằng code)	3812
+NhaLoc	NhaLoc/Tang_1/PhongKhach/CayChoiLongGa		(lưới dựng bằng code)	156
+NhaLoc	NhaLoc/Tang_1/PhongKhach/ChauCayKieng_LaTo		(lưới dựng bằng code)	776
+NhaLoc	NhaLoc/Tang_1/PhongKhach/ChauCayKieng_LaTo		(lưới dựng bằng code)	776
+NhaLoc	NhaLoc/Tang_1/PhongKhach/ChieuMen_KhachO		(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/Tang_1/PhongKhach/ChoiQuet_Ky		(lưới dựng bằng code)	184
+NhaLoc	NhaLoc/Tang_1/PhongKhach/ChongGhe	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/ChongGhe.glb	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/ChongGhe.glb	304
+NhaLoc	NhaLoc/Tang_1/PhongKhach/CuaChinh_Phai (mở ra ngoài)		(lưới dựng bằng code) ; Library/unity default resources	1584
+NhaLoc	NhaLoc/Tang_1/PhongKhach/CuaChinh_Trai (mở ra ngoài)		(lưới dựng bằng code) ; Library/unity default resources	1584
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Dem1/BanThoVong_Dem1	Assets/LOC_House/Models/BanTho_SetBanThoBoMe/BanThoVong_Dem1.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/BanTho_SetBanThoBoMe/BanThoVong_Dem1.glb	2362
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Dem2/BanThoVong_Dem2	Assets/LOC_House/Models/BanTho_SetBanThoBoMe/BanThoVong_Dem2.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/BanTho_SetBanThoBoMe/BanThoVong_Dem2.glb	2410
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Dem3/BanThoVong_Dem3	Assets/LOC_House/Models/BanTho_SetBanThoBoMe/BanThoVong_Dem3.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/BanTho_SetBanThoBoMe/BanThoVong_Dem3.glb	2486
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Dem3/VT_GoiHang	Assets/LOC_House/Models/gd6/LOC_KienHang_ThayDong.glb	Assets/LOC_House/Models/gd6/LOC_KienHang_ThayDong.glb ; (lưới dựng bằng code)	406
+NhaLoc	NhaLoc/Tang_1/PhongKhach/DenChum_5Tay		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenChum_5Tay.glb	482
+NhaLoc	NhaLoc/Tang_1/PhongKhach/DenHat_Ong		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenHat_Ong.glb	12
+NhaLoc	NhaLoc/Tang_1/PhongKhach/DenHat_Ong		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenHat_Ong.glb	12
+NhaLoc	NhaLoc/Tang_1/PhongKhach/DenHat_Ong		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenHat_Ong.glb	12
+NhaLoc	NhaLoc/Tang_1/PhongKhach/DenHat_Ong		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenHat_Ong.glb	12
+NhaLoc	NhaLoc/Tang_1/PhongKhach/DenTuyp_120		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_120.glb	68
+NhaLoc	NhaLoc/Tang_1/PhongKhach/DenTuyp_120		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_120.glb	68
+NhaLoc	NhaLoc/Tang_1/PhongKhach/DiaVCD_XepChong		(lưới dựng bằng code)	152
+NhaLoc	NhaLoc/Tang_1/PhongKhach/DieuKhien		Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/DieuKhien.glb	40
+NhaLoc	NhaLoc/Tang_1/PhongKhach/DongHoQuaLac		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/DongHoQuaLac.glb	626
+NhaLoc	NhaLoc/Tang_1/PhongKhach/GatTan_ThuyTinh		(lưới dựng bằng code)	184
+NhaLoc	NhaLoc/Tang_1/PhongKhach/GheDau_Go		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_1/PhongKhach/HoaTran		Assets/LOC_House/Models/NoiThat/BeMat/mesh/HoaTran.glb	88
+NhaLoc	NhaLoc/Tang_1/PhongKhach/HopKhanGiay_Nhua		(lưới dựng bằng code)	36
+NhaLoc	NhaLoc/Tang_1/PhongKhach/KeGiay_ChanCau		(lưới dựng bằng code)	216
+NhaLoc	NhaLoc/Tang_1/PhongKhach/KeGo_TreoTuong		(lưới dựng bằng code)	1240
+NhaLoc	NhaLoc/Tang_1/PhongKhach/KhayAmChen		Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/KhayAmChen.glb	217
+NhaLoc	NhaLoc/Tang_1/PhongKhach/KhayHoaQua_Nhua		(lưới dựng bằng code)	332
+NhaLoc	NhaLoc/Tang_1/PhongKhach/LichThang8_2002		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/BoSung/mesh/LichThang8_2002.glb	26
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Loa_Thung		(lưới dựng bằng code)	22
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Loa_Thung		(lưới dựng bằng code)	22
+NhaLoc	NhaLoc/Tang_1/PhongKhach/LOC_BanNhoDatMay	Assets/LOC_House/Models/DienThoai_DoCung/LOC_BanNhoDatMay.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DienThoai_DoCung/LOC_BanNhoDatMay.glb	372
+NhaLoc	NhaLoc/Tang_1/PhongKhach/LOC_BatGao	Assets/LOC_House/Models/DienThoai_DoCung/LOC_BatGao.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DienThoai_DoCung/LOC_BatGao.glb	252
+NhaLoc	NhaLoc/Tang_1/PhongKhach/LOC_BatMuoi	Assets/LOC_House/Models/DienThoai_DoCung/LOC_BatMuoi.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DienThoai_DoCung/LOC_BatMuoi.glb	252
+NhaLoc	NhaLoc/Tang_1/PhongKhach/LOC_DienThoai_TronBo	Assets/LOC_House/Models/DienThoai_DoCung/LOC_DienThoai_TronBo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/DienThoai_DoCung/LOC_DienThoai_TronBo.glb	812
+NhaLoc	NhaLoc/Tang_1/PhongKhach/LOC_DongDoCungTang	Assets/LOC_House/Models/DienThoai_DoCung/LOC_DongDoCungTang.glb	(lưới dựng bằng code)	3392
+NhaLoc	NhaLoc/Tang_1/PhongKhach/LOC_TapGiay_ButBi	Assets/LOC_House/Models/NhatKy_ToGiay/LOC_TapGiay_ButBi.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/NhatKy_ToGiay/LOC_TapGiay_ButBi.glb	86
+NhaLoc	NhaLoc/Tang_1/PhongKhach/LoHoaGia_Nhua		(lưới dựng bằng code)	244
+NhaLoc	NhaLoc/Tang_1/PhongKhach/NonLa_TreoTuong		(lưới dựng bằng code)	100
+NhaLoc	NhaLoc/Tang_1/PhongKhach/OCamKeoDai		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/OCamKeoDai.glb	96
+NhaLoc	NhaLoc/Tang_1/PhongKhach/PH_BaiVi_Vong		Library/unity default resources	84
+NhaLoc	NhaLoc/Tang_1/PhongKhach/PH_BatComQuaTrung		Library/unity default resources	1800
+NhaLoc	NhaLoc/Tang_1/PhongKhach/PH_BatHuong_Vong		Library/unity default resources	3104
+NhaLoc	NhaLoc/Tang_1/PhongKhach/PH_DenDau_GamQuanTai		Library/unity default resources	1408
+NhaLoc	NhaLoc/Tang_1/PhongKhach/PH_KhanTang_Chong		Library/unity default resources	132
+NhaLoc	NhaLoc/Tang_1/PhongKhach/PH_KhayNhang_PhongBi		Library/unity default resources	980
+NhaLoc	NhaLoc/Tang_1/PhongKhach/PH_ThungPhungDieu		Library/unity default resources	132
+NhaLoc	NhaLoc/Tang_1/PhongKhach/QuanTai_LOC	Assets/Prefab/QuanTai/QuanTai_LOC.glb	Assets/Prefab/QuanTai/QuanTai_LOC.glb ; (lưới dựng bằng code)	660
+NhaLoc	NhaLoc/Tang_1/PhongKhach/QuatCay_NguyenBo		(lưới dựng bằng code)	432
+NhaLoc	NhaLoc/Tang_1/PhongKhach/QuatTran_Canh		(lưới dựng bằng code)	28
+NhaLoc	NhaLoc/Tang_1/PhongKhach/QuatTran_Canh		(lưới dựng bằng code)	28
+NhaLoc	NhaLoc/Tang_1/PhongKhach/QuatTran_Canh		(lưới dựng bằng code)	28
+NhaLoc	NhaLoc/Tang_1/PhongKhach/QuatTran_Than		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/QuatTran_Than.glb	132
+NhaLoc	NhaLoc/Tang_1/PhongKhach/RadioCassette_2Loa		(lưới dựng bằng code)	380
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Rem_Hat		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/Rem_Hat.glb ; (lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Rem_Hat		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/Rem_Hat.glb ; (lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Salon_BanNuoc		(lưới dựng bằng code)	70
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Salon_Dem_NgoiDai_GanTV		Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/Salon_Dem_NgoiDai_GanTV.glb	10
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Salon_Dem_NgoiDai_Kia		Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/Salon_Dem_NgoiDai_Kia.glb	10
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Salon_Dem_NgoiDon		Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/Salon_Dem_NgoiDon.glb	10
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Salon_Dem_NgoiDon		Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/Salon_Dem_NgoiDon.glb	10
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Salon_GheDai		Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/Salon_GheDai.glb	272
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Salon_GheDon		Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/Salon_GheDon.glb	272
+NhaLoc	NhaLoc/Tang_1/PhongKhach/Salon_GheDon		Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/Salon_GheDon.glb	272
+NhaLoc	NhaLoc/Tang_1/PhongKhach/SM_MournHat	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoTangVaiXo/SM_MournHat.glb	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoTangVaiXo/SM_MournHat.glb	92
+NhaLoc	NhaLoc/Tang_1/PhongKhach/SM_MourningCloth_Stack_Can	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoTangVaiXo/SM_MourningCloth_Stack_Can.glb	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoTangVaiXo/SM_MourningCloth_Stack_Can.glb	50
+NhaLoc	NhaLoc/Tang_1/PhongKhach/SM_MourningCloth_Stack_Voi	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoTangVaiXo/SM_MourningCloth_Stack_Voi.glb	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoTangVaiXo/SM_MourningCloth_Stack_Voi.glb	66
+NhaLoc	NhaLoc/Tang_1/PhongKhach/SM_MourningRobe_Hung	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoTangVaiXo/SM_MourningRobe_Hung.glb	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoTangVaiXo/SM_MourningRobe_Hung.glb	136
+NhaLoc	NhaLoc/Tang_1/PhongKhach/SM_MourningRobe_Hung	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoTangVaiXo/SM_MourningRobe_Hung.glb	Assets/LOC_House/Models/DamTang_Rap_DamTang_DoTangVaiXo/SM_MourningRobe_Hung.glb	136
+NhaLoc	NhaLoc/Tang_1/PhongKhach/SM_PlasticChairStack_4	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_4.glb	(lưới dựng bằng code)	204
+NhaLoc	NhaLoc/Tang_1/PhongKhach/SM_PlasticTable	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticTable.glb	(lưới dựng bằng code)	144
+NhaLoc	NhaLoc/Tang_1/PhongKhach/ThamChuiChan_Cua		(lưới dựng bằng code)	36
+NhaLoc	NhaLoc/Tang_1/PhongKhach/TranGiatCap_Khung		Assets/LOC_House/Models/NoiThat/BeMat/mesh/TranGiatCap_Khung.glb	64
+NhaLoc	NhaLoc/Tang_1/PhongKhach/TranhSonThuy_Khung		Assets/LOC_House/Models/NoiThat/BoSung/mesh/TranhSonThuy_Khung.glb	26
+NhaLoc	NhaLoc/Tang_1/PhongKhach/TranhTheu_Tex		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/BoSung/mesh/TranhTheu_Tex.glb	74
+NhaLoc	NhaLoc/Tang_1/PhongKhach/TuTV_Dung_Bo		(lưới dựng bằng code) ; Library/unity default resources ; Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/DauVCD.glb ; Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/KhungNho_Nhim.glb ; Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/KhungNho_Khoi.glb ; Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/TuTV_CanhKinh_Trai.glb ; Assets/LOC_House/Models/NoiThat/PhongKhach/mesh/TuTV_CanhKinh_Phai.glb	1536
+NhaLoc	NhaLoc/Tang_1/PhongKhach/VongHoaTang_1	Assets/LOC_House/Models/BanTho_SetBanThoBoMe/VongHoaTang_1.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/BanTho_SetBanThoBoMe/VongHoaTang_1.glb	450
+NhaLoc	NhaLoc/Tang_1/SanhSau/BangDienChinh		(lưới dựng bằng code)	172
+NhaLoc	NhaLoc/Tang_1/SanhSau/BanTron_Thap		(lưới dựng bằng code)	600
+NhaLoc	NhaLoc/Tang_1/SanhSau/BongCompact		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/BongCompact.glb	48
+NhaLoc	NhaLoc/Tang_1/SanhSau/ChoiLau_Gop		(lưới dựng bằng code)	84
+NhaLoc	NhaLoc/Tang_1/SanhSau/Dep_Khach		(lưới dựng bằng code)	184
+NhaLoc	NhaLoc/Tang_1/SanhSau/Dep_Nhim_Roi		Assets/LOC_House/Models/NoiThat/DoSong/mesh/Dep_Nhim_Roi.glb	24
+NhaLoc	NhaLoc/Tang_1/SanhSau/GheDau	Assets/LOC_House/Models/CuaHang_VatLieu/GheDau.glb	(lưới dựng bằng code)	120
+NhaLoc	NhaLoc/Tang_1/SanhSau/GheDau_Go		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_1/SanhSau/GiaDep_Bo		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/DoSong/mesh/Dep_Bo.glb ; Assets/LOC_House/Models/NoiThat/DoSong/mesh/Dep_Me.glb ; Assets/LOC_House/Models/NoiThat/DoSong/mesh/Dep_Nhim_Gia.glb	174
+NhaLoc	NhaLoc/Tang_1/SanhSau/MocChiaKhoa		(lưới dựng bằng code)	134
+NhaLoc	NhaLoc/Tang_1/SanhSau/SapVangMa	Assets/LOC_House/Models/BanTho_SetBanThoBoMe/SapVangMa.glb	Assets/LOC_House/Models/BanTho_SetBanThoBoMe/SapVangMa.glb ; (lưới dựng bằng code)	34
+NhaLoc	NhaLoc/Tang_1/SanhSau/SapVangMa	Assets/LOC_House/Models/BanTho_SetBanThoBoMe/SapVangMa.glb	Assets/LOC_House/Models/BanTho_SetBanThoBoMe/SapVangMa.glb ; (lưới dựng bằng code)	34
+NhaLoc	NhaLoc/Tang_1/SanhSau/SM_PaperHouse	Assets/LOC_House/Models/DamTang_Rap_DamTang_VangMa/SM_PaperHouse.glb	(lưới dựng bằng code)	496
+NhaLoc	NhaLoc/Tang_1/SanhSau/SM_PlasticChairStack_8	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_8.glb	(lưới dựng bằng code)	276
+NhaLoc	NhaLoc/Tang_1/SanhSau/ThungCarton_Chong		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_1/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/GocLamViec/BanGiay_Go		(lưới dựng bằng code) ; Library/unity default resources	420
+NhaLoc	NhaLoc/Tang_2/GocLamViec/BanTinh_Go		(lưới dựng bằng code)	252
+NhaLoc	NhaLoc/Tang_2/GocLamViec/ChongSoSach_Cu		(lưới dựng bằng code)	168
+NhaLoc	NhaLoc/Tang_2/GocLamViec/ConDau_HopMuc		(lưới dựng bằng code)	320
+NhaLoc	NhaLoc/Tang_2/GocLamViec/CuaLamViec_Phai (mở)		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaBanCong_Phai.glb	124
+NhaLoc	NhaLoc/Tang_2/GocLamViec/CuaLamViec_Trai (mở)		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaBanCong_Trai.glb	124
+NhaLoc	NhaLoc/Tang_2/GocLamViec/DenTuyp_60		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_60.glb	68
+NhaLoc	NhaLoc/Tang_2/GocLamViec/GheBanGiay		(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_2/GocLamViec/MayTinhBoTui		(lưới dựng bằng code)	216
+NhaLoc	NhaLoc/Tang_2/GocLamViec/TuHoSo_Sat		(lưới dựng bằng code) ; Library/unity default resources	2608
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/AnhCuoi_Tex		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/BoSung/mesh/AnhCuoi_Tex.glb	74
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/AoMuaBo_TreoCua		(lưới dựng bằng code)	48
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/BanCoHoc_Go		(lưới dựng bằng code) ; Library/unity default resources	742
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/BanTrangDiem_Bo		(lưới dựng bằng code) ; Library/unity default resources ; Assets/LOC_House/Models/NoiThat/BoSung/mesh/VaiChePhuGuong_Ban.glb	1427
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/BauCuaSo_Granito_BoMe		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/BauCuaSo_Granito_BoMe.glb	12
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/BauCuaSo_Granito_BoMe		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/BauCuaSo_Granito_BoMe.glb	12
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/BinhNongLanh		(lưới dựng bằng code)	66
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/CanhBanCong_Phai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaBanCong_Phai.glb	124
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/CanhBanCong_Trai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaBanCong_Trai.glb	124
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/ChanMenBong_GapGon		(lưới dựng bằng code)	100
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/ChoiCauBonCau		(lưới dựng bằng code)	240
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/CocBanChai_NguoiLon		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/CocBanChai_NguoiLon.glb	66
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/CuaSo_BoMe_Phai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_BoMe_Phai.glb	82
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/CuaSo_BoMe_Phai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_BoMe_Phai.glb	82
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/CuaSo_BoMe_Trai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_BoMe_Trai.glb	82
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/CuaSo_BoMe_Trai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_BoMe_Trai.glb	82
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/CuaWC_BoMe (mở)		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaWC_Canh.glb	32
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/Dem3/LoiNhanMe_Giay	Assets/LOC_House/Models/V35/LoiNhanMe_Giay.glb	Assets/LOC_House/Models/V35/LoiNhanMe_Giay.glb	216
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/DenNgu_BoMe		(lưới dựng bằng code)	86
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/DenOpTran		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenOpTran.glb	80
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/DenTuyp_60		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_60.glb	68
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/DongHoDeBan_BaoThuc		(lưới dựng bằng code)	228
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/DonTrangDiem		(lưới dựng bằng code)	48
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/DoTuDauGiuong_Bo		(lưới dựng bằng code)	92
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/DoTuDauGiuong_Me		(lưới dựng bằng code)	82
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/GheTua_AoBo_Fix		(lưới dựng bằng code)	240
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/GiayVeSinh_Treo		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/GioQuanAo		(lưới dựng bằng code)	64
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/GiuongDoi_Bo		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/PhongBoMe/mesh/DemMong.glb ; Assets/LOC_House/Models/NoiThat/PhongBoMe/mesh/ChieuTruc.glb ; Assets/LOC_House/Models/NoiThat/PhongBoMe/mesh/Goi_BoMe_Bo.glb ; Assets/LOC_House/Models/NoiThat/PhongBoMe/mesh/Goi_BoMe_Me.glb ; Assets/LOC_House/Models/NoiThat/PhongBoMe/mesh/Chan_GapDo.glb ; Assets/LOC_House/Models/NoiThat/PhongBoMe/mesh/ManTuyn_Buoc.glb	426
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/GuongWC		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/GuongWC.glb	12
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/HopKimChi_Me		(lưới dựng bằng code)	204
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/KeKinh		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/KeKinh.glb	34
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/KeKinh_DoBoMe		(lưới dựng bằng code)	50
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/KeSachHoSo_Go		(lưới dựng bằng code)	564
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/KeTreo_Go		Library/unity default resources ; (lưới dựng bằng code)	2728
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/KetSat_Dung		(lưới dựng bằng code) ; Library/unity default resources ; Assets/LOC_House/Models/V35/SoDo_BaoNo.glb ; Assets/LOC_House/Models/NhatKy_ToGiay/NhatKy_Dong.glb	4464
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/KeXaPhong_WC		(lưới dựng bằng code)	144
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/Khan_Treo		(lưới dựng bằng code)	420
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/KhungAnh_CuoiNho		Assets/LOC_House/Models/NoiThat/BoSung/mesh/KhungAnh_CuoiNho.glb	84
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/KhungCuaWC_BoMe		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaWC_Khung.glb	40
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/KinhLao_HopKinh		Assets/LOC_House/Models/NoiThat/BoSung/mesh/KinhLao_HopKinh.glb	176
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/Lavabo		Assets/LOC_House/Models/NoiThat/BepAnWC/mesh/Lavabo.glb	8
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/MacAoDung		Library/unity default resources	1408
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/Nokia_DoChuong		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/OCam_Doi		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/OCam_Doi.glb	24
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/QuatCayDung		Library/unity default resources	1812
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/QuatTreoTuong_Fix		(lưới dựng bằng code)	928
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/Rem_Vai_BoMe_Buong		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/Rem_Vai_BoMe_Buong.glb	80
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/Rem_Vai_BoMe_Buong		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/Rem_Vai_BoMe_Buong.glb	80
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/Rem_Voan_BoMe		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/Rem_Voan_BoMe.glb	80
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/Rem_Voan_BoMe		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/Rem_Voan_BoMe.glb	80
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/RoNhua_QuanAoBan		(lưới dựng bằng code)	160
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/SongSatHoa_BoMe		(lưới dựng bằng code)	300
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/SongSatHoa_BoMe		(lưới dựng bằng code)	300
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/Tham_Do_1m2		Assets/LOC_House/Models/NoiThat/BoSung/mesh/Tham_Do_1m2.glb	14
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/ThanhRem		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/ThanhRem.glb	48
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/ThanhRem		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/ThanhRem.glb	48
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/ThanhRem		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/ThanhRem.glb	48
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/ThanhRem		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/ThanhRem.glb	48
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/ThuocBo_LoThuocNam		(lưới dựng bằng code)	348
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/TranhThuPhap_Phuc		Assets/LOC_House/Models/NoiThat/BoSung/mesh/TranhThuPhap_Phuc.glb	26
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/TuDauGiuong		(lưới dựng bằng code) ; Library/unity default resources	836
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/TuDauGiuong		(lưới dựng bằng code) ; Library/unity default resources	948
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/TuiXachMe_ViTien		(lưới dựng bằng code)	84
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/TuQuanAo_GamHo		(lưới dựng bằng code) ; Library/unity default resources	2610
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/VaiChePhuGuong_WC		Assets/LOC_House/Models/NoiThat/BoSung/mesh/VaiChePhuGuong_WC.glb	798
+NhaLoc	NhaLoc/Tang_2/PhongBoMe/XiBet_Tron		(lưới dựng bằng code)	1516
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/BanHoc_Khoi_Bo		(lưới dựng bằng code) ; Library/unity default resources ; Assets/LOC_House/Models/NoiThat/PhongKhoiNhim/mesh/KinhMatBan.glb	522
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/BauCuaSo_Granito_Khoi		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/BauCuaSo_Granito_Khoi.glb	12
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/BongDa_Xep		Assets/LOC_House/Models/NoiThat/PhongKhoiNhim/mesh/BongDa_Xep.glb	20
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/CuaSo_Khoi_Phai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_Khoi_Phai.glb	82
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/CuaSo_Khoi_Trai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_Khoi_Trai.glb	82
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/Dem2/BaloKhoi_XanhLa		(lưới dựng bằng code)	84
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/Dem3/BaloKhoi_XanhLa		(lưới dựng bằng code)	84
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/DenBanHoc		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenBanHoc.glb	152
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/DenOpTran		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenOpTran.glb	80
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/GheBanHoc_Go		(lưới dựng bằng code)	108
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/GiaSach_Bo		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/PhongKhoiNhim/mesh/SachGop.glb	114
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/GiayBaoNhapHoc		(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/GiayKhen_Khoi		Assets/LOC_House/Models/NoiThat/PhongKhoiNhim/mesh/GiayKhen_Khoi.glb	2
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/GiuongDon_Khoi		(lưới dựng bằng code)	216
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/Guitar		(lưới dựng bằng code)	52
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/HanhLyKhoi_TuiVai		(lưới dựng bằng code)	400
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/LichTo_2000		Assets/LOC_House/Models/NoiThat/PhongKhoiNhim/mesh/LichTo_2000.glb	2
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/Poster_BanNhac		Assets/LOC_House/Models/NoiThat/PhongKhoiNhim/mesh/Poster_BanNhac.glb	2
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/Rem_Vai_Khoi_Buong		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/Rem_Vai_Khoi_Buong.glb	80
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/Rem_Voan_Khoi		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/Rem_Voan_Khoi.glb	80
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/SongSatHoa_Khoi		(lưới dựng bằng code)	312
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/TamNilon_PhuBui		(lưới dựng bằng code)	36
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/ThanhRem		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/ThanhRem.glb	48
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/ThanhRem		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/ThanhRem.glb	48
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/TuAo_Khoi_Go		(lưới dựng bằng code) ; Library/unity default resources	6708
+NhaLoc	NhaLoc/Tang_2/PhongKhoi/Walkman_BangCu		(lưới dựng bằng code)	224
+NhaLoc	NhaLoc/Tang_2/PhongNhim/BanCanhGiuong_Thuoc		(lưới dựng bằng code)	292
+NhaLoc	NhaLoc/Tang_2/PhongNhim/BangTayGay		(lưới dựng bằng code)	88
+NhaLoc	NhaLoc/Tang_2/PhongNhim/BanHoc_Nhim		Assets/LOC_House/Models/NoiThat/PhongKhoiNhim/mesh/BanHoc_Nhim.glb	58
+NhaLoc	NhaLoc/Tang_2/PhongNhim/BinhNuocHocSinh		(lưới dựng bằng code)	844
+NhaLoc	NhaLoc/Tang_2/PhongNhim/BupBe_NhuaCu		(lưới dựng bằng code)	1340
+NhaLoc	NhaLoc/Tang_2/PhongNhim/CapSach_TieuHoc		(lưới dựng bằng code)	84
+NhaLoc	NhaLoc/Tang_2/PhongNhim/ChauNuoc_KhanUot		(lưới dựng bằng code)	124
+NhaLoc	NhaLoc/Tang_2/PhongNhim/CocNuoc_Nhim	Assets/LOC_House/Models/V35/CocNuoc_Nhim.glb	Assets/LOC_House/Models/V35/CocNuoc_Nhim.glb	220
+NhaLoc	NhaLoc/Tang_2/PhongNhim/CuaPhongNhim_FullAssembly		Assets/LOC_House/Models/Ham_PhongNhim_GLB_Game/CuaPhongNhim_FullAssembly.glb ; (lưới dựng bằng code)	256
+NhaLoc	NhaLoc/Tang_2/PhongNhim/DenNgu_Nhim		Assets/LOC_House/Models/NoiThat/BoSung/mesh/DenNgu_Nhim.glb	128
+NhaLoc	NhaLoc/Tang_2/PhongNhim/DoChoi_Lon		(lưới dựng bằng code)	216
+NhaLoc	NhaLoc/Tang_2/PhongNhim/DoHoc_Nhim		Assets/LOC_House/Models/NoiThat/PhongKhoiNhim/mesh/DoHoc_Nhim.glb	48
+NhaLoc	NhaLoc/Tang_2/PhongNhim/DongPhuc_Treo		(lưới dựng bằng code)	96
+NhaLoc	NhaLoc/Tang_2/PhongNhim/GauBong_Cu		(lưới dựng bằng code)	444
+NhaLoc	NhaLoc/Tang_2/PhongNhim/GheNhua_Nhim		Assets/LOC_House/Models/NoiThat/PhongKhoiNhim/mesh/GheNhua_Nhim.glb	60
+NhaLoc	NhaLoc/Tang_2/PhongNhim/GiuongNhim_ChieuChan		(lưới dựng bằng code)	156
+NhaLoc	NhaLoc/Tang_2/PhongNhim/GiuongXep_CoTam		(lưới dựng bằng code)	156
+NhaLoc	NhaLoc/Tang_2/PhongNhim/Hop_DoChoi_Nhim		(lưới dựng bằng code)	3752
+NhaLoc	NhaLoc/Tang_2/PhongNhim/HopBut_ThuocKe		(lưới dựng bằng code)	48
+NhaLoc	NhaLoc/Tang_2/PhongNhim/KeGo_Nhim		(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_2/PhongNhim/MocDongPhuc		(lưới dựng bằng code)	44
+NhaLoc	NhaLoc/Tang_2/PhongNhim/OThoang_BongGio		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/OThoang_BongGio.glb	12
+NhaLoc	NhaLoc/Tang_2/PhongNhim/SachVo_Nhim		(lưới dựng bằng code)	2756
+NhaLoc	NhaLoc/Tang_2/PhongNhim/TranhSap_Nhim		Assets/LOC_House/Models/NoiThat/PhongKhoiNhim/mesh/TranhSap_Nhim.glb	2
+NhaLoc	NhaLoc/Tang_2/PhongNhim/TuNhua_Nhim		(lưới dựng bằng code) ; Library/unity default resources	670
+NhaLoc	NhaLoc/Tang_2/PhongNhim/ViThuoc_HaSot	Assets/LOC_House/Models/V35/ViThuoc_HaSot.glb	Assets/LOC_House/Models/V35/ViThuoc_HaSot.glb ; (lưới dựng bằng code)	1060
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/BongCompact		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/BongCompact.glb	48
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/BongCompact		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/BongCompact.glb	48
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/ChauCayKieng_LaTo		(lưới dựng bằng code)	776
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/ChauLuoiHo		(lưới dựng bằng code)	76
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/ChuongDien_Chuong		(lưới dựng bằng code)	460
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/GuongTreo_Sanh		Assets/LOC_House/Models/NoiThat/DoSong/mesh/GuongTreo_Sanh.glb	10
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/KeGiayDep_Go		(lưới dựng bằng code)	468
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/KeSachHoSo_Go		(lưới dựng bằng code)	564
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/KeTreo_Go		Library/unity default resources ; (lưới dựng bằng code)	2728
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/Khan_Treo		(lưới dựng bằng code)	1080
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/Tham_Chieu_Hoa		Assets/LOC_House/Models/NoiThat/BoSung/mesh/Tham_Chieu_Hoa.glb	14
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/ThungCarton_Chong		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/TranhNho_HanhLang		Assets/LOC_House/Models/NoiThat/DoSong/mesh/TranhNho_HanhLang.glb	2
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/TranhSonThuy_Khung		Assets/LOC_House/Models/NoiThat/BoSung/mesh/TranhSonThuy_Khung.glb	26
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/TuDung_RuongChanMan		(lưới dựng bằng code) ; Library/unity default resources	598
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/TuThap_Sanh		(lưới dựng bằng code) ; Library/unity default resources	598
+NhaLoc	NhaLoc/Tang_2/SanhHanhLang/VaiChePhuGuong_Sanh		Assets/LOC_House/Models/NoiThat/BoSung/mesh/VaiChePhuGuong_Sanh.glb	798
+NhaLoc	NhaLoc/Tang_2/VoNha/GoBanCong		(lưới dựng bằng code)	12
+NhaLoc	NhaLoc/Tang_2/VoNha/GoBanCong		(lưới dựng bằng code)	12
+NhaLoc	NhaLoc/Tang_2/VoNha/LanCan_BanCong		(lưới dựng bằng code)	584
+NhaLoc	NhaLoc/Tang_2/VoNha/LanCan_BanCong		(lưới dựng bằng code)	584
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_2/VoNha/MuiBac_Mon		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/MuiBac_Mon.glb	16
+NhaLoc	NhaLoc/Tang_3/PhongTho/AoTangGap		(lưới dựng bằng code)	60
+NhaLoc	NhaLoc/Tang_3/PhongTho/BanThoGiaTien_Set		Assets/LOC_House/Models/PhongTho_TangBa/BanThoGiaTien.glb ; (lưới dựng bằng code) ; Assets/LOC_House/Models/PhongTho_TangBa/KhanPhuBanTho.glb ; Assets/LOC_House/Models/PhongTho_TangBa/DoTrenBanTho.glb ; Assets/LOC_House/Models/PhongTho_TangBa/KhungAnhOngBa.glb ; Assets/LOC_House/Models/PhongTho_TangBa/BocVai_Kin.glb	4360
+NhaLoc	NhaLoc/Tang_3/PhongTho/BauCuaSo_Granito_Khoi		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/BauCuaSo_Granito_Khoi.glb	12
+NhaLoc	NhaLoc/Tang_3/PhongTho/BauCuaSo_Granito_Khoi		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/BauCuaSo_Granito_Khoi.glb	12
+NhaLoc	NhaLoc/Tang_3/PhongTho/BinhHoaLon_Gom		(lưới dựng bằng code)	3812
+NhaLoc	NhaLoc/Tang_3/PhongTho/BinhHoaTho		(lưới dựng bằng code)	4152
+NhaLoc	NhaLoc/Tang_3/PhongTho/ChauCayKieng_LaTo		(lưới dựng bằng code)	776
+NhaLoc	NhaLoc/Tang_3/PhongTho/ChauCayKieng_LaTo		(lưới dựng bằng code)	776
+NhaLoc	NhaLoc/Tang_3/PhongTho/ChieuCoi_PhongTho		(lưới dựng bằng code)	10
+NhaLoc	NhaLoc/Tang_3/PhongTho/CuaSanPhoi	Assets/LOC_House/Models/SanPhoi_TangBa/CuaSanPhoi.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/SanPhoi_TangBa/CuaSanPhoi.glb	164
+NhaLoc	NhaLoc/Tang_3/PhongTho/CuaSo_Khoi_Phai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_Khoi_Phai.glb	82
+NhaLoc	NhaLoc/Tang_3/PhongTho/CuaSo_Khoi_Phai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_Khoi_Phai.glb	82
+NhaLoc	NhaLoc/Tang_3/PhongTho/CuaSo_Khoi_Trai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_Khoi_Trai.glb	82
+NhaLoc	NhaLoc/Tang_3/PhongTho/CuaSo_Khoi_Trai		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/CuaSo_Go_Khoi_Trai.glb	82
+NhaLoc	NhaLoc/Tang_3/PhongTho/CumAnhCu_TreoTuong		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/BoSung/mesh/CumAnhCu_TreoTuong.glb	68
+NhaLoc	NhaLoc/Tang_3/PhongTho/DenTuyp_120		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_120.glb	68
+NhaLoc	NhaLoc/Tang_3/PhongTho/DenTuyp_120		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_120.glb	68
+NhaLoc	NhaLoc/Tang_3/PhongTho/GheDau_Go		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_3/PhongTho/GiaPhoiDo_Xep		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_3/PhongTho/HuBinhNgamRuou		(lưới dựng bằng code)	444
+NhaLoc	NhaLoc/Tang_3/PhongTho/HuongNen_DuTru		(lưới dựng bằng code)	210
+NhaLoc	NhaLoc/Tang_3/PhongTho/KeGiayDep_Go		(lưới dựng bằng code)	468
+NhaLoc	NhaLoc/Tang_3/PhongTho/KeGo_TreoTuong		(lưới dựng bằng code)	1240
+NhaLoc	NhaLoc/Tang_3/PhongTho/LichAm_TreoTuong		(lưới dựng bằng code)	84
+NhaLoc	NhaLoc/Tang_3/PhongTho/MamDong_HoaQuaTho		(lưới dựng bằng code)	1492
+NhaLoc	NhaLoc/Tang_3/PhongTho/Rem_Voan_PhongTho		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/Rem_Voan_PhongTho.glb	80
+NhaLoc	NhaLoc/Tang_3/PhongTho/Rem_Voan_PhongTho		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/Rem_Voan_PhongTho.glb	80
+NhaLoc	NhaLoc/Tang_3/PhongTho/SachGiaLe_CuaMe		Library/unity default resources	140
+NhaLoc	NhaLoc/Tang_3/PhongTho/SapGo		Assets/LOC_House/Models/NoiThat/DoSong/mesh/SapGo.glb	42
+NhaLoc	NhaLoc/Tang_3/PhongTho/SongSatHoa_Khoi		(lưới dựng bằng code)	312
+NhaLoc	NhaLoc/Tang_3/PhongTho/SongSatHoa_Khoi		(lưới dựng bằng code)	312
+NhaLoc	NhaLoc/Tang_3/PhongTho/ThanhRem		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/ThanhRem.glb	48
+NhaLoc	NhaLoc/Tang_3/PhongTho/ThanhRem		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/ThanhRem.glb	48
+NhaLoc	NhaLoc/Tang_3/PhongTho/ThanhRem		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/ThanhRem.glb	48
+NhaLoc	NhaLoc/Tang_3/PhongTho/ThanhRem		Assets/LOC_House/Models/NoiThat/CuaSo/mesh/ThanhRem.glb	48
+NhaLoc	NhaLoc/Tang_3/PhongTho/ThungCarton_Chong		(lưới dựng bằng code)	192
+NhaLoc	NhaLoc/Tang_3/PhongTho/TranhHoaSen_Khung		Assets/LOC_House/Models/NoiThat/BoSung/mesh/TranhHoaSen_Khung.glb	26
+NhaLoc	NhaLoc/Tang_3/PhongTho/TranhThuPhap_Phuc		Assets/LOC_House/Models/NoiThat/BoSung/mesh/TranhThuPhap_Phuc.glb	26
+NhaLoc	NhaLoc/Tang_3/PhongTho/TuDoTho_Fix		(lưới dựng bằng code) ; Library/unity default resources	1658
+NhaLoc	NhaLoc/Tang_3/PhongTho/VP_ChenSo3	Assets/Prefab/BoChen/ChenC_GanLai.glb	Assets/Prefab/BoChen/ChenC_GanLai.glb	120
+NhaLoc	NhaLoc/Tang_3/SanhGocKho/BongCompact		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/BongCompact.glb	48
+NhaLoc	NhaLoc/Tang_3/SanhGocKho/ChauCayKieng_LaTo		(lưới dựng bằng code)	776
+NhaLoc	NhaLoc/Tang_3/SanhGocKho/GocKho_DoGio_Fix		(lưới dựng bằng code)	392
+NhaLoc	NhaLoc/Tang_3/SanhGocKho/GocKho_DoNha_Fix		(lưới dựng bằng code)	1260
+NhaLoc	NhaLoc/Tang_3/SanhGocKho/GocKho_DoTet_Fix		(lưới dựng bằng code) ; Assets/LOC_House/Models/NoiThat/BoSung/mesh/GocKho_DoTet_Fix.glb	1846
+NhaLoc	NhaLoc/Tang_3/SanPhoi/AntenTV_MaiNha		(lưới dựng bằng code)	132
+NhaLoc	NhaLoc/Tang_3/SanPhoi/AoTang_Phoi_01	Assets/LOC_House/Models/SanPhoi_TangBa/AoTang_Phoi_01.glb	(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_3/SanPhoi/AoTang_Phoi_02	Assets/LOC_House/Models/SanPhoi_TangBa/AoTang_Phoi_02.glb	(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_3/SanPhoi/AoTang_Phoi_03	Assets/LOC_House/Models/SanPhoi_TangBa/AoTang_Phoi_03.glb	(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_3/SanPhoi/AoTang_Phoi_04	Assets/LOC_House/Models/SanPhoi_TangBa/AoTang_Phoi_04.glb	(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_3/SanPhoi/AoTang_Phoi_05	Assets/LOC_House/Models/SanPhoi_TangBa/AoTang_Phoi_05.glb	(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_3/SanPhoi/BeNuoc_Nap	Assets/LOC_House/Models/SanPhoi_TangBa/BeNuoc_Nap.glb	(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tang_3/SanPhoi/BongDenSan_DayDien		Assets/LOC_House/Models/NoiThat/BoSung/mesh/BongDenSan_DayDien.glb	584
+NhaLoc	NhaLoc/Tang_3/SanPhoi/BonHoa_SanPhoi		(lưới dựng bằng code)	1368
+NhaLoc	NhaLoc/Tang_3/SanPhoi/ChauCay_SanPhoi		(lưới dựng bằng code)	8160
+NhaLoc	NhaLoc/Tang_3/SanPhoi/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tang_3/SanPhoi/CotPhoi	Assets/LOC_House/Models/SanPhoi_TangBa/CotPhoi.glb	(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_3/SanPhoi/DayPhoi	Assets/LOC_House/Models/SanPhoi_TangBa/DayPhoi.glb	(lưới dựng bằng code)	72
+NhaLoc	NhaLoc/Tang_3/SanPhoi/KepPhoi	Assets/LOC_House/Models/SanPhoi_TangBa/KepPhoi.glb	(lưới dựng bằng code)	168
+NhaLoc	NhaLoc/Tang_3/SanPhoi/LanCanSanPhoi	Assets/LOC_House/Models/SanPhoi_TangBa/LanCanSanPhoi.glb	(lưới dựng bằng code)	324
+NhaLoc	NhaLoc/Tang_3/SanPhoi/NenSanPhoi	Assets/LOC_House/Models/SanPhoi_TangBa/NenSanPhoi.glb	(lưới dựng bằng code)	148
+NhaLoc	NhaLoc/Tang_3/VoNha/BonNuocMai		Assets/LOC_House/Models/NoiThat/ThangCong/mesh/BonNuocMai.glb	96
+NhaLoc	NhaLoc/Tang_3/VoNha/GiengTroi		(lưới dựng bằng code)	98
+NhaLoc	NhaLoc/Tiem/BanHang/BangGia		Assets/LOC_House/Models/NoiThat/DoSong/mesh/BangGia.glb	2
+NhaLoc	NhaLoc/Tiem/BanHang/BanThoThanTai		(lưới dựng bằng code)	2452
+NhaLoc	NhaLoc/Tiem/BanHang/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/BanHang/CanBanHang	Assets/LOC_House/Models/CuaHang_VatLieu/CanBanHang.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CanBanHang.glb	144
+NhaLoc	NhaLoc/Tiem/BanHang/CuonDayDien	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	312
+NhaLoc	NhaLoc/Tiem/BanHang/DenTuyp_120		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_120.glb	68
+NhaLoc	NhaLoc/Tiem/BanHang/DongHoTreo_Tiem		(lưới dựng bằng code)	436
+NhaLoc	NhaLoc/Tiem/BanHang/KeVLo_DoKe		Assets/LOC_House/Models/NoiThat/DoSong/mesh/KeVLo.glb ; (lưới dựng bằng code)	332
+NhaLoc	NhaLoc/Tiem/BanHang/LichBloc_CongTy		(lưới dựng bằng code)	408
+NhaLoc	NhaLoc/Tiem/BanHang/LOC_CanhQuayHang	Assets/LOC_House/Models/QuayHang_LoKeo/LOC_CanhQuayHang.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/QuayHang_LoKeo/LOC_CanhQuayHang.glb	1488
+NhaLoc	NhaLoc/Tiem/BanHang/QuatBan_SatCu		(lưới dựng bằng code)	736
+NhaLoc	NhaLoc/Tiem/BanHang/SM_PlasticChairStack_4	Assets/LOC_House/Models/DamTang_Rap_DamTang_BoBanGheNhua/SM_PlasticChairStack_4.glb	(lưới dựng bằng code)	204
+NhaLoc	NhaLoc/Tiem/BanHang/SoHoaDon_Quay		(lưới dựng bằng code)	176
+NhaLoc	NhaLoc/Tiem/BanHang/ThungSon_Cum2	Assets/LOC_House/Models/CuaHang_VatLieu/ThungSon_Cum2.glb	Assets/LOC_House/Models/CuaHang_VatLieu/ThungSon_Cum2.glb ; (lưới dựng bằng code)	2140
+NhaLoc	NhaLoc/Tiem/BanHang/TuKinh		(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/TuKinh.glb	362
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong.glb ; (lưới dựng bằng code)	325
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong2	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	192
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong2	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	192
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong2	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	192
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong2	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	192
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong2	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	192
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong2	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	192
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong2	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	192
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Chong2	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Chong2.glb	192
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Le	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	48
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Le	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	48
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Le	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	48
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Le	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	48
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Le	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	48
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Le	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	48
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Le	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	48
+NhaLoc	NhaLoc/Tiem/Kho/BaoXiMang_Le	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	Assets/LOC_House/Models/CuaHang_VatLieu/BaoXiMang_Le.glb	48
+NhaLoc	NhaLoc/Tiem/Kho/CayChoi	Assets/LOC_House/Models/CuaHang_VatLieu/CayChoi.glb	(lưới dựng bằng code)	48
+NhaLoc	NhaLoc/Tiem/Kho/CayChoi	Assets/LOC_House/Models/CuaHang_VatLieu/CayChoi.glb	(lưới dựng bằng code)	48
+NhaLoc	NhaLoc/Tiem/Kho/CayChoi	Assets/LOC_House/Models/CuaHang_VatLieu/CayChoi.glb	(lưới dựng bằng code)	48
+NhaLoc	NhaLoc/Tiem/Kho/CayChoi	Assets/LOC_House/Models/CuaHang_VatLieu/CayChoi.glb	(lưới dựng bằng code)	48
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/ChauNhua	Assets/LOC_House/Models/SanPhoi_TangBa/ChauNhua.glb	(lưới dựng bằng code)	54
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	312
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	312
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	312
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	312
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	312
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	312
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	312
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien.glb	312
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien_2	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	452
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien_2	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	452
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien_2	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	452
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien_2	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	452
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien_2	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	452
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien_2	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	452
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien_2	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	452
+NhaLoc	NhaLoc/Tiem/Kho/CuonDayDien_2	Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/CuonDayDien_2.glb	452
+NhaLoc	NhaLoc/Tiem/Kho/CuonLuoiThep	Assets/LOC_House/Models/CuaHang_VatLieu/CuonLuoiThep.glb	Assets/LOC_House/Models/CuaHang_VatLieu/CuonLuoiThep.glb	288
+NhaLoc	NhaLoc/Tiem/Kho/CuonLuoiThep	Assets/LOC_House/Models/CuaHang_VatLieu/CuonLuoiThep.glb	Assets/LOC_House/Models/CuaHang_VatLieu/CuonLuoiThep.glb	288
+NhaLoc	NhaLoc/Tiem/Kho/CuonLuoiThep	Assets/LOC_House/Models/CuaHang_VatLieu/CuonLuoiThep.glb	Assets/LOC_House/Models/CuaHang_VatLieu/CuonLuoiThep.glb	288
+NhaLoc	NhaLoc/Tiem/Kho/DenTuyp_120		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_120.glb	68
+NhaLoc	NhaLoc/Tiem/Kho/DenTuyp_120		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_120.glb	68
+NhaLoc	NhaLoc/Tiem/Kho/DenTuyp_120		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_120.glb	68
+NhaLoc	NhaLoc/Tiem/Kho/DenTuyp_120		Assets/LOC_House/Models/NoiThat/DenQuat/mesh/DenTuyp_120.glb	68
+NhaLoc	NhaLoc/Tiem/Kho/KeGoDai	Assets/LOC_House/Models/CuaHang_VatLieu/KeGoDai.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/KeGoDai.glb	1188
+NhaLoc	NhaLoc/Tiem/Kho/KeGoDai	Assets/LOC_House/Models/CuaHang_VatLieu/KeGoDai.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/KeGoDai.glb	1188
+NhaLoc	NhaLoc/Tiem/Kho/OngNuoc_Bo	Assets/LOC_House/Models/CuaHang_VatLieu/OngNuoc_Bo.glb	(lưới dựng bằng code)	224
+NhaLoc	NhaLoc/Tiem/Kho/OngNuoc_Bo	Assets/LOC_House/Models/CuaHang_VatLieu/OngNuoc_Bo.glb	(lưới dựng bằng code)	224
+NhaLoc	NhaLoc/Tiem/Kho/OngNuoc_Bo	Assets/LOC_House/Models/CuaHang_VatLieu/OngNuoc_Bo.glb	(lưới dựng bằng code)	224
+NhaLoc	NhaLoc/Tiem/Kho/OngNuoc_Nam	Assets/LOC_House/Models/CuaHang_VatLieu/OngNuoc_Nam.glb	(lưới dựng bằng code)	128
+NhaLoc	NhaLoc/Tiem/Kho/OngNuoc_Nam	Assets/LOC_House/Models/CuaHang_VatLieu/OngNuoc_Nam.glb	(lưới dựng bằng code)	128
+NhaLoc	NhaLoc/Tiem/Kho/OngNuoc_Nam	Assets/LOC_House/Models/CuaHang_VatLieu/OngNuoc_Nam.glb	(lưới dựng bằng code)	128
+NhaLoc	NhaLoc/Tiem/Kho/ThangNhom	Assets/LOC_House/Models/CuaHang_VatLieu/ThangNhom.glb	Assets/LOC_House/Models/CuaHang_VatLieu/ThangNhom.glb	120
+NhaLoc	NhaLoc/Tiem/Kho/ThangNhom	Assets/LOC_House/Models/CuaHang_VatLieu/ThangNhom.glb	Assets/LOC_House/Models/CuaHang_VatLieu/ThangNhom.glb	120
+NhaLoc	NhaLoc/Tiem/Kho/ThangNhom	Assets/LOC_House/Models/CuaHang_VatLieu/ThangNhom.glb	Assets/LOC_House/Models/CuaHang_VatLieu/ThangNhom.glb	120
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGao_Nhua		(lưới dựng bằng code)	106
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungGo	Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	(lưới dựng bằng code) ; Assets/LOC_House/Models/CuaHang_VatLieu/ThungGo.glb	96
+NhaLoc	NhaLoc/Tiem/Kho/ThungSon_Chong		(lưới dựng bằng code)	19556
+NhaLoc	NhaLoc/Tiem/Kho/ThungSon_Chong		(lưới dựng bằng code)	19616
+NhaLoc	NhaLoc/Tiem/Kho/ThungSon_Ke		(lưới dựng bằng code)	16880
+NhaLoc	NhaLoc/Tiem/Kho/ThungSon_Ke		(lưới dựng bằng code)	9368
+NhaLoc	NhaLoc/Tiem/Kho/ThungSon_Ke		(lưới dựng bằng code)	9428
+NhaLoc	NhaLoc/Tiem/Kho/XeRua	Assets/LOC_House/Models/CuaHang_VatLieu/XeRua.glb	(lưới dựng bằng code)	368
+NhaLoc	NhaLoc/Tiem/Kho/XeRua	Assets/LOC_House/Models/CuaHang_VatLieu/XeRua.glb	(lưới dựng bằng code)	368
+NhaLoc	NhaLoc/Tiem/VoNha/CuaSatXep_Dong	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/CuaSatXep_Dong.glb	Assets/LOC_House/Models/DamTang_Rap_TuPhanTrungLam/CuaSatXep_Dong.glb	456

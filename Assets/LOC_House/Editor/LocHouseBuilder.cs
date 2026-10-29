@@ -1834,6 +1834,7 @@ public static partial class LocHouseBuilder
     static void Tint(GameObject g, string name)
     {
         if (!NoMatColor.TryGetValue(name, out var hex)) return;
+        if (g.GetComponentsInChildren<Renderer>(true).Any(r => r.sharedMaterials.Any(m => m && m.name.Contains("__")))) return;   // [29/10] bản nâng cấp đã có vật liệu
         var m = M("M_NT_" + hex.TrimStart('#'), hex);
         foreach (var r in g.GetComponentsInChildren<Renderer>(true))
             r.sharedMaterials = Enumerable.Repeat(m, Mathf.Max(1, r.sharedMaterials.Length)).ToArray();
