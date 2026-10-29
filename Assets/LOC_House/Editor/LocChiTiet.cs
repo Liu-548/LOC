@@ -54,6 +54,7 @@ public static class LocChiTiet
     public static void Apply(Transform root)
     {
         mats.Clear(); meshes.Clear(); d2.Clear(); d2mesh.Clear(); nMat = nRend = 0;
+        AssetDatabase.DeleteAsset(D2MeshDir); System.IO.Directory.CreateDirectory(D2MeshDir);   // [29/10] lưới _tg dựng lại mỗi lần
         var log = new List<string>();
         foreach (var lp in root.GetComponentsInChildren<LocProp>(true))
         {
@@ -186,6 +187,7 @@ public static class LocChiTiet
     };
     static readonly Dictionary<string, Material> d2 = new();
     static readonly Dictionary<Mesh, Mesh> d2mesh = new();
+    const string D2MeshDir = "Assets/LOC_House/Meshes_D2";
 
     static void ApD2(MeshRenderer r)
     {
@@ -203,7 +205,13 @@ public static class LocChiTiet
         var mf = r.GetComponent<MeshFilter>();
         if (mf && mf.sharedMesh && (mf.sharedMesh.tangents == null || mf.sharedMesh.tangents.Length == 0))
         {
-            if (!d2mesh.TryGetValue(mf.sharedMesh, out var t)) { t = Object.Instantiate(mf.sharedMesh); t.name = mf.sharedMesh.name + "_tg"; t.RecalculateTangents(); d2mesh[mf.sharedMesh] = t; }
+            if (!d2mesh.TryGetValue(mf.sharedMesh, out var t))
+            {
+                t = Object.Instantiate(mf.sharedMesh); t.name = mf.sharedMesh.name + "_tg"; t.RecalculateTangents();
+                // [29/10] lưu ra file riêng: để trong scene thì LOC_NhaLoc.unity vượt 100 MB (GitHub chặn push). Tên theo thứ tự dựng → ổn định giữa các lần dựng
+                AssetDatabase.CreateAsset(t, $"{D2MeshDir}/{d2mesh.Count:0000}_{t.name.Replace('/', '_')}.asset");
+                d2mesh[mf.sharedMesh] = t;
+            }
             mf.sharedMesh = t;
         }
         nRend++;

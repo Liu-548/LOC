@@ -1,6 +1,6 @@
-[LocMiniGameBuilder] 29/10/2026 6:19:00 CH
+[LocMiniGameBuilder] 29/10/2026 10:25:43 CH
   bàn học      Đêm 1–3  trên BanHoc_Khoi_Bo  tại (5.70, 4.45, 16.10)
-  bàn ăn       Đêm 2–3  trên LongBan  tại (3.80, 1.16, 13.70)
+  bàn ăn       Đêm 2–3  trên LongBan  tại (3.80, 1.13, 13.70)
   Dán chén     Đêm 2–2  trên Bo_Chen_Tren_De  tại (-2.00, -1.42, 11.22)
   Bày mâm      Đêm 3–3  trên BanThoHam  tại (-2.00, -1.50, 11.27)
   Giữ nhang    Đêm 3–3  trên BanThoHam  tại (-2.00, -1.50, 11.27)

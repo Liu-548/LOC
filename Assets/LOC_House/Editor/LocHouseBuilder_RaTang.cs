@@ -138,7 +138,7 @@ public static partial class LocHouseBuilder
         A("BatDia_TrongChau", 0.95f, 14.95f, 0, 20); A("BatDia_TrongChau", 1.05f, 15.55f, 0, -15);
         A("RauQua_Ro", 1.75f, 14.6f, 0, 25);
         A("ThungNuocNgot_Khach", 5.5f, 11.35f, 0, 10); A("ThungNuocNgot_Khach", 5.5f, 11.35f, 0.4f, -5);
-        A("SM_PlasticChairStack_4", 6.4f, 11.4f, 0, 0);
+        A("SM_PlasticChairStack_4", 5.95f, 11.4f, 0, 0);   // [29/10] dời khỏi vùng quét cánh tủ lạnh (bản lề x≈6,92, cánh 0,58 m)
         A("KhayTra_LyThuyTinh", 6.95f, 12.6f, 0.6f, 0); A("DiaKeoBanh_HatDua", 6.95f, 13.6f, 0.6f, 0);   // soạn sẵn trên chõng để bưng ra rạp
 
         cur = G("Tang_1/Bep/Dem2");
@@ -148,7 +148,7 @@ public static partial class LocHouseBuilder
         A("BatDia_TrongChau", 0.95f, 14.95f, 0, 20); A("BatDia_TrongChau", 1.05f, 15.55f, 0, -15); A("BatDia_TrongChau", 1.65f, 15.25f, 0, 60);
         A("ChauInox", 5.45f, 14.75f, 0); A("ChauNhua", 6.35f, 14.8f, 0, 15);
         A("ThungNuocNgot_Khach", 5.5f, 11.35f, 0, 10); A("ThungNuocNgot_Khach", 5.5f, 11.35f, 0.4f, -5); A("ThungNuocNgot_Khach", 6.0f, 11.3f, 0, 30);
-        A("SM_PlasticChairStack_4", 6.55f, 11.45f, 0, 15);
+        A("SM_PlasticChairStack_4", 6.05f, 11.85f, 0, 15);   // [29/10] như Đêm 1
         A("ThungRacNhua", 5.3f, 16.1f, 0, 0);
         A("SM_PlasticChair_Red", 6.1f, 14.3f, 0, 40); A("SM_PlasticChair_Green", 1.9f, 12.3f, 0, -70);   // ghế khách bưng vào ngồi rửa bát, bỏ lại
         A("BaoTaiRong", 1.95f, 14.95f, 0, 20);

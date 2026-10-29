@@ -189,6 +189,7 @@ public static class LocSceneAudit
                 if (self.Contains(h.collider) || h.collider is CharacterController) continue;
                 var lp = h.collider.GetComponentInParent<LocProp>();
                 if (lp && lp.kieu == LocProp.Kieu.Cua) continue;          // cánh cửa không làm mặt đỡ
+                if (lp && !SameVariant(p, lp)) continue;                   // [29/10] đồ Đêm 2 không đậu lên ghế/bàn của Đêm 1 (lúc rà các đêm cùng bật)
                 if (h.point.y > best) best = h.point.y;
             }
             if (best > float.NegativeInfinity) { hitN++; top = Mathf.Max(top, best); if (sx == 0 && sz == 0) centre = best; }
