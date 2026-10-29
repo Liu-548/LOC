@@ -62,7 +62,8 @@ public static partial class LocHouseBuilder
         float yt = y + 0.42f, yd = y + 0.08f;
         // ngăn trên: xấp giấy tờ nhà đất kẹp bìa xanh + chùm chìa khoá hầm + khoá treo to
         Pv(d, PrimitiveType.Cube, "GiayToNhaDat", new Vector3(0.25f, yt + 0.025f, 0.24f), new Vector3(0.30f, 0.05f, 0.21f), "#E8E0C8", 3);
-        Pv(d, PrimitiveType.Cube, "BiaXanh", new Vector3(0.25f, yt + 0.053f, 0.24f), new Vector3(0.305f, 0.006f, 0.215f), "#3E5A7A", 3);
+        // [29/10 v3.3] trên xấp giấy tờ: sổ đỏ của căn nhà kẹp tờ giấy báo nợ ngân hàng (LOC_Nguon/V35) — thay bìa xanh cũ
+        A("SoDo_BaoNo", 0.25f, 0.24f, yt + 0.0505f, 3, k: LocProp.Kieu.CoDinh);
         Pv(d, PrimitiveType.Cylinder, "ChumChia_Vong", new Vector3(0.45f, yt + 0.003f, 0.38f), new Vector3(0.05f, 0.003f, 0.05f), "#A8A08A");
         for (int i = 0; i < 3; i++)
             Pv(d, PrimitiveType.Cube, "ChiaKhoa_" + i, new Vector3(0.45f, yt + 0.004f + i * 0.003f, 0.38f + 0.03f), new Vector3(0.016f, 0.003f, 0.07f), i == 0 ? "#B8964A" : "#A9ABA6", -25 + i * 22);

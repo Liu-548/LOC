@@ -1,7 +1,7 @@
-BÁO CÁO DỰNG NHÀ LỘC — 28/10/2026 23:29
+BÁO CÁO DỰNG NHÀ LỘC — 29/10/2026 12:44
 Scene: Assets/Scenes/LOC_NhaLoc.unity
 
-ASSET ĐÃ ĐẶT (385):
+ASSET ĐÃ ĐẶT (398):
   ✓ AmNhom
   ✓ AnhCuoi_Tex
   ✓ AnhGiaDinh_Tex
@@ -86,6 +86,14 @@ ASSET ĐÃ ĐẶT (385):
   ✓ ChauNhua_Up
   ✓ ChauNuoc_KhanUot
   ✓ ChauTrauBa
+  ✓ ChenA_GanLai
+  ✓ ChenA_Tach
+  ✓ ChenB_GanLai
+  ✓ ChenB_Tach
+  ✓ ChenC_GanLai
+  ✓ ChenC_Tach
+  ✓ ChenMe
+  ✓ ChenNut
   ✓ ChieuCoi_PhongTho
   ✓ ChieuMen_KhachO
   ✓ ChieuTruc
@@ -99,6 +107,7 @@ ASSET ĐÃ ĐẶT (385):
   ✓ ChuongDien_Nut
   ✓ CocBanChai_NguoiLon
   ✓ CocBanChai_TreEm
+  ✓ CocNuoc_Nhim
   ✓ ConDau_HopMuc
   ✓ CongSat_CanhPhai
   ✓ CongSat_CanhTrai
@@ -252,8 +261,10 @@ ASSET ĐÃ ĐẶT (385):
   ✓ LOC_CanhQuayHang
   ✓ LOC_DienThoai_TronBo
   ✓ LOC_DongDoCungTang
+  ✓ LOC_KienHang_ThayDong
   ✓ LOC_TapGiay_ButBi
   ✓ LoHoaGia_Nhua
+  ✓ LoiNhanMe_Giay
   ✓ LongBan
   ✓ LonSuaDac_DungBut
   ✓ MamDoCungMan
@@ -325,6 +336,7 @@ ASSET ĐÃ ĐẶT (385):
   ✓ SM_PlasticChairStack_8
   ✓ SM_PlasticTable
   ✓ SM_PlasticTable_TableCover
+  ✓ SoDo_BaoNo
   ✓ SoHoaDon_Quay
   ✓ SongSatHoa_Bep
   ✓ SongSatHoa_BoMe
@@ -377,6 +389,7 @@ ASSET ĐÃ ĐẶT (385):
   ✓ VaiChePhuGuong_Ban
   ✓ VaiChePhuGuong_Sanh
   ✓ VaiChePhuGuong_WC
+  ✓ ViThuoc_HaSot
   ✓ Voi
   ✓ VoiSen
   ✓ VongHoa_Heo

@@ -33,7 +33,7 @@ public static partial class LocHouseBuilder
         // ── điểm lấp ló ở mép cửa
         string[] boQua = { "tủ", "két", "sổ", "cổng", "chính", "ban công", "sân phơi", "ngách", "hầm", "ngăn" };
         var P = new System.Collections.Generic.List<Vector3>(); var D = new System.Collections.Generic.List<Vector3>();
-        var N = new System.Collections.Generic.List<Vector3>(); var R = new System.Collections.Generic.List<LocDoor>();
+        var N = new System.Collections.Generic.List<Vector3>(); var R = new System.Collections.Generic.List<LocDoor>(); var Hep = new System.Collections.Generic.List<bool>();
         foreach (var dr in root.GetComponentsInChildren<LocDoor>(true))
         {
             if (!dr.ten.StartsWith("cửa") || boQua.Any(x => dr.ten.Contains(x)) || dr.truot != Vector3.zero || dr.gapX > 0) continue;
@@ -56,13 +56,19 @@ public static partial class LocHouseBuilder
                 var o = new Vector3(J.x, y0 + 1.2f, J.z) + ra * 0.12f + s * 0.9f;   // trước mặt tường, ngay ngoài mép
                 if (!Physics.Raycast(o, -s, out var hit, 1.2f, ~0, QueryTriggerInteraction.Ignore)) continue;
                 if (Mathf.Abs(0.9f - hit.distance) > 0.25f || hit.collider.GetComponentInParent<LocDoor>()) continue;   // mặt tường phải sát mép khung
-                if (Physics.CheckSphere(o + s * 0.4f, 0.25f, ~0, QueryTriggerInteraction.Ignore)) continue;   // phía người chơi phải trống
+                bool hep = false;
+                if (Physics.CheckSphere(o + s * 0.4f, 0.25f, ~0, QueryTriggerInteraction.Ignore))   // phía người chơi phải trống
+                {
+                    // [29/10] hành lang hẹp (T2 cạnh phòng Nhím/Khôi, rộng 1,1 m): chỉ cần 0,5 m trước tường trống — người chơi nhìn dọc hành lang
+                    if (Physics.CheckSphere(new Vector3(J.x, y0 + 1.2f, J.z) + ra * 0.12f + s * 0.45f, 0.2f, ~0, QueryTriggerInteraction.Ignore)) continue;
+                    hep = true;
+                }
                 var p = new Vector3(J.x, y0, J.z) + s * (0.9f - hit.distance);
-                P.Add(p); D.Add(-ra); N.Add(s); R.Add(dr);
-                log.AppendLine($"cửa  {dr.ten,-28} {(ra == u ? "chốt  " : "bản lề")} P=({p.x:0.00},{p.y:0.00},{p.z:0.00})  D=({-ra.x:0.0},{-ra.z:0.0})  N=({s.x:0.0},{s.z:0.0})");
+                P.Add(p); D.Add(-ra); N.Add(s); R.Add(dr); Hep.Add(hep);
+                log.AppendLine($"cửa  {dr.ten,-28} {(ra == u ? "chốt  " : "bản lề")} P=({p.x:0.00},{p.y:0.00},{p.z:0.00})  D=({-ra.x:0.0},{-ra.z:0.0})  N=({s.x:0.0},{s.z:0.0}){(hep ? "  [hành lang hẹp]" : "")}");
             }
         }
-        m.cuaP = P.ToArray(); m.cuaD = D.ToArray(); m.cuaN = N.ToArray(); m.cuaRef = R.ToArray();
+        m.cuaP = P.ToArray(); m.cuaD = D.ToArray(); m.cuaN = N.ToArray(); m.cuaRef = R.ToArray(); m.cuaHep = Hep.ToArray();
 
         // ── lan can trong nhà (đầu thang T3 + tay vịn xiên các vế thang)
         var A = new System.Collections.Generic.List<Vector3>(); var B = new System.Collections.Generic.List<Vector3>();

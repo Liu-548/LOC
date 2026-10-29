@@ -196,6 +196,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         var b = Bao(ban); var anh = new Vector3(b.center.x, b.max.y - 0.3f, b.center.z);
         var tu = fp.cam.position + fp.cam.forward;
         for (float t = 0; t < 1; t += Time.deltaTime / 0.8f) { fp.DatTuThe(fp.transform.position, Vector3.Lerp(tu, anh, t * t * (3 - 2 * t))); yield return null; }
+        StartCoroutine(LocTay.ThapHuong(2.3f));   // [29/10] chắp tay kẹp nén hương, vái
         yield return new WaitForSeconds(2.5f);
         LocTui.Dat(co);
         LocFirstPerson.khoa = false; LocMa.tamDung = false; dangCanh = false;
@@ -224,29 +225,83 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         var tu = fp.cam.position + fp.cam.forward;
         for (float t = 0; t < 1; t += Time.deltaTime / 0.8f) { fp.DatTuThe(fp.transform.position, Vector3.Lerp(tu, anh, t * t * (3 - 2 * t))); yield return null; }
         fp.DatTuThe(fp.transform.position, anh);
-        // ponytail: chưa có tay Khôi + que hương cắm vào bát (TL-10) — chỉ giữ camera trên hai tấm ảnh
+        StartCoroutine(LocTay.ThapHuong(3.9f));   // [29/10] tay Khôi chắp ba nén hương, vái ba lần — camera vẫn giữ trên hai tấm ảnh
         yield return new WaitForSeconds(4.5f);   // "lâu hơn mức thoải mái"; Khôi không nói gì
         LocFirstPerson.khoa = false; LocMa.tamDung = false; dangCanh = false;
         yield return new WaitForSeconds(1.2f);
-        // [v3.3] chị gái của mẹ — "bác" (TL-22), giọng Bắc, không nói câu của khách. Tên riêng còn chờ TL-03.
-        yield return Thoai((BAC, "Khôi đấy à… Khổ thân con. Về muộn quá."),
-            ("KHÔI", "Bác. Mấy hôm nay vất vả bác quá."),
-            (BAC, "Đang yên đang lành, thế mà…"),
-            (BAC, "Mẹ con dạo này cứ thấp thỏm. Hỏi thì không nói."));
-        yield return new WaitForSeconds(2f);
-        yield return Thoai((BAC, "Con Nhím vẫn nằm trên gác. Tay còn bó, sốt thì chưa dứt."),
-            (BAC, "Bố con nhất định không cho nó đi viện. Gọi ông bác sĩ đầu phố sang bó tận giường."),
-            (BAC, "Thuốc bác để trên tủ, sáng tối nửa viên."),
-            (BAC, "Nó biết rồi. Khóc mấy hôm, giờ mệt quá chỉ nằm."),
-            (BAC, "À, hôm qua có ông nào gọi về hỏi nhà còn ai lớn không."),
-            (BAC, "Bác bảo còn thằng lớn sắp về. Ông ấy không xưng tên."),
-            (BAC, "Chắc lại người đòi tiền hàng. Dạo này bố con nợ nhiều chỗ lắm."),
-            (BAC, "Lát con sang phòng bố mẹ xem có giấy tờ gì cần cất riêng không."),
-            (BAC, "Người ta bảo nhà mình phạm trùng tang. Hai người một ngày, lại sắp sang tháng bảy."),
-            (BAC, "Tối không ai dám ở lại đâu con."),
-            (BAC, "Bác cũng phải về, nhà còn đứa cháu nhỏ. Nhớ giữ hương trên linh cữu, đừng để tắt."));
+        // [29/10] cả đoạn bác (bước tới, nắm tay, 15 câu thoại) bỏ qua được: giữ Space 0,8 s như đoạn xe buýt
+        bool buong = false;
+        IEnumerator DoanBac()
+        {
+            // [29/10 v3.3] bác bước tới, nắm lấy cánh tay Khôi (IK tay phải bác lên giữa cẳng tay trái Khôi) — giữ qua hai câu chào rồi buông
+            if (LocDi.I && LocDi.I.gameObject.activeInHierarchy)
+            {
+                LocFirstPerson.khoa = true;
+                var dau = LocDi.I.transform.position + Vector3.up * 1.4f;
+                fp.DatTuThe(fp.transform.position, dau);
+                yield return LocDi.I.BuocToi(fp.transform);
+                fp.DatTuThe(fp.transform.position, LocDi.I.transform.position + Vector3.up * 1.35f);
+                StartCoroutine(LocTay.GiuTayTrai(() => buong));
+                yield return new WaitForSeconds(0.35f);
+                LocDi.I.NamTay(() => LocTay.CangTayTrai);
+            }
+            // [v3.3] chị gái của mẹ — "bác" (TL-22), giọng Bắc, không nói câu của khách. Tên riêng còn chờ TL-03.
+            yield return Thoai((BAC, "Khôi đấy à… Khổ thân con. Về muộn quá."),
+                ("KHÔI", "Bác. Mấy hôm nay vất vả bác quá."));
+            if (LocDi.I) LocDi.I.NamTay(null);
+            yield return new WaitForSeconds(0.5f);
+            buong = true; LocFirstPerson.khoa = false;
+            yield return Thoai(
+                (BAC, "Đang yên đang lành, thế mà…"),
+                (BAC, "Mẹ con dạo này cứ thấp thỏm. Hỏi thì không nói."));
+            yield return new WaitForSeconds(2f);
+            yield return Thoai((BAC, "Con Nhím vẫn nằm trên gác. Tay còn bó, sốt thì chưa dứt."),
+                (BAC, "Bố con nhất định không cho nó đi viện. Gọi ông bác sĩ đầu phố sang bó tận giường."),
+                (BAC, "Thuốc bác để trên tủ, sáng tối nửa viên."),
+                (BAC, "Nó biết rồi. Khóc mấy hôm, giờ mệt quá chỉ nằm."),
+                (BAC, "À, hôm qua có ông nào gọi về hỏi nhà còn ai lớn không."),
+                (BAC, "Bác bảo còn thằng lớn sắp về. Ông ấy không xưng tên."),
+                (BAC, "Chắc lại người đòi tiền hàng. Dạo này bố con nợ nhiều chỗ lắm."),
+                (BAC, "Lát con sang phòng bố mẹ xem có giấy tờ gì cần cất riêng không."),
+                (BAC, "Người ta bảo nhà mình phạm trùng tang. Hai người một ngày, lại sắp sang tháng bảy."),
+                (BAC, "Tối không ai dám ở lại đâu con."),
+                (BAC, "Bác cũng phải về, nhà còn đứa cháu nhỏ. Nhớ giữ hương trên linh cữu, đừng để tắt."));
+        }
+        yield return BoQuaDuoc(DoanBac(), () =>
+        {
+            buong = true; LocFirstPerson.khoa = false;
+            if (LocDi.I) { LocDi.I.NamTay(null); LocDi.I.DungLai(); }
+        });
         if (LocDi.I) { LocDi.I.Noi(false); LocDi.I.Ve(); }   // bác về — đi ra cổng
         LocTui.Dat("ho_hang_ve");
+    }
+
+    // ───── [29/10] đoạn dài bỏ qua được (bác nói chuyện…): giữ Space 0,8 s — cùng cách với đoạn xe buýt (LocXeBuyt).
+    //  Bỏ qua thì dừng ngay đoạn đang chạy, xoá phụ đề, gọi donDep để trả trạng thái (mở khoá, buông tay…), rồi chạy tiếp phần sau đoạn.
+    float giuSpace; bool coBoQua;
+    IEnumerator BoQuaDuoc(IEnumerator doan, System.Action donDep)
+    {
+        bool xong = false;
+        IEnumerator Chay() { yield return doan; xong = true; }
+        var c = StartCoroutine(Chay());
+        coBoQua = true; giuSpace = 0;
+        while (!xong)
+        {
+            var k = Keyboard.current;
+            giuSpace = k != null && k.spaceKey.isPressed && !LocMenu.DangChe ? giuSpace + Time.deltaTime : 0;
+            if (giuSpace >= 0.8f) { StopCoroutine(c); LocFirstPerson.PhuDe("", 0.01f); donDep?.Invoke(); break; }
+            yield return null;
+        }
+        coBoQua = false; giuSpace = 0;
+    }
+    void OnGUI()
+    {
+        if (!coBoQua || LocMenu.DangChe) return;
+        float k = Screen.height / 1080f;
+        var st = new GUIStyle(GUI.skin.label) { font = LocMenu.FontChu(1), fontSize = Mathf.RoundToInt(19 * k), alignment = TextAnchor.LowerRight };
+        st.normal.textColor = new Color(0.75f, 0.72f, 0.66f, 0.38f + 0.5f * Mathf.Clamp01(giuSpace / 0.8f));
+        GUI.Label(new Rect(0, 0, Screen.width - 36 * k, Screen.height - 30 * k), "Giữ Space để bỏ qua", st);
+        if (giuSpace > 0) { float w = 170 * k * Mathf.Clamp01(giuSpace / 0.8f); GUI.color = new Color(0.75f, 0.72f, 0.66f, 0.7f); GUI.DrawTexture(new Rect(Screen.width - 36 * k - w, Screen.height - 26 * k, w, 2 * k), Texture2D.whiteTexture); GUI.color = Color.white; }
     }
 
     const string BAC = "BÁC";

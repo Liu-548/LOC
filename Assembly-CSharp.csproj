@@ -79,6 +79,7 @@
     <Compile Include="Assets\LOC_House\Scripts\MiniGame\LocTuiHud.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocNhim.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\LOC_House\Scripts\LocTay.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocKetSat.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocCotTruyen_V34.cs" />
     <Compile Include="Assets\LOC_House\Scripts\LocXeBuyt.cs" />
@@ -106,6 +107,7 @@
   <ItemGroup>
     <None Include="Assets\LOC_House\BaoCao_TuMo.txt" />
     <None Include="Assets\LOC_House\BaoCao_ChieuCaoCua.txt" />
+    <None Include="Assets\LOC_House\BaoCao_Tay.txt" />
     <None Include="Assets\LOC_House\BaoCao_DungNha.txt" />
     <None Include="Assets\LOC_House\BaoCao_ViTriBiDoi.txt" />
     <None Include="Assets\LOC_House\BaoCao_KiemTu.txt" />

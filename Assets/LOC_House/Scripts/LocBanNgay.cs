@@ -122,7 +122,9 @@ public class LocBanNgay : MonoBehaviour
             yield return Den(1, 0, 1.0f);
             var kd = Nguon(kenDam, 0.32f, true);
             Chup("dem1_sang_ban_nuoc");
-            // shortcut: chưa có tay Khôi rót trà (chờ duyệt bản vẽ tay) — giữ khung bàn nước 3,2 s
+            // [29/10] tay Khôi cầm ấm rót vào chén trên khay (bản vẽ tay đã duyệt)
+            var khay = GameObject.Find("KhayAmChen");
+            if (khay) { StartCoroutine(LocTay.RotTra(Bao(khay).center, 2.4f)); if (rotTra) Destroy(Nguon(rotTra, 0.6f, false), 4f); }
             for (float t = 0; t < 3.2f; t += Time.deltaTime) { cam.rotation *= Quaternion.Euler(-0.4f * Time.deltaTime, 0.6f * Time.deltaTime, 0); yield return null; }   // trôi rất chậm
             StartCoroutine(NhoDan(new[] { tk, nv, kd }, 1.6f));
             yield return Den(0, 1, 1.2f);

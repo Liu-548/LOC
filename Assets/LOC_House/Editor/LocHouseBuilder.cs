@@ -1,4 +1,4 @@
-// Dựng ngôi nhà LỘC theo prompt-gui-claude-design-gd5/00-thiet-ke-noi-that-ngoi-nha.md (phương án ★),
+﻿// Dựng ngôi nhà LỘC theo prompt-gui-claude-design-gd5/00-thiet-ke-noi-that-ngoi-nha.md (phương án ★),
 // BẢN 8 × 25 + TIỆM TÁCH RIÊNG bên trái (bản vẽ đã duyệt 27/9/2026). Cao độ, thang, hầm 2,40 × 3,00 giữ nguyên số GĐ1–5.
 // Menu: LOC → Dựng nhà LỘC. Tạo lại Assets/Scenes/LOC_NhaLoc.unity mỗi lần chạy.
 //
@@ -72,6 +72,7 @@ public static partial class LocHouseBuilder
         Ham();
         Tang2();
         Tang3();
+        DoVatV35();   // [29/10] đồ vật còn thiếu theo v3.3 (LocHouseBuilder_V35) — trước rà soát để thả chạm mặt đỡ
         CongTacToanNha();   // [29/9 tối] cụm công tắc mới cho từng phòng
         NguoiChoi();
 
@@ -101,6 +102,7 @@ public static partial class LocHouseBuilder
         Ma();   // [3/10 v3.1] con ma lấp ló + chế độ tức giận (LocHouseBuilder_Ma)
         Nhim();   // [5/10] em gái Nhím: model + thoại + cơ chế (LocHouseBuilder_Nhim)
         Di();     // [21/10] người dì (người họ hàng Đêm 1): model low-poly + đi ra cổng (LocHouseBuilder_Di)
+        Tay();    // [29/10] tay Khôi góc nhìn thứ nhất + tay thầy Đồng (LocHouseBuilder_Tay)
         GamePlay();   // [6/10] túi đồ, món nhặt/đọc, két khoá số, cửa hầm khoá (LocHouseBuilder_GamePlay)
         try { LocMiniGameBuilder.DungVaoScene(); }   // [21/10] mini game — lỗi ở đây không được chặn việc lưu scene
         catch (System.Exception e) { Debug.LogException(e); }
@@ -959,7 +961,7 @@ public static partial class LocHouseBuilder
         // góc học tập dồn về tường sau (bàn + ghế + kệ sách treo + cặp), đồ chơi gom vào rổ, giường xếp cô Tâm khít tường trái. Giữa phòng để trống.
         A("GiuongNhim_ChieuChan", 6.64f, 8.96f, y, 0);                       // x 5,69–7,59 · z 8,51–9,41
         A("BanCanhGiuong_Thuoc", 7.38f, 9.63f, y);                           // x 7,18–7,58 · z 9,43–9,83
-        A("DenNgu_Nhim", 7.38f, 9.63f, y + 1.2f);
+        A("DenNgu_Nhim", 7.345f, 9.635f, y + 1.2f);   // [29/10] lệch khỏi ấm nước trên mặt tủ (chao đèn đè lên ấm)
         A("GauBong_Cu", 5.93f, 8.74f, y + 1.2f, 160);       // [5/10] dời xuống cuối giường — Nhím nằm chỗ gối
         A("BangTayGay", 6.05f, 9.22f, y + 1.2f, 15);         // [5/10] dây đeo tay tháo ra, để cuối giường
         A("ChauNuoc_KhanUot", 6.66f, 9.68f, y);              // chậu nước + khăn ướt cạnh giường (Nhím đang sốt)
@@ -983,7 +985,7 @@ public static partial class LocHouseBuilder
         DW("Decal_TranhSap_2.png", "M_Decal_TranhSap2", W - 0.004f, y + 0.95f, 10.35f, -90, 0.36f, 0.48f, true);
         A("MocDongPhuc", W - 0.06f, 11.9f, y + 1.5f, -90, top: true);
         A("TranhSap_Nhim", 6.4f, 8.51f, y + 1.35f, 0, top: true);      // tranh sáp dán trên đầu giường
-        L("DenNgu_Nhim", 7.38f, y + 0.95f, 9.63f, "#FFB36B", 4.5f, 0.9f, true);
+        L("DenNgu_Nhim", 7.345f, y + 0.95f, 9.635f, "#FFB36B", 4.5f, 0.9f, true);
     }
 
     static void PhongKhoi(float y)   // 4,40 × 3,90 — đứng yên từ 9/2000, cửa sổ nhìn xuống giếng trời

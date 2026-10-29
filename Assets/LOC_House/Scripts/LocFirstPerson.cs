@@ -117,7 +117,12 @@ public class LocFirstPerson : MonoBehaviour
             if (d) goiY = d.khoa && d.khiKhoa ? d.khiKhoa.GoiY : "[E] " + (d.DangMo ? "Đóng " : "Mở ") + d.ten;
             else if (c) goiY = "[E] " + (c.bat ? "Tắt" : "Bật") + " " + c.ten;
             if (h && k.fKey.wasPressedThisFrame) h.BamF();   // [27/10] chỗ rẽ cuối: [F] Xé giấy niêm
-            if (k.eKey.wasPressedThisFrame) { if (d) d.Bam(); else if (c) c.Toggle(); else if (h) h.Bam(); else if (nc && nc.GoiY.Length > 0) nc.Bam(); else if (tt) tt.Bam(); }
+            if (k.eKey.wasPressedThisFrame)
+            {
+                bool lam = d || c || h || tt || (nc && nc.GoiY.Length > 0);
+                if (d) d.Bam(); else if (c) c.Toggle(); else if (h) h.Bam(); else if (nc && nc.GoiY.Length > 0) nc.Bam(); else if (tt) tt.Bam();
+                if (lam && !khoa && !LocTui.Mo) LocTay.Cham(hit.point);   // [29/10] tay Khôi với tới chỗ vừa bấm (cảnh khoá camera tự lo tay riêng)
+            }
         }
 
         float f = (k.wKey.isPressed ? 1 : 0) - (k.sKey.isPressed ? 1 : 0);

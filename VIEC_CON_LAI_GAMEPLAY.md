@@ -29,7 +29,29 @@ File này gom mọi phần gameplay **chưa làm**, **làm dở** và **chưa te
 | 2.7 | Đổi đêm giữa lúc thăm Nhím: dừng thoại cũ | |
 | Gợi ý H | Thêm bậc gợi ý cho cuộc gọi, dán chén, bát cháo, gói hàng, bài khấn, chỗ rẽ | |
 
-**Chưa làm:** 1.5 (sổ đỏ + giấy báo nợ, ba bộ quần áo Nhím, cốc nước + vỉ thuốc, vòng khoanh ngày 9, tay Khôi, clip bác nắm tay, âm thanh thật), model thật cho lọ keo / chén số ba / gói hàng / chén vỡ, mục 2.1–2.6, 2.8, 2.10.
+**Chưa làm:** âm thanh thật (mục 1.5), mục 2.1–2.6, 2.8, 2.10. *(Model/đồ vật, tay Khôi, bác nắm tay: xong 29/10 — xem mục trên.)*
+
+---
+
+## Cập nhật 29/10 — model và đồ vật (mục 1.5), tay Khôi, bác nắm tay
+
+Đã dựng lại nhà và chạy **LOC → Chơi thử một mạch**: qua hết 3 đêm + 4 kết, Console 0 lỗi mới. Đồ mới đều chụp kiểm tại chỗ (không lơ lửng, không đè đồ khác).
+
+| Mục | Đã làm | File |
+|---|---|---|
+| Sổ đỏ + giấy báo nợ | Model thật trên xấp giấy tờ ngăn trên két, [E] "Sổ đỏ. Kẹp giấy báo nợ. / Nhà đang cắm ngân hàng." | `Models/V35/SoDo_BaoNo.glb`, `LocHouseBuilder_V3`, `_GamePlay` |
+| Cốc nước + vỉ thuốc | Cốc thuỷ tinh có nước, vỉ paracetamol bóc 4 viên + nửa viên trên tủ đầu giường Nhím (bỏ cốc/vỉ thô gộp trong lưới tủ). Đèn ngủ dời trái vì chao đè lên ấm | `Models/V35/`, `LocHouseBuilder_V35` |
+| Chén hầm | 5 chỗ đúng kịch bản (1–2 vỡ · 3 trống · 4 nứt · 5 mẻ). Dán chén xong: 1–2 lành + chén số ba vào chỗ 3. Bad: vỡ cái 5. Death: vỡ cái 4 | `LocHouseBuilder_V35`, `LocCotTruyen.ChenHam`, `LocMa` |
+| Lọ keo, chén số ba, gói hàng, lời nhắn mẹ, bát cháo hầm | Thay khối tạm bằng model: lọ keo trong ngăn kéo quầy (có sẵn), chén dán keo trên bàn thờ ông bà, gói giấy dầu (bộ gd6), tờ lịch bóc chữ mẹ (Đêm 3), bản sao bát cháo thật | `LocHouseBuilder_V35`, `LocCotTruyen_V34` |
+| Vòng khoanh ngày 9 | Texture lịch đã có sẵn, không phải làm | |
+| Ba bộ quần áo Nhím | Đêm 1 hoa nhí (giữ nguyên) · Đêm 2 ba lỗ sọc xanh + quần kẻ ô (dựng lại da vai/bắp tay chỗ Body bị khoét) · Đêm 3 áo hồng in thỏ + quần lửng hồng. Kết giữ bộ Đêm 3. Bản FBX cũ ở `LOC_Backup/Nhim_b7_truoc_quanao_29-10.fbx` | `LOC_Nguon/Nhim/b8_quanao.py`, `tex_quanao.py`, `LocNhim.boDem1..3` |
+| Tay Khôi (bản vẽ v1, áo xắn) | Chỉ hiện khi làm việc: bấm E → tay với tới chỗ bấm · thắp hương chắp tay kẹp 3 nén, vái 3 lần · thay khăn · kéo hũ, nhón góc niêm, miết niêm, xé niêm · rót trà cảnh ban ngày | `Models/Tay/`, `LocTay.cs`, `LocHouseBuilder_Tay` |
+| Tay thầy Đồng (nhẫn + móng út) | Bad đường (c): sau cảnh cổng sáng, bàn tay thò qua cửa ngách từ sau trụ cổng, ngửa ra; Khôi đưa cái hũ; tay khép lại rút đi | `LocCotTruyen_V34.ThayNhanHu` |
+| Bác nắm tay | Sau thắp hương: bác bước tới, tay phải nắm cẳng tay trái Khôi (IK hai khớp, không cần clip mới) qua hai câu chào rồi buông | `LocDi.BuocToi/NamTay`, `LocCotTruyen.ThapHuong` |
+
+Công cụ mới: **LOC → Thử tay: chụp** (`LOC_ThuTay.txt` → `LOC_KiemTra/Tay/`) đặt tay đứng yên để chụp, không cần Play.
+
+**Còn lại của 1.5:** âm thanh thật (chuông, rè, tút, đồng hồ). **Chưa chơi tay để xem:** tay khi bấm E thật, đường Bad (c) có tay thầy (công cụ chơi thử gọi thẳng cảnh kết nên không đi qua), bác nắm tay lúc đang chạy.
 
 ---
 
@@ -100,15 +122,16 @@ Thay dần `KetThuc(chu)` trong `LocCotTruyen.Start` bằng coroutine riêng cho
 
 | # | Vấn đề | Hướng sửa |
 |---|---|---|
-| 1 | Nhím nằm **quay lưng ra cửa**, đầu về tường sau (kịch bản: đầu về tường phải, nhìn ra cửa) | Xoay giường + điểm đặt Nhím trong `Editor/LocHouseBuilder_Nhim.cs`. Kiểm lại camera các cảnh trong phòng |
-| 2 | Lần mất điện đầu: ma cách ~4,5 m (kịch bản 5–6 m) | `LocMa.DatMaTruocMat`: thử thêm hướng xiên ±45° trước khi lùi khoảng cách |
-| 3 | Tầng 2 rất ít chỗ lấp ló, nhất là hành lang cạnh phòng Nhím | Thêm điểm mép cửa / lan can ở T2 (mép cửa phòng Khôi đang bị tủ áo che, xem TL-12) |
-| 4 | Lớp phim cũ mức "Đầy đủ" làm cả game xám đục | Giảm độ mờ / tăng tương phản trong `Materials/LOC_HinhCu.asset` |
+| 1 | ~~Nhím nằm quay lưng ra cửa~~ | **Xong (29/10):** bản dựng hiện tại đã đúng hướng, không cần sửa. Kiểm tay H1 |
+| 2 | ~~Lần mất điện đầu: ma cách ~4,5 m~~ | **Xong (29/10):** `DatMaTruocMat` quét 6 → 5 m, ±60° trước; `DatMaTrongToi` có vòng dò rộng. Kiểm tay H2–H3 |
+| 3 | Tầng 2 rất ít chỗ lấp ló | **Làm một phần (29/10):** builder nhận điểm hành lang hẹp, nhưng điểm mới (mặt trong cửa Nhím) bị tự kiểm loại vì đè công tắc + bàn học → vẫn 2 điểm. Còn: dời công tắc/bàn, hoặc thêm lan can đầu thang T2 |
+| 4 | ~~Lớp phim "Đầy đủ" xám đục~~ | **Xong (29/10):** `LocHinhAnh.ApB` + VHS × 0,35. Kiểm tay H5 |
 | 5 | Hai linh cữu trong phòng khách, v3.3 ghi một 🗣 | Chờ chốt TL-31 |
-| 6 | Thoại bác dài ~70 s, người chơi đứng yên | Cắt bớt, hoặc cho đi lại trong lúc nghe (bỏ `khoa` trong đoạn thoại) 🗣 |
-| 7 | Coroutine thăm Nhím không dừng khi nhảy đêm bằng phím thử → thoại chạy chồng | Lưu `Coroutine` trong `LocNhim.Tham` và `StopCoroutine` khi `LocMa.dem` đổi |
-| 8 | Bài tự kiểm Nhím cũ còn chờ bước vẽ bột (đã bỏ) | Sửa `LocNhim.TuKiem()` theo v3.3 / v3.4 |
+| 6 | ~~Thoại bác dài ~70 s~~ | **Xong (29/10):** giữ Space 0,8 s để bỏ qua (`LocCotTruyen.BoQuaDuoc`). Kiểm tay H6–H7 |
+| 7 | ~~Coroutine thăm Nhím chạy chồng~~ | Đã sửa 27/10 |
+| 8 | Bài tự kiểm Nhím | **Đã sửa (29/10):** bỏ bước vẽ bột + tháo các hàm kết khi tự kiểm. Chưa chạy lại bản cuối (H12) |
 | 9 | Good / Bad / Evil kết bằng màn tạm | Xem 1.4 |
+| 11 | ~~Đèn sáng không có bóng (chiếu nghỉ T1/T2, giếng trời, sân phơi)~~ | **Xong (29/10):** tuýp gắn tường + chao sân phơi (`LocHouseBuilder_V35.DenGanTuong`). Kiểm tay H9–H11 |
 | 10 | Mini game: mọi mini game còn nút **Bỏ qua** (phím B) để dev cho nhanh | Trước khi nộp: đặt `LocMiniGame.choBoQua = false` |
 
 ---

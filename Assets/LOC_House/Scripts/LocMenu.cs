@@ -362,7 +362,7 @@ public class LocMenu : MonoBehaviour
     void ApDung()
     {
         float phim = new[] { 1f, 0.5f, 0f }[Mathf.Clamp(CD("Phim", 0), 0, 2)];
-        LocFirstPerson.vhs = phim;
+        LocFirstPerson.vhs = phim * 0.35f;   // [29/10] vạch quét nhạt hơn (đậm quá làm cả hình xám)
         var hc = GameObject.Find("LocHinhCu")?.GetComponent<Volume>(); if (hc) hc.weight = phim;
         // độ sáng: một Volume riêng trên LocHinhCu (ưu tiên 10) và dưới LocMatDien (11) — lúc mất điện vẫn tối hẳn
         if (!hoSoSang) { hoSoSang = ScriptableObject.CreateInstance<VolumeProfile>(); hoSoSang.Add<ColorAdjustments>(); }

@@ -36,6 +36,7 @@ public class LocHuCot : MonoBehaviour
         for (float t = 0; t < 1; t += Time.deltaTime / 0.5f) { DatGoc(Mathf.Lerp(gocDay, 0f, Em(t))); yield return null; }
         DatGoc(0f);
         if (sot) am.PlayOneShot(sot, 0.5f);
+        StartCoroutine(LocTay.HaiTay(mieng, 1.6f, "Xoe", 0.04f));   // [29/10] miết tờ niêm bằng hai lòng bàn tay
         LocFirstPerson.PhuDe("Miết cho phẳng.", 2f); yield return new WaitForSeconds(2.2f);
         if (keo) am.PlayOneShot(keo, 0.8f);
         var a = than.position; var b = a - f * keoRa;
@@ -57,6 +58,8 @@ public class LocHuCot : MonoBehaviour
         var den = new GameObject("Ham_DenPhu_HuCot").AddComponent<Light>();
         den.type = LightType.Point; den.range = 1.3f; den.color = new Color(1f, 0.72f, 0.45f); den.shadows = LightShadows.None; den.intensity = denManh;
         den.transform.position = mieng + up * 0.26f + f * 0.20f;
+        if (goc) StartCoroutine(LocTay.MotTay(goc.position, 1.4f, "Nhon"));   // [29/10] nhón góc niêm mà xé
+        yield return new WaitForSeconds(0.3f);
         if (xe) am.PlayOneShot(xe, 1f);
         for (float t = 0; t < 1; t += Time.deltaTime / 0.5f) { DatGoc(Mathf.Lerp(gocDay, 40f, Em(t)) + Mathf.Sin(t * 50) * 2f * (1 - t)); yield return null; }
         if (xe) am.PlayOneShot(xe, 0.8f);
@@ -108,6 +111,7 @@ public class LocHuCot : MonoBehaviour
         yield return Bay(cam, p1, Nhin(p1, day0 + up * 0.18f), 1.2f);
 
         // 2. kéo hũ ra khỏi gầm — ba nhịp giật cục, khớp tiếng sành cạ nền
+        StartCoroutine(LocTay.HaiTay(Vector3.Lerp(day0, day1, 0.6f) + up * 0.16f, 1.0f, "Cam", 0.1f));   // [29/10] hai tay ôm thân hũ
         if (keo) am.PlayOneShot(keo, 0.9f);
         float t0 = Time.time; var nhip = new[] { (0f, 0.32f), (0.45f, 0.8f), (0.95f, 1.22f) };
         for (int k = 0; k < 3; k++)
@@ -133,6 +137,8 @@ public class LocHuCot : MonoBehaviour
         for (float t = 0; t < 1; t += Time.deltaTime / 0.5f) { den.intensity = denManh * t; yield return null; }
 
         // 4. xé tờ niêm: góc giấy giật lên một chút
+        if (goc) StartCoroutine(LocTay.MotTay(goc.position, 1.6f, "Nhon"));   // [29/10] hai ngón nhón góc giấy
+        yield return new WaitForSeconds(0.3f);
         if (xe) am.PlayOneShot(xe, 0.85f);
         for (float t = 0; t < 1; t += Time.deltaTime / 0.6f) { DatGoc(12f * Em(t) + Mathf.Sin(t * 40) * 1.2f * (1 - t)); yield return null; }
         yield return new WaitForSeconds(0.35f);

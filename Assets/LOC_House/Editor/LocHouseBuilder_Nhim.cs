@@ -37,6 +37,10 @@ public static partial class LocHouseBuilder
         n.mat = new[] { T("Eye_L").GetComponent<Renderer>(), T("Eye_R").GetComponent<Renderer>() };
         foreach (var (ten, set) in new (string, System.Action<GameObject>)[] { ("Chan", g => n.chan = g), ("ChanVo", g => n.chanVo = g), ("Khan_Kho", g => n.khanKho = g), ("Khan_Uot", g => n.khanUot = g), ("DayDeo", g => n.dayDeo = g) })
         { var t = T(ten); if (t) set(t.gameObject); else log.AppendLine("THIẾU " + ten); }
+        GameObject[] Bo(params string[] ts) => ts.Select(T).Where(t => t).Select(t => t.gameObject).ToArray();
+        n.boDem1 = Bo("Ao", "Quan"); n.boDem2 = Bo("Ao_D2", "Quan_D2", "DaVai_D2"); n.boDem3 = Bo("Ao_D3", "Quan_D3", "InTho");   // [29/10]
+        n.daVai = T("DaVai_D2")?.GetComponent<Renderer>();
+        if (n.boDem2.Length < 3 || n.boDem3.Length < 3) log.AppendLine("THIẾU bộ quần áo Đêm 2/3 trong Nhim.fbx (b8)");
         for (int i = 0; i < 4; i++) { n.texDa[i] = LocNhimImport.Tex("T_Nhim_Da_" + i); n.texMat[i] = LocNhimImport.Tex("T_Nhim_Mat_" + i); }
         AudioClip A(string t) => AssetDatabase.LoadAssetAtPath<AudioClip>($"Assets/LOC_House/Audio/{t}.wav");
         n.tho = A("Nhim_Tho"); n.ho = A("Nhim_Ho"); n.sotSoat = A("Chan_SotSoat"); n.vatKhan = A("Khan_Vat"); n.dienChap = A("Dien_Chap"); n.khoiTho = A("Khoi_Tho");

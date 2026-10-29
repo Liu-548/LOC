@@ -205,3 +205,32 @@ Assets\LOC_House\Editor\LocMiniGameBuilder.cs(167,13): error CS0819: Implicitly-
 22:58:47 Assembly-CSharp.dll OK
 23:24:57 Assembly-CSharp-Editor.dll OK
 23:24:57 Assembly-CSharp.dll OK
+10:37:33 Assembly-CSharp-Editor.dll OK
+10:37:33 Assembly-CSharp.dll OK
+10:46:41 Assembly-CSharp-Editor.dll OK
+10:57:22 Assembly-CSharp-Editor.dll OK
+10:57:22 Assembly-CSharp.dll OK
+11:05:54 Assembly-CSharp-Editor.dll OK
+11:05:54 Assembly-CSharp.dll OK
+11:06:50 Assembly-CSharp-Editor.dll OK
+11:06:50 Assembly-CSharp.dll OK
+11:14:12 Assembly-CSharp-Editor.dll OK
+11:14:12 Assembly-CSharp.dll OK
+11:18:33 Assembly-CSharp-Editor.dll LỖI
+Assets\LOC_House\Editor\LocThuTay.cs(37,21): error CS0136: A local or parameter named 'f' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter
+11:18:33 Assembly-CSharp.dll OK
+11:24:05 Assembly-CSharp-Editor.dll OK
+11:29:00 Assembly-CSharp-Editor.dll OK
+11:29:01 Assembly-CSharp.dll OK
+12:03:16 Assembly-CSharp-Editor.dll OK
+12:03:16 Assembly-CSharp.dll OK
+12:09:04 Assembly-CSharp-Editor.dll OK
+12:17:51 Assembly-CSharp-Editor.dll OK
+12:17:51 Assembly-CSharp.dll OK
+12:21:13 Assembly-CSharp-Editor.dll OK
+12:30:41 Assembly-CSharp-Editor.dll OK
+12:35:44 Assembly-CSharp-Editor.dll OK
+12:40:38 Assembly-CSharp-Editor.dll LỖI
+Assets\LOC_House\Editor\LocHouseBuilder_V35.cs(132,152): error CS0103: The name 'EditorUtility' does not exist in the current context
+12:40:48 Assembly-CSharp-Editor.dll OK
+13:11:35 Assembly-CSharp.dll OK

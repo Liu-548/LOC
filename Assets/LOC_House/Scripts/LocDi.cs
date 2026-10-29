@@ -30,6 +30,7 @@ public class LocDi : MonoBehaviour
             foreach (var t in GetComponentsInChildren<Transform>(true)) if (t.name == "Toes_L" || t.name == "Toes_R" || t.name == "Foot_L" || t.name == "Foot_R") l.Add(t);
             banChan = l.ToArray(); cuaToi = GetComponentsInChildren<Collider>(true);
         }
+        NamTayIK();
         if (banChan.Length == 0) return;
         float thap = float.MaxValue; foreach (var b in banChan) if (b) thap = Mathf.Min(thap, b.position.y);
         var goc = transform.position + Vector3.up * 0.6f;
@@ -63,6 +64,54 @@ public class LocDi : MonoBehaviour
     }
 
     public void Noi(bool noi) { dangNoi = noi; if (!dangDi) Clip(noi ? "Dung_Noi" : "Dung_Cho"); }
+
+    // [29/10 v3.3] "Thấy Khôi, bác bước tới, nắm lấy cánh tay anh": đi tới cách người chơi ~0,6 m rồi đưa tay phải ra nắm.
+    //  Không có clip riêng — tay phải bác vươn bằng IK hai khớp (vai → khuỷu → cổ tay) đè lên hoạt cảnh đứng nói, mượt vào/ra 0,6 s.
+    public IEnumerator BuocToi(Transform nc)
+    {
+        dangDi = true; Clip("Di_Bo", 0.25f);
+        for (float t = 0; t < 4f; t += Time.deltaTime)
+        {
+            var d = nc.position - transform.position; d.y = 0;
+            if (d.magnitude < 0.62f) break;
+            Quay(nc.position, 300f);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(nc.position.x, transform.position.y, nc.position.z), tocDoDi * 0.8f * Time.deltaTime);
+            yield return null;
+        }
+        dangDi = false; Clip("Dung_Noi", 0.3f);
+    }
+    public void DungLai() { dangDi = false; dangNoi = false; Clip("Dung_Cho", 0.3f); }   // bị bỏ qua giữa lúc bước tới
+    System.Func<Vector3> namToi; float namW; Transform vaiR, khuyuR, coTayR;
+    public void NamTay(System.Func<Vector3> toi) { if (toi != null) namToi = toi; namBat = toi != null; }
+    bool namBat;
+#if UNITY_EDITOR
+    // thử trong Editor (LocThuTay "bac"): vươn tay ngay tới p, rồi ThuTha() trả xương về như cũ
+    Quaternion qVai, qKhuyu;
+    public void ThuNam(Vector3 p)
+    {
+        if (!vaiR) foreach (var t in GetComponentsInChildren<Transform>(true)) { if (t.name == "UpperArm_R") vaiR = t; if (t.name == "LowerArm_R") khuyuR = t; if (t.name == "Hand_R") coTayR = t; }
+        if (vaiR) { qVai = vaiR.localRotation; qKhuyu = khuyuR.localRotation; }
+        namToi = () => p; namBat = true; namW = 1f; NamTayIK();
+    }
+    public string ThuBao() => vaiR ? $"vai {vaiR.position} khuỷu {khuyuR.position} cổ tay {coTayR.position}" : "không thấy xương tay phải";
+    public void ThuTha() { if (vaiR) { vaiR.localRotation = qVai; khuyuR.localRotation = qKhuyu; } namBat = false; namW = 0f; }
+#endif
+    void NamTayIK()
+    {
+        namW = Mathf.MoveTowards(namW, namBat ? 1f : 0f, Time.deltaTime / 0.6f);
+        if (namW <= 0f || namToi == null) return;
+        if (!vaiR) foreach (var t in GetComponentsInChildren<Transform>(true)) { if (t.name == "UpperArm_R") vaiR = t; if (t.name == "LowerArm_R") khuyuR = t; if (t.name == "Hand_R") coTayR = t; }
+        if (!vaiR || !khuyuR || !coTayR) return;
+        var dich = namToi();
+        var a = vaiR.position; float la = (khuyuR.position - a).magnitude, lb = (coTayR.position - khuyuR.position).magnitude;
+        var ve = dich - a; var huong = ve.normalized; float d = Mathf.Clamp(ve.magnitude, 0.05f, la + lb - 0.002f);
+        float cosA = Mathf.Clamp((la * la + d * d - lb * lb) / (2f * la * d), -1f, 1f);
+        var cuc = Vector3.down + transform.right * 0.6f;   // khuỷu chĩa xuống, hơi ra ngoài (bên phải của bác)
+        var vuong = Vector3.ProjectOnPlane(cuc, huong).normalized;
+        var khuyu = a + huong * (la * cosA) + vuong * (la * Mathf.Sqrt(1f - cosA * cosA));
+        vaiR.rotation = Quaternion.Slerp(vaiR.rotation, Quaternion.FromToRotation(khuyuR.position - a, khuyu - a) * vaiR.rotation, namW);
+        khuyuR.rotation = Quaternion.Slerp(khuyuR.rotation, Quaternion.FromToRotation(coTayR.position - khuyuR.position, dich - khuyuR.position) * khuyuR.rotation, namW);
+    }
 
     public void Ve() { if (!dangDi && gameObject.activeInHierarchy) StartCoroutine(DiVe()); }
 

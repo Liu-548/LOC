@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // [27/10] Phần gameplay v3.3 còn thiếu (VIEC_CON_LAI_GAMEPLAY.md mục 1.1–1.4), làm thành cơ chế chạy được ngay, KHÔNG cần dựng lại nhà:
-//  đồ mới (lọ keo, chén số ba, gói hàng, giấy tờ) dựng lúc vào scene bằng khối đơn giản, đặt theo vật có sẵn (dò bằng tia).
-//  Khi có model thật thì thay bằng Mon(...) trong LocHouseBuilder_GamePlay, giữ nguyên id.
+//  [29/10] đồ có hình (lọ keo, chén số ba, gói hàng, lời nhắn của mẹ, các trạng thái chén hầm) nay là model thật do LocHouseBuilder_V35 đặt
+//  khi dựng nhà; ở đây chỉ tìm theo tên rồi gắn tương tác. Giấy tờ chỉ nằm trong túi vẫn là vật ẩn (MonAn).
 //
 //  ĐÊM 2  cuộc gọi không lời (goi_2) → ~35 s sau điện thoại reo lại, lần này có lời: thầy Đồng (goi_thay) → Khôi chép lời ra giấy
 //         → gom lọ keo (cửa hàng) + chén số ba (bàn thờ ông bà tầng ba) → dán chén dưới hầm (dan_chen, mini game sẵn có)
@@ -24,7 +24,7 @@ public partial class LocCotTruyen
     LocVatTam kienHang, choDatChao;
     GameObject chaoTrenBan;
     float tGoi2 = -1f, tReoThay;
-    bool daNhacKhan, daNhacDocHam, daNhacBayMam, dangKet;
+    bool daNhacKhan, daNhacDocHam, daNhacBayMam, dangKet, daDanChen;
     public bool DangKet => dangKet;   // LocNhim.TatCanh: đang trong phần kết thì giữ màn đen, giữ khoá
 
     // ───── khởi tạo (gọi trong Start, trước ApDem)
@@ -39,29 +39,14 @@ public partial class LocCotTruyen
         var cha = new GameObject("LOC_CotTruyen_V34").transform;
 
         // ── Đêm 2: lọ keo trên quầy cửa hàng · chén số ba trên bàn thờ ông bà · bát cháo trên bàn ăn
-        var pKeo = MatTren(new Vector3(-3.3f, 2.2f, -1.9f), 2.6f);
-        if (pKeo.HasValue)
-        {
-            var g = Khoi(cha, "VP_LoKeo", PrimitiveType.Cylinder, pKeo.Value + Vector3.up * 0.045f, new Vector3(0.05f, 0.045f, 0.05f), new Color(0.55f, 0.42f, 0.2f));
-            Khoi(g.transform, "Nap", PrimitiveType.Cylinder, pKeo.Value + Vector3.up * 0.1f, new Vector3(0.03f, 0.012f, 0.03f), new Color(0.85f, 0.1f, 0.08f));
-            vpKeo = Mon(g, "lo_keo", "lọ keo", LocVatPham.Kieu.Nhat, "Lọ keo dán sành sứ, hàng của cửa hàng nhà mình. Còn hơn nửa.", 2,
+        var keo = TimV("LoKeo", "NganKeo");   // lọ keo nằm trong ngăn kéo quầy (bộ LOC_CanhQuayHang)
+        if (keo)
+            vpKeo = Mon(keo.gameObject, "lo_keo", "lọ keo", LocVatPham.Kieu.Nhat, "Lọ keo dán sành sứ, hàng của cửa hàng nhà mình. Còn hơn nửa.", 2,
                 new[] { "Keo dán sứ. Cả phố toàn mua ở nhà mình." });
-        }
-        var anh = GameObject.Find("KhungAnhOngBa");
-        if (anh)
-        {
-            var b = BaoV(anh.transform);
-            var f = new Vector3(3.8f, b.center.y, 5.4f) - b.center; f.y = 0; f = f.sqrMagnitude > 0.01f ? f.normalized : Vector3.back;
-            var phai = Vector3.Cross(Vector3.up, f);
-            var pChen = MatTren(b.center + f * 0.22f + phai * 0.28f + Vector3.up * 0.3f, 1.6f);
-            if (pChen.HasValue)
-            {
-                var g = Khoi(cha, "VP_ChenSo3", PrimitiveType.Cylinder, pChen.Value + Vector3.up * 0.025f, new Vector3(0.085f, 0.025f, 0.085f), new Color(0.86f, 0.83f, 0.74f));
-                Khoi(g.transform, "VetKeo", PrimitiveType.Cube, pChen.Value + Vector3.up * 0.026f + f * 0.042f, new Vector3(0.004f, 0.045f, 0.003f), new Color(0.62f, 0.5f, 0.25f));
-                vpChen3 = Mon(g, "chen_3", "chén số ba", LocVatPham.Kieu.Nhat, "Chén của anh Phong. Vỡ một lần, bố dán lại. Đường keo cũ ngả vàng.", 2,
-                    new[] { "Chén của anh Phong.", "Bố dán lại. Vẫn còn thấy đường nứt." });
-            }
-        }
+        var chen3 = TimV("VP_ChenSo3");
+        if (chen3)
+            vpChen3 = Mon(chen3.gameObject, "chen_3", "chén số ba", LocVatPham.Kieu.Nhat, "Chén của anh Phong. Vỡ một lần, bố dán lại. Đường keo cũ ngả vàng.", 2,
+                new[] { "Chén của anh Phong.", "Bố dán lại. Vẫn còn thấy đường nứt." });
         foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             if (t.name == "BatChao_An" && t.parent && t.parent.name == "Dem2" && !t.GetComponent<LocVatPham>())
             {
@@ -99,13 +84,10 @@ public partial class LocCotTruyen
         });
 
         // ── Đêm 3: gói hàng giấy dầu ngay trong cửa chính
-        var pGoi = MatTren(new Vector3(5.0f, 1.2f, 0.45f), 2f);
-        if (pGoi.HasValue)
+        var goi = TimV("VT_GoiHang");
+        if (goi)
         {
-            var g = Khoi(cha, "VT_GoiHang", PrimitiveType.Cube, pGoi.Value + Vector3.up * 0.13f, new Vector3(0.42f, 0.26f, 0.32f), new Color(0.48f, 0.37f, 0.22f), true);
-            Khoi(g.transform, "Lat_1", PrimitiveType.Cube, pGoi.Value + Vector3.up * 0.13f, new Vector3(0.43f, 0.27f, 0.025f), new Color(0.72f, 0.62f, 0.38f));
-            Khoi(g.transform, "Lat_2", PrimitiveType.Cube, pGoi.Value + Vector3.up * 0.13f, new Vector3(0.025f, 0.27f, 0.33f), new Color(0.72f, 0.62f, 0.38f));
-            kienHang = g.AddComponent<LocVatTam>();
+            kienHang = goi.gameObject.AddComponent<LocVatTam>();
             kienHang.goiY = () => LocMa.dem == 3 && !LocTui.Co("mo_kien") ? "[E] Mở gói hàng" : "";
             kienHang.bam = () => StartCoroutine(MoKienHang());
         }
@@ -122,22 +104,13 @@ public partial class LocCotTruyen
         vpGiayNiem = MonAn(cha, "giay_niem", "tờ niêm", "Tờ giấy vàng, chữ son, dán lên miệng hũ.", 3, null);
 
         // ── Đêm 3: lời nhắn của mẹ trên bàn trang điểm phòng bố mẹ
-        var btd = GameObject.Find("BanTrangDiem_Bo");
-        if (btd)
-        {
-            var b = BaoV(btd.transform);
-            var p = MatTren(new Vector3(b.center.x + 0.08f, b.max.y + 0.2f, b.center.z + 0.1f), 1.4f, b.max.y - 0.4f);
-            if (p.HasValue)
-            {
-                var g = Khoi(cha, "VP_LoiNhanMe", PrimitiveType.Cube, p.Value + Vector3.up * 0.002f, new Vector3(0.1f, 0.003f, 0.15f), new Color(0.92f, 0.9f, 0.84f));
-                g.transform.rotation = Quaternion.Euler(0, 14f, 0);
-                vpLoiNhanMe = Mon(g, "loi_nhan_me", "lời nhắn của mẹ", LocVatPham.Kieu.Doc, "Mảnh giấy xé từ tờ lịch, nét chữ của mẹ.", 3,
+        var loiNhan = TimV("LoiNhanMe_Giay");
+        if (loiNhan)
+            vpLoiNhanMe = Mon(loiNhan.gameObject, "loi_nhan_me", "lời nhắn của mẹ", LocVatPham.Kieu.Doc, "Mảnh giấy xé từ tờ lịch, nét chữ của mẹ.", 3,
                     new[] { "Chữ mẹ." }, new[]
                     {
                         "<i>Mặt sau một tờ lịch, viết vội.</i>\n\nKhôi,\n\nCon về thì đừng xuống hầm một mình.\nCó gì cứ xem quyển sách của mẹ trong tủ thờ, mẹ kẹp giấy sẵn rồi.\nĐừng nghe ai hết.\n\nMẹ thương."
                     }, chuaToi: "");
-            }
-        }
 
         // ── nghi lễ: vòng 3 chỉ mở sau vòng 2 · nhang tắt = Bad (b)
         if (mgGiuNhang && vpVanKhan && kienHang) mgGiuNhang.sauCo = "nl_doc_van";
@@ -152,6 +125,7 @@ public partial class LocCotTruyen
 
     void ApDemV34(int d)
     {
+        ChenHam(LocTui.Co("dan_chen"), false, false);
         if (kienHang) kienHang.gameObject.SetActive(d == 3 && !LocTui.Co("mo_kien"));
         if (chaoTrenBan) chaoTrenBan.SetActive(d == 2);
     }
@@ -166,6 +140,7 @@ public partial class LocCotTruyen
     // ───── Đêm 2
     void Dem2V34()
     {
+        if (!daDanChen && LocTui.Co("dan_chen")) { daDanChen = true; ChenHam(true, false, false); }
         if (LocTui.Co("goi_2") && tGoi2 < 0) tGoi2 = Time.time;
         if (!CoGoiThay || !LocTui.Co("goi_2") || LocTui.Co("goi_thay") || dangReo || dangCanh || LocNhim.dangCanh || LocFirstPerson.khoa || LocTui.Mo) return;
         var p = fp.transform.position;
@@ -200,9 +175,10 @@ public partial class LocCotTruyen
     {
         if (chaoTrenBan) { chaoTrenBan.SetActive(LocMa.dem == 2); return; }
         if (!choDatChao) return;
-        var p = choDatChao.transform.position + Vector3.down * 0.06f;
-        chaoTrenBan = Khoi(choDatChao.transform.parent, "BatChao_TrenBanThoHam", PrimitiveType.Cylinder, p + Vector3.up * 0.03f, new Vector3(0.13f, 0.03f, 0.13f), new Color(0.84f, 0.82f, 0.76f));
-        Khoi(chaoTrenBan.transform, "Chao", PrimitiveType.Cylinder, p + Vector3.up * 0.06f, new Vector3(0.11f, 0.003f, 0.11f), new Color(0.95f, 0.94f, 0.9f));
+        if (!vpChao) return;
+        chaoTrenBan = BanSaoHinh(vpChao.transform, "BatChao_TrenBanThoHam", choDatChao.transform.parent);   // bản sao hình bát cháo vừa bưng xuống
+        chaoTrenBan.transform.SetPositionAndRotation(choDatChao.transform.position + Vector3.down * 0.06f, Quaternion.Euler(0, vpChao.transform.eulerAngles.y, 0));   // choDatChao cao 6 cm trên mặt bàn thờ; gốc bát ở đáy
+        chaoTrenBan.SetActive(LocMa.dem == 2);
     }
 
     // ───── Đêm 3
@@ -263,7 +239,7 @@ public partial class LocCotTruyen
             yield return new WaitForSeconds(1.5f);
             if (LocNhim.I) LocNhim.I.GoiTuTrenGac(); else StartCoroutine(KetEvil());
         }
-        else { TroiToi(); if (LocNhim.I) LocNhim.I.CanhBad(); else StartCoroutine(KetBad()); }
+        else { yield return ThayNhanHu(hu); TroiToi(); if (LocNhim.I) LocNhim.I.CanhBad(); else StartCoroutine(KetBad()); }
     }
 
     IEnumerator Xe(LocHuCot hu)
@@ -306,6 +282,25 @@ public partial class LocCotTruyen
             }
             yield return null;
         }
+    }
+
+    // [29/10] Bad đường (c): sáng mùng một, trong sân sát cửa ngách cổng — một bàn tay thò vào ngửa ra, Khôi đưa cái hũ, tay khép lại rút đi.
+    //  Thầy không bao giờ hiện hình: chỉ bàn tay (đặc tả tay mục 3). Cửa ngách mở hẳn (TL-H3 chưa chốt khe hé 25 cm).
+    IEnumerator ThayNhanHu(LocHuCot hu)
+    {
+        if (!LocTay.I || !LocTay.I.tayThay) yield break;
+        foreach (var d in FindObjectsByType<LocDoor>(FindObjectsSortMode.None)) if (d.name.StartsWith("CuaNgachCong") && !d.DangMo) d.Toggle();
+        // lòng bàn tay thầy: trong ô cửa ngách (x 5,44–6,34 · z −5,25), thò vào sân ~20 cm, chếch từ sau trụ cổng phải (x 6,34–6,66) — khuỷu và người khuất sau trụ
+        var cho = new Vector3(6.05f, 1.22f, -5.05f); var vao = new Vector3(-0.55f, 0f, 0.83f);
+        fp.DatTuThe(new Vector3(5.72f, 0.05f, -4.62f), new Vector3(6.05f, 1.05f, -5.2f));
+        var ban = hu && hu.than ? BanSaoHinh(hu.than, "HuCot_DuaThay", null) : null;
+        if (ban) ban.SetActive(false);
+        yield return Den(1, 0, 1.2f);
+        yield return new WaitForSeconds(0.8f);
+        yield return LocTay.TayThayNhanHu(cho, vao, ban);
+        yield return new WaitForSeconds(1.0f);
+        yield return Den(0, 1, 1.0f);
+        if (ban) Destroy(ban);
     }
 
     // cổng sáng mùng một (Bad c / Evil): ra ngoài cổng, trời sáng
@@ -384,6 +379,7 @@ public partial class LocCotTruyen
             den.transform.position = b.center + Vector3.up * 0.9f;
             yield return Den(1, 0, 1.0f);
             yield return new WaitForSeconds(1.6f);
+            ChenHam(LocTui.Co("dan_chen"), false, true);
             if (LocMa.I && LocMa.I.chenVo) AudioSource.PlayClipAtPoint(LocMa.I.chenVo, b.center, 1f);
             yield return new WaitForSeconds(2.4f);
             yield return Den(0, 1, 0.8f);
@@ -460,41 +456,41 @@ public partial class LocCotTruyen
         return b;
     }
 
-    // điểm trên mặt vật ngay dưới diem (tia đi xuống tối đa xa m); duoi: bỏ các mặt thấp hơn mức này (vd sàn)
-    static Vector3? MatTren(Vector3 diem, float xa, float duoi = float.MinValue)
+    // bản sao chỉ phần hình (lưới + vật liệu) của một vật: không nhân bản LocVatPham/va chạm (Awake sẽ đăng ký trùng id)
+    static GameObject BanSaoHinh(Transform goc, string ten, Transform cha)
     {
-        var hs = Physics.RaycastAll(diem, Vector3.down, xa, ~0, QueryTriggerInteraction.Ignore);
-        Vector3? tot = null; float cao = float.MinValue;
-        foreach (var h in hs) { if (h.collider is CharacterController || h.point.y < duoi) continue; if (h.point.y > cao) { cao = h.point.y; tot = h.point; } }
-        return tot;
+        var g0 = new GameObject(ten); g0.transform.SetParent(cha, false); g0.transform.SetPositionAndRotation(goc.position, goc.rotation);
+        foreach (var mf in goc.GetComponentsInChildren<MeshFilter>(true))
+        {
+            var g = new GameObject(mf.name); g.transform.SetParent(g0.transform, false);
+            g.transform.localPosition = goc.InverseTransformPoint(mf.transform.position); g.transform.localRotation = Quaternion.Inverse(goc.rotation) * mf.transform.rotation; g.transform.localScale = mf.transform.lossyScale;
+            g.AddComponent<MeshFilter>().sharedMesh = mf.sharedMesh; g.AddComponent<MeshRenderer>().sharedMaterials = mf.GetComponent<MeshRenderer>().sharedMaterials;
+        }
+        foreach (var sm in goc.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+        {
+            var g = new GameObject(sm.name); g.transform.SetParent(g0.transform, false);
+            g.transform.SetPositionAndRotation(sm.transform.position, sm.transform.rotation); g.transform.localScale = sm.transform.lossyScale;
+            g.AddComponent<MeshFilter>().sharedMesh = sm.sharedMesh; g.AddComponent<MeshRenderer>().sharedMaterials = sm.sharedMaterials;
+        }
+        return g0;
     }
 
-    static Material vlGoc;
-    static Material VatLieu(Color c)
+    // tìm cả vật đang ẩn (nhóm Dem2/Dem3 tắt lúc vào scene); cha: bắt buộc tên cha trực tiếp
+    static Transform TimV(string ten, string cha = null)
     {
-        if (!vlGoc)
-            foreach (var r in FindObjectsByType<MeshRenderer>(FindObjectsSortMode.None))
-            {
-                var m = r.sharedMaterial;
-                if (m && m.shader && m.shader.name.Contains("Universal Render Pipeline/Lit")) { vlGoc = m; break; }
-            }
-        Material k;
-        if (vlGoc) k = new Material(vlGoc);
-        else { var sh = Shader.Find("Universal Render Pipeline/Lit"); if (!sh) return null; k = new Material(sh); }
-        if (k.HasProperty("_BaseMap")) k.SetTexture("_BaseMap", null);
-        if (k.HasProperty("_BaseColor")) k.SetColor("_BaseColor", c);
-        if (k.HasProperty("_EmissionColor")) { k.SetColor("_EmissionColor", Color.black); k.DisableKeyword("_EMISSION"); }
-        k.color = c;
-        return k;
+        foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            if (t.name == ten && (cha == null || (t.parent && t.parent.name == cha))) return t;
+        Debug.LogWarning("[LOC] V34 không thấy " + ten + " — dựng lại nhà (LocHouseBuilder_V35)");
+        return null;
     }
 
-    static GameObject Khoi(Transform cha, string ten, PrimitiveType kieu, Vector3 tam, Vector3 co, Color mau, bool giuVaCham = false)
+    // năm chỗ chén dưới hầm (LocHouseBuilder_V35): dan = đã dán chén Đêm 2 (hai cái đầu lành lại + chén số ba vào chỗ) · vo4 = Death · vo5 = Bad
+    public static void ChenHam(bool dan, bool vo4, bool vo5)
     {
-        var g = GameObject.CreatePrimitive(kieu); g.name = ten;
-        var col = g.GetComponent<Collider>(); if (col && !giuVaCham) DestroyImmediate(col);   // xoá ngay: Mon() thêm hộp va chạm riêng
-        g.transform.SetParent(cha, true); g.transform.position = tam; g.transform.localScale = co;
-        var vl = VatLieu(mau); if (vl) g.GetComponent<Renderer>().sharedMaterial = vl;
-        return g;
+        var p = TimV("ChenHam_TrangThai"); if (!p) return;
+        void S(string n, bool bat) { var t = p.Find(n); if (t) t.gameObject.SetActive(bat); }
+        S("Chen1_Vo", !dan); S("Chen1_Dan", dan); S("Chen2_Vo", !dan); S("Chen2_Dan", dan); S("Chen3_Dan", dan);
+        S("Chen4", !vo4); S("Chen4_Vo", vo4); S("Chen5", !vo5); S("Chen5_Vo", vo5);
     }
 
     // món đặt ngoài nhà: hộp va chạm theo vật + LocVatPham

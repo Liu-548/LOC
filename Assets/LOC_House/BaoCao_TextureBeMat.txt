@@ -1,4 +1,4 @@
-TEXTURE BỀ MẶT: 4883 renderer, 497 vật liệu mới
+TEXTURE BỀ MẶT: 4913 renderer, 502 vật liệu mới
 AmNhom → son
 AnhCuoi_Tex → go
 AnhGiaDinh_Tex → go
@@ -93,6 +93,7 @@ ChuongDien_Chuong → son
 ChuongDien_Nut → nhua
 CocBanChai_NguoiLon → nhua
 CocBanChai_TreEm → nhua
+CocNuoc_Nhim → nhua
 ConDau_HopMuc → nhua
 CongSat_TruGach → son
 CotPhoi → son
@@ -217,6 +218,7 @@ LOC_DienThoai_TronBo → màu
 LOC_DongDoCungTang → carton
 LOC_TapGiay_ButBi → màu
 LoHoaGia_Nhua → nhua
+LoiNhanMe_Giay → nhua
 LongBan → nhua
 LonSuaDac_DungBut → nhua
 MamDoCungMan → màu
@@ -288,6 +290,7 @@ SM_PlasticChairStack_8 → nhua
 SM_PlasticTable → nhua
 SM_PlasticTable_TableCover → nhua
 SoCuaBo_TrongKet → go
+SoDo_BaoNo → màu
 SoHoaDon_Quay → màu
 SongSatHoa_Bep → son
 SongSatHoa_BoMe → son
@@ -344,10 +347,13 @@ TuThap_Sanh → go
 TuTV_Dung_Bo → go
 VaiChePhuGuong_Sanh → màu
 VaiChePhuGuong_WC → màu
+ViThuoc_HaSot → màu
 VoiSen → son
 VongHoa_Heo → màu
 VongHoa_Tuoi → go
 VongHoaTang_1 → màu
+VP_ChenSo3 → màu
+VT_GoiHang → vai
 Walkman_BangCu → vai
 XeRua → son
 XiBet_Tron → son

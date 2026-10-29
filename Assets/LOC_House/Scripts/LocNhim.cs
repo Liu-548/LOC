@@ -25,6 +25,8 @@ public class LocNhim : MonoBehaviour
     public Renderer[] mat;
     public Transform head, eyeL, eyeR;
     public GameObject chan, chanVo, khanKho, khanUot, dayDeo;
+    public GameObject[] boDem1 = { }, boDem2 = { }, boDem3 = { };   // [29/10 v3.3] ba bộ quần áo theo đêm (Nhim.fbx b8) — kết Good/Bad giữ bộ Đêm 3
+    public Renderer daVai;   // da vai + bắp tay của áo ba lỗ Đêm 2: dùng chung vật liệu da (đổi theo cơn sốt)
     public Texture2D[] texDa = new Texture2D[4], texMat = new Texture2D[4];
     public AudioClip tho, ho, sotSoat, vatKhan, dienChap, khoiTho;
     [Header("Chỗ đặt (gốc model)")]
@@ -102,6 +104,7 @@ public class LocNhim : MonoBehaviour
         demDangAp = d; d = Mathf.Clamp(d, 1, 3);
         Dat(neoGiuong, yawGiuong);
         DatSot(d);
+        foreach (var (bo, dem) in new[] { (boDem1, 1), (boDem2, 2), (boDem3, 3) }) foreach (var g in bo) if (g) g.SetActive(dem == d);
         if (chan) chan.SetActive(true); if (chanVo) chanVo.SetActive(false); if (dayDeo) dayDeo.SetActive(false);
         if (khanKho) khanKho.SetActive(true); if (khanUot) khanUot.SetActive(false);
         if (chau && chauGoc != null) chau.sharedMaterials = chauGoc;
@@ -114,6 +117,7 @@ public class LocNhim : MonoBehaviour
     {
         if (da) { var m = da.material; if (texDa[lv]) m.SetTexture("_BaseMap", texDa[lv]); m.SetFloat("_Smoothness", 0.30f + 0.22f * sotDem[lv]); }
         if (mat != null) foreach (var r in mat) if (r && texMat[lv]) r.material.SetTexture("_BaseMap", texMat[lv]);
+        if (daVai && da) daVai.sharedMaterial = da.material;
     }
 
     void Ngu(float fade = 0.8f) { thuc = false; tNham = 100; tHe = 0; tCuoi = 0; tNhau = Muc >= 2 ? 25 : 0; tChat = 0; Clip("Nam_Ngu", fade, TocTho); }
@@ -340,10 +344,11 @@ public class LocNhim : MonoBehaviour
         if (fp && head) fp.DatTuThe(choThayKhan, head.position + Vector3.up * 0.04f);
         yield return Den(0.35f, 0);
         if (vatKhan) am.PlayOneShot(vatKhan, 0.8f);
-        yield return new WaitForSeconds(1.2f);
-        yield return Den(0.25f, 1);
+        // [29/10] hai tay Khôi đặt khăn lên trán em (thay màn đen giữa hai khăn): đổi khăn lúc hai bàn tay che trán
+        var tay = head ? StartCoroutine(LocTay.HaiTay(head.position + Vector3.up * 0.05f, 1.5f, "Cam", 0.045f)) : null;
+        yield return new WaitForSeconds(1.0f);
         if (khanKho) khanKho.SetActive(false); if (khanUot) khanUot.SetActive(true);
-        yield return Den(0.25f, 0);
+        if (tay != null) yield return tay;
         Clip("Nam_ThayKhan", 0.3f); tHe = 70;
         yield return new WaitForSeconds(1.6f);
         Clip("Nam_Thuc", 0.8f, TocTho); tHe = 30;
@@ -572,6 +577,7 @@ public class LocNhim : MonoBehaviour
         System.IO.Directory.CreateDirectory("LOC_KiemTra/Nhim");
         foreach (var f in System.IO.Directory.GetFiles("LOC_KiemTra/Nhim", "*.png")) try { System.IO.File.Delete(f); } catch { }
         yield return new WaitForSeconds(1f);
+        SauGood = SauBad = SauEvil = null;   // [29/10] phần kết của LocCotTruyen kết thúc bằng VeMenu → nạp lại scene giữa bài kiểm (mất ảnh từ BAD trở đi). Kết thúc kiểm bằng "Chơi thử một mạch".
         Ghi($"blendshape: nhắm {iNham} hé {iHe} miệng {iMieng} cười {iCuoi} nhíu {iNhau} chặt {iChat} · mặt cục bộ {faceLocal}");
         for (int d = 1; d <= 3; d++)
         {

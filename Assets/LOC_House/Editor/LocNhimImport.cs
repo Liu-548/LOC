@@ -49,7 +49,7 @@ public class LocNhimImport : AssetPostprocessor
         var ti = (TextureImporter)assetImporter;
         ti.sRGBTexture = true; ti.mipmapEnabled = true; ti.maxTextureSize = 1024;
         ti.alphaIsTransparency = assetPath.Contains("Toc");
-        ti.wrapMode = assetPath.Contains("_Ao") || assetPath.Contains("T_Chan") ? TextureWrapMode.Repeat : TextureWrapMode.Clamp;
+        ti.wrapMode = assetPath.Contains("_Ao") || assetPath.Contains("_Quan") || assetPath.Contains("T_Chan") ? TextureWrapMode.Repeat : TextureWrapMode.Clamp;
     }
 
     [MenuItem("LOC/Nạp lại Nhím")]
@@ -110,10 +110,15 @@ public class LocNhimImport : AssetPostprocessor
         var chan = Mat("M_Chan", "T_Chan", 0.05f, true);
         var khan = Mat("M_Khan", "T_Khan", 0.2f, true);
         var day = Mat("M_DayDeo", "T_DayDeo", 0.05f, true);
+        // [29/10] bộ Đêm 2 (ba lỗ sọc + quần đùi kẻ ô) · bộ Đêm 3 (áo hồng in thỏ + quần lửng) — LOC_Nguon/Nhim/b8_quanao.py, tex_quanao.py
+        var ao2 = Mat("M_Nhim_Ao_D2", "T_Nhim_Ao_D2", 0.05f, true); var quan2 = Mat("M_Nhim_Quan_D2", "T_Nhim_Quan_D2", 0.05f, true);
+        var ao3 = Mat("M_Nhim_Ao_D3", "T_Nhim_Ao_D3", 0.05f, true); var quan3 = Mat("M_Nhim_Quan_D3", "T_Nhim_Quan_D3", 0.05f, true);
+        var tho = Mat("M_Nhim_InTho", "T_Nhim_InTho", 0.1f, false, true);
         return new System.Collections.Generic.Dictionary<string, Material>
         {
             ["Body"] = da, ["Eye_L"] = mat, ["Eye_R"] = mat, ["MouthIn"] = rang, ["Toc"] = toc, ["Ao"] = ao, ["Quan"] = ao, ["Bot"] = bot,
             ["Chan"] = chan, ["ChanVo"] = chan, ["Khan_Kho"] = khan, ["Khan_Uot"] = khan, ["DayDeo"] = day,
+            ["Ao_D2"] = ao2, ["Quan_D2"] = quan2, ["DaVai_D2"] = da, ["Ao_D3"] = ao3, ["Quan_D3"] = quan3, ["InTho"] = tho,
         };
     }
 

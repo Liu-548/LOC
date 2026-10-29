@@ -29,6 +29,7 @@ public class LocMa : MonoBehaviour
     public AudioClip tiengThet, chenVo;
     [Header("Điểm lấp ló (LocHouseBuilder_Ma dựng sẵn)")]
     public Vector3[] cuaP, cuaD, cuaN; public LocDoor[] cuaRef;
+    public bool[] cuaHep;   // [29/10] điểm phía hành lang hẹp (T2 rộng 1,1 m): người chơi nhìn dọc hành lang, gần như song song mặt tường
     public Vector3[] lanCanA, lanCanB;
     public Bounds[] vungNha;   // trong nhà (ngoài hầm) — chỉ tắt đèn khi người chơi ở trong này
     [Header("Cảnh chạy lên phòng Nhím")]
@@ -366,7 +367,8 @@ public class LocMa : MonoBehaviour
                 if (cuaRef != null && i < cuaRef.Length && cuaRef[i] && !cuaRef[i].DangMo) continue;
                 Vector3 P = cuaP[i], d = cuaD[i], n = cuaN[i];
                 var ph = pp - P; ph.y = 0; float kc = ph.magnitude;
-                if (kc < 4f || kc > 14f || Mathf.Abs(pp.y - P.y) > 1.2f || Vector3.Dot(ph, n) < 0.3f * kc) { lyDoLo = $"kc {kc:0.0} dy {pp.y - P.y:0.0} dot {Vector3.Dot(ph, n) / Mathf.Max(kc, 0.01f):0.00}"; continue; }
+                bool hep = cuaHep != null && i < cuaHep.Length && cuaHep[i];
+                if (kc < (hep ? 3f : 4f) || kc > 14f || Mathf.Abs(pp.y - P.y) > 1.2f || Vector3.Dot(ph, n) < (hep ? 0.08f : 0.3f) * kc) { lyDoLo = $"kc {kc:0.0} dy {pp.y - P.y:0.0} dot {Vector3.Dot(ph, n) / Mathf.Max(kc, 0.01f):0.00}"; continue; }
                 foreach (var k in new[] { LO_DAU })   // [4/10] bỏ kiểu chỉ ló bàn tay
                 {
                     var b = bong[k]; if (b == null || (ep >= 0 && ep != k)) continue;
@@ -591,6 +593,16 @@ public class LocMa : MonoBehaviour
     bool DatMaTruocMat()
     {
         var f = cam.forward; f.y = 0; f.Normalize();
+        // [29/10] kịch bản: lần đầu đứng cách 5–6 m. Quét có thứ tự ở 6 / 5,5 / 5 m, lệch 0 → ±60° (chéo qua cửa, dọc hành lang) trước khi chịu gần hơn
+        foreach (var r in new[] { 6f, 5.5f, 5f })
+            for (int i = 0; i < 13; i++)
+            {
+                var dir = Quaternion.Euler(0, (i % 2 == 0 ? 1 : -1) * ((i + 1) / 2) * 10f, 0) * f;
+                if (!Physics.Raycast(player.position + dir * r + Vector3.up * 1.2f, Vector3.down, out var s5, 1.8f, ~0, QueryTriggerInteraction.Ignore) || Mathf.Abs(s5.point.y - player.position.y) > 0.35f) continue;
+                var G5 = s5.point; var rot5 = Quaternion.LookRotation(-dir, Vector3.up);
+                if (bong[VAN] == null || Vuong(bong[VAN], G5, rot5) || !ThayDuoc(G5 + Vector3.up * 1.78f)) continue;
+                if (DatThu(VAN, G5 + Vector3.up * 0.03f, rot5)) { chanMa = G5; return true; }
+            }
         for (int thu = 0; thu < 60; thu++)
         {
             var dir = Quaternion.Euler(0, Random.Range(-30f, 30f), 0) * f;
@@ -602,13 +614,14 @@ public class LocMa : MonoBehaviour
         }
         return false;
     }
-    bool DatMaTrongToi(int ep = -1)
+    // rong: lượt hai khi lượt thường (2,5–4,5 m) không có chỗ — phòng hẹp thì tìm xa hơn qua cửa, tới 7 m, nhiều lượt hơn. Không bao giờ gần hơn 2,5 m (vùng chết 2 m).
+    bool DatMaTrongToi(int ep = -1, bool rong = false)
     {
         var mask = ~0; var qi = QueryTriggerInteraction.Ignore;
         int kSan = 0, kTang = 0, kCho = 0, kNhin = 0; string vuong = "";
-        for (int thu = 0; thu < 60; thu++)
+        for (int thu = 0; thu < (rong ? 110 : 60); thu++)
         {
-            float a = Random.Range(0f, 360f), r = Random.Range(Mathf.Min(cachMaKhiToi.x, 2.5f), Mathf.Min(cachMaKhiToi.y, 4.5f));   // [23/10] gần hơn để thấy rõ mặt
+            float a = Random.Range(0f, 360f), r = rong ? Random.Range(2.5f, 7f) : Random.Range(Mathf.Min(cachMaKhiToi.x, 2.5f), Mathf.Min(cachMaKhiToi.y, 4.5f));   // [23/10] gần hơn để thấy rõ mặt
             var dir = Quaternion.Euler(0, a, 0) * Vector3.forward;
             var Q = player.position + dir * r;
             if (!Physics.Raycast(Q + Vector3.up * 1.2f, Vector3.down, out var san, 1.8f, mask, qi)) { kSan++; continue; }
@@ -645,8 +658,8 @@ public class LocMa : MonoBehaviour
                 }
             }
         }
-        lyDoToi = $"không sàn {kSan} · khác tầng {kTang} · vướng {kCho} · khuất {kNhin} ·{vuong}";
-        return false;
+        lyDoToi = $"{(rong ? "[rộng] " : "")}không sàn {kSan} · khác tầng {kTang} · vướng {kCho} · khuất {kNhin} ·{vuong}";
+        return !rong && DatMaTrongToi(ep, true);   // [29/10] phòng hẹp: "tối mà không có gì" → thử lượt rộng
     }
 
     // ───── đo lấn tường bằng đỉnh lưới (model Ma_*.fbx bật Read/Write — LocMaImport)
@@ -1183,7 +1196,6 @@ public class LocMa : MonoBehaviour
     }
 
     // ───── Death Ending: cắt đen ngay → chén nứt, ba giây, vỡ → NHÀ NÀY CÒN MỘT CÁI CHÉN.
-    // ponytail: chưa dựng khung hình tĩnh bàn thờ hầm với chén số 4 vỡ — thêm khi có biến thể chén vỡ trong scene
     public static void BatChet() { if (I) I.Chet(); }
     void Chet() { if (amHH) amHH.Stop(); if (!dangChet) StartCoroutine(CanhChet()); }
     IEnumerator CanhChet()
@@ -1197,6 +1209,7 @@ public class LocMa : MonoBehaviour
         var chen = GameObject.Find("Bo_Chen_Tren_De");
         if (chen && cam)
         {
+            LocCotTruyen.ChenHam(LocTui.Co("dan_chen"), true, false);   // [29/10] cái thứ tư vỡ (LocHouseBuilder_V35)
             yield return new WaitForSeconds(1.6f);
             var rs = chen.GetComponentsInChildren<Renderer>(); var b = rs.Length > 0 ? rs[0].bounds : new Bounds(chen.transform.position, Vector3.one * 0.3f);
             foreach (var r in rs) b.Encapsulate(r.bounds);

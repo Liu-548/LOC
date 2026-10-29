@@ -71,6 +71,7 @@ public static partial class LocHouseBuilder
                 Mon(chum, "chia_ham", "chùm chìa khóa", LocVatPham.Kieu.Nhat, "Một chùm chìa khóa lạ và cái khóa treo to. Lấy trong két sắt phòng bố mẹ.",
                     new[] { "Chìa khóa hầm à?", "Bố khóa cái này vào két làm gì.", "Bố mẹ có bao giờ cho xuống đâu." });
             }
+            Mon(Tim("SoDo_BaoNo"), "so_do", "sổ đỏ", LocVatPham.Kieu.Xem, "", new[] { "Sổ đỏ. Kẹp giấy báo nợ.", "Nhà đang cắm ngân hàng." });   // [29/10 v3.3]
             Mon(Tim("SoCuaBo_TrongKet"), "so_cua_bo", "sổ của bố", LocVatPham.Kieu.Nhat, "Cuốn sổ bìa cứng của bố, lấy trong két.",
                 new[] { "Sổ của bố.", "Thôi cất đã. Mai xem." }, SoCuaBo(), docTuDem: 2);
         }

@@ -83,14 +83,17 @@
     <Compile Include="Assets\LOC_House\Editor\LocSceneAudit.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocChiTiet.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocChupTu.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Tay.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocNhayCua.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Thang.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocChanDoanNhayMenu.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocDoTrongTu.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocThuTay.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocChanDoanDen.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocKiemThang.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocDiThu.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocTuMo.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_V35.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
