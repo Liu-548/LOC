@@ -43,7 +43,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         dienThoai = GameObject.Find("LOC_DienThoai_TronBo")?.transform;
         dongHo = GameObject.Find("DongHoQuaLac")?.transform;
         cuaHamT = GameObject.Find("CuaSatHam (mở)")?.transform;
-        foreach (var n in new[] { "QuanTai_LOC", "VaiPhuQuanTai_A", "VaiPhuQuanTai_B", "DenDau_GamQuanTai", "Den_DenDau_GamQuanTai" })
+        foreach (var n in new[] { "QuanTai_LOC", "VaiPhuQuanTai_A", "VaiPhuQuanTai_B", "DenDau_GamQuanTai", "PH_DenDau_GamQuanTai", "Den_DenDau_GamQuanTai" })   // [31/10] đèn dầu là placeholder "PH_…": trước đây Đêm 3 vẫn còn
         { var g = GameObject.Find(n); if (g) linhCuu.Add(g); }
         cReo = Resources.Load<AudioClip>("LOC_V33/DienThoai_Reo"); cGo = Resources.Load<AudioClip>("LOC_V33/DongHo_Go");
         cRe = Resources.Load<AudioClip>("LOC_V33/DienThoai_Re"); cTut = Resources.Load<AudioClip>("LOC_V33/DienThoai_Tut");

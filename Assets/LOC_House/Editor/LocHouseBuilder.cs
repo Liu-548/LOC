@@ -371,7 +371,7 @@ public static partial class LocHouseBuilder
         Box("TamBia_XeMay", -2.5f, -1.9f, 0.004f, 0.009f, -4.85f, -3.85f, M("M_BiaCarton", "#A98B5E"), false);
         A("BanThoThanTai", -3.88f, 1.62f, 0, 180);   // lưng sát vách kho (z 1,8), mặt nhìn ra cửa
         A("QuatBan_SatCu", -3.3f, -1.5f, 1.3f, 90);                            // đầu quầy, thả xuống mặt quầy
-        A("SoHoaDon_Quay", -3.3f, -3.0f, 1.3f, 10);                            // sổ nợ + cuộn hoá đơn trên quầy
+        A("SoHoaDon_Quay", -3.3f, -2.2f, 1.3f, 10);                            // sổ nợ + cuộn hoá đơn trên quầy ([31/10] z −3,0 nằm ngoài mặt gỗ → rơi xuống sàn)
         A("DongHoTreo_Tiem", -0.4f, -2.5f, 2.35f, -90, pivot: true);           // treo tường phải, kim hơi trễ
         A("LichBloc_CongTy", -4.2f, -3.0f, 2.3f, 90, pivot: true);             // lịch công ty vật liệu tặng, mép trên = 2,30
         A("DenTuyp_120", -2.3f, -2.0f, 3.6f, 90, top: true);
@@ -558,7 +558,7 @@ public static partial class LocHouseBuilder
         AP("BatHuong_Vong", 3.8f, 2.4f, yBan, 180, false, XayBatHuong);
         AP("BaiVi_Vong", 3.8f, 2.62f, yBan, 180, false, XayBaiVi);
         AP("BatComQuaTrung", 4.3f, 2.42f, yBan, 180, false, XayBatCom);
-        AP("DenDau_GamQuanTai", 3.8f, 3.9f, 0, 180, false, XayDenDau);
+        AP("DenDau_GamQuanTai", 3.8f, 3.9f, 0, 180, false, XayDenDau).GetComponent<LocProp>().kieu = LocProp.Kieu.CoDinh;   // [31/10] cố ý nằm dưới gầm quan tài — rà soát không tách
         AP("KhanTang_Chong", 1.95f, 4.3f, TopY(chieu, 0.5f), 90, false, XayKhanTang);
         L("DenDau_GamQuanTai", 3.8f, 0.15f, 3.9f, "#FFA040", 2.2f, 0.8f);
         cur.Find("Den_DenDau_GamQuanTai").gameObject.AddComponent<LocLuaNhapNhay>();
@@ -705,7 +705,7 @@ public static partial class LocHouseBuilder
         KhanRu(5.05f, 1.6f, 21.8f, 180);   // [30/9] móc nhựa + khăn rũ trên vách sau WC (trước đây dán sát cạnh cửa WC, bị cánh cửa mở đè lên)
         A("ThamChuiChan", 4.2f, 20.9f, 0.002f, 90);
         A("BoXoGauChau_WC", 6.95f, 19.6f, 0, 0); A("KeXaPhong_WC", 6.4f, 21.8f, 1.2f, 180, pivot: true); A("MocAo_KhanTam", 6.0f, 19.2f, 1.6f, 0, pivot: true);   // [29/9] đồ dùng WC
-        A("BaoBotGiat_XaPhong", 7.2f, 24.3f, 1.4f, 0);                    // bột giặt, xà phòng, nước rửa chén — thả xuống bệ giặt
+        A("BaoBotGiat_XaPhong", 7.2f, 24.09f, 0.586f, 0, k: LocProp.Kieu.Treo);   // [31/10] đặt thẳng lên dải mặt bệ liền sát tường (z 23,99–24,19, cao 0,586) — rà soát làm rơi xuyên bệ xuống sàn nên không cho rà                    // bột giặt, xà phòng, nước rửa chén — thả xuống bệ giặt
         A("DenTuyp_60", 6.1f, 20.5f, C1, 90, top: true);
         Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 4.705f, 2.2f, 20.3f, 90, 0.55f, 0.55f);
         Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 6.2f, 2.35f, 21.795f, 180, 0.6f, 0.6f);
@@ -713,7 +713,7 @@ public static partial class LocHouseBuilder
         Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 0.005f, 2.4f, 23.0f, 90, 0.6f, 0.6f);        A("ChauNhua_Up", 5.3f, 23.3f, 0); A("GheDau_Nhua", 6.1f, 23.4f, 0);
         A("DepToOng_Fix", 5.5f, 20.3f, 0, 15);   // [23/10] ra khỏi tầm quét cánh WC (trước bị cánh quét xuyên)
         A("BeGiat", 7.095f, 24.25f, 0, 180);   // [30/9] bệ dựng lại liền khối, sát tường sau + tường phải
-        A("BanChaiCo_XaPhong", 6.8f, 24.05f, 1.3f, 170);   // thả xuống mặt bệ
+        A("BanChaiCo_XaPhong", 6.85f, 24.10f, 0.586f, 170, k: LocProp.Kieu.Treo);   // mặt bệ (như bột giặt)
         A("ThungNuoc_Nap", 4.2f, 24.2f, 0);
         A("Thau_Nhua_QuanAo", 5.85f, 23.9f, 0, 15);                        // thau quần áo chưa giặt
         A("GheDau_Go", 6.6f, 22.7f, 0, -20);
@@ -1395,7 +1395,9 @@ public static partial class LocHouseBuilder
             var rd = t.GetComponent<Renderer>();
             if (!rd) continue;
             var b = rd.bounds;
-            VaiPhu("VaiPhuQuanTai_" + (char)('A' + idx++), b.center.x, b.center.z, b.max.y, b.extents.x, b.extents.z, trang, vang, dor);
+            var ten = "VaiPhuQuanTai_" + (char)('A' + idx++);
+            VaiPhu(ten, b.center.x, b.center.z, b.max.y, b.extents.x, b.extents.z, trang, vang, dor);
+            cur.Find(ten).SetParent(qt.transform, true);   // [31/10] vải là một phần linh cữu: đi theo quan tài, rà soát không coi là tường
         }
     }
 

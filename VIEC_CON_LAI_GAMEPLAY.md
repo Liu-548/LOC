@@ -55,6 +55,19 @@ Công cụ mới: **LOC → Thử tay: chụp** (`LOC_ThuTay.txt` → `LOC_KiemT
 
 ---
 
+## Cập nhật 31/10 — âm thanh thật, build Windows, sửa đồ rơi
+
+| Mục | Đã làm | File |
+|---|---|---|
+| Âm thanh thật (1.5) | Chuông điện thoại = chuông điện cơ thật (bản thu CC0), nhịp VN reo 1 s / nghỉ 4 s. Nhấc máy = tiếng ống nghe thật + rè đường dây. Tút = tín hiệu bận VN 425 Hz 0,5/0,5 s. Đồng hồ = tiếng gõ thật của đồng hồ quả lắc (bản gốc gõ cách 1,6 s, khớp code). Không đổi code | `Resources/LOC_V33/*.wav`, `LOC_Nguon/AmThanh/` (nguồn + `tao_am_v33.py` + `NGUON.md`), bản cũ ở `LOC_Backup/AmThanh_V33_tam_31-10/` |
+| Build `.exe` | Build Settings trước đây chỉ có `SampleScene` → bản build mở cảnh mẫu. Thêm **LOC → Build thử (Windows .exe)**: đặt lại Build Settings = `LOC_NhaLoc`, build ra `Build/LOC/LOC.exe`, ghi `LOC_Build_KetQua.txt` | `Editor/LocBuild.cs` |
+| Đèn dầu gầm quan tài còn ở Đêm 3 | `LocCotTruyen` tìm `DenDau_GamQuanTai` nhưng vật tên `PH_DenDau_GamQuanTai` → sau đưa tang đèn vẫn nằm giữa nhà. Thêm tên vào danh sách ẩn | `LocCotTruyen.cs` |
+| Sổ hoá đơn rơi xuống sàn tiệm | Toạ độ nằm ngoài mặt gỗ quầy → dời lên mặt quầy | `LocHouseBuilder.cs` |
+| Bột giặt + bàn chải lọt xuyên bệ giặt | Đặt thẳng lên dải mặt bệ liền sát tường | `LocHouseBuilder.cs` |
+| Rà soát báo 3 chỗ "cần xử lý tay" | Vải phủ gắn vào quan tài (đi theo quan tài, không bị coi là tường); đèn dầu gầm quan tài là đồ cố định. Còn **0** chỗ | `LocHouseBuilder.cs` |
+
+---
+
 ## 0. Bản đồ code: muốn sửa gì thì mở file nào
 
 | Muốn làm | File chính | Ghi chú |
@@ -114,7 +127,7 @@ Thay dần `KetThuc(chu)` trong `LocCotTruyen.Start` bằng coroutine riêng cho
 - Ba bộ quần áo Nhím (mỗi đêm một bộ), cốc nước + vỉ thuốc ở phòng Nhím.
 - Vòng khoanh ngày 9 trên texture tờ lịch.
 - Tay Khôi (góc nhìn thứ nhất), clip bác nắm tay.
-- Âm thanh: chuông điện thoại, tiếng rè, tiếng tút, đồng hồ gõ đều là âm tổng hợp tạm (`Resources/LOC_V33/*.wav`). Thay bằng file thật cùng tên là xong, không cần sửa code.
+- ~~Âm thanh tạm~~ **Xong (31/10)** — xem mục *Cập nhật 31/10*.
 
 ---
 
@@ -147,7 +160,7 @@ Công cụ chơi thử dịch chuyển người chơi giữa các mốc, nên nh
 - [ ] Va chạm khi đi (kẹt góc, xuyên tường, cầu thang), đoạn bê mâm xuống hầm.
 - [ ] Chết → "Chơi lại" ở cả hai điểm lưu Đêm 3. "Tiếp tục" từ menu nạp đúng điểm lưu.
 - [ ] Thời lượng một lượt chơi thật (mục tiêu 15–30 phút) và độ khó tìm đồ khi không có gợi ý.
-- [ ] Bản build `.exe` (mới test trong Editor).
+- [ ] Bản build `.exe`: chạy **LOC → Build thử (Windows .exe)** rồi mở `Build/LOC/LOC.exe` chơi tới hết Đêm 1.
 
 ---
 

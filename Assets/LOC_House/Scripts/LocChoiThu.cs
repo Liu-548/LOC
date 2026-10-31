@@ -318,7 +318,7 @@ public class LocChoiThu : MonoBehaviour
         Goi(typeof(LocMenu), null, "Vao", 3, null, null); yield return Cho(4);
         Muc("EVIL (placeholder: gọi thẳng tiếng gọi từ trên gác)");
         LocNhim.I.GoiTuTrenGac(); yield return Cho(4); yield return Chup("evil_1");
-        yield return ChoDen(() => LocFirstPerson.chuGiua != null, 20, "Evil: màn chữ cuối"); yield return Chup("evil_chu_cuoi");
+        yield return ChoDen(() => LocFirstPerson.chuGiua != null, 35, "Evil: màn chữ cuối"); yield return Chup("evil_chu_cuoi");
         yield return Cho(8); yield return Chup("evil_ve_menu");
 
         Muc("MENU — Ending");
