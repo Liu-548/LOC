@@ -1,0 +1,44 @@
+== bep_thot
+  Tang_1/Bep/BanAn_Bo/BanAn/BanAn  [3.25,0.00,13.39 → 4.36,0.75,14.09]  D2_go__go_ban_an_venni_mo  C
+  Tang_1/Bep/Decal_Decal_VetNuoc_San  [0.45,0.00,14.95 → 1.35,0.00,15.65]  M_Decal_VetNuocSan(trong)
+  Tang_1/Bep/Dem1/RauQua_Ro/RauQua_Ro  [1.52,0.00,14.37 → 1.98,0.17,14.83]  D2_nhua__m_ro_DCC394  C
+  Tang_1/Bep/GheAn_me/GheAn_me  [2.66,0.00,13.51 → 3.12,0.85,13.90]  D2_go__go_ban_an_venni_mo,D2_vai__dem_ghe_me  C
+  Tang_1/Bep/GheDau_Go/GheDau_Go/GheDau_Go  [0.90,0.40,13.95 → 1.30,0.44,14.35]  D2_go__material_0_8D592E  C
+  Tang_1/Bep/GheDau_Go/GheDau_Go/GheDau_Go_1  [0.90,0.00,13.95 → 1.30,0.40,14.35]  D2_go__material_1_7A4921  C
+  Tang_1/Bep/RoRaThit/RoRaThit  [0.82,0.00,13.10 → 1.78,0.32,13.51]  D2_dan__material_0_3D8F6A,D2_dan__material_1_2A6E4F,D2_dan__material_2_7A9B37,D2_dan__material_3_B53726,D2_dan__material_4_A1703D,D2_dan__material_5_6A421C,D2_dan__material_6_CACCCE,D2_dan__material_7_492A15  C
+  Tang_1/VoNha/San  [0.00,-0.20,10.40 → 7.60,0.00,16.50]  M_SanGachBong_T1_Tex,M_TranSan  C
+== bome_cuaso1
+  Tang_2/PhongBoMe/BauCuaSo_Granito_BoMe/BauCuaSo_Granito_BoMe  [0.75,4.47,-0.03 → 1.85,4.50,0.05]  Material_0
+  Tang_2/PhongBoMe/CuaSo_BoMe_Phai/CuaSo_Go_BoMe_Phai/CuaSo_Go_BoMe_Phai  [1.30,4.50,-0.08 → 1.85,5.90,-0.02]  Material_0  C
+  Tang_2/PhongBoMe/CuaSo_BoMe_Trai/CuaSo_Go_BoMe_Trai/CuaSo_Go_BoMe_Trai  [0.75,4.50,-0.08 → 1.30,5.90,-0.03]  Material_0  C
+  Tang_2/PhongBoMe/KhungAnh_CuoiNho/KhungAnh_CuoiNho  [0.76,4.35,0.16 → 1.04,4.53,0.38]  Material_0,Material_1,Material_2,Material_3,Material_4,Material_5  C
+  Tang_2/PhongBoMe/Rem_Vai_BoMe_Buong/Rem_Vai_BoMe_Buong  [0.70,4.40,0.13 → 1.90,6.05,0.19]  M_Rem_Vai_BoMe_Buong
+  Tang_2/PhongBoMe/Rem_Voan_BoMe/Rem_Voan_BoMe  [0.70,4.40,0.05 → 1.90,6.05,0.09]  M_Rem_Voan_BoMe(trong)
+  Tang_2/PhongBoMe/SongSatHoa_BoMe/SongSatHoa_BoMe  [0.78,4.52,0.03 → 1.83,5.87,0.05]  Material_0
+  Tang_2/VoNha/Kinh_T2_1  [0.75,4.50,-0.20 → 1.85,5.90,-0.18]  M_KinhTrong(trong)  C
+  Tang_2/VoNha/MatTien_T2_0  [-0.20,3.60,-0.20 → 0.75,7.00,0.00]  M_TuongNgoai_Tex  C
+  Tang_2/VoNha/MatTien_T2_1  [0.75,3.60,-0.20 → 1.85,4.50,0.00]  M_TuongNgoai_Tex  C
+  Tang_2/VoNha/MatTien_T2_2  [0.75,5.90,-0.20 → 1.85,7.00,0.00]  M_TuongNgoai_Tex  C
+  Tang_2/VoNha/MatTien_T2_3  [1.85,3.60,-0.20 → 3.20,7.00,0.00]  M_TuongNgoai_Tex  C
+== bome_cuaso2
+  Tang_2/PhongBoMe/BauCuaSo_Granito_BoMe/BauCuaSo_Granito_BoMe  [5.55,4.47,-0.03 → 6.65,4.50,0.05]  Material_0
+  Tang_2/PhongBoMe/CuaSo_BoMe_Phai/CuaSo_Go_BoMe_Phai/CuaSo_Go_BoMe_Phai  [6.10,4.50,-0.08 → 6.65,5.90,-0.02]  Material_0  C
+  Tang_2/PhongBoMe/CuaSo_BoMe_Trai/CuaSo_Go_BoMe_Trai/CuaSo_Go_BoMe_Trai  [5.55,4.50,-0.08 → 6.10,5.90,-0.03]  Material_0  C
+  Tang_2/PhongBoMe/Rem_Vai_BoMe_Buong/Rem_Vai_BoMe_Buong  [5.50,4.40,0.13 → 6.70,6.05,0.19]  M_Rem_Vai_BoMe_Buong
+  Tang_2/PhongBoMe/Rem_Voan_BoMe/Rem_Voan_BoMe  [5.50,4.40,0.05 → 6.70,6.05,0.09]  M_Rem_Voan_BoMe(trong)
+  Tang_2/PhongBoMe/SongSatHoa_BoMe/SongSatHoa_BoMe  [5.58,4.52,0.03 → 6.63,5.87,0.05]  Material_0
+  Tang_2/VoNha/Kinh_T2_2  [5.55,4.50,-0.20 → 6.65,5.90,-0.18]  M_KinhTrong(trong)  C
+  Tang_2/VoNha/MatTien_T2_5  [4.40,3.60,-0.20 → 5.55,7.00,0.00]  M_TuongNgoai_Tex  C
+  Tang_2/VoNha/MatTien_T2_6  [5.55,3.60,-0.20 → 6.65,4.50,0.00]  M_TuongNgoai_Tex  C
+  Tang_2/VoNha/MatTien_T2_7  [5.55,5.90,-0.20 → 6.65,7.00,0.00]  M_TuongNgoai_Tex  C
+  Tang_2/VoNha/MatTien_T2_8  [6.65,3.60,-0.20 → 7.80,7.00,0.00]  M_TuongNgoai_Tex  C
+== loi cua chinh (CapsuleCastAll z −1,6 → +1,2)
+  x 3.4: Tang_1/VoNha/MatTien_T1_4  ở z -0.20 y 0.00
+  x 3.4: Tang_1/VoNha/San  ở z 0.00 y 0.00
+  x 3.4: Tang_1/PhongKhach/ThamChuiChan_Cua/ThamChuiChan_Cua  ở z 0.60 y 0.02
+  x 3.8: Tang_1/VoNha/MatTien_T1_4  ở z -0.20 y 0.00
+  x 3.8: Tang_1/VoNha/San  ở z 0.00 y 0.00
+  x 3.8: Tang_1/PhongKhach/ThamChuiChan_Cua/ThamChuiChan_Cua  ở z 0.60 y 0.02
+  x 4.2: Tang_1/VoNha/MatTien_T1_4  ở z -0.20 y 0.00
+  x 4.2: Tang_1/VoNha/San  ở z 0.00 y 0.00
+  x 4.2: Tang_1/PhongKhach/ThamChuiChan_Cua/ThamChuiChan_Cua  ở z 0.60 y 0.02

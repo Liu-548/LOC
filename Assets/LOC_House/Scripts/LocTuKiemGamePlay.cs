@@ -167,7 +167,7 @@ public class LocTuKiemGamePlay : MonoBehaviour
         V("so_cua_bo").Bam(); yield return null;
         Kt(LocTui.CoMon("so_cua_bo") && !V("so_cua_bo").DocDuoc, "nhặt sổ của bố, Đêm 1 chưa đọc được");
 
-        cuaHam.Bam(); yield return new WaitForSeconds(0.9f);
+        cuaHam.Bam(); yield return new WaitForSeconds(3.2f);   // [1/11] có cảnh tra chìa ~2,5 s
         Kt(!cuaHam.khoa && cuaHam.DangMo, "có chìa → cửa hầm mở khoá + mở ra");
 
         LocTui.I.DatChe(1); yield return new WaitForSeconds(0.3f); yield return Chup("03_tui_dem1");

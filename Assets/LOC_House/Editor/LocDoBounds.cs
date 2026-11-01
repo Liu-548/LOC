@@ -20,6 +20,14 @@ public static class LocDoBounds
                 foreach (var r in g.GetComponentsInChildren<Renderer>()) if (r.bounds.max.x > lim) sb.AppendLine($"LẤN {r.name} [{r.transform.parent?.name}] max.x {r.bounds.max.x:0.000}  c ({r.bounds.center.x:0.00},{r.bounds.center.y:0.00},{r.bounds.center.z:0.00})");
                 continue;
             }
+            if (l.StartsWith("hop:"))   // [2/11] hop:x0,y0,z0,x1,y1,z1 → mọi renderer đang hiện có tâm bao nằm trong hộp
+            {
+                var v = l.Substring(4).Split(',').Select(s => float.Parse(s, System.Globalization.CultureInfo.InvariantCulture)).ToArray();
+                var hb = new Bounds(); hb.SetMinMax(new Vector3(v[0], v[1], v[2]), new Vector3(v[3], v[4], v[5]));
+                foreach (var r in Object.FindObjectsByType<Renderer>(FindObjectsSortMode.None)) if (hb.Contains(r.bounds.center))
+                    sb.AppendLine($"  {r.transform.parent?.parent?.name}/{r.transform.parent?.name}/{r.name} min ({r.bounds.min.x:0.000},{r.bounds.min.y:0.000},{r.bounds.min.z:0.000}) max ({r.bounds.max.x:0.000},{r.bounds.max.y:0.000},{r.bounds.max.z:0.000})");
+                continue;
+            }
             if (l.StartsWith("con:"))   // con:Ten → mọi renderer con của món đầu tiên trùng tên
             {
                 var t0 = all.FirstOrDefault(t => t.name == l.Substring(4)); if (!t0) continue;

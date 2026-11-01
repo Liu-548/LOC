@@ -94,7 +94,7 @@ public class LocTui : MonoBehaviour
         foreach (var d in dong)
         {
             float t = Mathf.Max(1.8f, d.Length * 0.07f);
-            LocFirstPerson.PhuDe(d, t); yield return new WaitForSeconds(t * LocFirstPerson.nhanChu + 0.15f);   // [22/10] cài đặt thời gian hiện chữ
+            LocFirstPerson.PhuDe(d, t); yield return LocFirstPerson.Cho(t * LocFirstPerson.nhanChu + 0.15f);   // [22/10] cài đặt thời gian hiện chữ
         }
         noi = null;
     }

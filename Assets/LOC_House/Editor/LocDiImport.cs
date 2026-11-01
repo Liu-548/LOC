@@ -20,6 +20,7 @@ public class LocDiImport : AssetPostprocessor
         mi.importBlendShapes = false; mi.importAnimation = true;
         mi.materialImportMode = ModelImporterMaterialImportMode.None;
         mi.addCollider = false; mi.isReadable = false; mi.motionNodeName = "";
+        mi.importNormals = ModelImporterNormals.Calculate; mi.normalSmoothingSource = ModelImporterNormalSmoothingSource.FromAngle; mi.normalSmoothingAngle = 70f;   // [1/11] BUG-017 mặt bác lộ từng mặt phẳng khi cận cảnh → làm mượt pháp tuyến, giữ nguyên lưới low-poly
     }
 
     void OnPreprocessAnimation()

@@ -200,8 +200,9 @@ public static partial class LocHouseBuilder
         foreach (var sx in new[] { -1f, 1f }) TBx(khung, "Khung_Canh", sx * (W / 2 - 0.006f), 0.012f, 0, 0.012f, H - 0.024f, 0.012f, den);
         TBx(khung, "Giay_Nen", 0, 0.012f, -0.002f, W - 0.02f, H - 0.024f, 0.002f, giay);
         TNhan(khung, "Chu_LinhVi_Giay", new Vector3(0, H / 2, 0.0015f), W - 0.026f, H - 0.03f, 32, 72, new[] { "LINH", "VỊ" }, 22, 18, "#1A1A1A", "#EFEBDD", true);
-        var chong = TBx(p, "Chan_Chong", 0, 0, -0.045f, 0.012f, 0.24f, 0.006f, den);
-        chong.transform.localRotation = Quaternion.Euler(18f, 0, 0);
+        // [2/11] chân chống cũ (0,24 m · 18°) đâm xuyên ra trước mặt linh vị → ngắn 0,20 m, gốc lùi sau, đầu chân vừa chạm lưng khung
+        var chong = TBx(p, "Chan_Chong", 0, 0, -0.051f, 0.012f, 0.20f, 0.006f, den);
+        chong.transform.localRotation = Quaternion.Euler(14f, 0, 0);
     }
 
     // ───────── PK-74 bát cơm quả trứng đôi đũa 0,13 × 0,13 × 0,25: cơm đầy vun, trứng luộc, đũa cắm thẳng

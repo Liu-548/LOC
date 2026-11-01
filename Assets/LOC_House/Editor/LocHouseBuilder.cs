@@ -96,6 +96,8 @@ public static partial class LocHouseBuilder
         System.IO.File.AppendAllText("Assets/LOC_House/BaoCao_ViTriBiDoi.txt", "\n\nĐỒ LỌT VÀO HẦM ĐÃ NHẤC RA (hầm chỉ giữ đồ thiết kế gốc):\n" + (hamLog.Length > 0 ? hamLog : "  (không có)\n"));
 
         System.IO.File.WriteAllText("Assets/LOC_House/BaoCao_LanCan.txt", LanCanRaSoat());   // [30/9] lan can nào cắm vào kết cấu
+        Sua0111();   // [1/11] sửa theo kiểm thử Major.docx + chơi tay 01/11 (LocHouseBuilder_Sua0111)
+        Sua0211();   // [2/11] sửa theo khu: bàn thờ vong, bếp, nồi to, chén vỡ hầm (LocHouseBuilder_Sua0211)
         LocNhayCua.Sua();   // [1/10] mặt đồng phẳng chồng nhau (cả nhà + từng cửa ở tư thế còn lại) → đẩy bên nhỏ ra trước 0,8 mm
         foreach (var t in root.GetComponentsInChildren<Transform>(true))
             if (t.name is "Dem2" or "Dem3") t.gameObject.SetActive(false);
@@ -108,6 +110,7 @@ public static partial class LocHouseBuilder
         catch (System.Exception e) { Debug.LogException(e); }
 
         System.IO.Directory.CreateDirectory("Assets/Scenes");
+        LuuLuoiRaFile();   // [1/11] lưới sao riêng (rà nháy, sửa 01/11…) ra file → scene dưới 100 MB (GitHub chặn file > 100 MB)
         EditorSceneManager.SaveScene(scene, ScenePath);
         WriteReport();
         AssetDatabase.Refresh();
@@ -321,6 +324,7 @@ public static partial class LocHouseBuilder
             float a = (a0 + i * 360f / n + J(18)) * Mathf.Deg2Rad, rr = r + J(0.12f);
             float cx = x + Mathf.Sin(a) * rr, cz = z + Mathf.Cos(a) * rr;
             float face = Mathf.Atan2(x - cx, z - cz) * Mathf.Rad2Deg + J(35) + (rng.NextDouble() < 0.2 ? 150 : 0);
+            if (z < -0.3f && cx > 2.7f && cx < 4.9f) cx = cx < 3.8f ? 2.7f : 4.9f;   // [1/11] ghế không lấn lối giữa sân (x 3,0–4,6): trước đây ghế xanh chắn đường vào cửa chính
             A(i % 2 == 0 ? "SM_PlasticChair_Red" : "SM_PlasticChair_Green", cx, cz, y, face);
         }
     }
@@ -464,7 +468,7 @@ public static partial class LocHouseBuilder
         A("Salon_Dem_NgoiDai_Kia", 7.25f, 1.56f, 0.7f, -90);      // đệm rời: thả từ trên xuống, bước rà soát cho chạm mặt ghế
         A("Salon_Dem_NgoiDai_GanTV", 7.25f, 2.34f, 0.7f, -90);
         A("Salon_BanNuoc", 6.28f, 1.95f, 0, 90);
-        A("KhayAmChen", 6.28f, 1.88f, 0.7f, 90);
+        A("KhayAmChen", 6.28f, 2.17f, 0.7f, 90);   // [2/11] dồn về nửa bàn phía sau, nửa trước để đồ mini game dọn bàn
         Cat(A("DieuKhien", 6.2f, 2.3f, 0.7f, 75));   // [1/10] nhà có tang không xem TV
         foreach (var gz in new[] { 1.42f, 2.47f })
         {
@@ -525,13 +529,13 @@ public static partial class LocHouseBuilder
         A("KeGo_TreoTuong", W, 3.0f, 1.55f, -90, pivot: true);            // [29/9 tối] dời khỏi hộp thang hầm: kệ gỗ treo tường phải, giữa ảnh gia đình và loa, chậu hoa nhỏ + ảnh
         A("TranhSonThuy_Khung", 0.0f, 0.85f, 1.55f, 90, pivot: true);     // tranh sơn thuỷ tường trái, cạnh cửa sổ
         // [6/10] tường trái (bên trái quan tài, z 1,8–5,3 giữa bàn điện thoại và đống đồ cúng): góc đồ tang cho khách viếng
-        A("ChongGhe", 0.28f, 2.08f, 0, 90);                                // chồng ghế gỗ mượn hàng xóm
+        A("SM_PlasticChairStack_4", 0.24f, 2.06f, 0, 80);                   // [2/11] thay ChongGhe (chồng ghế gỗ cũ) bằng chồng ghế nhựa mới hơn
         A("SM_PlasticChairStack_4", 0.24f, 2.56f, 0, 90);                  // ghế nhựa xếp chồng
         A("VongHoaTang_1", 0.22f, 3.40f, 0, 90, k: LocProp.Kieu.CoDinh);                         // vòng hoa khách gửi, dựa tường
         A("SM_PlasticTable", 0.45f, 4.62f, 0, 0);                          // bàn nhựa phát khăn tang
         A("SM_MourningCloth_Stack_Can", 0.32f, 4.45f, 0.72f, 90);
         A("SM_MourningCloth_Stack_Voi", 0.34f, 4.80f, 0.72f, 80);
-        A("SM_MournHat", 0.66f, 4.60f, 0.72f, 95);
+        A("SM_MournHat", 0.66f, 4.58f, 0.72f, 95);
         A("SM_MourningRobe_Hung", 0.035f, 4.35f, 2.05f, 90, top: true);   // áo sô treo đinh trên bàn
         A("SM_MourningRobe_Hung", 0.035f, 4.92f, 2.05f, 90, top: true);
         DF("Decal_VetGheCoTuong.png", "M_Decal_VetGheCoTuong", W - 0.004f, 0.55f, 1.95f, -90, 1.5f, 0.375f);
@@ -553,11 +557,10 @@ public static partial class LocHouseBuilder
         // [1/10] đồ tang mới (LOC_DoTang) — thiếu .glb thì ra khối xanh "[thiếu file]". Cáo phó dán tường (PK-69) không đặt: giữ bảng ngoài cổng.
         cur = G("Tang_1/PhongKhach");
         var yBan = TopY(banTho, 1.4f);   // mặt bàn thờ Đêm 1 (đêm khác nếu cao khác thì chỉnh tay)
-        AP("ThungPhungDieu", 2.05f, 2.5f, 0, 180, true, XayThung);
-        AP("KhayNhang_PhongBi", 2.05f, 1.95f, 0, 180, true, XayKhay);
-        AP("BatHuong_Vong", 3.8f, 2.4f, yBan, 180, false, XayBatHuong);
+        AP("ThungPhungDieu", 1.86f, 2.5f, 0, 180, true, XayThung);
+        AP("KhayNhang_PhongBi", 1.86f, 1.95f, 0, 180, true, XayKhay);
+        // [2/11] bỏ bát hương + bát cơm giữ chỗ: bộ .glb bàn thờ vong đã có (trùng, chồng lên chén nước / lọ hoa)
         AP("BaiVi_Vong", 3.8f, 2.62f, yBan, 180, false, XayBaiVi);
-        AP("BatComQuaTrung", 4.3f, 2.42f, yBan, 180, false, XayBatCom);
         AP("DenDau_GamQuanTai", 3.8f, 3.9f, 0, 180, false, XayDenDau).GetComponent<LocProp>().kieu = LocProp.Kieu.CoDinh;   // [31/10] cố ý nằm dưới gầm quan tài — rà soát không tách
         AP("KhanTang_Chong", 1.95f, 4.3f, TopY(chieu, 0.5f), 90, false, XayKhanTang);
         L("DenDau_GamQuanTai", 3.8f, 0.15f, 3.9f, "#FFA040", 2.2f, 0.8f);
@@ -583,7 +586,7 @@ public static partial class LocHouseBuilder
         A("Dep_Nhim_Roi", 4.62f, 7.95f, 0, 35);
         A("Dep_Khach", 5.3f, 8.2f, 0, 8);
         // [6/10] bỏ hộp thang hầm cũ: bảng điện, móc chìa, chổi lau dời từ vách hộp (x 6,3) sang tường phải (x W), giữ cao độ + hướng; sảnh rộng x 2,0–W nên bóng đèn dời ra giữa
-        A("BangDienChinh", W - 0.035f, 8.8f, 2.05f, 90, top: true);
+        A("BangDienChinh", W - 0.04f, 8.8f, 2.05f, -90, top: true);   // [2/11] trước quay 90 → cầu chì/aptomat úp vào tường, chỉ thấy lưng ván
         A("MocChiaKhoa", W - 0.01f, 9.4f, 1.55f, -90, top: true);
         ChoiLauVatLieu(A("ChoiLau_Gop", W - 0.25f, 10.6f, 0, -90));
         A("BongCompact", 4.8f, 9.2f, C1, 0, top: true);
@@ -626,7 +629,7 @@ public static partial class LocHouseBuilder
 
         A("AmNhom", 0.9f, 16.1f, 1.2f);                 // ấm nhôm trên lò phụ (thả xuống mặt bếp)
         A("ThungGao_Nhua", 2.65f, 16.05f, 0, 0);
-        A("RoRaThit", 1.3f, 13.3f, 0, 0);                                 // [30/9] rổ rau, thớt dựng, dao — cạnh ghế đẩu nhặt rau (trước đây chắn ô cửa sắt kính sau bếp)
+        A("RoRaThit", 1.25f, 11.217f, 0, 0);   // [2/11] dồn sát tường trước bếp (mặt tường z 11,0): rổ, thớt tựa tường, dao gác miệng rổ — vừa dùng xong, chất một chỗ                                 // [30/9] rổ rau, thớt dựng, dao — cạnh ghế đẩu nhặt rau (trước đây chắn ô cửa sắt kính sau bếp)
         A("XoChauKhanLau", 7.2f, 15.8f, 0);
         A("HopBanhQuy_ThiecTaiDung", 0.28f, 12.4f, 2.4f);   // nóc chạn bát
         A("ChaiNuocMam_Lo", 0.25f, 12.95f, 2.4f, 90);   // trên nóc chạn bát
@@ -665,8 +668,8 @@ public static partial class LocHouseBuilder
     {
         cur = G("Tang_1/GiengTroi");
         A("ThungNuoc_Nap", 0.6f, 16.95f, -0.05f);   // [2/10 tối] dời khỏi lối trước cửa hầm
-        A("ChauTrauBa", 6.9f, 17.4f, -0.05f);
-        A("ChauCayKieng_LaTo", 5.6f, 17.35f, -0.05f, 0);   // [23/10] từ bếp ra
+        A("ChauTrauBa", 7.3f, 17.55f, -0.05f);   // [2/11] gọn: dồn đồ dọc tường phải, giữa sân trống lối bếp → kho / hầm
+        A("ChauCayKieng_LaTo", 7.15f, 16.95f, -0.05f, 0);   // [23/10] từ bếp ra
         // cửa sắt xuống hầm [2/10 tối]: tường trái giếng trời (TuongBao_T1), khoá + móc chìa ở mặt ngoài, bản lề bên phải người bước vào, mở ra giếng trời
         // [6/10] khớp khung–cánh, hết nháy texture (cả hai .glb vật liệu hai mặt → mặt trùng nhau là nháy):
         //   khung hạ 5 mm cho đáy chìm dưới ngưỡng cửa (trước trùng mặt ngưỡng y = 0);
@@ -678,7 +681,7 @@ public static partial class LocHouseBuilder
         var dHamCua = Mo(canhHam, 0f, false, "cửa sắt xuống hầm");
         if (dHamCua) { dHamCua.banLe = new Vector3(0.8f, 0, 0); dHamCua.goc = 90f; }   // gốc model nằm ở mép TAY NẮM → bản lề thật ở mép xa (x = 0,8); quay +90° để cánh bật ra giếng trời
         GanKhoa(cur.Find("CuaSatHam (mở)"), 1.0f, 0.28f, true);
-        A("GianPhoi_Gap", 3.6f, 17.9f, -0.05f, 0);
+        A("GianPhoi_Gap", 7.53f, 18.0f, -0.05f, 90);   // [2/11] gấp dựng sát tường phải (trước đứng giữa sân)
         A("MayBom_NuocGiengTroi", 2.4f, 16.85f, -0.05f, 0);               // máy bơm nước lên bể, ống PVC xanh dâng lên tường bếp
         A("OngNuocMua_GiengTroi", W, 18.5f, -0.05f, -90, pivot: true);    // ống nước mưa dọc tường phải giếng trời
         Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 3.0f, 2.3f, 16.505f, 0, 0.8f, 0.8f);
@@ -747,12 +750,15 @@ public static partial class LocHouseBuilder
         // [27/10] tường hầm dán KÍN bùa (C0): nhân mảng bùa mẫu ra cả bốn mặt tường, hai lớp cao thấp chồng lên nhau
         int nb = 0;
         void Bua(float x, float z, float yy, float yaw) { var g = A("TuongBuaMau", x, z, yy, yaw, new Vector3(2.2f, 1.42f, 0.03f), pivot: true); if (g) g.name = "TuongBuaMau_" + nb++; }
-        foreach (var yy in new[] { y, y + 0.68f })
+        // [1/11] BUG-008 vệt sáng dọc ngay trên bàn thờ: các mảng bùa chồng nhau (giữa tường x ≈ −2 và dải giữa hai lớp cao thấp) nằm cùng một mặt phẳng → nháy.
+        //  Mỗi mảng cách tường thêm 2,5 mm so với mảng trước → luôn có mảng nằm trên, không trùng mặt.
+        var lop = new int[4]; float Lo(int w) => 0.002f * lop[w]++;
+        foreach (var yy in new[] { y - 0.5f, y + 0.08f })   // [2/11] hạ cả hai lớp: lớp trên trước trồi 0,58 m qua trần hầm lên kho tiệm
         {
-            foreach (var x in new[] { -3.0f, -0.95f }) Bua(x, zs + 0.004f, yy, 0);          // tường sau bàn thờ
-            foreach (var z in new[] { 11.9f, 13.85f }) Bua(-3.796f, z, yy, 90);              // tường trái
-            foreach (var z in new[] { 11.9f, 13.85f }) Bua(-0.204f, z, yy, -90);             // tường phải
-            Bua(-2.75f, 14.796f, yy, 180);                                                   // tường đầu hầm (cạnh chân thang)
+            foreach (var x in new[] { -3.0f, -0.95f }) Bua(x, zs + 0.004f + Lo(0), yy, 0);          // tường sau bàn thờ
+            foreach (var z in new[] { 11.9f, 13.85f }) Bua(-3.796f + Lo(1), z, yy, 90);              // tường trái
+            foreach (var z in new[] { 11.9f, 13.85f }) Bua(-0.204f - Lo(2), z, yy, -90);             // tường phải
+            Bua(-2.75f, 14.796f - Lo(3), yy, 180);                                                   // tường đầu hầm (cạnh chân thang)
         }
         var banThoHam = A("BanThoHam", cx, zs + 0.22f, y, 0);
         HuCot(banThoHam, y);   // [3/10 v3.0] hũ cốt dưới gầm bàn thờ
@@ -765,7 +771,7 @@ public static partial class LocHouseBuilder
         DW("Decal_VetAm_Ham.png", "M_Decal_VetAm_Ham", -3.796f, y + 0.45f, 12.9f, 90, 1.2f, 1.65f);
         A("Decal_BongVoi_A", cx + 0.6f, zs + 0.02f, y + 1.9f, 0, pivot: true);
         L("BongDayToc_Ham", cx, -0.5f, 12.9f, "#FF9A3C", 5, 1.0f, true);
-        L("BongThang_Ham", -0.85f, -0.7f, 15.9f, "#FF9A3C", 3.5f, 0.7f);    // dưới chân thang
+        // [2/11] bỏ đèn dưới chân thang hầm (bóng + cần sắt thừa, user yêu cầu xoá)
         L("BongChieu_Ham", -0.85f, 2.5f, 18.0f, "#FF9A3C", 2.4f, 0.8f);     // trên chiếu tới, sau cửa sắt
     }
 
@@ -840,7 +846,7 @@ public static partial class LocHouseBuilder
         Mo(Leaf("CuaBoMe (mở)", 3.0f, 5.45f, y, 0.8f, 2.1f, 90, Go), 180f, true, "cửa phòng bố mẹ");
         LeafM("CuaWC_Khung", "KhungCuaWC_BoMe", 5.75f, 4.6f, y, 90, 0.7f, 1.9f, PhMat(VANG));
         Mo(LeafM("CuaWC_Canh", "CuaWC_BoMe (mở)", 5.75f, 4.6f, y, 0, 0.7f, 1.9f, PhMat(VANG)), 90f, true, "cửa WC");
-        A("BanCoHoc_Go", 1.3f, 0.27f, y, 0);
+        A("BanCoHoc_Go", 1.4f, 0.27f, y, 0);   // [1/11] hở két sắt góc trái thêm 10 cm
         // [3/10 v3.0] cuốn sổ của bố không còn trên bàn — nằm trong két sắt đứng (KetSatDung)
         A("GheTua_AoBo_Fix", 2.17f, 0.6f, y, 180);
         BoGuongTu(A("TuQuanAo_GamHo", 1.2f, 5.12f, y, 180, k: LocProp.Kieu.CoDinh));   // [29/9 khuya] bỏ ô gương trên cánh tủ
@@ -853,11 +859,11 @@ public static partial class LocHouseBuilder
         if (gq) { gq.transform.localScale = Vector3.one * 1.9f; Align(gq, 3.85f, y, 5.0f); }
         Set("BanTrangDiem_Bo", new[] { "BanTrangDiem", "Guong@0.15,0.3,0.73", "VaiChePhuGuong_Ban@0.15,0.3,0.73", "DoBanTrangDiem@0.48,0.02,0.73" }, 0.21f, 2.45f, y, 90);
         A("DonTrangDiem", 0.75f, 2.45f, y);
-        A("TuiXachMe_ViTien", 0.75f, 2.62f, y + 1.0f, 20);   // túi mẹ để trên đôn, chủ nay đã mất
+        A("TuiXachMe_ViTien", 0.75f, 2.47f, y + 1.0f, 20);   // túi mẹ để trên đôn, chủ nay đã mất — [1/11] đúng tâm đôn (trước rơi xuống sàn)
         A("ThuocBo_LoThuocNam", W - 0.22f, 0.5f, y + 1.2f, -90);   // thuốc bổ, dầu gió, thuốc hạ áp — thả xuống tủ đầu giường bố
-        A("KinhLao_HopKinh", 1.75f, 0.3f, y + 1.2f, 20);                    // kính + hộp da của bố, trên bàn viết
-        A("Nokia_DoChuong", W - 0.3f, 2.85f, y + 1.2f, 200);              // điện thoại + sạc bên giường mẹ
-        A("KhungAnh_CuoiNho", 0.9f, 0.27f, y + 1.0f, 10);                   // ảnh cưới nhỏ trên bàn viết
+        A("KinhLao_HopKinh", 1.85f, 0.3f, y + 1.2f, 20);                    // kính + hộp da của bố, trên bàn viết
+        A("Nokia_DoChuong", W - 0.3f, 2.62f, y + 1.2f, 200);              // điện thoại + sạc bên giường mẹ — [1/11] lùi khỏi chân đèn ngủ (trước rơi kẹt trong chao đèn)
+        A("KhungAnh_CuoiNho", 1.0f, 0.27f, y + 1.0f, 10);                   // ảnh cưới nhỏ trên bàn viết
         A("Tham_Do_1m2", 3.5f, 2.4f, y + 0.05f, 90);                        // thảm giữa phòng
         A("TranhThuPhap_Phuc", 0.0f, 1.55f, y + 1.55f, 90, pivot: true);   // chữ Phúc tường trái
         A("ChanMenBong_GapGon", 5.75f, 1.7f, y + 1.3f, 90);         // chăn bông + gối ôm cuối giường, thả xuống đệm
@@ -953,6 +959,7 @@ public static partial class LocHouseBuilder
                 var dich = canh.InverseTransformPoint(sk.position); dich.z = lbCanh.center.z;
                 foreach (var n in nam) { n.localPosition = dich + q * (n.localPosition - tam); n.localRotation = q * n.localRotation; }
             }
+            foreach (var nc in nam) Object.DestroyImmediate(nc.gameObject);   // [1/11] bỏ hẳn tay nắm (nhà không cửa nào có tay nắm; bản cũ dính tường, đóng thì lơ lửng)
             canh.localRotation *= Quaternion.Euler(0, -80, 0);
             Mo(canh, 0f, true, "cửa phòng Nhím", 80f);   // đóng = bỏ góc −80° (cánh thiết kế đóng ở góc 0)
         }
@@ -963,7 +970,7 @@ public static partial class LocHouseBuilder
         A("BanCanhGiuong_Thuoc", 7.38f, 9.63f, y);                           // x 7,18–7,58 · z 9,43–9,83
         A("DenNgu_Nhim", 7.345f, 9.635f, y + 1.2f);   // [29/10] lệch khỏi ấm nước trên mặt tủ (chao đèn đè lên ấm)
         A("GauBong_Cu", 5.93f, 8.74f, y + 1.2f, 160);       // [5/10] dời xuống cuối giường — Nhím nằm chỗ gối
-        A("BangTayGay", 6.05f, 9.22f, y + 1.2f, 15);         // [5/10] dây đeo tay tháo ra, để cuối giường
+        A("BangTayGay", 3.9f, 11.4f, y + 1.2f, 15);          // [1/11] dây đeo tay tháo ra để trên giường xếp cô Tâm (trước nằm dưới chăn Nhím như tờ giấy bị đè)
         A("ChauNuoc_KhanUot", 6.66f, 9.68f, y);              // chậu nước + khăn ướt cạnh giường (Nhím đang sốt)
         A("GiuongXep_CoTam", 3.74f, 11.49f, y, 0);           // khít tường trái, ngay sau tầm quét cánh cửa
         Decal("Decal_VetButSap.png", "M_Decal_VetButSap", W - 0.005f, y + 0.2f, 10.35f, -90, 0.62f, 0.465f);   // nét bút sáp của Nhím ở chân tường
@@ -999,12 +1006,12 @@ public static partial class LocHouseBuilder
         A("GheBanHoc_Go", 5.7f, 15.5f, y, 0);
         A("TamNilon_PhuBui", W - 0.49f, 13.52f, y + 1.0f, 0);      // nilon chống bụi phủ giường (phòng đóng cửa lâu)
         A("Walkman_BangCu", 6.1f, 16.0f, y + 1.3f, 190);           // máy cassette + tai nghe + băng, thả xuống bàn học
-        A("GiayBaoNhapHoc", 5.2f, 16.0f, y + 1.3f, 15);                    // giấy báo + thẻ sinh viên + thư trên bàn học
+        A("GiayBaoNhapHoc", 5.55f, 15.98f, y + 1.3f, 15);                  // giấy báo + thẻ sinh viên + thư trên bàn học — [1/11] dời vào giữa, không vắt mép bàn
         A("HanhLyKhoi_TuiVai", 3.6f, 15.75f, y, 30);                       // túi vải mang từ ký túc xá, chưa dỡ
         DW("Decal_MangNhen.png", "M_Decal_MangNhen", 3.204f, y + 2.55f, 12.55f, 90, 0.6f, 0.6f);
         Decal("Decal_NamMoc.png", "M_Decal_NamMoc", 3.205f, y + 2.15f, 15.9f, 90, 0.6f, 0.6f);   // phòng đóng cửa lâu: mốc góc trần tường trái
-        A("DenBanHoc", 5.25f, 16.15f, y + 1.0f, 180);
-        TuAoKhoiMoi(3.69f, 12.505f, y, 0);   // [4/10] tủ áo gỗ dựng lại (bản .glb cũ là hộp trơn rỗng) — lưng sát tường z 12,50, hông trái sát tường x 3,20
+        A("DenBanHoc", 5.42f, 16.08f, y + 1.0f, 180);   // [1/11] chân đèn lọt hẳn vào mặt bàn (trước thò ra mép trái)
+        TuAoKhoiMoi(4.55f, 12.505f, y, 0);   // [1/11] nhích về phía giường: cánh tủ mở không chắn lối cửa phòng   // [4/10] tủ áo gỗ dựng lại (bản .glb cũ là hộp trơn rỗng) — lưng sát tường z 12,50, hông trái sát tường x 3,20
         Set("GiaSach_Bo", new[] { "GiaSach_Treo", "SachGop@0.05,0,0.55" }, W - 0.1f, 15.4f, y + 1.0f, -90, k: LocProp.Kieu.Treo);
         A("LichTo_2000", W - 0.005f, 13.2f, y + 1.6f, -90, top: true);
         A("Poster_BanNhac", W - 0.005f, 14.0f, y + 1.65f, -90, top: true);
@@ -1131,8 +1138,9 @@ public static partial class LocHouseBuilder
     static void CuaSo(string loai, float x0, float x1, float y0, float zFace, int dir)
     {
         float w = x1 - x0, zs = zFace - dir * 0.05f, xa = dir > 0 ? x0 : x1, xb = dir > 0 ? x1 : x0;
-        var sT = Mo(LeafM($"CuaSo_Go_{loai}_Trai", $"CuaSo_{loai}_Trai", xa, zs, y0, dir > 0 ? 0 : 180, w / 2, 1.4f, Go), 0f, false, "cửa sổ", +90f);   // cánh mở ra ngoài
-        var sP = Mo(LeafM($"CuaSo_Go_{loai}_Phai", $"CuaSo_{loai}_Phai", xb, zs, y0, dir > 0 ? 180 : 0, w / 2, 1.4f, Go), 0f, false, "cửa sổ", -90f);
+        // [2/11] hai cánh mỗi cánh rộng hơn nửa ô 3 mm → chồng 4 mm ở khe giữa, mặt trùng nhau nháy → kéo mỗi cánh còn nửa ô − 2 mm
+        var sT = Mo(Dai(LeafM($"CuaSo_Go_{loai}_Trai", $"CuaSo_{loai}_Trai", xa, zs, y0, dir > 0 ? 0 : 180, w / 2, 1.4f, Go), w / 2 - 0.002f), 0f, false, "cửa sổ", +90f);   // cánh mở ra ngoài
+        var sP = Mo(Dai(LeafM($"CuaSo_Go_{loai}_Phai", $"CuaSo_{loai}_Phai", xb, zs, y0, dir > 0 ? 180 : 0, w / 2, 1.4f, Go), w / 2 - 0.002f), 0f, false, "cửa sổ", -90f);
         // ô kính trà đặt sát mặt ngoài (khối Kinh*) — ẩn khi có cánh mở, để cửa sổ mở là thấy ra ngoài
         var probe = new Bounds(new Vector3((x0 + x1) / 2, y0 + 0.7f, zFace), new Vector3(w - 0.1f, 0.5f, 0.5f));
         var kinh = boxObjs.Where(g => g && g.name.StartsWith("Kinh") && g.GetComponent<Renderer>().bounds.Intersects(probe)).ToArray();

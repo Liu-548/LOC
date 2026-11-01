@@ -130,7 +130,7 @@ public static partial class LocHouseBuilder
             Khoi("Mang", new Vector3(0, 0, 0.02f), new Vector3(0.62f, 0.05f, 0.04f), "#D8D4C8");              // máng sắt sơn trắng ngà, ngả vàng
             Khoi("Ong", new Vector3(0, -0.005f, 0.055f), new Vector3(0.6f, 0.028f, 0.028f), "#F4F2EA");         // ống tuýp 0,6 m
             var mo = M("M_DenTuong_Ong", "#F4F2EA"); mo.EnableKeyword("_EMISSION"); mo.SetColor("_EmissionColor", new Color(1f, 0.95f, 0.85f) * 1.6f); UnityEditor.EditorUtility.SetDirty(mo);   // ống sáng; LocCongTac tự tắt phát sáng trong 0,9 m quanh đèn khi gạt công tắc
-            Khoi("DayDien", new Vector3(0.33f, -0.25f, 0.008f), new Vector3(0.008f, 0.5f, 0.008f), "#2A2620");  // dây điện chạy dọc tường xuống
+            // [1/11] bỏ dây điện dọc tường: nhìn như một cái que cắm cạnh đèn
             l.transform.position = g.TransformPoint(new Vector3(0, -0.12f, 0.25f));   // hơi dưới ống: mặt dưới máng cũng sáng khi nhìn từ dưới thang lên
         }
         var sp = Den("SanPhoi"); var bong = Tim("BongDenSan_DayDien");

@@ -1,0 +1,6 @@
+Bo_Chen_Tren_De  <NhaLoc/Ham/>  pos (-2.000,-1.620,11.200) rotY 270.0 scale (1.00, 1.00, 1.00) +LocProp
+  Bo_Chen_Tren_De  R[-2.19,-1.59,11.17 → -1.81,-1.54,11.25] men_su_ChenNguyen_1,men_su_ChenNguyen_2,men_su_ChenNguyen_3,men_su_ChenNguyen_4,men_su_ChenNguyen_5
+    De  R[-2.21,-1.62,11.16 → -1.79,-1.58,11.27] men_su_de
+Bo_Chen_Tren_De  <NhaLoc/Ham/Bo_Chen_Tren_De/>  pos (-2.000,-1.620,11.200) rotY 270.0 scale (1.00, 1.00, 1.00)  R[-2.19,-1.59,11.17 → -1.81,-1.54,11.25] men_su_ChenNguyen_1,men_su_ChenNguyen_2,men_su_ChenNguyen_3,men_su_ChenNguyen_4,men_su_ChenNguyen_5
+  De  R[-2.21,-1.62,11.16 → -1.79,-1.58,11.27] men_su_de
+ChenHam_TrangThai  <NhaLoc/Ham/>  pos (0.000,0.000,0.000) rotY 0.0 scale (1.00, 1.00, 1.00)

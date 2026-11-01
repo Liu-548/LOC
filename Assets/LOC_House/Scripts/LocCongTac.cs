@@ -32,6 +32,7 @@ public class LocCongTac : MonoBehaviour
         ["HanhLang_ChieuNghi"] = new[] { "ChieuNghi_T2", "HanhLang_T2" },
         ["HanhLang_Khoi"] = new[] { "HanhLang_T2" },
         ["PhongKhoi"] = new[] { "Khoi_Tran", "DenBan_Khoi" },
+        ["PhongNhim"] = new[] { "DenNgu_Nhim" },   // [1/11] "Bật đèn cho em": công tắc phòng em bật/tắt được đèn ngủ (mất điện vẫn do LocMa)
         ["PhongTho"] = new[] { "PhongTho_1", "PhongTho_2" },
         ["Sanh_T3"] = new[] { "Sanh_T3" },
     };
@@ -117,6 +118,7 @@ public class LocCongTac : MonoBehaviour
     public void Toggle()
     {
         bat = !bat;
+        LocAm.Phat("CongTac_Tach", transform.position, 0.7f);   // [1/11]
         // hai chiều: đảo theo đèn đang sáng hay tắt, không theo phím của riêng cụm này
         bool sang = false; bool coDen = false;
         if (dens != null) foreach (var d in dens) if (d) { coDen = true; if (muon.TryGetValue(d, out var v) ? v : d.enabled) sang = true; }

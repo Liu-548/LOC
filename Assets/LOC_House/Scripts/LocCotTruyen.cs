@@ -127,15 +127,12 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         if (!LocTui.Co("den_ham_tat_1")) { LocTui.Dat("den_ham_tat_1"); StartCoroutine(GiatMinh(hopThang.center)); }
     }
 
-    // camera khựng, quay nhanh về một điểm (0,3 s), tiếng thở hắt — không chữ
+    // [1/11] lần đầu đèn hầm tự tắt sau lưng: tiếng thở hắt + Khôi thắc mắc. Không giật camera nữa (bị chê lạm dụng hù, camera tự ghim xuống chỗ đèn)
     IEnumerator GiatMinh(Vector3 diem)
     {
         if (LocNhim.I && LocNhim.I.khoiTho) AudioSource.PlayClipAtPoint(LocNhim.I.khoiTho, fp.cam.position, 0.7f);
-        LocFirstPerson.khoa = true;
-        var tu = fp.cam.position + fp.cam.forward * 2f;
-        for (float t = 0; t < 1; t += Time.deltaTime / 0.3f) { fp.DatTuThe(fp.transform.position, Vector3.Lerp(tu, diem, t * (2 - t))); yield return null; }
         yield return new WaitForSeconds(0.5f);
-        LocFirstPerson.khoa = false;
+        LocTui.Noi("...Đèn dưới hầm vừa tắt à?", "Mình có tắt đâu.", "Chắc chập điện. Nhà này dây điện cũ rồi.");
     }
 
     // ───── Đêm 1
@@ -203,19 +200,20 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     }
 
     // [21/10] thắp hương phải đứng chính diện, không cho đứng chéo: ngay trước mặt bàn thờ (0,4–1,9 m tính từ tâm bàn),
-    //         lệch ngang ≤ 0,25 m so với trục giữa, mặt hướng thẳng vào bàn thờ (lệch ≤ 20°)
+    //         [1/11] nới: 0,3–2,4 m, lệch ngang ≤ 0,55 m, mặt lệch ≤ 35°
     public bool DungChinhDien() => DungChinhDien(banThoVong);
     public bool DungChinhDien(Transform ban)
     {
         if (!ban || !fp) return true;
         var c = ban.position; c.y = 0;
         var truoc = ban.forward; truoc.y = 0; truoc.Normalize();
+        if (ban != banThoVong) { var bb = Bao(ban); c = bb.center; c.y = 0; truoc = bb.size.x < bb.size.z ? Vector3.right : Vector3.forward; }   // [1/11] khung ảnh .glb: trục forward không tin được → lấy trục mỏng của hộp bao (nhà dựng thẳng trục) làm pháp tuyến
         var mat = ban == banThoVong ? demSauDung : fp.transform.position;   // bàn thờ vong: mặt = phía cửa chính · bàn thờ ông bà: phía người đứng (sau lưng là tường)
         if (Vector3.Dot(truoc, mat - c) < 0) truoc = -truoc;
         var d = fp.transform.position - c; d.y = 0;
         float doc = Vector3.Dot(d, truoc), ngang = Vector3.Dot(d, Vector3.Cross(Vector3.up, truoc));
         var nhin = fp.cam.forward; nhin.y = 0;
-        return doc > 0.4f && doc < 1.9f && Mathf.Abs(ngang) <= 0.25f && Vector3.Angle(nhin, -truoc) <= 20f;
+        return doc > 0.3f && doc < 2.4f && Mathf.Abs(ngang) <= 0.55f && Vector3.Angle(nhin, -truoc) <= 35f;   // [1/11] nới: chơi tay phải chỉnh ~5 lần mới được
     }
 
     IEnumerator ThapHuong(Transform ban)
@@ -288,7 +286,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         while (!xong)
         {
             var k = Keyboard.current;
-            giuSpace = k != null && k.spaceKey.isPressed && !LocMenu.DangChe ? giuSpace + Time.deltaTime : 0;
+            giuSpace = LocFirstPerson.GiuBoQua(k) ? giuSpace + Time.deltaTime : 0;   // [1/11] Enter thay Space (Space làm nhảy)
             if (giuSpace >= 0.8f) { StopCoroutine(c); LocFirstPerson.PhuDe("", 0.01f); donDep?.Invoke(); break; }
             yield return null;
         }
@@ -300,7 +298,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         float k = Screen.height / 1080f;
         var st = new GUIStyle(GUI.skin.label) { font = LocMenu.FontChu(1), fontSize = Mathf.RoundToInt(19 * k), alignment = TextAnchor.LowerRight };
         st.normal.textColor = new Color(0.75f, 0.72f, 0.66f, 0.38f + 0.5f * Mathf.Clamp01(giuSpace / 0.8f));
-        GUI.Label(new Rect(0, 0, Screen.width - 36 * k, Screen.height - 30 * k), "Giữ Space để bỏ qua", st);
+        GUI.Label(new Rect(0, 0, Screen.width - 36 * k, Screen.height - 30 * k), LocFirstPerson.CHU_BO_QUA, st);
         if (giuSpace > 0) { float w = 170 * k * Mathf.Clamp01(giuSpace / 0.8f); GUI.color = new Color(0.75f, 0.72f, 0.66f, 0.7f); GUI.DrawTexture(new Rect(Screen.width - 36 * k - w, Screen.height - 26 * k, w, 2 * k), Texture2D.whiteTexture); GUI.color = Color.white; }
     }
 
@@ -313,7 +311,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
             float t = 1.2f + 0.06f * cau.Length;
             if (LocDi.I) LocDi.I.Noi(ai == BAC);   // dì quay về người chơi, gật nhẹ khi tới câu của dì
             LocFirstPerson.PhuDe($"{ai}: {cau}", t, false);
-            yield return new WaitForSeconds(t * LocFirstPerson.nhanChu + 0.4f);
+            yield return LocFirstPerson.Cho(t * LocFirstPerson.nhanChu + 0.4f);
         }
     }
 

@@ -144,7 +144,7 @@ public class LocXeBuyt : MonoBehaviour
             Khoa();
             float a = Mathf.SmoothStep(0, 1, t / 1.4f);
             yaw = Mathf.LerpAngle(yaw0, 28f, a); pitch = Mathf.Lerp(pitch0, -9f, a);
-            if (k < thoai.Length && t >= tc)
+            if (k < thoai.Length && (t >= tc || k > 0 && LocFirstPerson.BamTiep()))
             {
                 float d = 1.2f + 0.06f * thoai[k].cau.Length;
                 LocFirstPerson.PhuDe($"{thoai[k].ai}: {thoai[k].cau}", d, false);
@@ -287,7 +287,7 @@ public class LocXeBuyt : MonoBehaviour
     {
         if (boQua) return true;
         var k = Keyboard.current;
-        giuSpace = k != null && k.spaceKey.isPressed && !LocMenu.DangChe ? giuSpace + Time.deltaTime : 0;
+        giuSpace = LocFirstPerson.GiuBoQua(k) ? giuSpace + Time.deltaTime : 0;   // [1/11] Enter thay Space
         if (giuSpace < 0.8f) return false;
         boQua = true; StartCoroutine(BoQua());
         return true;
@@ -323,7 +323,7 @@ public class LocXeBuyt : MonoBehaviour
         var st = new GUIStyle(GUI.skin.label) { font = LocMenu.FontChu(1), fontSize = Mathf.RoundToInt(19 * k), alignment = TextAnchor.LowerRight };
         st.normal.textColor = new Color(0.75f, 0.72f, 0.66f, 0.38f + 0.5f * Mathf.Clamp01(giuSpace / 0.8f));
         var r = new Rect(0, 0, Screen.width - 36 * k, Screen.height - 30 * k);
-        GUI.Label(r, "Giữ Space để bỏ qua", st);
+        GUI.Label(r, LocFirstPerson.CHU_BO_QUA, st);
         if (giuSpace > 0) { GUI.color = new Color(0.75f, 0.72f, 0.66f, 0.7f); GUI.DrawTexture(new Rect(Screen.width - 36 * k - 170 * k * Mathf.Clamp01(giuSpace / 0.8f), Screen.height - 26 * k, 170 * k * Mathf.Clamp01(giuSpace / 0.8f), 2 * k), Texture2D.whiteTexture); GUI.color = Color.white; }
     }
 

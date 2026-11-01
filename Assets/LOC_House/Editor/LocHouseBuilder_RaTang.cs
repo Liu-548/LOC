@@ -152,8 +152,8 @@ public static partial class LocHouseBuilder
         A("ThungRacNhua", 5.3f, 16.1f, 0, 0);
         A("SM_PlasticChair_Red", 6.1f, 14.3f, 0, 40); A("SM_PlasticChair_Green", 1.9f, 12.3f, 0, -70);   // ghế khách bưng vào ngồi rửa bát, bỏ lại
         A("BaoTaiRong", 1.95f, 14.95f, 0, 20);
-        A("KhayTra_LyThuyTinh", 4.3f, 13.35f, 0.8f, 30); A("DiaKeoBanh_HatDua", 3.3f, 14.05f, 0.8f, -20);   // khay ly bẩn, đĩa hạt dưa bưng từ rạp vào để dồn lên bàn ăn
-        A("PorridgeBowl_Tron", 6.9f, 12.55f, 0.6f); A("BatChao_An", 7.05f, 13.6f, 0.6f); A("KhoaiLuoc_Dia", 6.85f, 13.9f, 0.6f);   // ăn dở để trên chõng
+        A("KhayTra_LyThuyTinh", 4.02f, 13.9f, 0.8f, 30); A("DiaKeoBanh_HatDua", 3.45f, 13.92f, 0.8f, -20);   // [1/11] vào trong mặt bàn (trước khay vắt mép, lơ lửng)   // khay ly bẩn, đĩa hạt dưa bưng từ rạp vào để dồn lên bàn ăn
+        A("PorridgeBowl_Tron", 6.9f, 12.55f, 0.6f); A("BatChao_An", 7.05f, 13.6f, 0.6f); A("KhoaiLuoc_Dia", 6.85f, 13.7f, 0.6f);   // ăn dở để trên chõng
 
         cur = G("Tang_1/Bep/Dem3");
         A("BepGas_Kieng_BinhGas", 6.55f, 16.0f, 0, 150); NoiTo(5.55f, 15.85f, 0, false, false);   // kiềng dồn vào góc, nồi úp phơi

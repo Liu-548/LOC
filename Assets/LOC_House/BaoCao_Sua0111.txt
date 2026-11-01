@@ -1,0 +1,51 @@
+SỬA 01/11 — 02/11 01:48
+  băng Tang_1/PhongKhach/VongHoaTang_1: 10 mảnh
+  băng Tang_1/PhongKhach/Dem1/BanThoVong_Dem1/VongHoaTang_1/VongHoaTang_1_BangChu: 1 mảnh
+  băng Tang_1/PhongKhach/Dem1/BanThoVong_Dem1/VongHoaTang_1/VongHoaTang_1_DuoiBang: 4 mảnh
+  băng Tang_1/PhongKhach/Dem1/BanThoVong_Dem1/VongHoaTang_2/VongHoaTang_2_BangChu: 1 mảnh
+  băng Tang_1/PhongKhach/Dem1/BanThoVong_Dem1/VongHoaTang_2/VongHoaTang_2_DuoiBang: 2 mảnh
+  băng Tang_1/PhongKhach/Dem2/BanThoVong_Dem2/VongHoaTang_1/VongHoaTang_1_BangChu: 1 mảnh
+  băng Tang_1/PhongKhach/Dem2/BanThoVong_Dem2/VongHoaTang_1/VongHoaTang_1_DuoiBang: 4 mảnh
+  băng Tang_1/PhongKhach/Dem2/BanThoVong_Dem2/VongHoaTang_2/VongHoaTang_2_BangChu: 1 mảnh
+  băng Tang_1/PhongKhach/Dem2/BanThoVong_Dem2/VongHoaTang_2/VongHoaTang_2_DuoiBang: 2 mảnh
+  băng Tang_1/PhongKhach/Dem3/BanThoVong_Dem3/VongHoaTang_1/VongHoaTang_1_BangChu: 1 mảnh
+  băng Tang_1/PhongKhach/Dem3/BanThoVong_Dem3/VongHoaTang_1/VongHoaTang_1_DuoiBang: 4 mảnh
+  băng Tang_1/PhongKhach/Dem3/BanThoVong_Dem3/VongHoaTang_2/VongHoaTang_2_BangChu: 1 mảnh
+  băng Tang_1/PhongKhach/Dem3/BanThoVong_Dem3/VongHoaTang_2/VongHoaTang_2_DuoiBang: 2 mảnh
+băng vòng hoa: 13 lưới
+rạp: z -5.59…-0.91 → -5.49…-1.46
+đèn hầm: bỏ 20 tam giác xích dưới bóng (y < -0.56); nguồn sáng → (-2.00, -0.51, 13.60)
+bóng BongChieu_Ham: y 2.62, trần 3.60
+gói hàng: dựng lại gói giấy dầu 34×25×11 cm tại (5,00 · 0 · 0,45)
+  gấu: mảnh 152 đỉnh, tâm (5.943, 4.049, 8.705), cách 0.4 cm
+  gấu: mảnh 148 đỉnh, tâm (5.926, 4.174, 8.752), cách 0.5 cm
+  gấu: mảnh 130 đỉnh, tâm (5.943, 4.164, 8.705), cách 0.0 cm
+  gấu: mảnh 114 đỉnh, tâm (5.950, 4.164, 8.686), cách 0.1 cm
+  gấu: mảnh 130 đỉnh, tâm (5.875, 4.229, 8.744), cách 0.3 cm
+  gấu: mảnh 130 đỉnh, tâm (5.969, 4.229, 8.778), cách 0.4 cm
+  gấu: mảnh 114 đỉnh, tâm (5.966, 4.189, 8.713), cách 0.5 cm
+  gấu: mảnh 114 đỉnh, tâm (5.919, 4.189, 8.696), cách 0.5 cm
+  gấu: mảnh 130 đỉnh, tâm (5.993, 3.969, 8.712), cách 0.8 cm
+  gấu: mảnh 130 đỉnh, tâm (5.899, 3.969, 8.678), cách 0.8 cm
+  gấu: mảnh 146 đỉnh, tâm (6.023, 4.069, 8.776), cách 1.1 cm
+  gấu: mảnh 146 đỉnh, tâm (5.835, 4.069, 8.708), cách 1.1 cm
+gấu bông: 13 mảnh, kéo 10
+va chạm thân tủ đứng hành lang T2
+va chạm vòng hoa SanTruoc/Dem1/VongHoa_Tuoi
+va chạm vòng hoa SanTruoc/Dem1/VongHoa_Tuoi
+va chạm vòng hoa SanTruoc/Dem1/VongHoa_Tuoi
+va chạm vòng hoa SanTruoc/Dem2/VongHoa_Heo
+va chạm vòng hoa SanTruoc/Dem2/VongHoa_Heo
+va chạm vòng hoa SanTruoc/Dem2/VongHoa_Heo
+va chạm vòng hoa SanTruoc/Dem3/VongHoa_Heo
+va chạm vòng hoa SanTruoc/Dem3/VongHoa_Heo
+va chạm vòng hoa Tang_1/PhongKhach/VongHoaTang_1
+tủ chén: khoét mặt trước ngăn dưới, bỏ 2 tam giác
+tủ chén: hộc dưới (7.11, 0.06, 14.48) → (7.53, 0.95, 15.42) (đồ trong tủ đã có sẵn từ LocTuMo)
+chén hầm: bỏ năm chén liền, đặt 9 model trạng thái (vỡ/dán/nứt/mẻ)
+lưới thép: texture CuonLuoiThep__0 · màu RGBA(0.769, 0.788, 0.796, 1.000)
+lưới thép kho: 3 renderer sang cắt alpha
+gối Nhím tại (7.33, 3.97, 8.84)
+cổng: nới va chạm CanhCong_Trai (mở)
+cổng: nới va chạm CanhCong_Phai (mở)
+lưới ra file: 112 lưới, 740933 đỉnh → Assets/LOC_House/Meshes_Scene

@@ -34,7 +34,7 @@ public static partial class LocHouseBuilder
         if (lt.phai)
         {
             var n = new GameObject("NhangCam").transform; n.SetParent(lt.phai, false);
-            n.localPosition = new Vector3(-0.021f, 0.004f, 0.05f);   // khe giữa hai lòng bàn tay
+            n.localPosition = new Vector3(0f, -0.021f, 0.05f);   // khe giữa hai lòng bàn tay — [1/11] tư thế Chap: +Y khung tay = phải camera, nên lùi theo Y (trước lùi theo X → hương lệch sang phải)
             for (int i = 0; i < 3; i++)
             {
                 var goc = Quaternion.Euler(-4f + i * 4f, 0, -6f + i * 6f);

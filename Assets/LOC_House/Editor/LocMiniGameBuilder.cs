@@ -89,22 +89,23 @@ public static class LocMiniGameBuilder
         var ban = Tim("Salon_BanNuoc");
         if (ban)
         {
-            var b = Bao(ban); float y = b.max.y; var c = b.center; float ex = b.extents.x * 0.7f, ez = b.extents.z * 0.7f;
-            var rd = new System.Random(5);
-            float R(float a) => (float)(rd.NextDouble() * 2 - 1) * a;
+            var b = Bao(ban); float y = b.max.y; var c = b.center;
+            // [2/11] vị trí cố định, không chồng nhau, chừa khay ấm chén (nửa bàn phía z+, xem LocHouseBuilder PhongKhach) + hộp khăn giấy (mép z−).
+            //  Bàn đặt dọc z (0,55 × 1,0 m); bỏ ấm, gói hạt dưa và 2 chén vì khay ấm chén đã có ấm + chén.
+            Vector3 P(float dx, float dz, float yy) => new Vector3(c.x + dx, yy, c.z + dz);
             var truoc = Nhom("TruocDon_BanNuoc");
-            for (int i = 0; i < 5; i++) Mo(truoc, "MG_ChenTra", new Vector3(c.x + R(ex), y, c.z + R(ez)), R(180));
-            Mo(truoc, "MG_AmTra", new Vector3(c.x + ex * 0.3f, y, c.z - ez * 0.5f), 70);
-            Mo(truoc, "MG_DiaVoHatDua", new Vector3(c.x - ex * 0.4f, y, c.z + ez * 0.3f), R(180));
+            foreach (var (dx, dz) in new[] { (0.03f, -0.33f), (0.06f, -0.15f), (0.20f, -0.13f) }) Mo(truoc, "MG_ChenTra", P(dx, dz, y), 0);
+            Mo(truoc, "MG_DiaVoHatDua", P(-0.14f, -0.25f, y), 0);
             string[] keo = { "MG_GiayKeo_do", "MG_GiayKeo_vang", "MG_GiayKeo_lam" };
-            for (int i = 0; i < 9; i++) Mo(truoc, keo[i % 3], new Vector3(c.x + R(ex), y, c.z + R(ez)), R(180));
-            for (int i = 0; i < 4; i++) Mo(truoc, keo[(i + 1) % 3], new Vector3(c.x + R(ex * 1.6f), b.min.y, c.z + R(ez * 1.6f)), R(180));   // rơi dưới sàn
-            Mo(truoc, "MG_BanhKeoThua", new Vector3(c.x - ex * 0.1f, y, c.z - ez * 0.1f), 12);
-            Mo(truoc, "MG_GoiHatDua", new Vector3(c.x + ex * 0.6f, y, c.z + ez * 0.6f), -25);
+            var keoBan = new[] { (-0.22f, -0.085f, 30f), (-0.07f, -0.085f, -40f), (0.22f, -0.405f, 15f) };
+            for (int i = 0; i < keoBan.Length; i++) Mo(truoc, keo[i % 3], P(keoBan[i].Item1, keoBan[i].Item2, y), keoBan[i].Item3);
+            var keoSan = new[] { (-0.42f, -0.25f), (-0.39f, 0.35f), (0.43f, -0.35f), (0.38f, 0.40f), (-0.37f, -0.65f), (0.33f, 0.65f) };   // rơi dưới sàn quanh bàn
+            for (int i = 0; i < keoSan.Length; i++) Mo(truoc, keo[(i + 1) % 3], P(keoSan[i].Item1, keoSan[i].Item2, b.min.y), 25 + 50 * i);
+            Mo(truoc, "MG_BanhKeoThua", P(-0.18f, -0.44f, y), 12);
             var sau = Nhom("SauDon_BanNuoc");
-            Mo(sau, "MG_HopBanhKeo", new Vector3(c.x - ex * 0.2f, y, c.z + ez * 0.2f), 0);
+            Mo(sau, "MG_HopBanhKeo", P(-0.14f, -0.25f, y), 0);
             // cốc của bố — có ở cả hai trạng thái, không thuộc nhóm nào
-            var cocP = new Vector3(c.x + ex * 0.55f, y, c.z - ez * 0.1f);
+            var cocP = P(0.19f, -0.30f, y);
             var coc = Nhom("CocCuaBo_Up"); coc.transform.position = cocP;
             Mo(coc, "MG_CocUp", cocP, 200);
             Muc(truoc, 1, null, "mg_ban_nuoc"); Muc(sau, 1, "mg_ban_nuoc", null);

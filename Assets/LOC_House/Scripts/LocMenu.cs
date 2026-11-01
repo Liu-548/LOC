@@ -191,7 +191,7 @@ public class LocMenu : MonoBehaviour
         if (man == Man.Khong)
         {
             if (vaoGame && kb != null && kb.escapeKey.wasPressedThisFrame && !dangChup
-                && !LocTui.Mo && LocMiniGame.hienTai == null && !LocFirstPerson.khoa) StartCoroutine(MoTamDung());
+                && !LocTui.Mo && LocMiniGame.hienTai == null && LocFirstPerson.den < 0.99f) StartCoroutine(MoTamDung());   // [1/11] dừng được cả trong cảnh cắt (xe buýt)
             return;
         }
         if (man == Man.TheDem) { LocFirstPerson.khoa = true; LocMa.tamDung = true; return; }
@@ -334,11 +334,13 @@ public class LocMenu : MonoBehaviour
         }
         anhDung.SetPixels32(px); anhDung.filterMode = FilterMode.Bilinear; anhDung.wrapMode = TextureWrapMode.Clamp; anhDung.Apply();
         man = Man.TamDung; chon = 0; dangChup = false;
+        khoaTruoc = LocFirstPerson.khoa;
         Time.timeScale = 0; AudioListener.pause = true; LocFirstPerson.khoa = true;
     }
+    bool khoaTruoc;
     void TiepTuc()
     {
-        man = Man.Khong; Time.timeScale = 1; AudioListener.pause = false; LocFirstPerson.khoa = false;
+        man = Man.Khong; Time.timeScale = 1; AudioListener.pause = false; LocFirstPerson.khoa = khoaTruoc;
         StartCoroutine(KhoaChuot());
     }
     IEnumerator KhoaChuot() { yield return null; Cursor.lockState = CursorLockMode.Locked; }   // đợi qua khung Esc của LocFirstPerson
@@ -393,7 +395,7 @@ public class LocMenu : MonoBehaviour
     static readonly string[] GHI_CHU =
     {
         "Độ sáng: chỉnh tới khi hình bên phải vừa khuất — game cần lúc tối phải thật tối.",
-        "Hiệu ứng, tiếng nền, nhạc menu: thêm khi game có bộ trộn âm thanh.",
+        null,
         "Đi WASD · Nhìn chuột · Tương tác E · Túi đồ Tab · Gợi ý H · Ngồi C · Tạm dừng Esc",
         null,
     };
@@ -602,7 +604,7 @@ public class LocMenu : MonoBehaviour
         Chu(cx, 600, "Tác phẩm hư cấu. Mọi nghi lễ, sách vở, thầy cúng, địa danh trong game đều do hư cấu.", 25, fNghieng, MO, 1, false);
         Chu(cx, 640, "Game phê phán kẻ lợi dụng nỗi sợ của người khác, không phê phán tín ngưỡng.", 25, fNghieng, MO, 1, false);
         float p = Mathf.Clamp01(tCB / 5f);
-        if (p >= 1) Chu(cx, 930, "Nhấn phím bất kỳ để tiếp tục", 22, fThuong, C(110, 104, 96), 1, false, Mathf.Clamp01((tCB - 5f) / 0.6f));
+        if (p >= 1) Chu(cx, 930, "Nhấn phím bất kỳ hoặc click để tiếp tục", 22, fThuong, C(110, 104, 96), 1, false, Mathf.Clamp01((tCB - 5f) / 0.6f));
         O(cx - 120, 962, 240, 2, C(40, 36, 32)); O(cx - 120, 962, 240 * p, 2, C(110, 104, 96));   // thanh mảnh = đồng hồ đếm 5 giây
     }
 

@@ -234,3 +234,22 @@ Assets\LOC_House\Editor\LocThuTay.cs(37,21): error CS0136: A local or parameter 
 Assets\LOC_House\Editor\LocHouseBuilder_V35.cs(132,152): error CS0103: The name 'EditorUtility' does not exist in the current context
 12:40:48 Assembly-CSharp-Editor.dll OK
 13:11:35 Assembly-CSharp.dll OK
+22:58:07 Assembly-CSharp-Editor.dll OK
+22:58:07 Assembly-CSharp.dll OK
+23:03:27 Assembly-CSharp-Editor.dll OK
+23:07:02 Assembly-CSharp-Editor.dll OK
+23:18:01 Assembly-CSharp-Editor.dll OK
+23:18:01 Assembly-CSharp.dll OK
+23:34:35 Assembly-CSharp-Editor.dll OK
+23:34:35 Assembly-CSharp.dll OK
+23:40:04 Assembly-CSharp-Editor.dll OK
+23:54:52 Assembly-CSharp-Editor.dll OK
+23:56:40 Assembly-CSharp-Editor.dll OK
+23:57:33 Assembly-CSharp-Editor.dll OK
+00:16:55 Assembly-CSharp.dll OK
+00:45:48 Assembly-CSharp-Editor.dll OK
+00:53:49 Assembly-CSharp-Editor.dll OK
+01:03:45 Assembly-CSharp-Editor.dll OK
+01:19:01 Assembly-CSharp-Editor.dll OK
+01:21:55 Assembly-CSharp-Editor.dll OK
+01:46:57 Assembly-CSharp-Editor.dll OK

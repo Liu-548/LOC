@@ -58,6 +58,7 @@
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_PhongKhoi.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocKhuPho.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Sua0211.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHinhAnh.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocMiniGameBuilder.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocRadioImport.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Di.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocDoBounds.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocNhimImport.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Sua0111.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_BanTho.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocRaCua.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Nhim.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_RaTang.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocKiemTu.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocSceneAudit.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocCay.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocChiTiet.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocChupTu.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_Tay.cs" />
@@ -91,8 +94,10 @@
     <Compile Include="Assets\LOC_House\Editor\LocThuTay.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocChanDoanDen.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocKiemThang.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocKeNguon.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocDiThu.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocTuMo.cs" />
+    <Compile Include="Assets\LOC_House\Editor\LocBuild.cs" />
     <Compile Include="Assets\LOC_House\Editor\LocHouseBuilder_V35.cs" />
   </ItemGroup>
   <ItemGroup>

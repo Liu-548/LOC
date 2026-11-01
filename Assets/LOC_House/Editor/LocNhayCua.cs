@@ -20,7 +20,7 @@ public static class LocNhayCua
     // ───── quét
     static List<Cap> Find(Bounds? region, IList<MeshRenderer> rends, out List<MeshRenderer> rs)
     {
-        var tris = new List<Tri>(); rs = new List<MeshRenderer>(); var dem = new List<string>(); var moi = new List<bool>();
+        var tris = new List<Tri>(); rs = new List<MeshRenderer>(); var dem = new List<string>(); var moi = new List<bool>(); var nho = new List<bool>();
         foreach (var r in rends)
         {
             if (!r || (region.HasValue && !r.bounds.Intersects(region.Value))) continue;
@@ -29,6 +29,7 @@ public static class LocNhayCua
             if (v.Length == 0) continue;
             var M = r.transform.localToWorldMatrix; int ri = rs.Count; rs.Add(r); dem.Add(Dem(r.transform));
             moi.Add(r.sharedMaterials.Any(x => x && x.name.Contains("__")));   // [29/10] asset nâng cấp: dựng sạch, bỏ qua cặp trong cùng một lưới (lưới dày → O(n²))
+            { var bs = r.bounds.size; nho.Add(moi[ri] && Mathf.Max(bs.x, Mathf.Max(bs.y, bs.z)) < 1.0f); }   // [1/11] đồ nhỏ nâng cấp (chậu cây, lọ…) vẫn nháy trong chính lưới của nó → quét cả nó
             var w = new Vector3[v.Length]; for (int i = 0; i < v.Length; i++) w[i] = M.MultiplyPoint3x4(v[i]);
             for (int s = 0; s < m.subMeshCount; s++)
             {
@@ -41,6 +42,7 @@ public static class LocNhayCua
                     if (ar < 2e-6f) continue;
                     if (region.HasValue) { var tb = new Bounds(a, Vector3.zero); tb.Encapsulate(b); tb.Encapsulate(c); if (!tb.Intersects(region.Value)) continue; }
                     var n = cr / (2 * ar);
+                    if (nho[ri] && n.y < -0.9f) continue;   // [1/11] mặt đáy đồ nhỏ: không ai nhìn thấy, mà ghép cặp thì nặng (mọi đáy cùng nằm trên sàn)
                     tris.Add(new Tri { a = a, b = b, c = c, n = n, d = Vector3.Dot(n, a), area = ar, r = ri, sub = s, ti = i });
                 }
             }
@@ -52,7 +54,7 @@ public static class LocNhayCua
         {
             var n = tris[i].n; var k = (Mathf.RoundToInt(n.x * 40), Mathf.RoundToInt(n.y * 40), Mathf.RoundToInt(n.z * 40), Mathf.RoundToInt(tris[i].d / 0.002f));
             if (!grid.TryGetValue(k, out var l)) grid[k] = l = new List<int>(); l.Add(i);
-            if (!moi[tris[i].r]) { if (!gridCu.TryGetValue(k, out var lc)) gridCu[k] = lc = new List<int>(); lc.Add(i); }
+            if (!moi[tris[i].r] || nho[tris[i].r]) { if (!gridCu.TryGetValue(k, out var lc)) gridCu[k] = lc = new List<int>(); lc.Add(i); }
         }
         var caps = new List<Cap>();
         foreach (var kv in gridCu)
@@ -65,9 +67,9 @@ public static class LocNhayCua
                 {
                     int ia = l1[ii], ib = l2[jj];
                     if (ia == ib) continue;
-                    if (!moi[tris[ib].r] && (dd < 0 || (dd == 0 && ib < ia))) continue;   // cặp cũ–cũ: chỉ đếm một lần (như bản trước)
+                    if ((!moi[tris[ib].r] || nho[tris[ib].r]) && (dd < 0 || (dd == 0 && ib < ia))) continue;   // cặp cũ–cũ: chỉ đếm một lần (như bản trước)
                     Tri A = tris[ia], B = tris[ib];
-                    if (A.r == B.r && moi[A.r]) continue;
+                    if (A.r == B.r && moi[A.r] && !nho[A.r]) continue;
                     if (Vector3.Dot(A.n, B.n) < 0.9998f || Mathf.Abs(A.d - B.d) > LechMax) continue;
                     if (dem[A.r] != null && dem[B.r] != null && dem[A.r] != dem[B.r]) continue;   // bản Đêm 1/2/3 chồng chỗ nhau nhưng chỉ bật 1 bản
                     if (Mathf.Abs(Vector3.Dot(A.n, B.b) - A.d) > LechMax || Mathf.Abs(Vector3.Dot(A.n, B.c) - A.d) > LechMax) continue;

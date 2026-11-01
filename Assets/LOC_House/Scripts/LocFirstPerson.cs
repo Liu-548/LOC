@@ -42,6 +42,14 @@ public class LocFirstPerson : MonoBehaviour
     public static void Reset0() { khoa = false; den = 0; chuGiua = null; phuDe = null; ngoi = false; }
     // nghieng = độc thoại nội tâm (chữ nghiêng, xám nhạt, không tên) — kịch bản 6.2
     public static void PhuDe(string s, float giay, bool nghieng = true) { phuDe = s; phuDeNghieng = nghieng; phuDeHet = Time.time + giay * nhanChu; }
+    // [1/11] click chuột trái = sang câu thoại tiếp (giữ Enter = bỏ qua cả đoạn — LocCotTruyen/LocXeBuyt)
+    public static bool BamTiep() { var m = Mouse.current; return m != null && m.leftButton.wasPressedThisFrame && !LocMenu.DangChe && !LocTui.Mo; }
+    public static System.Collections.IEnumerator Cho(float giay)
+    {
+        for (float t = 0; t < giay; t += Time.deltaTime) { yield return null; if (BamTiep()) { phuDeHet = Time.time; yield break; } }
+    }
+    public static bool GiuBoQua(Keyboard k) => k != null && (k.enterKey.isPressed || k.numpadEnterKey.isPressed) && !LocMenu.DangChe;
+    public const string CHU_BO_QUA = "Click: câu tiếp   ·   Giữ Enter: bỏ qua";
     // [22/10] cài đặt (LocMenu): đảo trục dọc · cỡ chữ phụ đề (ở 1080p) · độ đậm nền sau chữ · hệ số thời gian hiện chữ
     public static bool daoTruc; public static int coChu = 24; public static float nenChu = 0.45f, nhanChu = 1f;
 
@@ -58,9 +66,11 @@ public class LocFirstPerson : MonoBehaviour
         vy = 0;
     }
 
+    int buocTruoc;
     void Start()
     {
         cc = GetComponent<CharacterController>();
+        if (cam && cam.GetComponent<Camera>() is Camera c0) c0.farClipPlane = 250f;   // [1/11] mặc định 1000 → vật nhỏ ở xa nháy (độ chính xác chiều sâu)
         Cursor.lockState = CursorLockMode.Locked;
         matDung = camY = cam ? cam.localPosition.y : 1.52f; ccCao = cc.height; ccTam = cc.center; camX = cam ? cam.localPosition.x : 0;
         // [27/10 chơi thử] "chân không chạm đất": skin 0,08 làm khối người chơi lơ lửng 8 cm và dễ mắc mép bậc → 0,03 (≈ 10% bán kính như Unity khuyên)
@@ -73,6 +83,8 @@ public class LocFirstPerson : MonoBehaviour
         if (k == null || m == null) return;
         if (k.escapeKey.wasPressedThisFrame && !LocTui.Mo) Cursor.lockState = CursorLockMode.None;
         if (m.leftButton.wasPressedThisFrame && !khoa) Cursor.lockState = CursorLockMode.Locked;   // mini game cần chuột tự do
+        // [1/11] ngoài menu / mini game không bao giờ hiện con trỏ hệ thống (đọc sổ thu chi từng hiện con trỏ)
+        if (!LocMenu.DangChe && LocMiniGame.hienTai == null) { Cursor.visible = false; if (LocTui.Mo && Application.isFocused) Cursor.lockState = CursorLockMode.Locked; }
         goiY = "";
         if (khoa || LocTui.Mo || LocXeBuyt.dangChay) return;   // [25/10] trên xe buýt mở đầu: LocXeBuyt tự lo nhìn
 
@@ -121,7 +133,7 @@ public class LocFirstPerson : MonoBehaviour
             {
                 bool lam = d || c || h || tt || (nc && nc.GoiY.Length > 0);
                 if (d) d.Bam(); else if (c) c.Toggle(); else if (h) h.Bam(); else if (nc && nc.GoiY.Length > 0) nc.Bam(); else if (tt) tt.Bam();
-                if (lam && !khoa && !LocTui.Mo) LocTay.Cham(hit.point);   // [29/10] tay Khôi với tới chỗ vừa bấm (cảnh khoá camera tự lo tay riêng)
+                if (lam && !d && !c && !khoa && !LocTui.Mo) LocTay.Cham(hit.point);   // [29/10] tay Khôi với tới chỗ vừa bấm · [1/11] bớt tay: không đưa tay khi mở cửa/cổng (trông như đấm cửa)
             }
         }
 
@@ -136,6 +148,8 @@ public class LocFirstPerson : MonoBehaviour
         float v = new Vector2(cc.velocity.x, cc.velocity.z).magnitude;
         lacW = Mathf.MoveTowards(lacW, cc.isGrounded && v > 0.3f ? 1 : 0, Time.deltaTime * 4f);
         pha += v * Time.deltaTime * 2.7f;
+        int buoc = Mathf.FloorToInt(pha / Mathf.PI);   // [1/11] tiếng bước chân: mỗi nửa chu kỳ lắc đầu là một bước
+        if (buoc != buocTruoc) { buocTruoc = buoc; if (lacW > 0.5f) LocAm.BuocChan(transform.position, ngoi ? 0.12f : k.leftShiftKey.isPressed ? 0.45f : 0.3f); }
         float a = lac * lacW * (ngoi ? 0.5f : 1f);
         cam.localPosition = new Vector3(camX + Mathf.Sin(pha) * 0.006f * a, camY + Mathf.Abs(Mathf.Sin(pha)) * 0.014f * a - 0.007f * a, cam.localPosition.z);
     }

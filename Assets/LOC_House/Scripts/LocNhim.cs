@@ -128,7 +128,9 @@ public class LocNhim : MonoBehaviour
     // ───────── vòng chính
     void Update()
     {
-        PhimThu();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        PhimThu();   // [1/11] phím thử chỉ trong Editor / bản development
+#endif
         if (LocMa.dem != demDangAp && !dangCanh)
         {
             // [27/10] VIEC_CON_LAI 2.7: đổi đêm giữa lúc đang thăm (phím thử) → dừng thoại cũ, không chạy chồng
@@ -152,7 +154,7 @@ public class LocNhim : MonoBehaviour
             }
         }
         trongPhong = vao;
-        if (amTho) amTho.mute = dangCanhKhongTho;
+        if (amTho) amTho.mute = dangCanhKhongTho || (!dangCanh && !NguoiTrongPhong() && (!cua || !cua.DangMo || !player || Vector3.Distance(player.position, cua.transform.position) > 2.5f));   // [1/11] tiếng thở chỉ nghe trong phòng / sát cửa đang mở (trước nghe xuyên tường, xuyên sàn)
         // không lấp ló trong lúc thoại/cảnh (kịch bản 6.3)
         if (dangThoai || dangCanh) { LocMa.tamDung = true; toiDat = true; } else if (toiDat) { LocMa.tamDung = false; toiDat = false; }
     }
@@ -205,8 +207,9 @@ public class LocNhim : MonoBehaviour
         if (nhinW > 0.001f && cam && head)
         {
             var f = head.TransformDirection(faceLocal); var to = (cam.position - head.position).normalized;
-            var q = Quaternion.FromToRotation(f, to); q.ToAngleAxis(out float a, out Vector3 ax);
-            if (a > 180) a -= 360;
+            // [1/11] chỉ quay đầu quanh trục cổ (không nghiêng/ngoẹo đầu — trước đây FromToRotation tự do làm đầu luôn ngoẹo một bên)
+            var ax = (head.position - (head.parent ? head.parent.position : transform.position)).normalized;
+            float a = Vector3.SignedAngle(Vector3.ProjectOnPlane(f, ax), Vector3.ProjectOnPlane(to, ax), ax);
             a = Mathf.Clamp(a, -gocNhin, gocNhin);
             float gat = Time.time < noiHet ? Mathf.Sin(Time.time * 6.3f) * 2.2f : 0f;   // gật khẽ khi nói
             head.rotation = Quaternion.AngleAxis(a * nhinW * Mathf.SmoothStep(0, 1, nhinW), ax) * head.rotation;
@@ -233,7 +236,7 @@ public class LocNhim : MonoBehaviour
             LocFirstPerson.PhuDe(s, d, nghieng); Ghi("thoại  " + s);
             if (ai == "NHÍM") noiHet = Time.time + d * 0.8f;
             float t = 0; bool dut = false;
-            while (t < d) { if (!dangCanh && !NguoiTrongPhong()) { dut = true; break; } t += Time.deltaTime; yield return null; }
+            while (t < d) { if (!dangCanh && !NguoiTrongPhong()) { dut = true; break; } t += Time.deltaTime; yield return null; if (LocFirstPerson.BamTiep()) break; }
             if (!dut) break;
             LocFirstPerson.PhuDe("", 0.01f); noiHet = 0;   // đi ra giữa chừng: dừng, vào lại thì nói lại dòng này
         }
@@ -317,7 +320,7 @@ public class LocNhim : MonoBehaviour
         while (NguoiTrongPhong() || dangCanh) yield return null;
         if (LocTui.Co("khoi_vo")) yield break;
         LocTui.Dat("khoi_vo");
-        if (cua && cua.DangMo) cua.Bam();
+        // [1/11] không tự đóng cửa phòng em sau lưng người chơi nữa
         LocFirstPerson.khoa = true; LocMa.tamDung = true;
         if (khoiTho) am.PlayOneShot(khoiTho, 0.9f);
         var tu = cam.position + cam.forward * 2f; var nen = player.position + player.forward * 0.7f;
@@ -382,7 +385,7 @@ public class LocNhim : MonoBehaviour
         yield return new WaitForSeconds(4f);
         LocFirstPerson.PhuDe("Không sao. Nó ngủ.", 2f); yield return new WaitForSeconds(2.1f);
         LocFirstPerson.PhuDe("Bình tĩnh cái đã.", 2f); yield return new WaitForSeconds(2.4f);
-        if (fp) fp.DatTuThe(choCuaTrong, choCuaTrong + Vector3.up * 1.4f + huongCauThang * 3f);
+        // [1/11] bỏ cú quay phắt ra cầu thang giữa đoạn độc thoại ("tự dưng quay ra sau") — vẫn nhìn em
         LocFirstPerson.PhuDe("Bế nó đi. Đi viện, đi đâu cũng được.", 2.6f); yield return new WaitForSeconds(2.6f + 3f);
         foreach (var c in new[] { "Gọi bác sĩ sang? Khám rồi. Thuốc vẫn uống. Có ăn thua gì.", "...Bố mẹ cũng đi.", "Đi buổi sáng, chiều thì người ta gọi về.", "Sổ bố viết. Ra khỏi cổng là hết.", "Thảo nào bố không cho nó đi viện.", "Ở đây thì còn được. Ở đây, với nó.", "Đến mùng một thôi." })
         { float t = Mathf.Max(2.4f, c.Length * 0.065f); LocFirstPerson.PhuDe(c, t); yield return new WaitForSeconds(t + 0.2f); }

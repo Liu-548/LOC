@@ -20,7 +20,30 @@ public class LocHuCot : MonoBehaviour
     {
         if (ChoChon) { if (LocCotTruyen.I) LocCotTruyen.I.NiemHu(this); return; }
         if (LocMa.dem == 3 && !LocMa.huDaHe && LocMa.I) LocMa.I.HeHu(this);
+        else if (!LocMa.huDaHe && !dangDung) StartCoroutine(DungVao());
         else LocFirstPerson.PhuDe(LocMa.huDaHe ? "Đậy lại rồi. Đừng động vào nữa." : "Đừng động vào.", 2f);
+    }
+
+    // [1/11] "dặn đừng mở hũ mà đụng vào cũng chẳng sao": Đêm 1–2 chạm tay vào hũ → bóng hầm chập chờn, tiếng sột soạt trong hũ, Khôi rụt tay
+    bool dangDung; int lanDung;
+    IEnumerator DungVao()
+    {
+        dangDung = true; lanDung++;
+        var am = Am(); if (sot) am.PlayOneShot(sot, 0.9f);
+        var den = FindObjectsByType<Light>(FindObjectsSortMode.None);
+        var gan = new System.Collections.Generic.List<Light>();
+        foreach (var l in den) if (l.enabled && (l.transform.position - transform.position).sqrMagnitude < 36f) gan.Add(l);
+        var goc = gan.ConvertAll(l => l.intensity);
+        for (float t = 0; t < 1.1f; t += Time.deltaTime)
+        {
+            float k = Random.value < 0.45f ? 0.08f : 1f;
+            for (int i = 0; i < gan.Count; i++) if (gan[i]) gan[i].intensity = goc[i] * k;
+            yield return new WaitForSeconds(0.06f);
+        }
+        for (int i = 0; i < gan.Count; i++) if (gan[i]) gan[i].intensity = goc[i];
+        LocTui.Noi(lanDung == 1 ? new[] { "...", "Mẹ dặn đừng động vào." } : new[] { "Đừng động vào." });
+        yield return new WaitForSeconds(1.5f);
+        dangDung = false;
     }
     public void BamF() { if (ChoChon && LocCotTruyen.I) LocCotTruyen.I.XeNiem(this); }
 

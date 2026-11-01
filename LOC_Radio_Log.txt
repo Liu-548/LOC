@@ -1,0 +1,95 @@
+14:58:26 gắn radio vào RadioCassette_2Loa
+14:58:26 gắn radio vào RadioCassette_2Loa
+15:00:41 gắn radio vào RadioCassette_2Loa
+15:00:41 gắn radio vào RadioCassette_2Loa
+15:02:07 bấm E → bật · nhạc LOC_Radio_Nhac · đang chạy True · âm lượng tổng 1.00 · tạm dừng False
+15:02:07 bấm E → tắt · nhạc LOC_Radio_Nhac · đang chạy False · âm lượng tổng 1.00 · tạm dừng False
+15:02:14 bấm E → tắt · nhạc LOC_Radio_Nhac · đang chạy False · âm lượng tổng 1.00 · tạm dừng False
+15:04:07 gắn radio vào RadioCassette_2Loa
+15:04:07 gắn radio vào RadioCassette_2Loa
+15:07:51 gắn radio vào RadioCassette_2Loa
+15:07:51 gắn radio vào RadioCassette_2Loa
+15:09:21 gắn radio vào RadioCassette_2Loa
+15:09:21 gắn radio vào RadioCassette_2Loa
+15:30:16 gắn radio vào RadioCassette_2Loa
+15:30:16 gắn radio vào RadioCassette_2Loa
+00:14:09 gắn radio vào RadioCassette_2Loa
+00:14:09 gắn radio vào RadioCassette_2Loa
+00:16:59 gắn radio vào RadioCassette_2Loa
+00:16:59 gắn radio vào RadioCassette_2Loa
+00:22:32 gắn radio vào RadioCassette_2Loa
+00:22:32 gắn radio vào RadioCassette_2Loa
+00:23:57 bấm E → bật · nhạc LOC_Radio_Nhac · đang chạy True · âm lượng tổng 1.00 · tạm dừng False
+00:23:57 bấm E → tắt · nhạc LOC_Radio_Nhac · đang chạy False · âm lượng tổng 1.00 · tạm dừng False
+00:24:04 bấm E → tắt · nhạc LOC_Radio_Nhac · đang chạy False · âm lượng tổng 1.00 · tạm dừng False
+00:25:33 gắn radio vào RadioCassette_2Loa
+00:25:33 gắn radio vào RadioCassette_2Loa
+00:27:59 gắn radio vào RadioCassette_2Loa
+00:27:59 gắn radio vào RadioCassette_2Loa
+00:28:41 gắn radio vào RadioCassette_2Loa
+00:46:07 gắn radio vào RadioCassette_2Loa
+00:46:07 gắn radio vào RadioCassette_2Loa
+00:46:10 gắn radio vào RadioCassette_2Loa
+00:57:51 gắn radio vào RadioCassette_2Loa
+00:59:12 gắn radio vào RadioCassette_2Loa
+16:19:32 gắn radio vào RadioCassette_2Loa
+16:19:32 gắn radio vào RadioCassette_2Loa
+16:19:39 gắn radio vào RadioCassette_2Loa
+16:45:37 gắn radio vào RadioCassette_2Loa
+16:45:37 gắn radio vào RadioCassette_2Loa
+16:45:40 gắn radio vào RadioCassette_2Loa
+17:04:11 gắn radio vào RadioCassette_2Loa
+17:04:11 gắn radio vào RadioCassette_2Loa
+17:04:15 gắn radio vào RadioCassette_2Loa
+17:15:46 gắn radio vào RadioCassette_2Loa
+17:16:43 gắn radio vào RadioCassette_2Loa
+17:16:47 gắn radio vào RadioCassette_2Loa
+17:17:09 gắn radio vào RadioCassette_2Loa
+17:17:16 gắn radio vào RadioCassette_2Loa
+17:17:41 gắn radio vào RadioCassette_2Loa
+17:29:48 gắn radio vào RadioCassette_2Loa
+17:29:48 gắn radio vào RadioCassette_2Loa
+17:29:51 gắn radio vào RadioCassette_2Loa
+17:40:47 gắn radio vào RadioCassette_2Loa
+17:41:45 gắn radio vào RadioCassette_2Loa
+17:41:48 gắn radio vào RadioCassette_2Loa
+17:42:11 gắn radio vào RadioCassette_2Loa
+17:42:18 gắn radio vào RadioCassette_2Loa
+17:42:42 gắn radio vào RadioCassette_2Loa
+19:13:19 gắn radio vào RadioCassette_2Loa
+19:13:19 gắn radio vào RadioCassette_2Loa
+22:16:05 gắn radio vào RadioCassette_2Loa
+22:16:05 gắn radio vào RadioCassette_2Loa
+22:16:12 gắn radio vào RadioCassette_2Loa
+22:31:38 gắn radio vào RadioCassette_2Loa
+22:31:38 gắn radio vào RadioCassette_2Loa
+22:33:04 bấm E → bật · nhạc LOC_Radio_Nhac · đang chạy True · âm lượng tổng 1.00 · tạm dừng False
+22:33:04 bấm E → tắt · nhạc LOC_Radio_Nhac · đang chạy False · âm lượng tổng 1.00 · tạm dừng False
+22:33:12 bấm E → tắt · nhạc LOC_Radio_Nhac · đang chạy False · âm lượng tổng 1.00 · tạm dừng False
+22:49:00 gắn radio vào RadioCassette_2Loa
+22:49:00 gắn radio vào RadioCassette_2Loa
+23:17:17 gắn radio vào RadioCassette_2Loa
+23:17:17 gắn radio vào RadioCassette_2Loa
+23:31:38 gắn radio vào RadioCassette_2Loa
+23:31:38 gắn radio vào RadioCassette_2Loa
+11:32:15 gắn radio vào RadioCassette_2Loa
+11:32:15 gắn radio vào RadioCassette_2Loa
+11:32:18 gắn radio vào RadioCassette_2Loa
+11:44:02 gắn radio vào RadioCassette_2Loa
+11:45:07 gắn radio vào RadioCassette_2Loa
+11:45:35 gắn radio vào RadioCassette_2Loa
+12:45:29 gắn radio vào RadioCassette_2Loa
+12:45:29 gắn radio vào RadioCassette_2Loa
+12:46:55 bấm E → bật · nhạc LOC_Radio_Nhac · đang chạy True · âm lượng tổng 1.00 · tạm dừng False
+12:46:55 bấm E → tắt · nhạc LOC_Radio_Nhac · đang chạy False · âm lượng tổng 1.00 · tạm dừng False
+12:47:02 bấm E → tắt · nhạc LOC_Radio_Nhac · đang chạy False · âm lượng tổng 1.00 · tạm dừng False
+12:48:31 gắn radio vào RadioCassette_2Loa
+12:48:31 gắn radio vào RadioCassette_2Loa
+12:52:05 gắn radio vào RadioCassette_2Loa
+15:32:14 gắn radio vào RadioCassette_2Loa
+15:32:14 gắn radio vào RadioCassette_2Loa
+15:32:21 gắn radio vào RadioCassette_2Loa
+00:12:47 gắn radio vào RadioCassette_2Loa
+00:12:47 gắn radio vào RadioCassette_2Loa
+00:17:35 gắn radio vào RadioCassette_2Loa
+00:17:35 gắn radio vào RadioCassette_2Loa

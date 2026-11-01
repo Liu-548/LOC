@@ -119,13 +119,49 @@ public class LocDoor : MonoBehaviour
         {
             if (khiKhoa) { khiKhoa.Bam(); return; }
             if (string.IsNullOrEmpty(canVatPham) || !LocTui.CoMon(canVatPham)) { LocTui.Noi(loiKhoa); return; }
-            khoa = false; LocTui.Noi(loiMoKhoa);
+            if (!dangMoKhoa) StartCoroutine(MoKhoa());   // [1/11] có chìa thì cũng phải tra chìa mở ổ khoá, không bật ra ngay
+            return;
         }
         Toggle();
     }
+
+    static float amCuoi = -1f;
+    // [1/11] tra chìa: nhìn vào ổ khoá → tay với tới → lách cách, bật càng → tháo ổ khoá → mở cửa
+    bool dangMoKhoa;
+    System.Collections.IEnumerator MoKhoa()
+    {
+        dangMoKhoa = true; LocFirstPerson.khoa = true;
+        Transform o = null; foreach (var t in GetComponentsInChildren<Transform>(true)) if (t.name == "KhoaCua_Hasp_2") { o = t; break; }
+        Vector3 diem = o ? o.position : transform.position + Vector3.up * 1.0f;
+        var fp = FindAnyObjectByType<LocFirstPerson>();
+        if (fp && fp.cam)
+        {
+            var tu = fp.cam.position + fp.cam.forward;
+            for (float t = 0; t < 1; t += Time.deltaTime / 0.45f) { fp.DatTuThe(fp.transform.position, Vector3.Lerp(tu, diem, t * t * (3 - 2 * t))); yield return null; }
+        }
+        var tay = StartCoroutine(LocTay.MotTay(diem, 1.3f, "Nhon"));
+        LocAm.Phat("OKhoa_Mo", diem, 1f);
+        yield return new WaitForSeconds(0.85f);
+        if (o) foreach (var t in o.parent.GetComponentsInChildren<Transform>(true)) if (t.name is "KhoaCua_Hasp_2" or "KhoaCua_Hasp_3" or "KhoaCua_Hasp_4") t.gameObject.SetActive(false);   // thân + càng ổ khoá treo
+        yield return tay;
+        LocTui.Noi(string.IsNullOrEmpty(loiMoKhoa) ? "Mở được rồi." : loiMoKhoa);
+        khoa = false; LocFirstPerson.khoa = false; dangMoKhoa = false;
+        yield return new WaitForSeconds(0.3f);
+        Toggle();
+    }
+
     public void Toggle()
     {
         if (khoa) return; Luu(); KiemGoc(); dich = dich < 0.5f ? 1f : 0f; CapNhatChan();
+        if (Application.isPlaying && thoiGian > 0.05f && Time.time - amCuoi > 0.08f)   // cánh bạn cùng ô cửa bật theo thì không kêu chồng   // [1/11] tiếng cửa: kẹt khi mở, bụp khi đóng · cổng/cửa sắt rít kim loại · ngăn kéo/kính lùa nhỏ
+        {
+            amCuoi = Time.time;
+            bool sat = ten.Contains("cổng") || ten.Contains("sắt") || ten.Contains("hầm");
+            var p = transform.position + Vector3.up * 1.0f;
+            if (truot != Vector3.zero || gapX > 0f) LocAm.Phat("Cua_Dong", p, 0.25f, 1.6f);
+            else if (sat) LocAm.Phat("Cong_Sat", p, DangMo ? 0.55f : 0.45f, DangMo ? 1f : 1.15f);
+            else LocAm.Phat(DangMo ? "Cua_Ken" : "Cua_Dong", p, DangMo ? 0.45f : 0.5f, Random.Range(0.9f, 1.08f));
+        }
         if (ban != null) foreach (var d in ban) if (d && !d.khoa && d.DangMo != DangMo) d.Toggle();   // cánh bạn cùng ô cửa
     }
     void CapNhatChan()

@@ -13,7 +13,11 @@ public abstract class LocMiniGame : MonoBehaviour
 {
     public static LocMiniGame hienTai;
     // shortcut: nút "Bỏ qua" + phím B cho giai đoạn phát triển (cả bản build) — đặt false trước khi phát hành
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
     public static bool choBoQua = true;
+#else
+    public static bool choBoQua = false;   // [1/11] bản phát hành: không có nút bỏ qua
+#endif
     public string tieuDe;
     [TextArea] public string goiY;
     public bool choLap;                    // chơi lại được nhiều lần (ráp chén mỗi đêm)

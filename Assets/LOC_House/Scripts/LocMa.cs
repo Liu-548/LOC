@@ -314,7 +314,9 @@ public class LocMa : MonoBehaviour
     void Update()
     {
         if (!cam || !player) return;
-        PhimThu();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+        PhimThu();   // [1/11] F1–F6, Shift+1..5 chỉ trong Editor / bản development
+#endif
         if (dangChet) { if (choR && Keyboard.current != null && Keyboard.current.rKey.wasPressedThisFrame) ChoiLai(); return; }
         if (dem < 2 || tamDung || dangCanh || dangToi || dangDoa || player.position.y < -0.6f) return;
         if (MaBatRadioUpdate()) return;
@@ -368,7 +370,7 @@ public class LocMa : MonoBehaviour
                 Vector3 P = cuaP[i], d = cuaD[i], n = cuaN[i];
                 var ph = pp - P; ph.y = 0; float kc = ph.magnitude;
                 bool hep = cuaHep != null && i < cuaHep.Length && cuaHep[i];
-                if (kc < (hep ? 3f : 4f) || kc > 14f || Mathf.Abs(pp.y - P.y) > 1.2f || Vector3.Dot(ph, n) < (hep ? 0.08f : 0.3f) * kc) { lyDoLo = $"kc {kc:0.0} dy {pp.y - P.y:0.0} dot {Vector3.Dot(ph, n) / Mathf.Max(kc, 0.01f):0.00}"; continue; }
+                if (kc < (hep ? 2.2f : 2.6f) || kc > 14f || Mathf.Abs(pp.y - P.y) > 1.2f || Vector3.Dot(ph, n) < (hep ? 0.08f : 0.3f) * kc) { lyDoLo = $"kc {kc:0.0} dy {pp.y - P.y:0.0} dot {Vector3.Dot(ph, n) / Mathf.Max(kc, 0.01f):0.00}"; continue; }
                 foreach (var k in new[] { LO_DAU })   // [4/10] bỏ kiểu chỉ ló bàn tay
                 {
                     var b = bong[k]; if (b == null || (ep >= 0 && ep != k)) continue;
