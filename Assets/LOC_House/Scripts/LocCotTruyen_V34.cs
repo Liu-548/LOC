@@ -411,19 +411,99 @@ public partial class LocCotTruyen
             fp.DatTuThe(dung + Vector3.down * (fp.cam ? fp.cam.localPosition.y : 1.52f), b.center);
             var den = new GameObject("Ket_DenBanThoHam").AddComponent<Light>(); den.type = LightType.Point; den.range = 2.4f; den.intensity = 1.1f; den.color = new Color(1f, 0.6f, 0.3f);
             den.transform.position = b.center + Vector3.up * 0.9f;
+            bool duongC = LocTui.Co("chon_niem") && !LocTui.Co("doc:sach_gia_le");   // Bad (c): cái hũ đã đưa qua cửa ngách
+            var hu = duongC ? FindAnyObjectByType<LocHuCot>() : null;
+            if (hu) foreach (var r in (hu.than ? hu.than : hu.transform).GetComponentsInChildren<Renderer>()) r.enabled = false;
             yield return Den(1, 0, 1.0f);
             yield return new WaitForSeconds(1.6f);
             ChenHam(LocTui.Co("dan_chen"), false, true);
             if (LocMa.I && LocMa.I.chenVo) AudioSource.PlayClipAtPoint(LocMa.I.chenVo, b.center, 1f);
             yield return new WaitForSeconds(2.4f);
+            if (hu) yield return ChoHuTrong(hu, den);   // [02/11] walkthrough Bad (c): khung hầm, chỗ cái hũ trống, vòng bụi tròn
             yield return Den(0, 1, 0.8f);
             Destroy(den.gameObject);
         }
         LocFirstPerson.chuGiua = "Bốn năm sau.";
         yield return new WaitForSeconds(3f);
+        LocFirstPerson.chuGiua = null;
+        if (chen && fp) yield return BonNamSau(chen.transform);   // [02/11] cảnh thật: Khôi rót nước mỗi sáng, chén bốn nứt dài thêm
+        LocFirstPerson.den = 1;
         LocFirstPerson.chuGiua = "Anh đã ở trong căn nhà này bốn năm.";
         yield return new WaitForSeconds(6f);
         VeMenu();
+    }
+
+    // khối hình đơn giản cho các cảnh kết (không va chạm, không đổ bóng, vật liệu Lit một màu lấy theo vật liệu sẵn có trong cảnh)
+    static Material vlKhoiGoc;
+    static GameObject Khoi(Transform cha, string ten, PrimitiveType kieu, Vector3 p, Vector3 co, Color mau)
+    {
+        var g = GameObject.CreatePrimitive(kieu); g.name = ten;
+        var col = g.GetComponent<Collider>(); if (col) DestroyImmediate(col);
+        g.transform.SetParent(cha, false); g.transform.position = p; g.transform.localScale = co;
+        var r = g.GetComponent<Renderer>();
+        if (!vlKhoiGoc) { var sh = Shader.Find("Universal Render Pipeline/Lit"); if (sh) vlKhoiGoc = new Material(sh); }
+        if (vlKhoiGoc) { r.sharedMaterial = vlKhoiGoc; var mpb = new MaterialPropertyBlock(); mpb.SetColor("_BaseColor", mau); r.SetPropertyBlock(mpb); }
+        r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        return g;
+    }
+
+    // Bad (c): dưới gầm bàn thờ hầm, chỗ cái hũ để mười ba năm giờ trống — một vòng sạch giữa lớp bụi
+    IEnumerator ChoHuTrong(LocHuCot hu, Light den)
+    {
+        var goc = hu.than ? hu.than : hu.transform;
+        var b = BaoV(goc);
+        float R = Mathf.Clamp(Mathf.Max(b.extents.x, b.extents.z), 0.08f, 0.3f), san = b.min.y;
+        var cha = new GameObject("Ket_ChoHuTrong").transform;
+        var bui = Khoi(cha, "Bui", PrimitiveType.Cylinder, new Vector3(b.center.x, san + 0.002f, b.center.z), new Vector3(R * 2f + 0.26f, 0.001f, R * 2f + 0.26f), new Color(0.42f, 0.39f, 0.34f));
+        var sach = Khoi(cha, "VongSach", PrimitiveType.Cylinder, new Vector3(b.center.x, san + 0.004f, b.center.z), new Vector3(R * 2f, 0.001f, R * 2f), new Color(0.13f, 0.12f, 0.11f));
+        var ra = Vector3.ProjectOnPlane(fp.transform.position - b.center, Vector3.up); ra = ra.sqrMagnitude > 1e-4f ? ra.normalized : Vector3.forward;
+        var mat = b.center + ra * 0.75f + Vector3.up * 0.45f;
+        yield return Den(0, 1, 0.5f);
+        fp.cam.SetPositionAndRotation(mat, Quaternion.LookRotation(new Vector3(b.center.x, san, b.center.z) - mat, Vector3.up));
+        if (den) den.transform.position = b.center + Vector3.up * 0.6f + ra * 0.3f;
+        yield return Den(1, 0, 0.6f);
+        yield return new WaitForSeconds(2.6f);
+        yield return Den(0, 1, 0.6f);
+        Destroy(cha.gameObject);
+    }
+
+    // "bốn năm sau": buổi sáng dưới hầm, tay Khôi rót nước vào cái chén thứ tư — vết nứt trên chén đã dài thêm
+    IEnumerator BonNamSau(Transform boChen)
+    {
+        var tt = TimV("ChenHam_TrangThai");
+        var c4 = tt ? tt.Find("Chen4") : null;
+        var bc = c4 && c4.gameObject.activeInHierarchy ? BaoV(c4) : BaoV(boChen);
+        var tam = bc.center;
+        var ra = Vector3.ProjectOnPlane(fp.transform.position - tam, Vector3.up); ra = ra.sqrMagnitude > 1e-4f ? ra.normalized : Vector3.forward;
+        var cha = new GameObject("Ket_BonNamSau").transform;
+        if (c4 && c4.gameObject.activeInHierarchy)
+        {
+            // vết nứt dài thêm: đường gãy khúc tối trên thành chén phía người nhìn, từ miệng xuống gần đáy
+            float r = Mathf.Max(bc.extents.x, bc.extents.z) * 0.98f, h = bc.size.y;
+            var phai = Vector3.Cross(Vector3.up, ra);
+            var diem = new[] { 0.97f, 0.74f, 0.52f, 0.28f, 0.1f };
+            var lech = new[] { 0f, 0.012f, -0.006f, 0.01f, 0.002f };
+            for (int i = 0; i + 1 < diem.Length; i++)
+            {
+                var a = tam + ra * r + phai * lech[i] + Vector3.up * (bc.min.y - tam.y + h * diem[i]);
+                var bb = tam + ra * r + phai * lech[i + 1] + Vector3.up * (bc.min.y - tam.y + h * diem[i + 1]);
+                var g = Khoi(cha, "VetNut", PrimitiveType.Cube, (a + bb) / 2f, new Vector3(0.0018f, Vector3.Distance(a, bb), 0.0018f), new Color(0.05f, 0.04f, 0.035f));
+                g.transform.rotation = Quaternion.FromToRotation(Vector3.up, bb - a);
+            }
+        }
+        var den = new GameObject("Ket_DenSang").AddComponent<Light>(); den.transform.SetParent(cha, false);
+        den.type = LightType.Point; den.range = 2.2f; den.intensity = 0.9f; den.color = new Color(0.95f, 0.85f, 0.7f);
+        den.transform.position = tam + Vector3.up * 0.9f + ra * 0.4f;
+        var mat = tam + ra * 0.42f + Vector3.up * 0.3f;
+        fp.cam.SetPositionAndRotation(mat, Quaternion.LookRotation(tam - mat, Vector3.up));
+        yield return Den(1, 0, 1.0f);
+        yield return new WaitForSeconds(0.6f);
+        var bn = GetComponent<LocBanNgay>();
+        if (bn && bn.rotTra) AudioSource.PlayClipAtPoint(bn.rotTra, tam, 0.6f);
+        if (LocTay.I) yield return LocTay.RotTra(new Vector3(tam.x, bc.max.y, tam.z), 2.4f); else yield return new WaitForSeconds(2.4f);
+        yield return new WaitForSeconds(1.2f);
+        yield return Den(0, 1, 1.0f);
+        Destroy(cha.gameObject);
     }
 
     IEnumerator KetEvil()
