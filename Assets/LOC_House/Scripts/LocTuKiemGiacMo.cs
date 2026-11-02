@@ -96,13 +96,17 @@ public class LocTuKiemGiacMo : MonoBehaviour
         }
         LocGiacMo.bot = LocGiacMo.Bot.Ne;
         ChupLai();
+        int tb0 = LocThongBao.soLanHien;
         ct.DiNguNgay();
         a = Time.time; while (!LocGiacMo.dangMo && Time.time - a < 6f) yield return null;
         Kt(LocGiacMo.dangMo, "bấm Đi ngủ → vào mơ");
         a = Time.time; while (LocGiacMo.dangMo && Time.time - a < 180f) yield return null;
         KiemTraLai("nối mạch");
         yield return new WaitForSeconds(1.2f); yield return Chup("4_tinh_day");
+        a = Time.time; while (!LocThongBao.DangHien && LocMa.dem == 2 && Time.time - a < 30f) yield return null;
+        if (LocThongBao.DangHien) { yield return new WaitForSeconds(1f); yield return Chup("4_thong_bao_ngay_moi"); }
         a = Time.time; while (LocMa.dem == 2 && Time.time - a < 60f) yield return null;
+        Kt(LocThongBao.soLanHien == tb0 + 1, "tỉnh dậy → hiện thông báo \"Sáng hôm sau\" (tự tắt sau ~3 s)");
         Kt(LocMa.dem == 3, "tỉnh dậy → hết Đêm 2 → sang Đêm 3");
         Kt(LocTui.Co("mo_2_xong") && LocTui.Co("mo2_thoat") && !LocTui.Co("mo2_bi_bat"), "cờ: mo_2_xong + mo2_thoat");
         a = Time.time; while ((LocFirstPerson.khoa || LocFirstPerson.den > 0.01f) && Time.time - a < 30f) yield return null;
@@ -117,7 +121,7 @@ public class LocTuKiemGiacMo : MonoBehaviour
     }
 
     // ── môi trường trước khi mơ → so ngay lúc mơ vừa xong (trước khi cảnh tỉnh dậy / ban ngày đổi gì thêm)
-    AudioSource thuAm;
+    AudioSource thuAm; Color? mauTuong;
     bool fog0; float fogD0; Color amb0; UnityEngine.Rendering.AmbientMode ambM0; int troi0; CameraClearFlags xoa0; float xa0; Vector3 camLP0;
     void ChupLai()
     {
@@ -145,11 +149,25 @@ public class LocTuKiemGiacMo : MonoBehaviour
         ct.StartCoroutine((IEnumerator)typeof(LocCotTruyen).GetMethod("DiNguThu", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(ct, null));
         float a = Time.time; while (!LocGiacMo.dangMo && Time.time - a < 6f) yield return null;
         Kt(LocGiacMo.dangMo, ten + ": vào mơ");
-        var goc = GameObject.Find("LOC_GiacMo");
+        // cảnh mơ nạp chồng mất vài khung → chờ hành lang dựng xong
+        GameObject goc = null; float b0 = Time.time;
+        while (Time.time - b0 < 15f) { goc = GameObject.Find("LOC_GiacMo"); if (goc && goc.GetComponentsInChildren<Renderer>().Length > 300) break; yield return null; }
         if (goc)
         {
             int khoi = goc.GetComponentsInChildren<Renderer>().Length;
             Kt(khoi > 300, $"{ten}: hành lang dựng xong ({khoi} khối hình)");
+        }
+        yield return null;
+        var cm = UnityEngine.SceneManagement.SceneManager.GetSceneByName(LocGiacMo.TEN_CANH);
+        Kt(cm.IsValid() && cm.isLoaded && goc && goc.scene == cm, ten + ": hành lang nằm trong cảnh riêng " + LocGiacMo.TEN_CANH);
+        Kt(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == LocGiacMo.TEN_CANH, ten + ": cảnh mơ là cảnh chính (dùng ánh sáng riêng)");
+        // màu tường lần này phải bằng lần trước (lỗi cũ: mỗi lần mơ tối thêm ~40%)
+        var tuong = goc ? goc.transform.Find("Tuong_0") : null;
+        if (tuong && tuong.GetComponent<Renderer>().sharedMaterial.HasProperty("_BaseColor"))
+        {
+            var mau = tuong.GetComponent<Renderer>().sharedMaterial.GetColor("_BaseColor");
+            if (mauTuong.HasValue) Kt(Mathf.Abs(mau.r - mauTuong.Value.r) < 0.01f && Mathf.Abs(mau.g - mauTuong.Value.g) < 0.01f, $"{ten}: tường không tối hơn lần trước ({mauTuong.Value.r:0.000} → {mau.r:0.000})");
+            mauTuong = mau;
         }
         yield return new WaitForSeconds(2.5f); yield return Chup(ten + "_mo_dau");
         yield return new WaitForSeconds(3.5f); yield return Chup(ten + "_quay_lai_thay_ma");
@@ -172,6 +190,8 @@ public class LocTuKiemGiacMo : MonoBehaviour
         a = Time.time; while ((LocFirstPerson.khoa || LocFirstPerson.den > 0.01f) && Time.time - a < 20f) yield return null;
         Kt(!LocFirstPerson.khoa, ten + ": tỉnh dậy xong, trả điều khiển");
         Kt(!GameObject.Find("LOC_GiacMo"), ten + ": đã xoá hành lang");
+        Kt(!UnityEngine.SceneManagement.SceneManager.GetSceneByName(LocGiacMo.TEN_CANH).isLoaded, ten + ": đã gỡ cảnh mơ");
+        Kt(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != LocGiacMo.TEN_CANH, ten + ": cảnh nhà là cảnh chính lại");
         var nguoi = FindAnyObjectByType<LocFirstPerson>();
         if (nguoi) Kt(nguoi.GetComponent<CharacterController>().enabled, ten + ": khối va chạm người chơi bật lại");
         if (nguoi && nguoi.cam) Kt((nguoi.cam.localPosition - camLP0).sqrMagnitude < 1e-4f, ten + ": mắt về đúng chỗ trên người chơi (không lệch sau cảnh tỉnh dậy)");
