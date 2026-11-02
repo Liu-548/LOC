@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 //  giữ hương (giu_huong_2) → cảnh nửa tỉnh ở cửa phòng Nhím ("Còn. Ngủ đi.") → sáng lại, "Ngủ thôi." (nua_tinh_2)
 //  → về phòng Khôi, [E] Đi ngủ ở GiuongDon_Khoi → GIẤC MƠ (LocGiacMo) → bật dậy trên giường → hết đêm (cảnh ban ngày → Đêm 3).
 //  Cờ: mo_2_xong + mo2_thoat | mo2_bi_bat (không đổi gì về sau — GM-10).
-//  Phím thử (Editor): 8 = vào mơ ngay rồi tỉnh dậy, ở lại đêm hiện tại (để chạy lại nhiều lần).
+//  Phím thử (Editor): 8 ở Đêm 2 = đúng mạch thật (mơ → tỉnh → "Sáng hôm sau" → Đêm 3) · Shift + 8 = chỉ thử giấc mơ, ở lại đêm hiện tại.
 public partial class LocCotTruyen
 {
     LocVatTam choNgu;
@@ -99,9 +99,12 @@ public partial class LocCotTruyen
         {
             if (denCu && ct) ct.Dat(true);
             yield return Den(1, 0, 0.8f);
+            LocFirstPerson.PhuDe($"[thử] Giấc mơ xong — vẫn ở Đêm {LocMa.dem}. (Ở Đêm 2 bấm 8 không giữ Shift để đi đúng mạch sang Đêm 3.)", 3.5f, false);
             LocFirstPerson.khoa = false; LocMa.tamDung = false; dangCanh = false;
             yield break;
         }
+        // [02/11] thông báo qua ngày mới: click hoặc chờ ~3 s
+        yield return LocThongBao.NgayMoi("SÁNG HÔM SAU", "Đêm thứ hai đã qua.", LocMenu.NgayDai(3));
         dangCanh = false;
         yield return HetDem();   // nua_tinh_2 đã có → HetDem bỏ cảnh nửa tỉnh, màn đang đen → thẳng sang cảnh ban ngày
     }
@@ -188,8 +191,13 @@ public partial class LocCotTruyen
     void PhimThuGiacMo(Keyboard k)
     {
 #if UNITY_EDITOR
-        if (k != null && k.digit8Key.wasPressedThisFrame && !k.shiftKey.isPressed && !LocFirstPerson.khoa && !LocMenu.DangChe && !LocTui.Mo && !LocGiacMo.dangMo)
-            StartCoroutine(DiNguThu());   // [02/11] thử: phím 8 = vào giấc mơ ngay (xong thì tỉnh dậy trên giường, ở lại đêm hiện tại)
+        // [02/11] phím 8 ở Đêm 2 = đúng mạch thật: mơ → tỉnh dậy → "Sáng hôm sau" → cảnh đưa tang → Đêm 3
+        //         Shift + 8 (hoặc 8 ở đêm khác) = chỉ thử giấc mơ: tỉnh dậy rồi ở lại đêm đang chơi
+        if (k != null && k.digit8Key.wasPressedThisFrame && !LocFirstPerson.khoa && !LocMenu.DangChe && !LocTui.Mo && !LocGiacMo.dangMo)
+        {
+            if (LocMa.dem == 2 && !k.shiftKey.isPressed) { LocTui.Dat("giu_huong_2"); LocTui.Dat("nua_tinh_2"); StartCoroutine(DiNgu(false)); }
+            else StartCoroutine(DiNguThu());
+        }
 #endif
     }
 }

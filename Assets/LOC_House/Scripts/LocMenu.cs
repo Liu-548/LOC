@@ -38,6 +38,7 @@ public class LocMenu : MonoBehaviour
     static readonly string[] NGAY = { "", "6/8/2002", "7/8/2002", "8/8/2002" };
     static readonly string[] NGAY_DAI = { "", "6 tháng 8 năm 2002", "7 tháng 8 năm 2002", "8 tháng 8 năm 2002" };
     static readonly string[] KET = { "good", "death", "bad", "evil" };
+    public static string NgayDai(int d) => NGAY_DAI[Mathf.Clamp(d, 0, 3)];   // [02/11] thông báo "sáng hôm sau" sau giấc mơ (LocThongBao)
     static readonly string[] KET_NHOM = { "GOOD", "DEATH", "BAD", "EVIL" };
     static readonly string[] KET_TEN = { "Tiễn", "Nhà này còn một cái chén", "Mùng một", "Cháu khá hơn bố cháu" };
     static readonly string[] KET_GOI_Y =
