@@ -174,6 +174,7 @@ public class LocGiacMo : MonoBehaviour
     // ═════════════════════════ môi trường: tắt sáng nhà, sương đen
     float tBo;   // đang giữ Enter để bỏ qua
     readonly List<AudioSource> amNha = new();   // tiếng trong nhà đang phát (mưa trên mái, tủ lạnh, đồng hồ, radio…) — tạm dừng suốt giấc mơ
+    Camera mayQuay; CameraClearFlags xoa0; Color nen0; float xa0;
     Color amb0, fog0; bool fogBat0; float fogD0; FogMode fogM0; UnityEngine.Rendering.AmbientMode ambM0; Material sky0; readonly List<Light> mat0 = new();
     void ChupMoiTruong()
     {
@@ -184,6 +185,9 @@ public class LocGiacMo : MonoBehaviour
         RenderSettings.fog = true; RenderSettings.fogMode = FogMode.ExponentialSquared; RenderSettings.fogDensity = 0.055f; RenderSettings.fogColor = new Color(0.008f, 0.008f, 0.01f);
         foreach (var l in FindObjectsByType<Light>(FindObjectsSortMode.None)) if (l.type == LightType.Directional && l.enabled) { mat0.Add(l); l.enabled = false; }
         foreach (var a in FindObjectsByType<AudioSource>(FindObjectsSortMode.None)) if (a.isPlaying && !a.transform.IsChildOf(transform)) { a.Pause(); amNha.Add(a); }
+        // máy quay: nền đen đặc, nhìn xa 70 m — sương đen đã nuốt hết từ ~40 m, khỏi vẽ cả hành lang 240 m sau các bức tường
+        mayQuay = cam ? cam.GetComponent<Camera>() : null;
+        if (mayQuay) { xoa0 = mayQuay.clearFlags; nen0 = mayQuay.backgroundColor; xa0 = mayQuay.farClipPlane; mayQuay.clearFlags = CameraClearFlags.SolidColor; mayQuay.backgroundColor = RenderSettings.fogColor; mayQuay.farClipPlane = 70f; }
     }
     void TraMoiTruong()
     {
@@ -191,6 +195,7 @@ public class LocGiacMo : MonoBehaviour
         RenderSettings.ambientLight = amb0; RenderSettings.fogColor = fog0; RenderSettings.fog = fogBat0; RenderSettings.fogDensity = fogD0; RenderSettings.fogMode = fogM0;
         foreach (var l in mat0) if (l) l.enabled = true;
         foreach (var a in amNha) if (a) a.UnPause();
+        if (mayQuay) { mayQuay.clearFlags = xoa0; mayQuay.backgroundColor = nen0; mayQuay.farClipPlane = xa0; }
     }
 
     // ═════════════════════════ hành lang
@@ -766,6 +771,7 @@ public class LocGiacMo : MonoBehaviour
     static Texture2D texVien;
     void OnGUI()
     {
+        GUI.depth = 1;   // vẽ dưới lớp của LocFirstPerson: phụ đề nằm trên viền tối, màn đen phủ lên dấu "!"
         if (!dangMo || Event.current.type != EventType.Repaint || LocMenu.DangChe) return;
         float W = Screen.width, Hh = Screen.height, k = Hh / 1080f;
         if (toiChop > 0) { GUI.color = new Color(0, 0, 0, toiChop / 0.28f * 0.75f); GUI.DrawTexture(new Rect(0, 0, W, Hh), Texture2D.whiteTexture); }
