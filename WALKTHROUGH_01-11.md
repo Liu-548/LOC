@@ -66,15 +66,15 @@ Bắt đầu giữa phòng khách. Từ đêm này **cổng khóa** (*"Không đ
 
 1. **Lên thăm Nhím, thay khăn.** *"Em muốn mẹ."* ✅
 2. **Xuống phòng khách, lại gần điện thoại (< 6 m)** → cuộc gọi không lời. [E] Nhấc máy (tùy chọn) → rè + cái đài. ✅
-3. **Ở trong ~16 m quanh điện thoại, ngoài hầm, ~35 giây sau** → điện thoại reo lại → **[E] Nhấc máy → thầy Đồng.** Xong có **tờ giấy chép lời thầy** trong túi. Không nhấc thì ~55 s sau reo lại. ✅ ⚠️ thoại tạm
-4. **Đọc sổ của bố** (Tab, lật tới bìa sau). Trang 11: *"Hôm đấy chẳng nhớ gì…"* → đóng Tab → **đoạn hoảng loạn**. Từ đây bật **lấp ló** và **khóa mọi mini game sắp xếp**. ✅
+3. **Đọc sổ của bố** (Tab, lật tới bìa sau — mặt trong ghi *"Thầy Đồng — 826 315"*). Trang 11: *"Hôm đấy chẳng nhớ gì…"* → đóng Tab → **đoạn hoảng loạn**. Từ đây bật **lấp ló** và **khóa mọi mini game sắp xếp**. ✅
+4. **[02/11, nhánh `claude/walkthrough-tiep`] Điện thoại phòng khách → [E] Gọi số ở bìa sổ (826 315)** → quay số, chuông chờ → thầy nhấc máy: *"Ông ấy đâu?"* — im bảy giây — *"Nhà còn ai lớn không?"* … *"Không mở hũ."* Xong có **tờ giấy chép lời thầy** trong túi. (Trước đây thầy tự gọi tới trước khi đọc sổ — sai thứ tự v3.3.) ✅ ⚠️ phần dặn dò giữa vẫn là thoại tạm
 5. Gom đồ, không thứ tự:
    - **Lọ keo** — ngăn kéo quầy cửa hàng (căn trái T1). ✅
    - **Chén số ba** — T3, bàn thờ ông bà, giữa nến trái và bát hương. ✅
    - **Bát cháo** — bàn ăn giữa bếp. ✅
 6. **Xuống hầm (bật điện) → [E] Dán chén** (cần keo + chén số ba; mini game ghép mảnh, B bỏ qua). Chén 1–2 lành, chén số ba vào chỗ 3. ✅
 7. **[E] Đặt bát cháo** lên bàn thờ hầm. ✅
-8. **Bàn thờ vong → [E] Thắp nén mới.** Chỉ hiện khi đã: thăm Nhím, hoảng loạn, nghe thầy, dán chén, đặt cháo. ✅
+8. **Bàn thờ vong → [E] Thắp nén mới.** Chỉ hiện khi đã: thăm Nhím, hoảng loạn, gọi thầy, dán chén, đặt cháo. ✅
 9. Cảnh nửa tỉnh (Nhím: *"mai anh còn ở nhà không"* — *"Còn. Ngủ đi."*) → sáng lại, *"Ngủ thôi."* ✅
 10. **[02/11] Về phòng Khôi (ngay cạnh phòng Nhím) → [E] Đi ngủ ở giường** (Khôi kéo tấm nilon ra, tắt đèn; một phút chưa đi ngủ thì *"Khuya lắm rồi. Về phòng mà ngủ."*) → **GIẤC MƠ "Chạy"** (~1 phút 30): ✅ *(nhánh `claude/giac-mo-dem2`, chưa chạy thử trong Unity)*
     - **Giữ W** để chạy, **A / D** đổi làn (3 làn). Khúc rẽ tự rẽ; lối hai bên là lối giả. Chuột chỉ nhìn được ±40°.
@@ -88,7 +88,7 @@ Bắt đầu giữa phòng khách. Từ đêm này **cổng khóa** (*"Không đ
 **Tùy chọn Đêm 2:** rút quần áo sân phơi (trước hoảng loạn) ✅ · chỗ ngồi quanh bàn ăn ✅ · **bát gạo, bát muối, bó mía** nhặt được ✅ nhưng **không dùng vào đâu** ⚠️ · ra cổng: *"Không được…"* ✅ · quay lại phòng Nhím: *"Bật đèn cho em."* ✅
 
 **Chưa làm / lệch Đêm 2:**
-- ⚠️ Thứ tự khác v3.3: kịch bản gọi thầy **sau** đọc sổ + hoảng loạn (lấy số ở bìa sau); bản dựng cho thầy gọi tới bất kỳ lúc nào sau cuộc gọi không lời.
+- ✅ *(02/11)* Thứ tự theo v3.3: đọc sổ + hoảng loạn rồi Khôi **tự gọi** số ở bìa sau.
 - ⚠️ Thoại thầy Đồng và tờ giấy chép lời là **bản tạm**, khác v3.3 (thiếu *"Ông ấy đâu?"*, bảy giây im, *"Nhà còn ai lớn không?"*, đoạn năm cái chén, dòng *"KHÔNG MỞ HŨ"* tách riêng, sơ đồ mâm chín ô).
 - ❌ Mini game **nấu cháo** (v3.3: Khôi tự nấu; bản dựng: bát cháo bác nấu có sẵn).
 - ❌ Mini game **tìm gạo muối / bó mía** có vật nhiễu; mâm cúng Đêm 3 không đòi các món này.
@@ -101,24 +101,24 @@ Bắt đầu giữa phòng khách. Từ đêm này **cổng khóa** (*"Không đ
 
 Bắt đầu giữa phòng khách, linh cữu không còn. **Đồng hồ quả lắc gõ 9 tiếng — từ đây có hạn giờ** (mỗi ~6 phút chơi gõ thêm một giờ, không đếm lúc đang trong cảnh/menu; tới 12 tiếng = **Bad (a)**). Đi thẳng đường chính mất khoảng 10–12 phút, đủ thời gian nếu không lạc.
 
-1. **Gói giấy dầu ngay trong cửa chính → [E] Mở gói hàng** → nhận **bài khấn, hai tờ giấy gói, tờ niêm**. ✅ ⚠️ nội dung tạm
+1. **[02/11] Kiện hàng được giao:** ~6 s sau khi vào đêm, xe máy chạy tới ngoài cổng (đài trên xe mở nhạc), **chuông cổng hai lần**, xe chạy đi → **gói giấy dầu trong cửa chính → [E] Mở gói hàng** → nhận **bài khấn, hai tờ giấy gói, tờ niêm**. ✅ ⚠️ nội dung tạm
 2. (Nên làm) **Thăm Nhím**: *"Đêm qua có ai đứng ở cửa nhìn em…"* → *"Ừ."* Chỉ thăm được **trước khi hé hũ**. ✅
-3. (Tùy chọn) **Phòng bố mẹ → bàn trang điểm → lời nhắn của mẹ.** ✅ ⚠️
+3. **[02/11] BẮT BUỘC: Phòng bố mẹ → bàn trang điểm → lời nhắn của mẹ** (v3.3: chưa đọc thì hũ chỉ là *"[E] Cái hũ"*, chạm vào thì đèn chập chờn, *"Mẹ dặn đừng động vào."*). ✅ ⚠️ nội dung tạm
 4. **Xuống hầm, bật điện → ngồi (C) trước gầm bàn thờ → [E] Hé miệng hũ.** Thấy nhúm tóc buộc chỉ đỏ → **tiếng thét** → cắt sang phòng Nhím mất điện, ma mắt đỏ → đèn sáng lại. **Điểm lưu 1.** ✅
 5. Từ đây **mất điện từng đợt** (60–120 s/lần, tối ~6 s). Lần đầu luôn an toàn, *"Đứng yên. Bố viết thế."* **Từ lần hai: đứng yên hoặc lùi xa đôi mắt đỏ, đừng đi về phía nó.** ✅
 6. *(Quyết định Evil hay Bad c — xem dưới)* **T3 → đứng chính diện ảnh ông bà → [E] Thắp hương → [E] ngăn tủ thờ → lấy quyển sách → mở trong Tab.** Mở ra là tính "đã đọc". **Điểm lưu 2.** ✅
-7. **Xuống hầm → [E] Bày mâm** (mini game; sau: gạo · nhang · muối, trước: mía · cháo · khoai). ✅
+7. **Xuống hầm → [E] Bày mâm** (mini game; sau: gạo · nhang · muối, trước: mía · cháo · khoai). **[02/11] Cần đủ bát gạo, bát muối (phòng khách), bó mía (bếp) trong túi** — thiếu thì *"Mâm còn thiếu …"*. ✅
 8. **Vẫn đứng trong hầm → Tab → bài khấn → lật tới trang cuối** → *"Khấn xong."* (Đọc ngoài hầm hoặc trước khi bày mâm sẽ bị nhắc.) ✅ ⚠️
 9. **[E] Giữ nhang** — 20 giây, giữ Space (hoặc chuột phải) khi có gió, thả ra cho tay hồi. **Nhang tắt = Bad (b).** ✅
 10. *"Nhang cháy hết rồi. Còn cái hũ."* → nhìn hũ: **[E] Niêm hũ  [F] Xé giấy niêm** → **CHỖ RẼ**.
 
 **Chưa làm / lệch Đêm 3:**
 - ❌ **Cảnh két: hai tờ giấy gói đặt cạnh nhau**, lời nhắn rơi ra từ giấy gói cũ, Khôi lật lại trang 10–12, trang 7 — *cú lật quan trọng nhất của game*. Bản dựng: giấy gói đến trong kiện hàng, lời nhắn nằm riêng trên bàn trang điểm với **nội dung tạm** (khác toàn văn v3.3).
-- ❌ Hé hũ **chưa bị khóa sau lời nhắn** (v3.3: chỉ có prompt hé hũ sau khi đọc lời nhắn). Hiện có thể đi thẳng xuống hé.
-- ❌ Kiện hàng: chuông cổng + xe máy + cái đài; gói đang nằm sẵn trong cửa.
+- ✅ *(02/11)* Hé hũ bị khóa tới khi đọc lời nhắn của mẹ.
+- ✅ *(02/11)* Kiện hàng: chuông cổng + xe máy + cái đài (chuông, chuông chờ điện thoại là âm tổng hợp tạm).
 - ❌ Chén số 5 vơi nửa nước khi xuống hầm Đêm 3.
 - ⚠️ Vòng 2 nghi lễ: v3.3 là mini game đọc **năm đoạn theo năm vạch tàn nhang** (±0,6 s); bản dựng chỉ cần lật hết trang. Văn khấn tạm, chưa có đoạn 5 *"ở yên trong hũ"* đúng chữ.
-- ❌ Gợi ý H mục 4–7 theo v3.3 (kiện hàng quen mắt, cái hũ, quyển sách, *"Tiễn người ta đi mà lại khóa người ta lại à?"*). Đang có bản gợi ý riêng.
+- ✅ *(02/11)* Gợi ý H theo v3.3: kiện hàng *"trông quen mắt"* → lời nhắn của mẹ → cái hũ → quyển sách → thiếu đồ mâm → chỗ rẽ, bậc cuối *"Tiễn người ta đi mà lại khóa người ta lại à?"* (câu chữ các bậc giữa là tạm).
 
 ---
 
@@ -129,8 +129,8 @@ Bắt đầu giữa phòng khách, linh cữu không còn. **Đồng hồ quả 
 
 Diễn ra: xé niêm, đốt, mở hũ → **bốn lọn tóc** → bùa trên tường hầm rơi → "Cảm ơn" → sáng hôm sau Nhím ngồi mép giường *"Anh Khôi ơi!"* → chữ *"Mười ba năm, người mang nó tới không cho nó đi."* → điện thoại reo, không ai nhấc.
 
-- ⚠️ Câu "Cảm ơn" đang ghi tên **NHÍM** — kịch bản là giọng con vong, **không tên** (`…:`).
-- ⚠️ Thiếu câu *"KHÔI: Đi đi. Nhà tôi giữ lâu quá rồi."* (kiểm lại trong `LocHuCot.CanhXe`).
+- ✅ *(02/11)* Câu "Cảm ơn" giọng con vong, không tên (`...: Cảm ơn.`).
+- ✅ *(02/11)* Thêm *"KHÔI: Đi đi. Nhà tôi giữ lâu quá rồi."* trước lúc bùa rơi.
 - ❌ Rắc gạo muối theo đường ra (tùy chọn).
 - ❌ Cái hũ bọc vải trắng trong túi cạnh cửa.
 - 🗣 Nhím chỉ có một câu (TL-09).
@@ -157,10 +157,10 @@ Diễn ra: miết niêm → cổng sáng mùng một, ba dòng độc thoại �
 **Phần chung của mọi Bad:** cảnh Nhím ngồi quỳ, đầu gập → giường trống, em đứng góc tường → hầm, **chén 5 vỡ** → *"Bốn năm sau."* → *"Anh đã ở trong căn nhà này bốn năm."*
 
 - ⚠️ Chưa có lựa chọn ở cổng ([E] Đưa hũ / không đưa); cảnh tự chạy.
-- ⚠️ Độc thoại cổng là bản tạm (*"Mùng một. / Sáng rồi. / Không có chuyện gì cả."*); v3.3 là *"Ông ấy bảo đem lên chùa."* hoặc *"Mẹ bảo không được niêm."*.
-- ❌ Đường (a): mở bằng tiếng gõ thứ mười hai rồi im (đang có tiếng gõ, chưa rõ có khớp).
-- ❌ Đường (c): khung hầm **chỗ cái hũ trống, vòng bụi tròn**.
-- ❌ Cảnh "bốn năm sau": Khôi rót nước mỗi sáng, **chén 4 nứt dài thêm** — đang chỉ là chữ.
+- ✅ *(02/11)* Độc thoại cổng v3.3: *"Mùng một."* → *"Mẹ bảo không được niêm."* (đã đọc lời nhắn) / *"Ông ấy bảo đem lên chùa."* (chưa đọc).
+- ✅ *(02/11)* Đường (a): khoá ngay khi giờ thứ 12 gõ, tới tiếng thứ 12 thì nhà im bặt, 3 s sau vào cảnh.
+- ✅ *(02/11)* Đường (c): khung hầm chỗ cái hũ trống, vòng sạch giữa lớp bụi.
+- ✅ *(02/11)* Cảnh "bốn năm sau": buổi sáng dưới hầm, tay Khôi rót nước vào chén thứ tư, vết nứt dài từ miệng xuống gần đáy. *(Model `Prefab/BoChen/ChenNut_Nang.glb` có sẵn mà chưa dùng — muốn thì thêm trạng thái chén vào `LocHouseBuilder_V35`.)*
 
 ### EVIL — "Cháu khá hơn bố cháu" ⚠️
 **Đường đi hiện tại:** đường chung **CÓ mở sách của mẹ** (bước 6) → **[E] Niêm hũ**.
@@ -169,9 +169,9 @@ Diễn ra: cổng sáng → Khôi ở chân cầu thang, *"NHÍM: Anh Khôi ơi.
 
 **Theo v3.3 (chưa làm):**
 - ❌ Ở cổng **không đưa hũ**, tự bê hũ xuống hầm **[E] Đặt hũ xuống**, tay miết lá bùa, độc thoại *"Lộc là thật."*
-- ❌ Người chơi đi được tới chân cầu thang nhưng **khựng ở bậc thứ nhất**, tiếng chén vỡ.
-- ⚠️ Cuộc gọi: v3.3 là *"Cháu giữ nó lại à." / … / "Cháu khá hơn bố cháu." / "Dạ."* — bản dựng đang *"Xong rồi chứ."* (nghĩa ngược: thầy tưởng mọi thứ theo ý mình).
-- ❌ Cảnh năm năm sau: cửa hàng mở lại, bàn thờ hầm bùa mới + **năm chén mới**, hũ niêm mới, **nửa cái đầu lấp ló cuối hành lang**.
+- ✅ *(02/11)* Người chơi đi được tới chân cầu thang, **khựng ở bậc thứ nhất**, tiếng chén vỡ.
+- ✅ *(02/11)* Cuộc gọi đúng chữ v3.3: *"Cháu giữ nó lại à." / … / "Cháu khá hơn bố cháu." / "Dạ."*
+- ✅ *(02/11)* Cảnh năm năm sau: nhà ban ngày, dưới hầm **năm chén mới**, hũ đã niêm, đêm — **nửa cái đầu lấp ló** ở mép cửa sảnh sau. (Chưa có: cửa hàng mở lại, bùa mới.)
 - 🗣 TL-29: bốn câu hỏi còn mở (có cần cờ đọc sách không, hũ niêm có giữ được nó sau mùng một không…).
 
 ---
@@ -180,7 +180,7 @@ Diễn ra: cổng sáng → Khôi ở chân cầu thang, *"NHÍM: Anh Khôi ơi.
 
 | Muốn xem | Cách nhanh nhất |
 |---|---|
-| Good / Bad (c) / Evil | Menu → **Chọn đêm 3** → mở gói hàng → hé hũ → (Evil: thắp hương T3 + mở sách) → bày mâm (B) → đọc khấn trong hầm → giữ nhang (B) → E hoặc F |
+| Good / Bad (c) / Evil | Menu → **Chọn đêm 3** → chờ giao gói (~6 s) → mở gói hàng → **đọc lời nhắn của mẹ** (phòng bố mẹ) → hé hũ → (Evil: thắp hương T3 + mở sách) → bày mâm (B) → đọc khấn trong hầm → giữ nhang (B) → E hoặc F |
 | Bad (b) | Như trên nhưng giữ nhang không bấm gì |
 | Bad (a) | Chọn đêm 3, đứng chờ ~18 phút (hoặc giảm `phutMoiTieng` trong Inspector `LocCotTruyen`) |
 | Death | Chọn đêm 3 → hé hũ → chờ mất điện lần 2 → đi về phía mắt đỏ |
@@ -201,6 +201,6 @@ Sau mỗi kết, menu → **Ending** sẽ ghi nhận.
 | 5 | Vòng đọc khấn theo vạch tàn (thêm một đường vào Bad b) | Bad (b) |
 | 6 | Cảnh "bốn năm sau" thật, chỗ hũ trống ở Bad (c) | Bad |
 | 7 | Good: "Cảm ơn" không tên, câu "Đi đi…", hũ bọc vải | Good |
-| 8 | Nấu cháo, tìm gạo muối/mía; mâm cúng đòi đủ món | Đêm 2–3 |
-| 9 | Tắt nút Bỏ qua (`LocMiniGame.choBoQua = false`) trước khi nộp — đang bật thì Bad (b) không thể xảy ra nếu bấm B | Bad (b) |
+| 8 | ✅ *(02/11)* mâm cúng đòi đủ gạo, muối, mía · ❌ nấu cháo, tìm gạo muối / mía có vật nhiễu | Đêm 2–3 |
+| 9 | ✅ *(02/11)* Menu **LOC → Bản nộp (tắt mọi nút Bỏ qua)** — một công tắc tắt nút B mini game + giữ Enter bỏ qua giấc mơ | Bad (b) |
 | 10 | Chơi tay cả 4 kết theo `kiem-thu-29-10.md` mục D (chưa ai đi bộ thật tới Bad c / Evil) | Tất cả |
