@@ -26,6 +26,8 @@ public partial class LocCotTruyen
     float tGoi2 = -1f, tReoThay;
     bool daNhacKhan, daNhacDocHam, daNhacBayMam, dangKet, daDanChen;
     public bool DangKet => dangKet;   // LocNhim.TatCanh: đang trong phần kết thì giữ màn đen, giữ khoá
+    // [02/11] v3.3: chưa đọc lời nhắn của mẹ thì chưa hé hũ được (chỉ khoá khi lời nhắn có thật trong cảnh — không có thì không chặn)
+    public static bool KhoaHeHu => I && I.vpLoiNhanMe && !LocTui.Co("doc:loi_nhan_me");
 
     // ───── khởi tạo (gọi trong Start, trước ApDem)
     void KhoiTaoV34()
@@ -453,9 +455,13 @@ public partial class LocCotTruyen
         }
         if (d == 3)
         {
-            if (kienHang && !LocTui.Co("mo_kien")) { id = "mo_kien"; bac = new[] { "Có cái gì để ở cửa.", "Cạnh cửa chính." }; return; }
+            // [02/11] gợi ý Đêm 3 theo v3.3: kiện hàng quen mắt → lời nhắn của mẹ → cái hũ → quyển sách → … → "Tiễn người ta đi mà lại khóa người ta lại à?"
+            if (kienHang && !LocTui.Co("mo_kien")) { id = "mo_kien"; bac = new[] { "Có cái gói ai để ở cửa.", "Giấy dầu, buộc dây... trông quen mắt.", "Cạnh cửa chính." }; return; }
+            if (KhoaHeHu && !LocMa.huDaHe) { id = "loi_nhan"; bac = new[] { "Mẹ có để lại gì không.", "Phòng bố mẹ.", "Bàn trang điểm của mẹ." }; return; }
+            if (!LocMa.huDaHe) { id = "he_hu"; bac = new[] { "Cái hũ dưới hầm.", "Mẹ dặn đừng động vào. Nhưng phải xem trong ấy có gì.", "Xuống hầm, ngồi xuống trước gầm bàn thờ." }; return; }
+            if (vpLoiNhanMe && !LocTui.Co("doc:sach_gia_le") && !LocTui.Co("nl_bay_mam")) { id = "sach"; bac = new[] { "Mẹ bảo có gì cứ xem quyển sách.", "Tủ thờ trên tầng ba.", "Thắp hương ông bà trước đã." }; return; }
             if (LocTui.Co("nl_bay_mam") && vpVanKhan && !LocTui.Co("nl_doc_van")) { id = "nl_doc_van"; bac = new[] { "Còn bài khấn.", "Đứng trước bàn thờ dưới hầm mà đọc.", "Mở trong túi, lật tới trang cuối." }; return; }
-            if (LocHuCot.ChoChon) { id = "chon_hu"; bac = new[] { "Còn cái hũ.", "Ông ấy bảo niêm lại.", "Sách của mẹ thì nói khác." }; return; }
+            if (LocHuCot.ChoChon) { id = "chon_hu"; bac = new[] { "Còn cái hũ.", "Ông ấy bảo niêm lại.", "Sách của mẹ thì nói khác.", "Tiễn người ta đi mà lại khóa người ta lại à?" }; return; }
         }
     }
 

@@ -253,7 +253,10 @@ public class LocChoiThu : MonoBehaviour
         var ctHam = T("CongTac_Ham").GetComponent<LocCongTac>();
         Toi(new Vector3(-0.6f, 0.05f, 18.1f), ctHam.transform.position); yield return Cho(0.3f); ctHam.Dat(true);
         Toi(new Vector3(-2.0f, -2.25f, 13.8f), new Vector3(-2.0f, -1.6f, 11.0f)); yield return Cho(1.5f); yield return Chup("ham_dem3");
-        var hu = FindAnyObjectByType<LocHuCot>(); G("hũ: " + hu.GoiY); hu.Bam();
+        var hu = FindAnyObjectByType<LocHuCot>(); G("hũ trước khi đọc lời nhắn của mẹ: " + hu.GoiY + " (phải là \"[E] Cái hũ\")");
+        // [02/11] v3.3: phải đọc lời nhắn của mẹ (phòng bố mẹ) thì mới hé hũ được
+        var ln = V("loi_nhan_me"); if (ln) { LocTui.Doc(ln); yield return Cho(1.5f); yield return Chup("loi_nhan_me"); LocTui.I.DatChe(0); yield return Cho(0.5f); }
+        G("hũ sau khi đọc lời nhắn: " + hu.GoiY); hu.Bam();
         yield return Cho(6); yield return Chup("he_hu_toc");
         yield return ChoDen(() => LocTui.Co("diem_luu_1"), 60, "xong cảnh phòng Nhím + điểm lưu 1");
         yield return Cho(1); yield return Chup("sau_canh_phong_nhim");

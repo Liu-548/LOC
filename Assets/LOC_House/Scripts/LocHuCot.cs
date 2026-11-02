@@ -14,12 +14,14 @@ public class LocHuCot : MonoBehaviour
 
     // [27/10] chỗ rẽ cuối (v3.3): giữ nhang xong → [E] Niêm hũ / [F] Xé giấy niêm. LocCotTruyen quyết kết.
     public static bool ChoChon => LocMa.dem == 3 && LocMa.huDaHe && LocTui.Co("nl_giu_nhang") && !LocTui.Co("da_chon_hu");
-    public string GoiY => ChoChon ? "[E] Niêm hũ        [F] Xé giấy niêm" : LocMa.dem == 3 && !LocMa.huDaHe ? "[E] Hé miệng hũ" : "[E] Cái hũ";
+    // [02/11] v3.3: Đêm 3 chỉ có "[E] Hé miệng hũ" sau khi đã đọc lời nhắn của mẹ (LocCotTruyen.KhoaHeHu) — trước đó hũ như Đêm 1–2
+    static bool ChoHe => LocMa.dem == 3 && !LocMa.huDaHe && !LocCotTruyen.KhoaHeHu;
+    public string GoiY => ChoChon ? "[E] Niêm hũ        [F] Xé giấy niêm" : ChoHe ? "[E] Hé miệng hũ" : "[E] Cái hũ";
 
     public void Bam()
     {
         if (ChoChon) { if (LocCotTruyen.I) LocCotTruyen.I.NiemHu(this); return; }
-        if (LocMa.dem == 3 && !LocMa.huDaHe && LocMa.I) LocMa.I.HeHu(this);
+        if (ChoHe && LocMa.I) LocMa.I.HeHu(this);
         else if (!LocMa.huDaHe && !dangDung) StartCoroutine(DungVao());
         else LocFirstPerson.PhuDe(LocMa.huDaHe ? "Đậy lại rồi. Đừng động vào nữa." : "Đừng động vào.", 2f);
     }
