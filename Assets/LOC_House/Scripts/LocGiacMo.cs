@@ -15,7 +15,7 @@ using UnityEngine.InputSystem;
 public class LocGiacMo : MonoBehaviour
 {
     public static bool dangMo;
-    public static bool choBoQua = true;          // giữ Space 0,8 s để bỏ qua (dev) — TẮT trước khi nộp, như nút B của mini game
+    public static bool choBoQua = true;          // giữ Enter 0,8 s để bỏ qua (như xe buýt / đoạn bác — LocFirstPerson.GiuBoQua) — TẮT trước khi nộp, như nút B của mini game
     public enum Bot { Khong, Ne, KhongNe, DungYen }
     public static Bot bot = Bot.Khong;           // tự kiểm (LocTuKiemGiacMo): máy tự chơi
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset0() { dangMo = false; bot = Bot.Khong; cuoi = null; }
@@ -100,13 +100,13 @@ public class LocGiacMo : MonoBehaviour
         yield return null;
         yield return Intro();
         intro = false;
-        float tBo = 0f;
         while (!ketThuc)
         {
+            if (LocMenu.DangChe) { yield return null; continue; }   // Esc tạm dừng: đứng hình (timeScale 0), không nhận phím đổi làn
             float dt = Time.deltaTime;
             tChase += dt; tgChay += dt;
             var k = Keyboard.current;
-            if (choBoQua && k != null && k.spaceKey.isPressed) { tBo += dt; if (tBo > 0.8f) { ketThoat = true; break; } } else tBo = 0f;
+            if (choBoQua && LocFirstPerson.GiuBoQua(k)) { tBo += dt; if (tBo >= 0.8f) { ketThoat = true; break; } } else tBo = 0f;
             DieuKhien(dt);
             CapNhatMa(dt);
             CapNhatNem(dt);
@@ -171,6 +171,8 @@ public class LocGiacMo : MonoBehaviour
     }
 
     // ═════════════════════════ môi trường: tắt sáng nhà, sương đen
+    float tBo;   // đang giữ Enter để bỏ qua
+    readonly List<AudioSource> amNha = new();   // tiếng trong nhà đang phát (mưa trên mái, tủ lạnh, đồng hồ, radio…) — tạm dừng suốt giấc mơ
     Color amb0, fog0; bool fogBat0; float fogD0; FogMode fogM0; UnityEngine.Rendering.AmbientMode ambM0; Material sky0; readonly List<Light> mat0 = new();
     void ChupMoiTruong()
     {
@@ -180,12 +182,14 @@ public class LocGiacMo : MonoBehaviour
         RenderSettings.ambientLight = new Color(0.025f, 0.024f, 0.028f);
         RenderSettings.fog = true; RenderSettings.fogMode = FogMode.ExponentialSquared; RenderSettings.fogDensity = 0.055f; RenderSettings.fogColor = new Color(0.008f, 0.008f, 0.01f);
         foreach (var l in FindObjectsByType<Light>(FindObjectsSortMode.None)) if (l.type == LightType.Directional && l.enabled) { mat0.Add(l); l.enabled = false; }
+        foreach (var a in FindObjectsByType<AudioSource>(FindObjectsSortMode.None)) if (a.isPlaying && !a.transform.IsChildOf(transform)) { a.Pause(); amNha.Add(a); }
     }
     void TraMoiTruong()
     {
         RenderSettings.ambientMode = ambM0; RenderSettings.skybox = sky0;
         RenderSettings.ambientLight = amb0; RenderSettings.fogColor = fog0; RenderSettings.fog = fogBat0; RenderSettings.fogDensity = fogD0; RenderSettings.fogMode = fogM0;
         foreach (var l in mat0) if (l) l.enabled = true;
+        foreach (var a in amNha) if (a) a.UnPause();
     }
 
     // ═════════════════════════ hành lang
@@ -484,7 +488,7 @@ public class LocGiacMo : MonoBehaviour
         var t = Tiep(s);
         var chan = GOC + Tam(s) + Phai(t) * x;
         fp.transform.SetPositionAndRotation(chan, Quaternion.LookRotation(t));
-        float bob = v > 0.5f ? Mathf.Abs(Mathf.Sin(s * 1.9f)) * 0.045f * (v / tocChay) : 0f;
+        float bob = v > 0.5f ? Mathf.Abs(Mathf.Sin(s * 1.9f)) * 0.045f * (v / tocChay) * LocFirstPerson.lac : 0f;   // theo cài đặt "lắc camera" (0 = tắt)
         var lac = rung > 0 ? Random.insideUnitSphere * rung * 0.05f : Vector3.zero;
         cam.localPosition = new Vector3(0, matCao + bob - 0.02f, 0) + lac;
         cam.localRotation = Quaternion.Euler(pitch + (rung > 0 ? Random.Range(-1f, 1f) * rung * 3f : 0), yawLech, (x - lanDich) * 4f);
@@ -742,7 +746,7 @@ public class LocGiacMo : MonoBehaviour
     static Texture2D texVien;
     void OnGUI()
     {
-        if (!dangMo || Event.current.type != EventType.Repaint) return;
+        if (!dangMo || Event.current.type != EventType.Repaint || LocMenu.DangChe) return;
         float W = Screen.width, Hh = Screen.height, k = Hh / 1080f;
         if (toiChop > 0) { GUI.color = new Color(0, 0, 0, toiChop / 0.28f * 0.75f); GUI.DrawTexture(new Rect(0, 0, W, Hh), Texture2D.whiteTexture); }
         if (soTrung > 0)
@@ -780,6 +784,13 @@ public class LocGiacMo : MonoBehaviour
             var st = new GUIStyle(GUI.skin.label) { font = LocMenu.FontChu(0), fontSize = Mathf.RoundToInt(22 * k), alignment = TextAnchor.MiddleCenter };
             st.normal.textColor = new Color(1, 1, 1, Mathf.Clamp01(tHuongDan) * 0.75f);
             GUI.Label(new Rect(0, Hh * 0.93f, W, 34 * k), "A / D  đổi làn  ·  thấy dấu  !  thì tránh làn đó", st);
+        }
+        if (choBoQua && !intro && !ketThuc)   // giống chữ bỏ qua của LocCotTruyen (góc phải dưới, vạch chạy khi giữ)
+        {
+            var st = new GUIStyle(GUI.skin.label) { font = LocMenu.FontChu(1), fontSize = Mathf.RoundToInt(19 * k), alignment = TextAnchor.LowerRight };
+            st.normal.textColor = new Color(0.75f, 0.72f, 0.66f, 0.3f + 0.5f * Mathf.Clamp01(tBo / 0.8f));
+            GUI.Label(new Rect(0, 0, W - 36 * k, Hh - 30 * k), "Giữ Enter: bỏ qua giấc mơ", st);
+            if (tBo > 0) { float w = 170 * k * Mathf.Clamp01(tBo / 0.8f); GUI.color = new Color(0.75f, 0.72f, 0.66f, 0.7f); GUI.DrawTexture(new Rect(W - 36 * k - w, Hh - 26 * k, w, 2 * k), Texture2D.whiteTexture); GUI.color = Color.white; }
         }
         if (nhieu > 0)
         {
