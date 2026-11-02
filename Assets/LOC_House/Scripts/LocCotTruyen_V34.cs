@@ -251,9 +251,12 @@ public partial class LocCotTruyen
         fp.cam.localPosition = camLP; fp.cam.localRotation = camLR;
         fp.DatTuThe(fp.transform.position, new Vector3(hamPhong.center.x, hamPhong.min.y + 1.4f, hamPhong.min.z - 0.3f));
         yield return Den(1, 0, 0.4f);
+        // [02/11] walkthrough: thiếu câu của Khôi trước khi bùa rơi (kịch bản v3.3)
+        LocFirstPerson.PhuDe("KHÔI: Đi đi. Nhà tôi giữ lâu quá rồi.", 3f, false);
+        yield return new WaitForSeconds(3.4f);
         yield return BuaRoi();
         yield return new WaitForSeconds(1.2f);
-        LocFirstPerson.PhuDe("NHÍM: ...Cảm ơn.", 2.6f, false);
+        LocFirstPerson.PhuDe("...: Cảm ơn.", 2.6f, false);   // [02/11] giọng con vong, KHÔNG tên (v3.3 ghi "…:") — trước ghi nhầm NHÍM
         yield return new WaitForSeconds(3.2f);
         yield return Den(LocFirstPerson.den, 1, 1.4f);
         fp.cam.localPosition = camLP; fp.cam.localRotation = camLR;   // CanhXe để camera ở chỗ hũ
