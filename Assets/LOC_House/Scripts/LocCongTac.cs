@@ -158,7 +158,8 @@ public class LocCongTac : MonoBehaviour
             for (int i = 0; i < ms.Length; i++)
             {
                 tat[i] = ms[i];
-                if (ms[i] && ms[i].HasProperty("_EmissionColor") && ms[i].GetColor("_EmissionColor").maxColorComponent > 0.02f)
+                if (ms[i] && ms[i].HasProperty("_EmissionColor") && ms[i].GetColor("_EmissionColor").maxColorComponent > 0.02f
+                    && !LocDien.KhongAnDien(ms[i]) && !LocDien.CamORieng(ms[i]))   // [03/11] lửa / nhang / nến điện cắm ổ riêng không theo công tắc phòng
                 { var m = new Material(ms[i]) { name = ms[i].name + "_CongTacTat" }; m.SetColor("_EmissionColor", Color.black); m.DisableKeyword("_EMISSION"); tat[i] = m; co = true; }
             }
             if (!co) continue;
