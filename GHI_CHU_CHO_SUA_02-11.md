@@ -48,7 +48,7 @@ Hai cánh **cùng tên "cửa tủ đứng", cùng cha, cách nhau < 3,3 m** th�
 
 ---
 
-## 3. Giấc mơ tối dần sau mỗi lần thử (lỗi của `LocGiacMo`, tìm ra từ video chơi thử 02/11)
+## 3. Giấc mơ tối dần sau mỗi lần thử (lỗi của `LocGiacMo`, tìm ra từ video chơi thử 02/11) — ✅ ĐÃ SỬA (02/11 tối, nhánh `claude/giac-mo-dem2`)
 
 **Triệu chứng:** lần đầu thấy hành lang, vệt đèn trên trần, bóng ma đứng ở cuối; thử lại vài lần (phím 8) thì tường / trần / sàn tối dần, cuối cùng chỉ còn ghế nổi giữa một vùng xanh đen, không thấy vệt đèn, không thấy ma (ma đen đứng trước tường đen).
 
@@ -56,17 +56,17 @@ Hai cánh **cùng tên "cửa tủ đứng", cùng cha, cách nhau < 3,3 m** th�
 
 **Cách sửa:** đặt tên bản chép khác (thêm hậu tố, bỏ qua khi tìm) hoặc giữ bản chép trong biến tĩnh dùng lại; xoá mọi vật liệu tự tạo (`vlTuong`, `vlSan`, `vlTran`, `vlSat`, `vlDen`, `vlDay`, `vlBong`, `vlMa`) trong `DonDep()`. Thêm vào tự kiểm: mơ hai lần liền, so màu `_BaseColor` của tường phải bằng nhau.
 
-## 4. Giấc mơ bị bỏ qua ngay sau chữ "Chạy." (video 02/11)
+## 4. Giấc mơ bị bỏ qua ngay sau chữ "Chạy." (video 02/11) — ✅ ĐÃ SỬA
 
 Trong video, ngay khi hiện "Chạy." thì vạch dưới chữ *"Giữ Enter: bỏ qua giấc mơ"* chạy đầy → giấc mơ bị bỏ qua, tỉnh dậy với câu của nhánh **thoát** (*"Lại cái hành lang đấy."*) — vì thế "không chạy mà chỉ tỉnh dậy". Game nhận phím Enter đang được giữ (bấm Enter, hoặc Enter còn "dính" từ trước khi mơ).
 
 **Cách sửa:** chỉ tính giữ Enter khi Enter được **bấm mới trong lúc mơ** (bỏ qua nếu đã giữ sẵn từ trước), và chỉ cho bỏ qua sau đoạn mở đầu ~2 s.
 
-## 5. Lần đầu bấm 8 cả màn hình màu xanh lơ
+## 5. Lần đầu bấm 8 cả màn hình màu xanh lơ — ✅ ĐÃ SỬA (chờ dịch shader lúc màn còn đen)
 
 Unity Editor đang dịch shader lần đầu (sương kiểu mới, vật liệu Unlit của bóng đèn, khói đen của ma) nên tô tạm màu xanh lơ. Chỉ xảy ra trong Editor, lần đầu. **Cách sửa:** lúc màn còn đen, xoay máy quay một vòng cho mọi thứ được vẽ một lần, chờ `ShaderUtil.anythingCompiling` hết (tối đa ~15 s) rồi mới mở mắt.
 
-## 6. Việc đã hẹn làm cho giấc mơ
+## 6. Việc đã hẹn làm cho giấc mơ — ✅ ĐÃ LÀM (+ tách giấc mơ thành cảnh riêng `Assets/Scenes/LOC_GiacMo_Dem2.unity`)
 
 - Sau khi tỉnh dậy: thông báo **"Sáng hôm sau · 8 tháng 8 năm 2002"** (kiểu thẻ đêm của `LocMenu`), click hoặc chờ ~3 s thì tắt, rồi mới sang cảnh đưa tang.
 - Phím **8** ở Đêm 2 chạy đúng mạch thật (mơ → tỉnh → thông báo ngày mới → Đêm 3); **Shift + 8** giữ cách thử cũ (tỉnh dậy ở lại đêm đang chơi).

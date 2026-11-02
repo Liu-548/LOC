@@ -25,7 +25,7 @@ Viết theo **bản dựng thật** trên `main` (commit `eec7326`, 31/10), đ�
 
 ## Điều khiển
 
-WASD đi · chuột nhìn · **E** tương tác · **F** (chỉ ở chỗ rẽ cuối) · **Tab** túi đồ / đọc giấy (←→ lật trang) · **H** gợi ý · **C** ngồi (với đồ dưới thấp, gầm bàn thờ) · **click** sang câu thoại tiếp · **giữ Enter 0,8 s** bỏ qua đoạn xe buýt / đoạn bác / giấc mơ (từ 1/11 Space là nhảy) · **B** bỏ qua mini game (giai đoạn dev). Phím thử trong Editor: **8** vào giấc mơ ngay (xong tỉnh dậy, ở lại đêm đang chơi) · **9** hết đêm ngay.
+WASD đi · chuột nhìn · **E** tương tác · **F** (chỉ ở chỗ rẽ cuối) · **Tab** túi đồ / đọc giấy (←→ lật trang) · **H** gợi ý · **C** ngồi (với đồ dưới thấp, gầm bàn thờ) · **click** sang câu thoại tiếp · **giữ Enter 0,8 s** bỏ qua đoạn xe buýt / đoạn bác / giấc mơ (từ 1/11 Space là nhảy) · **B** bỏ qua mini game (giai đoạn dev). Phím thử trong Editor: **8** ở Đêm 2 = đi ngủ thật (mơ → tỉnh → "Sáng hôm sau" → Đêm 3) · **Shift + 8** = chỉ thử giấc mơ, tỉnh dậy ở lại đêm đang chơi · **9** hết đêm ngay.
 
 ---
 
@@ -82,7 +82,8 @@ Bắt đầu giữa phòng khách. Từ đêm này **cổng khóa** (*"Không đ
     - **Đứng yên** thì ma áp sát; khi nó sắp tới nơi (< 5 m) mới hiện **"CHẠY ĐI!"** — đầu giấc mơ không có chữ "giữ W". Không chạy tiếp → bị bắt (ngã, tay nó vươn xuống túm cổ áo, giật sát mặt, hét, cắt đen).
     - Ma là **bóng đen không mắt** (mặt và mắt đỏ để dành cho Đêm 3). Giữ Enter 0,8 s để bỏ qua (giai đoạn dev).
     - Tới **cửa sắt** cuối hành lang = thoát (sập cửa, ma đập hai cái, tối, *"Anh Khôi ơi."*).
-    - Thoát hay bị bắt đều **bật dậy trên giường** (*"Lại cái hành lang đấy."* / *"...Mơ. Mơ thôi."*) → cắt cảnh **đưa tang** → Đêm 3. Chỉ lưu cờ `mo2_thoat` / `mo2_bi_bat`.
+    - Thoát hay bị bắt đều **bật dậy trên giường** (*"Lại cái hành lang đấy."* / *"...Mơ. Mơ thôi."*) → thông báo **"SÁNG HÔM SAU · 8 tháng 8 năm 2002"** (click hoặc chờ ~3 s) → cắt cảnh **đưa tang** → Đêm 3. Chỉ lưu cờ `mo2_thoat` / `mo2_bi_bat`.
+    - Giấc mơ là **cảnh riêng** `Assets/Scenes/LOC_GiacMo_Dem2.unity` (nạp chồng lúc vào mơ, gỡ khi xong; sương / ánh nền chỉnh trong Lighting của cảnh đó).
 
 **Tùy chọn Đêm 2:** rút quần áo sân phơi (trước hoảng loạn) ✅ · chỗ ngồi quanh bàn ăn ✅ · **bát gạo, bát muối, bó mía** nhặt được ✅ nhưng **không dùng vào đâu** ⚠️ · ra cổng: *"Không được…"* ✅ · quay lại phòng Nhím: *"Bật đèn cho em."* ✅
 

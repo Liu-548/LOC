@@ -188,5 +188,11 @@ Chèn vào `LocCotTruyen.HetDem()` ngay trước `LocBanNgay.Chay()`. Đêm 3 kh
 
 **Chỉnh nhanh trong Inspector / code:** `LocGiacMo` — `tocChay`, `khoangMa` (8 m), `tocMaKhiDung` (2,2 m/s), `canhBaoKhi` (5 m), `batKhi` (0,8 m), `baoTruoc` (1,5 s); độ dài / khúc rẽ ở mảng `DAI` / `RE`; `LocCotTruyen.biBatLaChet`.
 
+### Sau lượt chơi thử đầu (02/11 tối)
+- Giấc mơ **tách thành cảnh riêng** `Assets/Scenes/LOC_GiacMo_Dem2.unity` (đã thêm vào Build Settings + `LocBuild`): cảnh rỗng, Lighting riêng (sương đen bình phương 0,055, ánh nền phẳng tối, không bầu trời). Vào mơ nạp chồng, đặt làm cảnh chính, dựng hành lang bên trong; mơ xong trả cảnh nhà, gỡ cảnh mơ. Đang mơ mà Chơi lại / Về menu thì nạp cảnh nhà.
+- Sửa: tối dần sau mỗi lần mơ (bản chép vật liệu trùng tên), bỏ qua ngay sau "Chạy." (Enter giữ sẵn), màn xanh lơ lần đầu (chờ dịch shader).
+- Thêm thông báo **"SÁNG HÔM SAU · Đêm thứ hai đã qua. · 8 tháng 8 năm 2002"** sau khi tỉnh (`LocThongBao`, click hoặc ~3 s).
+- Phím **8** ở Đêm 2 đi đúng mạch sang Đêm 3; **Shift + 8** chỉ thử.
+
 **Còn lại:** chạy thử trong Unity + chụp ảnh duyệt (menu **LOC → Tự kiểm giấc mơ (Play)**, kết quả `LOC_KiemTra/GiacMo/`), file âm thanh thật (tên ở trên), giọng Nhím cho câu *"Anh Khôi ơi."* (đang chỉ có phụ đề).
 
