@@ -102,7 +102,8 @@ public static class LocTuMo
             new Canh { a = new Vector3(0.345f, 0.545f, -0.015f), b = new Vector3(0.555f, 0.655f, 0.02f), kieu = Kieu.NganKeo, sauNgan = 0.3f, lamDay = true, ten = "ngăn kéo" } } },
         new Tu { ten = "Chan_BatDiaTrongChan", moHinh = "Chan_BatDiaTrongChan", canh = new[] {
             Q(-0.432f, 0.0005f, 0.795f, 1.578f, 0.205f, 0.25f, -0.428f, 0.217f, "cửa chạn"), Q(-0.0005f, 0.432f, 0.795f, 1.578f, 0.205f, 0.25f, 0.428f, 0.217f, "cửa chạn"),
-            Q(-0.43f, 0.0005f, 0.145f, 0.775f, 0.205f, 0.25f, -0.425f, 0.217f, "cửa chạn"), Q(-0.0005f, 0.43f, 0.145f, 0.775f, 0.205f, 0.25f, 0.425f, 0.217f, "cửa chạn") },
+            // [03/11] hàng dưới tên khác: cùng tên thì LocDoor ghép cả 4 cánh, bấm cánh trên thì cánh dưới cũng mở
+            Q(-0.43f, 0.0005f, 0.145f, 0.775f, 0.205f, 0.25f, -0.425f, 0.217f, "cửa chạn dưới"), Q(-0.0005f, 0.43f, 0.145f, 0.775f, 0.205f, 0.25f, 0.425f, 0.217f, "cửa chạn dưới") },
             hoc = new[] { H(-0.428f, 0.428f, 0.799f, 1.573f, 0.209f, -0.21f, 0f, 0.2085f), H(-0.425f, 0.425f, 0.15f, 0.77f, 0.209f, -0.21f, 0f, 0.2085f) } },
         new Tu { ten = "BanCoHoc_Go", moHinh = "BanCoHoc_Go", canh = new[] {
             NK(-0.482f, -0.118f, 0.018f, 0.222f, 0.226f, 0.254f, 0.38f), NK(-0.482f, -0.118f, 0.238f, 0.442f, 0.226f, 0.254f, 0.38f), NK(-0.482f, -0.118f, 0.458f, 0.662f, 0.226f, 0.254f, 0.38f) },

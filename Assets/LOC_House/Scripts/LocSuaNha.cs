@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 //     → cả mặt tủ quay như một tấm, tay nắm nằm lại trên thân. Ở đây tách cánh làm đôi (bản lề hai mép ngoài), chuyển tay nắm theo cánh.
 //     Hai cánh cùng tên, cùng cha → LocDoor tự ghép cửa đôi: bấm E vào cánh nào cũng mở / đóng cả hai.
 //     Dựng nhà lại với LocTuMo.Bang mới (đã khai 2 cánh) thì tủ có sẵn 2 cánh → bước này tự bỏ qua.
+//  3. [03/11] Tủ nhiều hàng cánh cùng tên (chạn bát) — chia hàng để không mở cả tủ một lúc (TachHangCanh).
 //  Chi tiết + số đo: GHI_CHU_CHO_SUA_02-11.md mục 1–2.
 public static class LocSuaNha
 {
@@ -20,6 +21,47 @@ public static class LocSuaNha
         try { DenPhuNhim(sc); } catch (System.Exception e) { Debug.LogException(e); }
         try { TachTuDung(sc); } catch (System.Exception e) { Debug.LogException(e); }
         try { LocNuocChen.Gan(sc); } catch (System.Exception e) { Debug.LogException(e); }   // [03/11] nước trong chén hầm, chén 5 vơi nửa từ Đêm 3
+        try { TachHangCanh(sc); } catch (System.Exception e) { Debug.LogException(e); }
+    }
+
+    // ───────── 3. [03/11] tủ nhiều hàng cánh cùng tên (chạn bát: 2 cánh trên + 2 cánh dưới, đều "cửa chạn") → LocDoor ghép cả 4 thành một cửa:
+    //  bấm cánh trên thì cánh dưới cũng bật ra. Chia theo hàng (khoảng cao chồng nhau), hàng dưới đổi tên "… dưới" để mỗi hàng là một cửa đôi riêng.
+    //  Phải chạy trước Start (LocDoor ghép cánh bạn trong Start). LocTuMo.Bang mới đã đặt tên khác cho hàng dưới → nhóm còn 2 cánh, bước này bỏ qua.
+    static void TachHangCanh(Scene sc)
+    {
+        var nhom = new Dictionary<(Transform, string), List<LocDoor>>();
+        foreach (var d in Object.FindObjectsByType<LocDoor>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (d.gameObject.scene != sc || !d.transform.parent || d.truot != Vector3.zero || d.gapX > 0f) continue;
+            var k = (d.transform.parent, d.ten);
+            if (!nhom.TryGetValue(k, out var l)) nhom[k] = l = new List<LocDoor>();
+            l.Add(d);
+        }
+        foreach (var kv in nhom)
+        {
+            if (kv.Value.Count < 3) continue;
+            var ds = new List<(LocDoor d, float y0, float y1)>();
+            foreach (var d in kv.Value)
+            {
+                bool co = false; var b = new Bounds();
+                foreach (var r in d.GetComponentsInChildren<Renderer>(true)) if (r.bounds.size != Vector3.zero) { if (!co) { b = r.bounds; co = true; } else b.Encapsulate(r.bounds); }
+                if (!co) { ds = null; break; }   // cánh đang ẩn (bounds rỗng): không đoán
+                ds.Add((d, b.min.y, b.max.y));
+            }
+            if (ds == null) continue;
+            ds.Sort((a, c) => c.y1.CompareTo(a.y1));   // trên xuống
+            var hang = new List<List<(LocDoor d, float y0, float y1)>>();
+            foreach (var x in ds)
+            {
+                var h = hang.Count > 0 ? hang[hang.Count - 1] : null;
+                float chong = h == null ? 0 : Mathf.Min(h[0].y1, x.y1) - Mathf.Max(h[0].y0, x.y0);
+                if (h != null && chong > 0.5f * Mathf.Min(h[0].y1 - h[0].y0, x.y1 - x.y0)) h.Add(x); else hang.Add(new List<(LocDoor, float, float)> { x });
+            }
+            if (hang.Count < 2) continue;
+            for (int i = 1; i < hang.Count; i++)
+                foreach (var x in hang[i]) x.d.ten = kv.Key.Item2 + (hang.Count == 2 ? " dưới" : " hàng " + (i + 1));
+            Debug.Log($"[LOC] {kv.Key.Item2}: {kv.Value.Count} cánh chia thành {hang.Count} hàng (mỗi hàng một cửa đôi)");
+        }
     }
 
     // ───────── 1. đèn phụ phòng Nhím
