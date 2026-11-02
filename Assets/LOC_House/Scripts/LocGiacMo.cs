@@ -315,13 +315,13 @@ public class LocGiacMo : MonoBehaviour
     void CuoiHanhLang(Vector3 c, Vector3 d)
     {
         var r = Phai(d); float W = 1.0f, HC = 2.05f;
-        Transform canhThat = null; float matKhoa = 1f;
+        Transform canhThat = null, khoaThat = null; float matKhoa = 1f;
         var ng = TimNguon("CuaSatHam (mở)");
         if (ng.Length > 0)
         {
             canhThat = ng[0].transform; W = 0.8f; HC = 1.9f;
             foreach (var t in canhThat.GetComponentsInChildren<Transform>(true))
-                if (t.name.StartsWith("KhoaCua_Hasp")) { matKhoa = Mathf.Sign(canhThat.InverseTransformPoint(t.position).z); break; }
+                if (t.name.StartsWith("KhoaCua_Hasp")) { khoaThat = t; matKhoa = Mathf.Sign(canhThat.InverseTransformPoint(t.position).z); break; }
             benBanLe = matKhoa < 0 ? 1 : -1;
         }
         float ben = (2 * H + 0.4f - W) / 2f;
@@ -341,10 +341,17 @@ public class LocGiacMo : MonoBehaviour
         if (canhThat)
         {
             // hình cánh thật: gốc model ở mép tay nắm, bản lề ở x = 0,8 (LocHouseBuilder: dHamCua.banLe)
-            var sao = HinhSao(canhThat, bl);
+            var sao = HinhSao(canhThat, bl, khoaThat);   // cánh + tấm móc chìa, chưa có ổ khoá
+            if (khoaThat)
+            {
+                // ổ khoá chép riêng, giữ đúng chỗ trên cánh, để lắc lách cách lúc sập cửa
+                var kh = HinhSao(khoaThat, sao.transform);
+                kh.transform.localPosition = Quaternion.Inverse(canhThat.rotation) * (khoaThat.position - canhThat.position);
+                kh.transform.localRotation = Quaternion.Inverse(canhThat.rotation) * khoaThat.rotation;
+                khoaTreo = kh.transform;
+            }
             if (benBanLe < 0) { sao.transform.localRotation = Quaternion.Euler(0, 180, 0); sao.transform.localPosition = new Vector3(0.8f, 0, 0); }
             else { sao.transform.localRotation = Quaternion.identity; sao.transform.localPosition = new Vector3(-0.8f, 0, 0); }
-            foreach (Transform t in sao.transform) if (t.name.Contains("Khoa") || t.name.Contains("Hasp") || t.name.Contains("khoa")) { khoaTreo = t; break; }
         }
         else
         {
@@ -919,12 +926,13 @@ public class LocGiacMo : MonoBehaviour
         return g;
     }
     // bản sao CHỈ phần hình (lưới + vật liệu): Instantiate cả vật sẽ chạy Awake của LocVatPham/LocTuongTac… trên bản sao (đăng ký trùng id)
-    static GameObject HinhSao(Transform src, Transform cha)
+    static GameObject HinhSao(Transform src, Transform cha, Transform boQua = null)   // boQua: nhánh con không chép (chép riêng)
     {
         var g0 = new GameObject(src.name); g0.transform.SetParent(cha, false);
         foreach (var mf in src.GetComponentsInChildren<MeshFilter>(true))
         {
             var mr = mf.GetComponent<MeshRenderer>(); if (!mf.sharedMesh || !mr || !mr.enabled) continue;
+            if (boQua && mf.transform.IsChildOf(boQua)) continue;
             var g = new GameObject(mf.name); g.transform.SetParent(g0.transform, false);
             g.transform.localPosition = Quaternion.Inverse(src.rotation) * (mf.transform.position - src.position);   // g0 tỉ lệ 1
             g.transform.localRotation = Quaternion.Inverse(src.rotation) * mf.transform.rotation;
