@@ -540,8 +540,12 @@ public partial class LocCotTruyen
         var bo = GameObject.Find("Bo_Chen_Tren_De");
         if (bo)
         {
-            foreach (var t in bo.GetComponentsInChildren<Transform>(true)) if (t.name.StartsWith("ChenNguyen_")) t.gameObject.SetActive(true);   // năm chén mới
-            var tt = TimV("ChenHam_TrangThai"); if (tt) tt.gameObject.SetActive(false);
+            // năm chén mới: lưới Bo_Chen_Tren_De không còn chén liền (LocHouseBuilder_Sua0111 mục 12) → dựng năm chén lành đúng chỗ năm chén cũ
+            var tt = TimV("ChenHam_TrangThai");
+            bool coSan = false;
+            foreach (var t in bo.GetComponentsInChildren<Transform>(true)) if (t.name.StartsWith("ChenNguyen_") && t.GetComponent<Renderer>()) { t.gameObject.SetActive(true); coSan = true; }
+            if (!coSan && tt) LocNuocChen.ChenMoi(tt);
+            if (tt) tt.gameObject.SetActive(false);
             var b = BaoV(bo.transform);
             var dung = b.center + new Vector3(0, 0.3f, 0.8f);
             fp.DatTuThe(dung + Vector3.down * (fp.cam ? fp.cam.localPosition.y : 1.52f), b.center);
