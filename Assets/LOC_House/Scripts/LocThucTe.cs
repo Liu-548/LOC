@@ -19,7 +19,7 @@ public class LocThucTe : MonoBehaviour
     static readonly Bounds VUNG = new Bounds(new Vector3(3.8f, 1.6f, 3.6f), new Vector3(7.6f, 3.6f, 7.2f));
 
     static VolumeProfile ho; Volume vol;
-    GameObject probeGo;
+    GameObject probeGo; ParticleSystem bui;
     readonly Dictionary<Renderer, Material[]> goc = new();
     readonly Dictionary<Material, Material> cache = new();
     bool daQuet, dangBat;
@@ -37,7 +37,7 @@ public class LocThucTe : MonoBehaviour
     {
         dangBat = b;
         if (b) { TaoHauKy(); if (vol) vol.enabled = true; StartCoroutine(BatVatLieu()); }
-        else { if (vol) vol.enabled = false; KhoiPhuc(); if (probeGo) probeGo.SetActive(false); }
+        else { if (vol) vol.enabled = false; KhoiPhuc(); if (probeGo) probeGo.SetActive(false); if (bui) bui.gameObject.SetActive(false); }
     }
 
     void Update()
@@ -100,6 +100,7 @@ public class LocThucTe : MonoBehaviour
         }
         yield return null;
         TaoProbe();
+        TaoBui();
     }
 
     static Material Doi(Material m, Shader lit, Renderer r)
@@ -127,7 +128,27 @@ public class LocThucTe : MonoBehaviour
         if (m.HasProperty("_Cull")) n.SetFloat("_Cull", m.GetFloat("_Cull"));
         n.SetFloat("_Metallic", 0f);
         n.SetFloat("_Smoothness", DoBong(m.name, r.name));
+        ThemChiTiet(n, m, r);
         return n;
+    }
+
+    static LocThucTeBo bo; static bool thuBo;
+
+    // Tường/trần: thêm normal map + AO vữa (D2_xm) lên vật liệu sẵn có. Tường đã có texture riêng nên giữ nguyên albedo, dùng cùng tỉ lệ lặp;
+    // vật liệu trơn thì dùng luôn albedo D2 nhân màu gốc. Sàn gạch KHÔNG thêm normal (vạch ron của D2 sẽ lệch ron thật).
+    static void ThemChiTiet(Material n, Material goc, Renderer r)
+    {
+        if (!thuBo) { thuBo = true; bo = Resources.Load<LocThucTeBo>("LocThucTeBo"); }
+        if (!bo) return;
+        string t = r.name;
+        bool tuong = t.StartsWith("Tuong") || (t.StartsWith("Vach") && !t.StartsWith("VachSan")) || (t.StartsWith("Tran") && !t.StartsWith("Tranh"));
+        if (!tuong) return;
+        if (!bo.Lay("xm", out var A, out var N, out var M)) return;
+        bool coTex = goc.HasProperty("_BaseMap") && goc.GetTexture("_BaseMap");
+        Vector2 sc = coTex ? goc.GetTextureScale("_BaseMap") : new Vector2(1f, 1f);
+        if (!coTex && A) { n.SetTexture("_BaseMap", A); n.SetTextureScale("_BaseMap", new Vector2(1f / 1.0f, 1f / 1.0f)); sc = n.GetTextureScale("_BaseMap"); }
+        if (N) { n.SetTexture("_BumpMap", N); n.SetFloat("_BumpScale", 0.8f); n.EnableKeyword("_NORMALMAP"); n.SetTextureScale("_BumpMap", sc); }
+        if (M) { n.SetTexture("_OcclusionMap", M); n.SetFloat("_OcclusionStrength", 0.5f); n.EnableKeyword("_OCCLUSIONMAP"); n.SetTextureScale("_OcclusionMap", sc); }
     }
 
     // độ bóng theo tên vật liệu/vật thể (0 = nhám hoàn toàn, 1 = gương)
@@ -147,6 +168,48 @@ public class LocThucTe : MonoBehaviour
     {
         foreach (var kv in goc) if (kv.Key) kv.Key.sharedMaterials = kv.Value;
         goc.Clear();
+    }
+
+    // Bụi lơ lửng trong luồng sáng: ~70 hạt nhỏ, trôi rất chậm, mờ — rẻ (một draw call), tạo chiều sâu cho không khí u ám.
+    void TaoBui()
+    {
+        if (!dangBat) return;
+        if (!bui)
+        {
+            var sh = Shader.Find("Universal Render Pipeline/Particles/Unlit");
+            if (!sh) return;
+            var go = new GameObject("LocThucTeBui"); go.transform.SetParent(transform, false); go.transform.position = VUNG.center;
+            bui = go.AddComponent<ParticleSystem>();
+            var main = bui.main; main.loop = true; main.startLifetime = 14f; main.startSpeed = 0.03f; main.startSize = new ParticleSystem.MinMaxCurve(0.008f, 0.02f);
+            main.maxParticles = 70; main.simulationSpace = ParticleSystemSimulationSpace.World;
+            main.startColor = new Color(0.8f, 0.82f, 0.9f, 0.22f);
+            var em = bui.emission; em.rateOverTime = 5f;
+            var sp = bui.shape; sp.shapeType = ParticleSystemShapeType.Box; sp.scale = VUNG.size * 0.9f;
+            var vel = bui.velocityOverLifetime; vel.enabled = true; vel.space = ParticleSystemSimulationSpace.World;
+            vel.x = new ParticleSystem.MinMaxCurve(-0.02f, 0.02f); vel.y = new ParticleSystem.MinMaxCurve(-0.01f, 0.03f); vel.z = new ParticleSystem.MinMaxCurve(-0.02f, 0.02f);
+            var col = bui.colorOverLifetime; col.enabled = true;
+            var g = new Gradient(); g.SetKeys(new[] { new GradientColorKey(Color.white, 0), new GradientColorKey(Color.white, 1) },
+                new[] { new GradientAlphaKey(0, 0), new GradientAlphaKey(1, 0.2f), new GradientAlphaKey(1, 0.8f), new GradientAlphaKey(0, 1) });
+            col.color = g;
+            var pr = go.GetComponent<ParticleSystemRenderer>();
+            var mat = new Material(sh) { name = "LocThucTe_Bui" };
+            mat.SetFloat("_Surface", 1); mat.SetFloat("_Blend", 0); mat.SetFloat("_ZWrite", 0);
+            mat.SetOverrideTag("RenderType", "Transparent"); mat.renderQueue = 3000;
+            mat.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha); mat.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            mat.mainTexture = ChamTron();
+            pr.sharedMaterial = mat; pr.shadowCastingMode = ShadowCastingMode.Off; pr.receiveShadows = false;
+            bui.Simulate(20f, true, true); bui.Play();
+        }
+        bui.gameObject.SetActive(true);
+    }
+
+    static Texture2D ChamTron()
+    {
+        var t = new Texture2D(32, 32, TextureFormat.RGBA32, false) { wrapMode = TextureWrapMode.Clamp };
+        for (int y = 0; y < 32; y++) for (int x = 0; x < 32; x++)
+        { float d = Vector2.Distance(new Vector2(x, y), new Vector2(15.5f, 15.5f)) / 16f; float a = Mathf.Clamp01(1f - d); t.SetPixel(x, y, new Color(1, 1, 1, a * a)); }
+        t.Apply(); return t;
     }
 
     void TaoProbe()
