@@ -11,6 +11,7 @@ public partial class LocCotTruyen
 {
     LocVatTam choNgu;
     Transform giuongKhoi;
+    float tNuaTinh = -1f; bool daNhacNgu;
     public LocVatTam ChoNgu => choNgu;   // tự kiểm đọc
     // true: bị bắt trong mơ = chết thật (màn Death, chơi lại từ chỗ lưu). Mặc định false: bị bắt → bật dậy, đêm vẫn tiếp (kế hoạch GM-10)
     public static bool biBatLaChet = false;
@@ -47,7 +48,20 @@ public partial class LocCotTruyen
         yield return Den(1, 0, 1.2f);
         LocFirstPerson.khoa = false; dangCanh = false;
         LocFirstPerson.PhuDe("Ngủ thôi.", 2.4f);
+        tNuaTinh = Time.time; daNhacNgu = false;
     }
+
+    // gọi từ Dem2(): đã "Ngủ thôi." mà một phút sau vẫn lang thang → nhắc một lần (không có chữ gợi ý nào khác)
+    void NhacDiNgu()
+    {
+        if (daNhacNgu || tNuaTinh < 0 || !LocTui.Co("nua_tinh_2") || LocTui.Co("mo_2_xong") || LocFirstPerson.khoa || LocTui.Mo) return;
+        if (Time.time - tNuaTinh < 60f) return;
+        daNhacNgu = true;
+        LocFirstPerson.PhuDe("Khuya lắm rồi. Về phòng mà ngủ.", 2.6f);
+    }
+
+    // tắt đèn phòng Khôi trước khi nằm (bật dậy giữa đêm thì phòng tối — kế hoạch mục 4) · trả về bật/tắt cũ (phím thử)
+    LocCongTac CongTacPhongKhoi() { var g = GameObject.Find("CongTac_PhongKhoi"); return g ? g.GetComponent<LocCongTac>() : null; }
 
     public void DiNguNgay() { if (!dangCanh && !LocGiacMo.dangMo) StartCoroutine(DiNgu(false)); }   // LocChoiThu
     IEnumerator DiNguThu() { yield return DiNgu(true); }
@@ -60,6 +74,8 @@ public partial class LocCotTruyen
         LocFirstPerson.PhuDe("", 0.01f);
         yield return Den(LocFirstPerson.den, 1, 0.9f);
         if (!thu) { var ni = TimV("TamNilon_PhuBui"); if (ni) ni.gameObject.SetActive(false); }   // Khôi đã kéo tấm nilon phủ bụi ra mới nằm được
+        var ct = CongTacPhongKhoi(); bool denCu = ct && ct.bat;
+        if (denCu) { ct.Dat(false); LocAm.Phat("CongTac_Tach", ct.transform.position, 0.8f); }
         var camT = fp.cam; var lp = camT.localPosition; var lr = camT.localRotation;
         yield return new WaitForSeconds(1.4f);
         bool thoat = false;
@@ -81,6 +97,7 @@ public partial class LocCotTruyen
         camT.localPosition = lp; camT.localRotation = lr;
         if (thu)
         {
+            if (denCu && ct) ct.Dat(true);
             yield return Den(1, 0, 0.8f);
             LocFirstPerson.khoa = false; LocMa.tamDung = false; dangCanh = false;
             yield break;

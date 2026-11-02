@@ -367,7 +367,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         { LocNhim.I.CanhHoangLoan(); if (LocMa.I) LocMa.I.LoSom(); }
         // [02/11] giữ hương → nửa tỉnh → "Ngủ thôi." → [E] Đi ngủ ở giường Khôi → giấc mơ → hết đêm (LocCotTruyen_GiacMo.cs)
         if (LocTui.Co("giu_huong_2") && !LocTui.Co("nua_tinh_2") && !LocNhim.dangCanh && !LocFirstPerson.khoa && !LocTui.Mo) StartCoroutine(SauGiuHuong2());
-        if (LocTui.Co("nua_tinh_2")) LocMa.tamDung = true;   // hết việc của đêm, đang về phòng ngủ: ma nhà thôi dọa
+        if (LocTui.Co("nua_tinh_2")) { LocMa.tamDung = true; NhacDiNgu(); }   // hết việc của đêm, đang về phòng ngủ: ma nhà thôi dọa
     }
 
     // chuông điện thoại bàn: lan hồi, lại gần (khi không cho nhấc) thì tắt; cho nhấc thì [E] Nhấc máy → tiếng rè, cái đài, không ai nói
