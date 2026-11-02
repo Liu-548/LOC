@@ -128,7 +128,7 @@ public partial class LocCotTruyen
     void ApDemV34(int d)
     {
         ChenHam(LocTui.Co("dan_chen"), false, false);
-        if (kienHang) kienHang.gameObject.SetActive(d == 3 && !LocTui.Co("mo_kien"));
+        if (kienHang) kienHang.gameObject.SetActive(d == 3 && !LocTui.Co("mo_kien") && LocTui.Co("kien_den"));   // [02/11] gói chỉ có sau khi giao (GiaoKien)
         if (chaoTrenBan) chaoTrenBan.SetActive(d == 2);
     }
 
@@ -202,6 +202,9 @@ public partial class LocCotTruyen
     void Dem3V34()
     {
         if (dangKet) return;
+        // [02/11] walkthrough Đêm 3: kiện hàng được GIAO (chuông cổng + xe máy + cái đài) chứ không nằm sẵn trong cửa
+        if (kienHang && !LocTui.Co("kien_den") && !LocTui.Co("mo_kien") && !dangGiaoKien && !LocFirstPerson.khoa && !LocMenu.DangChe)
+        { tChoKien += Time.deltaTime; if (tChoKien > 6f) StartCoroutine(GiaoKien()); }
         var p = fp.transform.position; bool trongHam = hamPhong.Contains(p);
         if (LocTui.Co("nl_bay_mam") && !daNhacBayMam && vpVanKhan) { daNhacBayMam = true; if (!LocTui.Co("nl_doc_van")) LocTui.Noi(LocTui.CoMon("van_khan") ? "Giờ đọc bài khấn." : "Còn bài khấn trong gói hàng."); }
         // vòng 2: lật tới trang cuối bài khấn, đứng trong hầm, sau khi bày mâm
@@ -212,6 +215,55 @@ public partial class LocCotTruyen
         }
         if (LocTui.DangDocId != "van_khan") daNhacDocHam = false;
         if (LocTui.Co("nl_giu_nhang") && !LocTui.Co("da_chon_hu") && !daNhacKhan) { daNhacKhan = true; LocTui.Noi("Nhang cháy hết rồi.", "Còn cái hũ."); }
+    }
+
+    // ───── [02/11] giao kiện hàng đầu Đêm 3: xe máy chạy tới ngoài cổng (đài trên xe mở nhạc), bấm chuông hai lần, gói nằm trong cửa, xe chạy đi
+    bool dangGiaoKien; float tChoKien;
+    static readonly Vector3 NGOAI_CONG = new(3.8f, 1.1f, -6.4f);
+    IEnumerator GiaoKien()
+    {
+        dangGiaoKien = true;
+        var bn = GetComponent<LocBanNgay>();
+        var xe = new GameObject("Kien_XeMay"); xe.transform.position = NGOAI_CONG + Vector3.left * 14f;
+        AudioSource Nguon(AudioClip c, float vol, float xa)
+        {
+            var a = xe.AddComponent<AudioSource>(); a.clip = c; a.loop = true; a.volume = vol; a.spatialBlend = 1f; a.minDistance = 2.5f; a.maxDistance = xa; a.rolloffMode = AudioRolloffMode.Linear;
+            if (c) a.Play(); return a;
+        }
+        var may = Nguon(bn ? bn.xeMay : null, 0.85f, 40f);
+        var dai = Nguon(Resources.Load<AudioClip>("LOC_Radio_Nhac"), 0.45f, 32f);   // cái đài trên xe
+        var lp = xe.AddComponent<AudioLowPassFilter>(); lp.cutoffFrequency = 2600f;
+        var a0 = xe.transform.position;
+        for (float t = 0; t < 1; t += Time.deltaTime / 3.2f) { xe.transform.position = Vector3.Lerp(a0, NGOAI_CONG, 1 - (1 - t) * (1 - t)); yield return null; }
+        if (may) may.volume = 0.45f;   // tắt máy để nổ ga nhỏ
+        yield return new WaitForSeconds(1.0f);
+        var chuong = ChuongCong();
+        for (int i = 0; i < 2; i++) { AudioSource.PlayClipAtPoint(chuong, NGOAI_CONG + Vector3.forward * 0.8f, 1f); yield return new WaitForSeconds(1.6f); }
+        LocTui.Dat("kien_den");
+        if (kienHang) kienHang.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1.2f);
+        if (may) may.volume = 0.9f;
+        var a1 = xe.transform.position; var a2 = NGOAI_CONG + Vector3.right * 30f;
+        for (float t = 0; t < 1; t += Time.deltaTime / 5.5f) { xe.transform.position = Vector3.Lerp(a1, a2, t * t); if (may) may.volume = Mathf.Lerp(0.9f, 0.1f, t); if (dai) dai.volume = Mathf.Lerp(0.45f, 0.05f, t); yield return null; }
+        Destroy(xe);
+        dangGiaoKien = false;
+    }
+    // chuông điện cổng "kính coong" (chưa có file âm thanh — tổng hợp tạm; có file thì đặt Resources/LOC_V33/Chuong_Cong)
+    static AudioClip chuongCong;
+    static AudioClip ChuongCong()
+    {
+        if (chuongCong) return chuongCong;
+        var f = Resources.Load<AudioClip>("LOC_V33/Chuong_Cong"); if (f) return chuongCong = f;
+        const int HZ = 22050; int n = (int)(1.5f * HZ); var d = new float[n];
+        for (int i = 0; i < n; i++)
+        {
+            float t = i / (float)HZ, x = 0;
+            foreach (var (bd, tan) in new[] { (0f, 659.3f), (0.55f, 523.3f) })
+                if (t >= bd) { float u = t - bd; x += Mathf.Exp(-u * 3.2f) * (Mathf.Sin(2 * Mathf.PI * tan * u) + 0.35f * Mathf.Sin(2 * Mathf.PI * tan * 2.01f * u) + 0.12f * Mathf.Sin(2 * Mathf.PI * tan * 3.03f * u)); }
+            d[i] = Mathf.Clamp(x * 0.45f, -1, 1);
+        }
+        chuongCong = AudioClip.Create("Chuong_Cong", n, 1, HZ, false); chuongCong.SetData(d, 0); chuongCong.hideFlags = HideFlags.DontUnloadUnusedAsset;
+        return chuongCong;
     }
 
     // ───── chỗ rẽ cuối (LocHuCot gọi)
@@ -536,7 +588,7 @@ public partial class LocCotTruyen
         if (d == 3)
         {
             // [02/11] gợi ý Đêm 3 theo v3.3: kiện hàng quen mắt → lời nhắn của mẹ → cái hũ → quyển sách → … → "Tiễn người ta đi mà lại khóa người ta lại à?"
-            if (kienHang && !LocTui.Co("mo_kien")) { id = "mo_kien"; bac = new[] { "Có cái gói ai để ở cửa.", "Giấy dầu, buộc dây... trông quen mắt.", "Cạnh cửa chính." }; return; }
+            if (kienHang && LocTui.Co("kien_den") && !LocTui.Co("mo_kien")) { id = "mo_kien"; bac = new[] { "Có cái gói ai để ở cửa.", "Giấy dầu, buộc dây... trông quen mắt.", "Cạnh cửa chính." }; return; }
             if (KhoaHeHu && !LocMa.huDaHe) { id = "loi_nhan"; bac = new[] { "Mẹ có để lại gì không.", "Phòng bố mẹ.", "Bàn trang điểm của mẹ." }; return; }
             if (!LocMa.huDaHe) { id = "he_hu"; bac = new[] { "Cái hũ dưới hầm.", "Mẹ dặn đừng động vào. Nhưng phải xem trong ấy có gì.", "Xuống hầm, ngồi xuống trước gầm bàn thờ." }; return; }
             if (vpLoiNhanMe && !LocTui.Co("doc:sach_gia_le") && !LocTui.Co("nl_bay_mam")) { id = "sach"; bac = new[] { "Mẹ bảo có gì cứ xem quyển sách.", "Tủ thờ trên tầng ba.", "Thắp hương ông bà trước đã." }; return; }
