@@ -13,13 +13,16 @@ using UnityEngine.Rendering.Universal;
 public class LocThucTe : MonoBehaviour
 {
     public static LocThucTe I;
-    public static bool Bat => PlayerPrefs.GetInt("LOC_CD_ThucTe", 0) == 1;
+    public static int Muc => PlayerPrefs.GetInt("LOC_CD_ThucTe", 0);   // 0 tắt · 1 phòng khách · 2 cả nhà
+    public static bool Bat => Muc > 0;
 
     // Hộp bao phòng khách (toạ độ thế giới) — chỉnh ở đây nếu muốn mở rộng/thu hẹp vùng thử
-    static readonly Bounds VUNG = new Bounds(new Vector3(3.8f, 1.6f, 3.6f), new Vector3(7.6f, 3.6f, 7.2f));
+    static readonly Bounds PK = new Bounds(new Vector3(3.8f, 1.6f, 3.6f), new Vector3(7.6f, 3.6f, 7.2f));
+    static Bounds VUNG = PK;
+    readonly List<GameObject> probes = new();
 
     static VolumeProfile ho; Volume vol;
-    GameObject probeGo; ParticleSystem bui;
+    ParticleSystem bui;
     readonly Dictionary<Renderer, Material[]> goc = new();
     readonly Dictionary<Material, Material> cache = new();
     bool daQuet, dangBat;
@@ -35,14 +38,15 @@ public class LocThucTe : MonoBehaviour
 
     void Dat(bool b)
     {
-        dangBat = b;
-        if (b) { TaoHauKy(); if (vol) vol.enabled = true; StartCoroutine(BatVatLieu()); }
-        else { if (vol) vol.enabled = false; KhoiPhuc(); if (probeGo) probeGo.SetActive(false); if (bui) bui.gameObject.SetActive(false); }
+        dangBat = b; StopAllCoroutines(); KhoiPhuc();
+        if (b) { VUNG = Muc == 2 ? TinhNha() : PK; TaoHauKy(); if (vol) vol.enabled = true; StartCoroutine(BatVatLieu()); }
+        else { if (vol) vol.enabled = false; KhoiPhuc(); foreach (var g in probes) if (g) g.SetActive(false); if (bui) bui.gameObject.SetActive(false); }
     }
 
     void Update()
     {
         if (!dangBat) return;
+        if (bui && Camera.main) bui.transform.position = Camera.main.transform.position;
         // giữ lớp VHS tắt trong lúc bật (LocMenu.ApDung đặt lại mỗi khi chỉnh cài đặt khác)
         LocFirstPerson.vhs = 0f;
         if (!hinhCu) { var g = GameObject.Find("LocHinhCu"); if (g) hinhCu = g.GetComponent<Volume>(); }
@@ -99,7 +103,7 @@ public class LocThucTe : MonoBehaviour
             if (++dem % 40 == 0) yield return null;   // rải ra nhiều khung, không giật
         }
         yield return null;
-        TaoProbe();
+        StartCoroutine(TaoProbes());
         TaoBui();
     }
 
@@ -178,13 +182,13 @@ public class LocThucTe : MonoBehaviour
         {
             var sh = Shader.Find("Universal Render Pipeline/Particles/Unlit");
             if (!sh) return;
-            var go = new GameObject("LocThucTeBui"); go.transform.SetParent(transform, false); go.transform.position = VUNG.center;
+            var go = new GameObject("LocThucTeBui"); go.transform.SetParent(transform, false); go.transform.position = Vector3.zero;
             bui = go.AddComponent<ParticleSystem>();
             var main = bui.main; main.loop = true; main.startLifetime = 14f; main.startSpeed = 0.03f; main.startSize = new ParticleSystem.MinMaxCurve(0.008f, 0.02f);
             main.maxParticles = 70; main.simulationSpace = ParticleSystemSimulationSpace.World;
             main.startColor = new Color(0.8f, 0.82f, 0.9f, 0.22f);
             var em = bui.emission; em.rateOverTime = 5f;
-            var sp = bui.shape; sp.shapeType = ParticleSystemShapeType.Box; sp.scale = VUNG.size * 0.9f;
+            var sp = bui.shape; sp.shapeType = ParticleSystemShapeType.Box; sp.scale = new Vector3(8f, 3.2f, 8f);
             var vel = bui.velocityOverLifetime; vel.enabled = true; vel.space = ParticleSystemSimulationSpace.World;
             vel.x = new ParticleSystem.MinMaxCurve(-0.02f, 0.02f); vel.y = new ParticleSystem.MinMaxCurve(-0.01f, 0.03f); vel.z = new ParticleSystem.MinMaxCurve(-0.02f, 0.02f);
             var col = bui.colorOverLifetime; col.enabled = true;
@@ -212,21 +216,48 @@ public class LocThucTe : MonoBehaviour
         t.Apply(); return t;
     }
 
-    void TaoProbe()
+    // Cả nhà: gom khối bao của mọi renderer nhỏ hơn 40 m (bỏ nền trời/mặt đất khổng lồ)
+    static Bounds TinhNha()
     {
-        if (!dangBat) return;
-        if (!probeGo)
+        Bounds b = PK; bool dau = true;
+        foreach (var r in FindObjectsByType<Renderer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
         {
-            probeGo = new GameObject("LocThucTeProbe"); probeGo.transform.SetParent(transform, false);
-            probeGo.transform.position = VUNG.center;
-            var p = probeGo.AddComponent<ReflectionProbe>();
+            if (!r || r is ParticleSystemRenderer) continue;
+            var s = r.bounds.size; if (s.x > 40f || s.z > 40f || s.y > 12f) continue;
+            if (dau) { b = r.bounds; dau = false; } else b.Encapsulate(r.bounds);
+        }
+        b.Expand(0.5f); return b;
+    }
+
+    // Reflection probe: phòng khách 1 probe; cả nhà chia lưới ô ~7 m × 3,6 m, mỗi probe chụp đúng 1 lần (mỗi khung 1 probe → không giật)
+    IEnumerator TaoProbes()
+    {
+        foreach (var g in probes) if (g) Destroy(g);
+        probes.Clear();
+        var ds = new List<Bounds>();
+        if (Muc == 1) ds.Add(PK);
+        else
+        {
+            const float O = 7f, T = 3.6f;
+            int nx = Mathf.Max(1, Mathf.CeilToInt(VUNG.size.x / O)), nz = Mathf.Max(1, Mathf.CeilToInt(VUNG.size.z / O)), ny = Mathf.Max(1, Mathf.CeilToInt(VUNG.size.y / T));
+            if (nx * nz * ny > 40) { nx = Mathf.Min(nx, 6); nz = Mathf.Min(nz, 6); ny = Mathf.Min(ny, 3); }
+            var sz = new Vector3(VUNG.size.x / nx, VUNG.size.y / ny, VUNG.size.z / nz);
+            for (int x = 0; x < nx; x++) for (int y = 0; y < ny; y++) for (int z = 0; z < nz; z++)
+                ds.Add(new Bounds(VUNG.min + new Vector3((x + 0.5f) * sz.x, (y + 0.5f) * sz.y, (z + 0.5f) * sz.z), sz));
+        }
+        foreach (var d in ds)
+        {
+            if (!dangBat) yield break;
+            var go = new GameObject("LocThucTeProbe"); go.transform.SetParent(transform, false); go.transform.position = d.center;
+            var p = go.AddComponent<ReflectionProbe>();
             p.mode = ReflectionProbeMode.Realtime; p.refreshMode = ReflectionProbeRefreshMode.ViaScripting;
             p.timeSlicingMode = ReflectionProbeTimeSlicingMode.NoTimeSlicing;
-            p.resolution = 128; p.hdr = true; p.boxProjection = true;
-            p.size = VUNG.size; p.center = Vector3.zero; p.intensity = 1f; p.importance = 10;
+            p.resolution = Muc == 1 ? 128 : 64; p.hdr = true; p.boxProjection = true;
+            p.size = d.size; p.center = Vector3.zero; p.intensity = 1f; p.importance = 10;
             p.nearClipPlane = 0.1f; p.farClipPlane = 20f;
+            probes.Add(go);
+            p.RenderProbe();
+            yield return null;
         }
-        probeGo.SetActive(true);
-        probeGo.GetComponent<ReflectionProbe>().RenderProbe();   // một lần duy nhất → gần như không tốn FPS
     }
 }
