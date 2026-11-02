@@ -410,10 +410,18 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         yield return new WaitForSeconds(2f);
         for (int i = 0; i < n && cGo && amGo; i++) { amGo.PlayOneShot(cGo, 1f); yield return new WaitForSeconds(1.6f); }
     }
+    // [02/11] walkthrough Bad (a): "mở bằng tiếng gõ thứ mười hai rồi im" — khoá người chơi ngay khi giờ thứ mười hai bắt đầu gõ
+    //  (trước đây vẫn chơi tiếp được ~21 s và có thể đè lên một kết khác đang chạy), tới tiếng thứ mười hai thì mọi tiếng lặp trong nhà
+    //  (đồng hồ tích tắc, mưa, tủ lạnh…) im bặt, ba giây sau mới vào cảnh Bad.
     IEnumerator BadA()
     {
-        yield return new WaitForSeconds(12 * 1.6f + 3f);   // tiếng thứ mười hai, rồi im
-        if (LocNhim.I && !LocNhim.dangCanh) LocNhim.I.CanhBad();
+        if (dangKet) yield break;   // đang trong một kết khác
+        VaoKet(); LocTui.Dat("het_gio");
+        yield return new WaitForSeconds(2f + 11 * 1.6f + 0.3f);   // Go(): chờ 2 s rồi mỗi 1,6 s một tiếng → tới tiếng thứ mười hai
+        foreach (var a in FindObjectsByType<AudioSource>(FindObjectsSortMode.None)) if (a && a.isPlaying && a.loop) a.Pause();   // rồi im
+        yield return new WaitForSeconds(3f);
+        if (LocNhim.I) { if (!LocNhim.dangCanh) LocNhim.I.CanhBad(); else { while (LocNhim.dangCanh) yield return null; LocNhim.I.CanhBad(); } }
+        else StartCoroutine(KetBad());
     }
 
     // shortcut: cảnh kết thay tạm (C6 chưa dựng: bốn lọn tóc, chén 5 vỡ, cuộc gọi thầy…) — chỉ màn đen + chữ cuối rồi về menu
