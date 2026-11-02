@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-// [02/11] BẢN THỬ "THỰC TẾ" — chỉ áp cho PHÒNG KHÁCH, bật/tắt trong Cài đặt › "Hình ảnh thực tế (thử)".
+// [02/11] BẢN THỬ "THỰC TẾ" — Cài đặt › "Hình ảnh thực tế (thử)": Tắt · Phòng khách · Cả nhà.
 //  1) Hậu kỳ điện ảnh thay lớp VHS: tonemapping ACES, tông lạnh u ám, bloom nhẹ, vignette (Volume tạo bằng code, không sửa scene).
 //  2) Vật liệu trong phòng khách: URP Simple Lit → URP Lit (PBR: có phản xạ, bóng loáng theo độ nhám). Giữ nguyên màu/texture.
 //  3) Một Reflection Probe realtime (render 1 lần) để sàn/gỗ/kính phản chiếu căn phòng, thay vì phản chiếu skybox.
@@ -25,7 +25,10 @@ public class LocThucTe : MonoBehaviour
     ParticleSystem bui;
     readonly Dictionary<Renderer, Material[]> goc = new();
     readonly Dictionary<Material, Material> cache = new();
-    bool daQuet, dangBat;
+    bool dangBat;
+    readonly Dictionary<MeshFilter, Mesh> gocLuoi = new();   // lưới gốc của vật được thay bằng bản có tangent
+    readonly Dictionary<Mesh, Mesh> luoiTg = new();
+    readonly Dictionary<Material, Material> khongNormal = new();
     Volume hinhCu;
 
     public static void Ap()
@@ -103,12 +106,40 @@ public class LocThucTe : MonoBehaviour
                 if (moi == null) moi = (Material[])cu.Clone();
                 moi[i] = n;
             }
-            if (moi != null) { goc[r] = cu; r.sharedMaterials = moi; }
+            if (moi != null) { goc[r] = cu; r.sharedMaterials = moi; CanTangent(r, moi); }
             if (++dem % 40 == 0) yield return null;   // rải ra nhiều khung, không giật
         }
         yield return null;
         StartCoroutine(TaoProbes());
         TaoBui();
+    }
+
+    // Normal map cần tangent. Tường/sàn dựng bằng code (lưới "BoxWorldUV") KHÔNG có tangent → normal map sẽ vỡ sáng.
+    // Chép lưới + tính tangent (không sửa lưới gốc/asset), trả lại lưới gốc khi tắt.
+    void CanTangent(Renderer r, Material[] ms)
+    {
+        bool can = false; foreach (var m in ms) if (m && m.IsKeywordEnabled("_NORMALMAP")) { can = true; break; }
+        if (!can || !(r is MeshRenderer)) return;
+        var mf = r.GetComponent<MeshFilter>(); if (!mf || !mf.sharedMesh) return;
+        var l = mf.sharedMesh;
+        if (l.HasVertexAttribute(VertexAttribute.Tangent)) return;
+        if (!l.isReadable || !l.HasVertexAttribute(VertexAttribute.TexCoord0))
+        {   // không tính được tangent → vật này dùng bản vật liệu KHÔNG normal map (thà phẳng còn hơn vỡ sáng)
+            var ms2 = (Material[])ms.Clone();
+            for (int i = 0; i < ms2.Length; i++)
+                if (ms2[i] && ms2[i].IsKeywordEnabled("_NORMALMAP"))
+                {
+                    if (!khongNormal.TryGetValue(ms2[i], out var k)) { k = new Material(ms2[i]) { name = ms2[i].name + "_phang" }; k.DisableKeyword("_NORMALMAP"); k.SetTexture("_BumpMap", null); khongNormal[ms2[i]] = k; }
+                    ms2[i] = k;
+                }
+            r.sharedMaterials = ms2; return;
+        }
+        if (!luoiTg.TryGetValue(l, out var t))
+        {
+            t = Instantiate(l); t.name = l.name + "_tg"; t.RecalculateTangents(); luoiTg[l] = t;
+        }
+        if (!gocLuoi.ContainsKey(mf)) gocLuoi[mf] = l;
+        mf.sharedMesh = t;
     }
 
     static Material Doi(Material m, Shader lit, Renderer r)
@@ -140,17 +171,17 @@ public class LocThucTe : MonoBehaviour
         return n;
     }
 
-    static LocThucTeBo bo; static bool thuBo;
+    static LocThucTeBo bo; static bool thieuBo;
 
     // Tường/trần: thêm normal map + AO vữa (D2_xm) lên vật liệu sẵn có. Tường đã có texture riêng nên giữ nguyên albedo, dùng cùng tỉ lệ lặp;
     // vật liệu trơn thì dùng luôn albedo D2 nhân màu gốc. Sàn gạch KHÔNG thêm normal (vạch ron của D2 sẽ lệch ron thật).
     static void ThemChiTiet(Material n, Material goc, Renderer r)
     {
-        if (!thuBo) { thuBo = true; bo = Resources.Load<LocThucTeBo>("LocThucTeBo"); }
+        if (!bo && !thieuBo) { bo = Resources.Load<LocThucTeBo>("LocThucTeBo"); thieuBo = !bo; }
         if (!bo) return;
-        string t = r.name;
-        bool tuong = t.StartsWith("Tuong") || (t.StartsWith("Vach") && !t.StartsWith("VachSan")) || (t.StartsWith("Tran") && !t.StartsWith("Tranh"));
-        if (!tuong) return;
+        // xét cả tên vật liệu (M_TuongVoi_Tex, M_TranSan…) vì một vật liệu dùng chung nhiều vật và chỉ đổi một lần (cache)
+        string vl = goc.name.StartsWith("M_") ? goc.name.Substring(2) : goc.name;
+        if (!LaVo(r.name) && !LaVo(vl)) return;
         if (!bo.Lay("xm", out var A, out var N, out var M)) return;
         bool coTex = goc.HasProperty("_BaseMap") && goc.GetTexture("_BaseMap");
         Vector2 sc = coTex ? goc.GetTextureScale("_BaseMap") : new Vector2(1f, 1f);
@@ -159,16 +190,21 @@ public class LocThucTe : MonoBehaviour
         if (M) { n.SetTexture("_OcclusionMap", M); n.SetFloat("_OcclusionStrength", 0.5f); n.EnableKeyword("_OCCLUSIONMAP"); n.SetTextureScale("_OcclusionMap", sc); }
     }
 
+    static bool LaVo(string t) => (t.StartsWith("Tuong") && !t.StartsWith("TuongRao")) || (t.StartsWith("Vach") && !t.StartsWith("VachSan")) || (t.StartsWith("Tran") && !t.StartsWith("Tranh"));
+
     // độ bóng theo tên vật liệu/vật thể (0 = nhám hoàn toàn, 1 = gương)
     static float DoBong(string vl, string vt)
     {
         string s = (vl + " " + vt).ToLowerInvariant();
-        if (s.Contains("sangach") || s.Contains("san") || s.Contains("gach") || s.Contains("floor")) return 0.62f;   // sàn gạch bóng ẩm
+        // thứ tự quan trọng: "tuong" chứa "tu", "tranh" chứa "tran" → xét tường/trần trước, tranh trước trần
+        if (s.Contains("tuong") || s.Contains("vach") || s.Contains("wall")) return 0.18f;   // vữa tường nhám
+        if (s.Contains("tranh")) return 0.25f;
+        if (s.Contains("tran")) return 0.15f;
+        if (s.Contains("sangach") || s.Contains("granito") || s.Contains("ceramic") || s.Contains("san") || s.Contains("gach") || s.Contains("floor")) return 0.62f;   // sàn gạch bóng ẩm
         if (s.Contains("kinh") || s.Contains("glass") || s.Contains("guong")) return 0.9f;
-        if (s.Contains("kimloai") || s.Contains("metal") || s.Contains("den") || s.Contains("chum")) return 0.55f;
+        if (s.Contains("kimloai") || s.Contains("metal") || s.Contains("inox") || s.Contains("chum")) return 0.55f;
+        if (s.Contains("vai") || s.Contains("sofa") || s.Contains("tham") || s.Contains("rem")) return 0.08f;
         if (s.Contains("go") || s.Contains("wood") || s.Contains("ban") || s.Contains("ghe") || s.Contains("tu")) return 0.4f;
-        if (s.Contains("tuong") || s.Contains("tran") || s.Contains("wall")) return 0.18f;   // vữa tường nhám
-        if (s.Contains("vai") || s.Contains("sofa") || s.Contains("tham")) return 0.08f;
         return 0.3f;
     }
 
@@ -176,6 +212,8 @@ public class LocThucTe : MonoBehaviour
     {
         foreach (var kv in goc) if (kv.Key) kv.Key.sharedMaterials = kv.Value;
         goc.Clear();
+        foreach (var kv in gocLuoi) if (kv.Key) kv.Key.sharedMesh = kv.Value;
+        gocLuoi.Clear();
     }
 
     // Bụi lơ lửng trong luồng sáng: ~70 hạt nhỏ, trôi rất chậm, mờ — rẻ (một draw call), tạo chiều sâu cho không khí u ám.
@@ -220,17 +258,20 @@ public class LocThucTe : MonoBehaviour
         t.Apply(); return t;
     }
 
-    // Cả nhà: gom khối bao của mọi renderer nhỏ hơn 40 m (bỏ nền trời/mặt đất khổng lồ)
+    // Cả nhà: khối bao của vỏ nhà (tường/sàn/trần/vách) — KHÔNG gom mọi vật (đường, xe buýt, cây ngoài xa sẽ làm hộp phình to)
     static Bounds TinhNha()
     {
         Bounds b = PK; bool dau = true;
-        foreach (var r in FindObjectsByType<Renderer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        foreach (var r in FindObjectsByType<MeshRenderer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
         {
-            if (!r || r is ParticleSystemRenderer) continue;
+            if (!r) continue;
+            string t = r.name;
+            bool vo = (t.StartsWith("Tuong") && !t.StartsWith("TuongRao")) || t.StartsWith("San") || t.StartsWith("Vach") || t.StartsWith("Nen") || (t.StartsWith("Tran") && !t.StartsWith("Tranh"));
+            if (!vo) continue;
             var s = r.bounds.size; if (s.x > 40f || s.z > 40f || s.y > 12f) continue;
             if (dau) { b = r.bounds; dau = false; } else b.Encapsulate(r.bounds);
         }
-        b.Expand(0.5f); return b;
+        b.Encapsulate(PK); b.Expand(0.5f); return b;
     }
 
     // Reflection probe: phòng khách 1 probe; cả nhà chia lưới ô ~7 m × 3,6 m, mỗi probe chụp đúng 1 lần (mỗi khung 1 probe → không giật)
@@ -242,9 +283,14 @@ public class LocThucTe : MonoBehaviour
         if (Muc == 1) ds.Add(PK);
         else
         {
-            const float O = 7f, T = 3.6f;
-            int nx = Mathf.Max(1, Mathf.CeilToInt(VUNG.size.x / O)), nz = Mathf.Max(1, Mathf.CeilToInt(VUNG.size.z / O)), ny = Mathf.Max(1, Mathf.CeilToInt(VUNG.size.y / T));
-            if (nx * nz * ny > 40) { nx = Mathf.Min(nx, 6); nz = Mathf.Min(nz, 6); ny = Mathf.Min(ny, 3); }
+            // tối đa 24 probe: ô to dần cho tới khi đủ ít (mỗi probe chụp 6 mặt một lần)
+            float O = 7f; int ny = Mathf.Clamp(Mathf.CeilToInt(VUNG.size.y / 3.6f), 1, 3), nx, nz;
+            while (true)
+            {
+                nx = Mathf.Max(1, Mathf.CeilToInt(VUNG.size.x / O)); nz = Mathf.Max(1, Mathf.CeilToInt(VUNG.size.z / O));
+                if (nx * nz * ny <= 24 || O > 60f) break;
+                O += 1f;
+            }
             var sz = new Vector3(VUNG.size.x / nx, VUNG.size.y / ny, VUNG.size.z / nz);
             for (int x = 0; x < nx; x++) for (int y = 0; y < ny; y++) for (int z = 0; z < nz; z++)
                 ds.Add(new Bounds(VUNG.min + new Vector3((x + 0.5f) * sz.x, (y + 0.5f) * sz.y, (z + 0.5f) * sz.z), sz));
