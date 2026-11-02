@@ -21,6 +21,9 @@ public partial class LocCotTruyen
     const string THAY = "THẦY ĐỒNG";
     LocVatPham vpKeo, vpChen3, vpChao, vpLoiNhanMe, vpGiayThay, vpVanKhan, vpGiayGoi, vpGiayNiem;
     LocTuongTacMG mgDanChen, mgBayMam, mgGiuNhang;
+    // [02/11] walkthrough #8: mâm cúng Đêm 3 đòi đủ gạo, muối, mía (trước nhặt được mà không dùng vào đâu)
+    static readonly (string id, string ten)[] DO_MAM = { ("bat_gao", "gạo"), ("bat_muoi", "muối"), ("bo_mia", "mía") };
+    string[] canCoMam0; readonly List<string> canMam = new(); string thieuCu;
     LocVatTam kienHang, choDatChao;
     GameObject chaoTrenBan;
     float tGoi2 = -1f, tReoThay;
@@ -35,7 +38,7 @@ public partial class LocCotTruyen
         foreach (var t in FindObjectsByType<LocTuongTacMG>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
             if (t.id == "dan_chen") mgDanChen = t;
-            if (t.id == "nl_bay_mam") mgBayMam = t;
+            if (t.id == "nl_bay_mam") { mgBayMam = t; canCoMam0 = t.canCo ?? new string[0]; }
             if (t.id == "nl_giu_nhang") mgGiuNhang = t;
         }
         var cha = new GameObject("LOC_CotTruyen_V34").transform;
@@ -129,6 +132,18 @@ public partial class LocCotTruyen
     {
         ChenHam(LocTui.Co("dan_chen"), false, false);
         if (kienHang) kienHang.gameObject.SetActive(d == 3 && !LocTui.Co("mo_kien") && LocTui.Co("kien_den"));   // [02/11] gói chỉ có sau khi giao (GiaoKien)
+        if (mgBayMam && d == 3)
+        {
+            // chỉ đòi món nào người chơi đã có hoặc còn nhặt được ở Đêm 3 (món đã mất theo nhóm đồ Đêm 2 thì thôi — không kẹt)
+            canMam.Clear();
+            foreach (var (id, _) in DO_MAM)
+            {
+                LocVatPham vp = null; foreach (var v in FindObjectsByType<LocVatPham>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (v.id == id) { vp = v; break; }
+                if (LocTui.CoMon(id) || (vp && vp.gameObject.activeInHierarchy)) canMam.Add(id);
+            }
+            var tong = new List<string>(canCoMam0 ?? new string[0]); foreach (var id in canMam) if (!tong.Contains(id)) tong.Add(id);
+            mgBayMam.canCo = tong.ToArray(); mgBayMam.tieuHaoCo = true;
+        }
         if (chaoTrenBan) chaoTrenBan.SetActive(d == 2);
     }
 
@@ -202,6 +217,13 @@ public partial class LocCotTruyen
     void Dem3V34()
     {
         if (dangKet) return;
+        // [02/11] mâm cúng: câu báo thiếu theo đúng món còn thiếu
+        if (mgBayMam && !LocTui.Co("nl_bay_mam") && canMam.Count > 0)
+        {
+            var thieu = new List<string>(); foreach (var (id, ten) in DO_MAM) if (canMam.Contains(id) && !LocTui.CoMon(id)) thieu.Add(ten);
+            var cau = thieu.Count == 0 ? mgBayMam.cauThieu : "Mâm còn thiếu " + string.Join(", ", thieu) + ".";
+            if (cau != thieuCu) { thieuCu = cau; if (thieu.Count > 0) mgBayMam.cauThieu = cau; }
+        }
         // [02/11] walkthrough Đêm 3: kiện hàng được GIAO (chuông cổng + xe máy + cái đài) chứ không nằm sẵn trong cửa
         if (kienHang && !LocTui.Co("kien_den") && !LocTui.Co("mo_kien") && !dangGiaoKien && !LocFirstPerson.khoa && !LocMenu.DangChe)
         { tChoKien += Time.deltaTime; if (tChoKien > 6f) StartCoroutine(GiaoKien()); }
@@ -593,6 +615,7 @@ public partial class LocCotTruyen
             if (!LocMa.huDaHe) { id = "he_hu"; bac = new[] { "Cái hũ dưới hầm.", "Mẹ dặn đừng động vào. Nhưng phải xem trong ấy có gì.", "Xuống hầm, ngồi xuống trước gầm bàn thờ." }; return; }
             if (vpLoiNhanMe && !LocTui.Co("doc:sach_gia_le") && !LocTui.Co("nl_bay_mam")) { id = "sach"; bac = new[] { "Mẹ bảo có gì cứ xem quyển sách.", "Tủ thờ trên tầng ba.", "Thắp hương ông bà trước đã." }; return; }
             if (LocTui.Co("nl_bay_mam") && vpVanKhan && !LocTui.Co("nl_doc_van")) { id = "nl_doc_van"; bac = new[] { "Còn bài khấn.", "Đứng trước bàn thờ dưới hầm mà đọc.", "Mở trong túi, lật tới trang cuối." }; return; }
+            if (mgBayMam && !LocTui.Co("nl_bay_mam") && LocMa.huDaHe && canMam.Exists(x => !LocTui.CoMon(x))) { id = "do_mam"; bac = new[] { "Mâm cúng còn thiếu đồ.", "Bát gạo, bát muối ở phòng khách. Mía ở bếp." }; return; }
             if (LocHuCot.ChoChon) { id = "chon_hu"; bac = new[] { "Còn cái hũ.", "Ông ấy bảo niêm lại.", "Sách của mẹ thì nói khác.", "Tiễn người ta đi mà lại khóa người ta lại à?" }; return; }
         }
     }

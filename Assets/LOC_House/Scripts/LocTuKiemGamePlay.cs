@@ -203,6 +203,7 @@ public class LocTuKiemGamePlay : MonoBehaviour
         Kt(!MG("dan_chen").HienDuoc, "Đêm 3 không còn dán chén");
         Kt(MG("nl_giu_nhang") && !MG("nl_giu_nhang").gameObject.activeSelf, "giữ nhang ẩn tới khi bày mâm xong");
         LocTui.Dat("he_hu");   // [28/10] nhảy thẳng Đêm 3 thì chưa hé hũ — nghi lễ chỉ mở sau khi hé hũ (sauCo)
+        foreach (var id in new[] { "bat_gao", "bat_muoi", "bo_mia" }) LocTui.Nhan(id, null, false);   // [02/11] mâm cúng đòi đủ gạo, muối, mía
         yield return ThuMiniGame("nl_bay_mam", "13_bay_mam");
         LocTui.Dat("nl_doc_van");   // [27/10] vòng 2 đọc bài khấn
         yield return ThuMiniGame("nl_giu_nhang", "14_giu_nhang");
