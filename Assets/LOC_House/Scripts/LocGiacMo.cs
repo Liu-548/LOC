@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 // [02/11] GIẤC MƠ cuối Đêm 2 — "Chạy" (ke-hoach-giac-mo-02-11.md, đã chốt 02/11):
 //  · chỉ một giấc mơ, cuối Đêm 2, vào bằng [E] Đi ngủ ở giường Khôi (LocCotTruyen.DiNgu) · ma là bóng đen KHÔNG MẮT
@@ -10,7 +11,10 @@ using UnityEngine.InputSystem;
 //  · đồ vật vừa chạy qua tự nhấc lên bay tới: dấu "!" đỏ ở đáy màn hình đúng làn sắp bị ném, 1,5 s trước · trúng 3 lần = bị bắt
 //  · tới cửa sắt cuối hành lang = thoát (sập cửa, ma đập cửa, "Anh Khôi ơi.") · bị bắt = ngã, bàn tay túm, hét, cắt đen
 //  Mơ không có thua thật: kết quả chỉ để LocCotTruyen chọn cảnh tỉnh dậy + lưu cờ.
-//  Hành lang dựng lúc vào mơ (khối + đồ nhân bản từ chính đồ trong nhà), ở xa dưới nhà (y −60) → scene không nặng thêm, xong thì xoá.
+//  [02/11 tối] Giấc mơ có CẢNH RIÊNG: Assets/Scenes/LOC_GiacMo_Dem2.unity (sương đen, ánh nền tối, không bầu trời — chỉnh trong Lighting của cảnh đó).
+//  Vào mơ: nạp chồng cảnh này, đặt làm cảnh chính (ánh sáng của nó áp lên), dựng hành lang bên trong (khối + đồ nhân bản từ chính đồ trong nhà,
+//  ở xa nhà: x 400, y −60) → mơ xong trả cảnh nhà làm cảnh chính rồi gỡ cảnh mơ (xoá sạch). Cảnh nhà không nặng thêm.
+//  Không nạp được cảnh (chưa có trong Build Settings…) thì dựng ngay trong cảnh nhà như trước và tự đổi sương / ánh nền.
 //  Âm thanh tim / gió rít / đồ rơi / thở của ma / đập cửa: AmTong (cuối file) — có file thật trong Resources/LOC_AmThanh/GM_* thì tự dùng.
 public class LocGiacMo : MonoBehaviour
 {
@@ -18,7 +22,7 @@ public class LocGiacMo : MonoBehaviour
     public static bool choBoQua = true;          // giữ Enter 0,8 s để bỏ qua (như xe buýt / đoạn bác — LocFirstPerson.GiuBoQua) — TẮT trước khi nộp, như nút B của mini game
     public enum Bot { Khong, Ne, KhongNe, DungYen }
     public static Bot bot = Bot.Khong;           // tự kiểm (LocTuKiemGiacMo): máy tự chơi
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset0() { dangMo = false; bot = Bot.Khong; cuoi = null; }
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset0() { dangMo = false; bot = Bot.Khong; cuoi = null; canhNha = default; }
 
     [Header("Chạy")]
     public float tocChay = 4.5f, tangToc = 14f, giamToc = 11f, matCao = 1.52f, rongLan = 1.2f, tgDoiLan = 0.25f;
@@ -31,6 +35,9 @@ public class LocGiacMo : MonoBehaviour
     public bool ketThoat; public float tgChay; public int soNem, soNemDoi, soTrung; public bool daCanhBao, luonCoLanTrong = true;
     public float tCanhBao = -1f, dungTu = -1f;   // lần đầu hiện "CHẠY ĐI!" (giây, tính từ lúc bắt đầu chạy) · lúc bắt đầu đứng yên
     public static LocGiacMo cuoi;                // lần mơ gần nhất (tự kiểm đọc sau khi mơ xong)
+    public const string TEN_CANH = "LOC_GiacMo_Dem2", DUONG_CANH = "Assets/Scenes/LOC_GiacMo_Dem2.unity";
+    public static Scene canhNha;                 // cảnh nhà lúc đang mơ (LocMenu.NapLai: chơi lại / về menu giữa giấc mơ phải nạp cảnh nhà, không phải cảnh mơ)
+    Scene canhMo; bool coCanhRieng;
     public static bool CoMatDangHien(Transform goc) { if (!goc) return false; foreach (var r in goc.GetComponentsInChildren<Renderer>()) if (r.enabled && LaMat(r.name)) return true; return false; }
 
     const float BUOC = 0.2f, H = 2.4f, CAO = 2.6f, R_GOC = 1.8f, S_BAT_DAU = 15f;
@@ -88,6 +95,43 @@ public class LocGiacMo : MonoBehaviour
         }
     }
 
+    // nạp chồng cảnh riêng của giấc mơ, chuyển cả cây LOC_GiacMo sang đó và đặt làm cảnh chính (sương / ánh nền của cảnh mơ tự áp lên)
+    IEnumerator NapCanh()
+    {
+        canhNha = SceneManager.GetActiveScene();
+        AsyncOperation op = null;
+        try
+        {
+#if UNITY_EDITOR
+            op = UnityEditor.SceneManagement.EditorSceneManager.LoadSceneAsyncInPlayMode(DUONG_CANH, new LoadSceneParameters(LoadSceneMode.Additive));
+#else
+            if (Application.CanStreamedLevelBeLoaded(TEN_CANH)) op = SceneManager.LoadSceneAsync(TEN_CANH, LoadSceneMode.Additive);
+#endif
+        }
+        catch (System.Exception e) { Debug.LogWarning("[LOC] Không nạp được cảnh giấc mơ " + DUONG_CANH + ": " + e.Message); }
+        if (op == null) { Debug.LogWarning("[LOC] Không có cảnh " + TEN_CANH + " — dựng giấc mơ ngay trong cảnh nhà"); yield break; }
+        float t0 = Time.realtimeSinceStartup;
+        while (!op.isDone && Time.realtimeSinceStartup - t0 < 20f) yield return null;
+        canhMo = SceneManager.GetSceneByName(TEN_CANH);
+        if (!canhMo.IsValid() || !canhMo.isLoaded) { Debug.LogWarning("[LOC] Cảnh " + TEN_CANH + " chưa nạp xong — dựng trong cảnh nhà"); yield break; }
+        SceneManager.MoveGameObjectToScene(gameObject, canhMo);
+        SceneManager.SetActiveScene(canhMo);
+        coCanhRieng = true;
+    }
+
+    // [02/11] lần đầu trong Editor, Unity còn dịch shader (sương kiểu mới, Unlit của bóng đèn, khói của ma) → tô tạm xanh lơ.
+    //  Lúc màn còn đen: xoay máy quay bốn phía cho mọi thứ được vẽ một lần, chờ dịch xong (tối đa 15 s) rồi mới mở mắt.
+    IEnumerator HamNong()
+    {
+        foreach (float y in new[] { 0f, 90f, 180f, 270f }) { yawLech = y; DatNguoi(); yield return null; yield return null; }
+        yawLech = 0; DatNguoi();
+#if UNITY_EDITOR
+        float t = 0;
+        while (UnityEditor.ShaderUtil.anythingCompiling && t < 15f) { t += Time.unscaledDeltaTime; yield return null; }
+#endif
+        yield return null;
+    }
+
     IEnumerator ChayTrong(LocFirstPerson nguoi)
     {
         dangMo = true; fp = nguoi; cam = fp.cam; goc = transform;
@@ -95,10 +139,12 @@ public class LocGiacMo : MonoBehaviour
         LocFirstPerson.khoa = true; LocMa.tamDung = true;
         var cc = fp.GetComponent<CharacterController>(); if (cc) cc.enabled = false;
         LocFirstPerson.den = 1f;
+        yield return NapCanh();
         DungDuong(); ChupMoiTruong(); DungHanhLang(); DungMa(); DungAm();
         s = S_BAT_DAU; gap = s - 1f; x = 0; lanDich = 0;
-        DatNguoi();
+        DatNguoi(); DatMa();
         yield return null;
+        yield return HamNong();
         yield return Intro();
         intro = false;
         while (!ketThuc)
@@ -107,7 +153,10 @@ public class LocGiacMo : MonoBehaviour
             float dt = Time.deltaTime;
             tChase += dt; tgChay += dt;
             var k = Keyboard.current;
-            if (choBoQua && LocFirstPerson.GiuBoQua(k)) { tBo += dt; if (tBo >= 0.8f) { ketThoat = true; break; } } else tBo = 0f;
+            // [02/11 tối] SỬA "bỏ qua ngay sau Chạy.": chỉ tính khi Enter được BẤM MỚI trong lúc chạy (Enter giữ sẵn / dính từ trước không tính)
+            if (k != null && (k.enterKey.wasPressedThisFrame || k.numpadEnterKey.wasPressedThisFrame)) enterMoi = true;
+            if (!LocFirstPerson.GiuBoQua(k)) enterMoi = false;
+            if (choBoQua && enterMoi) { tBo += dt; if (tBo >= 0.8f) { ketThoat = true; break; } } else tBo = 0f;
             DieuKhien(dt);
             CapNhatMa(dt);
             CapNhatNem(dt);
@@ -172,17 +221,20 @@ public class LocGiacMo : MonoBehaviour
     }
 
     // ═════════════════════════ môi trường: tắt sáng nhà, sương đen
-    float tBo;   // đang giữ Enter để bỏ qua
+    float tBo; bool enterMoi;   // đang giữ Enter để bỏ qua (chỉ tính lần bấm mới trong lúc mơ)
     readonly List<AudioSource> amNha = new();   // tiếng trong nhà đang phát (mưa trên mái, tủ lạnh, đồng hồ, radio…) — tạm dừng suốt giấc mơ
     Camera mayQuay; CameraClearFlags xoa0; Color nen0; float xa0;
     Color amb0, fog0; bool fogBat0; float fogD0; FogMode fogM0; UnityEngine.Rendering.AmbientMode ambM0; Material sky0; readonly List<Light> mat0 = new();
     void ChupMoiTruong()
     {
-        amb0 = RenderSettings.ambientLight; fog0 = RenderSettings.fogColor; fogBat0 = RenderSettings.fog; fogD0 = RenderSettings.fogDensity; fogM0 = RenderSettings.fogMode;
-        ambM0 = RenderSettings.ambientMode; sky0 = RenderSettings.skybox;
-        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat; RenderSettings.skybox = null;
-        RenderSettings.ambientLight = new Color(0.025f, 0.024f, 0.028f);
-        RenderSettings.fog = true; RenderSettings.fogMode = FogMode.ExponentialSquared; RenderSettings.fogDensity = 0.055f; RenderSettings.fogColor = new Color(0.008f, 0.008f, 0.01f);
+        if (!coCanhRieng)   // có cảnh riêng thì sương / ánh nền / bầu trời lấy từ Lighting của cảnh mơ
+        {
+            amb0 = RenderSettings.ambientLight; fog0 = RenderSettings.fogColor; fogBat0 = RenderSettings.fog; fogD0 = RenderSettings.fogDensity; fogM0 = RenderSettings.fogMode;
+            ambM0 = RenderSettings.ambientMode; sky0 = RenderSettings.skybox;
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat; RenderSettings.skybox = null;
+            RenderSettings.ambientLight = new Color(0.025f, 0.024f, 0.028f);
+            RenderSettings.fog = true; RenderSettings.fogMode = FogMode.ExponentialSquared; RenderSettings.fogDensity = 0.055f; RenderSettings.fogColor = new Color(0.008f, 0.008f, 0.01f);
+        }
         foreach (var l in FindObjectsByType<Light>(FindObjectsSortMode.None)) if (l.type == LightType.Directional && l.enabled) { mat0.Add(l); l.enabled = false; }
         foreach (var a in FindObjectsByType<AudioSource>(FindObjectsSortMode.None)) if (a.isPlaying && !a.transform.IsChildOf(transform)) { a.Pause(); amNha.Add(a); }
         // máy quay: nền đen đặc, nhìn xa 70 m — sương đen đã nuốt hết từ ~40 m, khỏi vẽ cả hành lang 240 m sau các bức tường
@@ -191,8 +243,12 @@ public class LocGiacMo : MonoBehaviour
     }
     void TraMoiTruong()
     {
-        RenderSettings.ambientMode = ambM0; RenderSettings.skybox = sky0;
-        RenderSettings.ambientLight = amb0; RenderSettings.fogColor = fog0; RenderSettings.fog = fogBat0; RenderSettings.fogDensity = fogD0; RenderSettings.fogMode = fogM0;
+        if (coCanhRieng) { if (canhNha.IsValid() && canhNha.isLoaded) SceneManager.SetActiveScene(canhNha); }   // cảnh nhà làm cảnh chính lại → ánh sáng nhà
+        else
+        {
+            RenderSettings.ambientMode = ambM0; RenderSettings.skybox = sky0;
+            RenderSettings.ambientLight = amb0; RenderSettings.fogColor = fog0; RenderSettings.fog = fogBat0; RenderSettings.fogDensity = fogD0; RenderSettings.fogMode = fogM0;
+        }
         foreach (var l in mat0) if (l) l.enabled = true;
         foreach (var a in amNha) if (a) a.UnPause();
         if (mayQuay) { mayQuay.clearFlags = xoa0; mayQuay.backgroundColor = nen0; mayQuay.farClipPlane = xa0; }
@@ -209,7 +265,7 @@ public class LocGiacMo : MonoBehaviour
         vlDen = TimVL(null, new Color(0.01f, 0.01f, 0.01f), Color.white);
         vlDay = TimVL(null, new Color(0.06f, 0.05f, 0.05f), Color.white);
         var unlit = Shader.Find("Universal Render Pipeline/Unlit");   // bóng đèn tự sáng, không phụ thuộc đèn — Unlit không có thì Lit + phát sáng
-        if (unlit) { vlBong = new Material(unlit); vlBong.SetColor("_BaseColor", new Color(1f, 0.78f, 0.5f)); }
+        if (unlit) { vlBong = Moi(new Material(unlit), "BongDen"); vlBong.SetColor("_BaseColor", new Color(1f, 0.78f, 0.5f)); }
         else
         {
             vlBong = TimVL(null, new Color(1f, 0.86f, 0.62f), Color.white);
@@ -406,7 +462,7 @@ public class LocGiacMo : MonoBehaviour
             // mặt trước của model: mắt nằm trước đầu (cùng cách LocMa.TaoBong) → quay để mặt nhìn theo +z của w
             var dau = Tim(m.transform, "Dau"); var mL = Tim(m.transform, "Mat_L"); var mR = Tim(m.transform, "Mat_R");
             if (dau && mL && mR && ((mL.position + mR.position) / 2 - dau.position).z < 0) m.transform.localRotation = Quaternion.Euler(0, 180, 0) * m.transform.localRotation;
-            if (!vlMa) { vlMa = new Material(lm.matDen); if (vlMa.HasProperty("_Alpha")) vlMa.SetFloat("_Alpha", 0.9f); if (vlMa.HasProperty("_Vien")) vlMa.SetFloat("_Vien", lm.vienTan); if (vlMa.HasProperty("_Nhieu")) vlMa.SetFloat("_Nhieu", lm.nhieu); }
+            if (!vlMa) { vlMa = Moi(new Material(lm.matDen), "MaKhoi"); if (vlMa.HasProperty("_Alpha")) vlMa.SetFloat("_Alpha", 0.9f); if (vlMa.HasProperty("_Vien")) vlMa.SetFloat("_Vien", lm.vienTan); if (vlMa.HasProperty("_Nhieu")) vlMa.SetFloat("_Nhieu", lm.nhieu); }
             foreach (var r in m.GetComponentsInChildren<Renderer>(true))
             {
                 r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; r.receiveShadows = false;
@@ -865,7 +921,10 @@ public class LocGiacMo : MonoBehaviour
         if (amTim) Destroy(amTim);
         foreach (var a in cam.GetComponents<AudioSource>()) if (a && a.clip == (LocMa.I ? LocMa.I.tiengThet : null)) Destroy(a);
         cam.localPosition = camLP0; cam.localRotation = camLR0;
-        Destroy(gameObject);
+        foreach (var m in vlTao) if (m) Destroy(m);   // vật liệu tự tạo không nằm trong cảnh nào — phải xoá tay (để lại thì lần mơ sau tìm nhầm, tối dần)
+        vlTao.Clear();
+        if (coCanhRieng && canhMo.IsValid() && canhMo.isLoaded) SceneManager.UnloadSceneAsync(canhMo);   // gỡ cảnh mơ: xoá luôn cả cây LOC_GiacMo
+        else Destroy(gameObject);
     }
     void OnDestroy() { dangMo = false; }
 
@@ -891,14 +950,20 @@ public class LocGiacMo : MonoBehaviour
         mpb ??= new MaterialPropertyBlock(); r.GetPropertyBlock(mpb);
         mpb.SetVector("_BaseMap_ST", new Vector4(Mathf.Max(0.2f, lx), Mathf.Max(0.2f, ly), 0, 0)); r.SetPropertyBlock(mpb);
     }
-    static Material TimVL(string ten, Color mau, Color nhanMau)
+    // [02/11 tối] SỬA "tối dần sau mỗi lần mơ": bản chép mang tên có hậu tố HAU_TO, khi tìm vật liệu gốc thì bỏ qua mọi bản chép,
+    //  và mọi vật liệu tự tạo được xoá lúc mơ xong (vlTao). Trước đây bản chép trùng tên gốc, không xoá → lần sau chép lại bản đã tối, tối thêm.
+    const string HAU_TO = " (GiacMo)";
+    readonly List<Material> vlTao = new();
+    Material Moi(Material m, string ten) { m.name = ten + HAU_TO; vlTao.Add(m); return m; }
+    Material TimVL(string ten, Color mau, Color nhanMau)
     {
         if (!string.IsNullOrEmpty(ten))
-            foreach (var m in Resources.FindObjectsOfTypeAll<Material>()) if (m && m.name == ten) { var k = new Material(m); if (k.HasProperty("_BaseColor")) k.SetColor("_BaseColor", k.GetColor("_BaseColor") * nhanMau); return k; }
+            foreach (var m in Resources.FindObjectsOfTypeAll<Material>())
+                if (m && m.name == ten) { var k = Moi(new Material(m), ten); if (k.HasProperty("_BaseColor")) k.SetColor("_BaseColor", m.GetColor("_BaseColor") * nhanMau); return k; }
         Material goc = null;
-        foreach (var r in FindObjectsByType<MeshRenderer>(FindObjectsSortMode.None)) { var m = r.sharedMaterial; if (m && m.shader && m.shader.name.Contains("Universal Render Pipeline/Lit")) { goc = m; break; } }
+        foreach (var r in FindObjectsByType<MeshRenderer>(FindObjectsSortMode.None)) { var m = r.sharedMaterial; if (m && m.shader && !m.name.EndsWith(HAU_TO) && m.shader.name.Contains("Universal Render Pipeline/Lit")) { goc = m; break; } }
         Material v;
-        if (goc) v = new Material(goc); else { var sh = Shader.Find("Universal Render Pipeline/Lit"); if (!sh) return null; v = new Material(sh); }
+        if (goc) v = Moi(new Material(goc), "VL"); else { var sh = Shader.Find("Universal Render Pipeline/Lit"); if (!sh) return null; v = Moi(new Material(sh), "VL"); }
         if (v.HasProperty("_BaseMap")) v.SetTexture("_BaseMap", null);
         if (v.HasProperty("_BaseColor")) v.SetColor("_BaseColor", mau);
         if (v.HasProperty("_EmissionColor")) { v.SetColor("_EmissionColor", Color.black); v.DisableKeyword("_EMISSION"); }

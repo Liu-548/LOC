@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LOC_NhaLoc.unity
     guid: 470ec15438f73b044b47fce381df07de
+  - enabled: 1
+    path: Assets/Scenes/LOC_GiacMo_Dem2.unity
+    guid: 3fc43cd77e8948dc92bb1d275f808bb1
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

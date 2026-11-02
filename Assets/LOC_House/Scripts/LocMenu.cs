@@ -124,10 +124,12 @@ public class LocMenu : MonoBehaviour
     static void ChoiLaiDem() { Time.timeScale = 1; AudioListener.pause = false; LocMa.ChoiLai(); }
     public static void NapLai()
     {
+        var sc = SceneManager.GetActiveScene();
+        if (sc.name == LocGiacMo.TEN_CANH && LocGiacMo.canhNha.IsValid()) sc = LocGiacMo.canhNha;   // [02/11] đang trong giấc mơ (cảnh mơ là cảnh chính) → nạp lại cảnh nhà
 #if UNITY_EDITOR
-        UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode(SceneManager.GetActiveScene().path, new LoadSceneParameters(LoadSceneMode.Single));
+        UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode(sc.path, new LoadSceneParameters(LoadSceneMode.Single));
 #else
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(sc.buildIndex);
 #endif
     }
     static void Thoat()
