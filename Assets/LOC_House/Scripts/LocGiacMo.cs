@@ -31,7 +31,7 @@ public class LocGiacMo : MonoBehaviour
     public bool ketThoat; public float tgChay; public int soNem, soNemDoi, soTrung; public bool daCanhBao, luonCoLanTrong = true;
     public float tCanhBao = -1f, dungTu = -1f;   // lần đầu hiện "CHẠY ĐI!" (giây, tính từ lúc bắt đầu chạy) · lúc bắt đầu đứng yên
     public static LocGiacMo cuoi;                // lần mơ gần nhất (tự kiểm đọc sau khi mơ xong)
-    public static bool CoMatDangHien(Transform goc) { if (!goc) return false; foreach (var r in goc.GetComponentsInChildren<Renderer>()) if (r.enabled && r.name.StartsWith("Mat_")) return true; return false; }
+    public static bool CoMatDangHien(Transform goc) { if (!goc) return false; foreach (var r in goc.GetComponentsInChildren<Renderer>()) if (r.enabled && LaMat(r.name)) return true; return false; }
 
     const float BUOC = 0.2f, H = 2.4f, CAO = 2.6f, R_GOC = 1.8f, S_BAT_DAU = 15f;
     static readonly Vector3 GOC = new(400f, -60f, 0f);
@@ -367,35 +367,44 @@ public class LocGiacMo : MonoBehaviour
         if (amMaTho) { amMaTho.clip = AmTong.MaTho(); amMaTho.loop = true; amMaTho.spatialBlend = 1f; amMaTho.minDistance = 1.5f; amMaTho.maxDistance = 18f; amMaTho.volume = 0.6f; amMaTho.Play(); }
     }
 
-    // bóng đen: model ma của LocMa (VanNguoi) phủ vật liệu khói đen, tắt mắt; không có model thì một khối người tối
+    // bóng đen đứng (dáng VanNguoi); không có model thì một khối người tối
     Transform BongDen1m9(Vector3 cucBo, Vector3 huong, bool chinh = false)
     {
-        var lm = LocMa.I; GameObject g = null;
-        if (lm && lm.mau != null && lm.mau.Length > 3 && lm.mau[3] && lm.matDen)
+        var g = HinhMa(3, chinh ? "Ma_GiacMo" : "Bong_LoiGia");
+        g.position = GOC + cucBo; g.rotation = Quaternion.LookRotation(huong.sqrMagnitude > 0 ? huong : Vector3.forward);
+        return g;
+    }
+
+    // hình ma từ model của LocMa (1 Tay · 3 VanNguoi — cùng một con ma nữ, khác dáng): phủ khói đen, ẩn hẳn mắt (nhãn cầu, con ngươi, tròng) và răng.
+    //  Trong nhà model giữ vật liệu ma nữ (mặt, tóc); trong mơ nó chỉ là bóng đen cao — "Đen sì. Cao lắm." (Nhím, Đêm 3): mặt và mắt để dành cho Đêm 3.
+    static readonly string[] AN_MA = { "Mat_", "ConNguoi", "TrongMat", "VienTrong", "Rang" };
+    static bool LaMat(string ten) { foreach (var a in AN_MA) if (ten.StartsWith(a)) return true; return false; }
+    Transform HinhMa(int kieu, string ten)
+    {
+        var lm = LocMa.I;
+        var w = new GameObject(ten).transform; w.SetParent(goc, false);
+        if (lm && lm.mau != null && lm.mau.Length > kieu && lm.mau[kieu] && lm.matDen)
         {
-            var w = new GameObject(chinh ? "Ma_GiacMo" : "Bong_LoiGia"); w.transform.SetParent(goc, false);
-            var m = Instantiate(lm.mau[3], w.transform); m.SetActive(true); m.transform.localPosition = Vector3.zero;
-            // mặt trước của model: mắt nằm trước đầu (cùng cách LocMa.TaoBong)
+            var m = Instantiate(lm.mau[kieu], w); m.SetActive(true); m.transform.localPosition = Vector3.zero;
+            // mặt trước của model: mắt nằm trước đầu (cùng cách LocMa.TaoBong) → quay để mặt nhìn theo +z của w
             var dau = Tim(m.transform, "Dau"); var mL = Tim(m.transform, "Mat_L"); var mR = Tim(m.transform, "Mat_R");
             if (dau && mL && mR && ((mL.position + mR.position) / 2 - dau.position).z < 0) m.transform.localRotation = Quaternion.Euler(0, 180, 0) * m.transform.localRotation;
             if (!vlMa) { vlMa = new Material(lm.matDen); if (vlMa.HasProperty("_Alpha")) vlMa.SetFloat("_Alpha", 0.9f); if (vlMa.HasProperty("_Vien")) vlMa.SetFloat("_Vien", lm.vienTan); if (vlMa.HasProperty("_Nhieu")) vlMa.SetFloat("_Nhieu", lm.nhieu); }
-            bool giu = false;   // model ma nữ (vật liệu "MaNu") giữ vật liệu riêng, như LocMa.TaoBong
-            foreach (var r in m.GetComponentsInChildren<Renderer>(true)) foreach (var sm in r.sharedMaterials) if (sm && sm.name.Contains("MaNu")) giu = true;
             foreach (var r in m.GetComponentsInChildren<Renderer>(true))
             {
                 r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; r.receiveShadows = false;
-                if (r.name.StartsWith("Mat_")) r.enabled = false; else if (!giu) r.sharedMaterial = vlMa;   // KHÔNG MẮT — mắt đỏ để dành cho Đêm 3
+                if (LaMat(r.name)) { r.enabled = false; continue; }   // KHÔNG MẮT
+                var ms = r.sharedMaterials; for (int i = 0; i < ms.Length; i++) ms[i] = vlMa; r.sharedMaterials = ms;
             }
             DonThanhPhan(m);
-            g = w;
         }
-        else
+        else if (kieu == 3)
         {
-            g = new GameObject(chinh ? "Ma_GiacMo" : "Bong_LoiGia"); g.transform.SetParent(goc, false);
-            var than = Khoi(PrimitiveType.Capsule, Vector3.zero, new Vector3(0.5f, 0.95f, 0.32f), vlDen); if (than) { than.transform.SetParent(g.transform, false); than.transform.localPosition = Vector3.up * 0.95f; }
+            var than = Khoi(PrimitiveType.Capsule, Vector3.zero, new Vector3(0.5f, 0.95f, 0.32f), vlDen); if (than) { than.transform.SetParent(w, false); than.transform.localPosition = Vector3.up * 0.95f; }
+            var dau = Khoi(PrimitiveType.Sphere, Vector3.zero, new Vector3(0.24f, 0.28f, 0.24f), vlDen); if (dau) { dau.name = "Dau"; dau.transform.SetParent(w, false); dau.transform.localPosition = Vector3.up * 1.78f; }
         }
-        g.transform.position = GOC + cucBo; g.transform.rotation = Quaternion.LookRotation(huong.sqrMagnitude > 0 ? huong : Vector3.forward);
-        return g.transform;
+        else { Destroy(w.gameObject); return null; }
+        return w;
     }
 
     void DungAm()
@@ -671,23 +680,43 @@ public class LocGiacMo : MonoBehaviour
             ma.rotation = Quaternion.AngleAxis(38f, Phai(t0)) * ma.rotation;
         }
         fp.transform.rotation = Quaternion.LookRotation(-t0);
+        toiChop = 0.28f;   // chớp tối che cú lật người
         for (float t = 0; t < 1; t += Time.deltaTime / 0.45f) { cam.localRotation = Quaternion.Euler(Mathf.Lerp(20f, -72f, t * (2 - t)), 0, Mathf.Lerp(14f, 0, t)); yield return null; }
         if (amMaTho) amMaTho.volume = 1f;
         yield return new WaitForSeconds(0.5f);
-        // 3. bàn tay túm, giật lên sát mặt nó
-        var tay = BanTay();
-        var dauT = ma ? Tim(ma, "Dau") : null;
-        var dau = dauT ? dauT.position : ma ? ma.position + Vector3.up * 1.5f + t0 * 1.0f : cam.position + Vector3.up * 0.8f;
-        if (tay) tay.position = cam.position + cam.forward * 0.9f + Vector3.up * 0.3f;
-        for (float t = 0; t < 1; t += Time.deltaTime / 0.25f) { if (tay) tay.position = Vector3.Lerp(tay.position, cam.position + cam.forward * 0.25f + Vector3.down * 0.12f, t); yield return null; }
-        var c0 = cam.position;
-        for (float t = 0; t < 1; t += Time.deltaTime / 0.22f)
+        // 3. tay nó vươn xuống túm cổ áo (đổi sang dáng Ma_Tay — cùng con ma, một tay vươn ra), giật lên sát mặt nó (~0,4 m)
+        var dang = HinhMa(1, "Ma_GiacMo_VuonTay");
+        if (dang && ma)
         {
-            var den = dau - (dau - c0).normalized * 0.4f;
-            cam.position = Vector3.Lerp(c0, den, t * t);
-            cam.rotation = Quaternion.LookRotation(dau - cam.position, Vector3.up);
-            if (tay) tay.position = cam.position + cam.forward * 0.22f + Vector3.down * 0.14f;
-            yield return null;
+            dang.SetPositionAndRotation(ma.position, ma.rotation);
+            foreach (var r in ma.GetComponentsInChildren<Renderer>()) r.enabled = false;
+        }
+        var hinh = dang ? dang : ma;
+        var dauT = hinh ? Tim(hinh, "Dau") : null;
+        Vector3 Dau() => dauT ? dauT.position : hinh ? hinh.position + Vector3.up * 1.5f + t0 * 1.0f : cam.position + Vector3.up * 0.8f;
+        var mong = dang ? TimR(dang, "Mong") : null;   // móng tay = đầu bàn tay đang vươn
+        if (mong)
+        {
+            var p0 = dang.position; var dich = cam.position + cam.forward * 0.2f - cam.up * 0.12f;   // cổ áo: đáy khung hình
+            var lech = Vector3.ClampMagnitude(dich - mong.bounds.center, 1.6f);
+            for (float t = 0; t < 1; t += Time.deltaTime / 0.3f) { dang.position = p0 + lech * (t * t); yield return null; }
+            dang.position = p0 + lech;
+            rung = 0.6f; yield return new WaitForSeconds(0.12f);
+        }
+        {
+            // giật: camera bị nhấc khỏi sàn, mặt nó kéo sát tới
+            var c0 = cam.position; var cDich = c0 + Vector3.up * 0.75f;
+            var d0 = Dau(); var huongMat = Vector3.ProjectOnPlane(d0 - c0, Vector3.up); huongMat = huongMat.sqrMagnitude > 1e-4f ? huongMat.normalized : -t0;
+            var dauDich = cDich + huongMat * 0.4f + Vector3.up * 0.05f;
+            var h0 = hinh ? hinh.position : Vector3.zero;
+            for (float t = 0; t < 1; t += Time.deltaTime / 0.22f)
+            {
+                float e = t * t;
+                cam.position = Vector3.Lerp(c0, cDich, e);
+                if (hinh) hinh.position = h0 + (dauDich - d0) * e;
+                cam.rotation = Quaternion.LookRotation(Dau() - cam.position, Vector3.up);
+                yield return null;
+            }
         }
         // 4. hét: rung mạnh, mặt lao vào ống kính, nhiễu — cắt đen ngay đỉnh tiếng hét
         AudioSource thet = null;
@@ -697,7 +726,7 @@ public class LocGiacMo : MonoBehaviour
         for (float t = 0; t < 0.65f; t += Time.deltaTime)
         {
             nhieu = t / 0.65f; rung = 1.4f;
-            if (ma) ma.position += (cam.position - (dauT ? dauT.position : dau)).normalized * Time.deltaTime * 0.45f;   // mặt nó lao vào ống kính
+            if (hinh) hinh.position += (cam.position - Dau()).normalized * Time.deltaTime * 0.45f;   // mặt nó lao vào ống kính
             cam.position += Random.insideUnitSphere * 0.02f;
             yield return null;
         }
@@ -707,17 +736,7 @@ public class LocGiacMo : MonoBehaviour
         yield return new WaitForSeconds(1.2f);
     }
     float nhieu;
-    Transform BanTay()
-    {
-        var lm = LocMa.I;
-        if (!lm || lm.mau == null || lm.mau.Length < 2 || !lm.mau[1]) return null;
-        var t = Instantiate(lm.mau[1], goc).transform; t.gameObject.SetActive(true);
-        bool giu = false; foreach (var r in t.GetComponentsInChildren<Renderer>(true)) foreach (var sm in r.sharedMaterials) if (sm && sm.name.Contains("MaNu")) giu = true;
-        foreach (var r in t.GetComponentsInChildren<Renderer>(true)) { r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; if (r.name.StartsWith("Mat_")) r.enabled = false; else if (vlMa && !giu) r.sharedMaterial = vlMa; }
-        DonThanhPhan(t.gameObject);
-        t.rotation = Quaternion.LookRotation(cam.position - t.position);
-        return t;
-    }
+    static Renderer TimR(Transform t, string ten) { foreach (var r in t.GetComponentsInChildren<Renderer>()) if (r.name == ten && r.enabled) return r; return null; }
 
     // ═════════════════════════ chữ trên màn hình: dấu "!" theo làn, "CHẠY ĐI!", viền tối nứt theo số lần trúng, nhiễu lúc hét
     static Texture2D texVien;
