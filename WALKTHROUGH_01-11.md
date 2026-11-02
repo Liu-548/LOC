@@ -25,7 +25,7 @@ Viết theo **bản dựng thật** trên `main` (commit `eec7326`, 31/10), đ�
 
 ## Điều khiển
 
-WASD đi · chuột nhìn · **E** tương tác · **F** (chỉ ở chỗ rẽ cuối) · **Tab** túi đồ / đọc giấy (←→ lật trang) · **H** gợi ý · **C** ngồi (với đồ dưới thấp, gầm bàn thờ) · **giữ Space 0,8 s** bỏ qua đoạn xe buýt / đoạn bác · **B** bỏ qua mini game (giai đoạn dev).
+WASD đi · chuột nhìn · **E** tương tác · **F** (chỉ ở chỗ rẽ cuối) · **Tab** túi đồ / đọc giấy (←→ lật trang) · **H** gợi ý · **C** ngồi (với đồ dưới thấp, gầm bàn thờ) · **giữ Space 0,8 s** bỏ qua đoạn xe buýt / đoạn bác · **B** bỏ qua mini game (giai đoạn dev). Phím thử trong Editor: **8** vào giấc mơ ngay (xong tỉnh dậy, ở lại đêm đang chơi) · **9** hết đêm ngay.
 
 ---
 
@@ -75,7 +75,13 @@ Bắt đầu giữa phòng khách. Từ đêm này **cổng khóa** (*"Không đ
 6. **Xuống hầm (bật điện) → [E] Dán chén** (cần keo + chén số ba; mini game ghép mảnh, B bỏ qua). Chén 1–2 lành, chén số ba vào chỗ 3. ✅
 7. **[E] Đặt bát cháo** lên bàn thờ hầm. ✅
 8. **Bàn thờ vong → [E] Thắp nén mới.** Chỉ hiện khi đã: thăm Nhím, hoảng loạn, nghe thầy, dán chén, đặt cháo. ✅
-9. Cảnh nửa tỉnh (Nhím: *"mai anh còn ở nhà không"*) → cắt cảnh **đưa tang** → Đêm 3. ✅
+9. Cảnh nửa tỉnh (Nhím: *"mai anh còn ở nhà không"* — *"Còn. Ngủ đi."*) → sáng lại, *"Ngủ thôi."* ✅
+10. **[02/11] Về phòng Khôi (ngay cạnh phòng Nhím) → [E] Đi ngủ ở giường** → **GIẤC MƠ "Chạy"** (~1 phút 30): ✅ *(nhánh `claude/giac-mo-dem2`, chưa chạy thử trong Unity)*
+    - **Giữ W** để chạy, **A / D** đổi làn (3 làn). Khúc rẽ tự rẽ; lối hai bên là lối giả. Chuột chỉ nhìn được ±40°.
+    - Đồ vật sau lưng tự bay tới: dấu **"!" đỏ** ở đáy màn hình đúng làn sắp bị ném, 1,5 s trước → đổi làn. Trúng 3 lần = bị bắt (viền màn hình tối + nứt dần).
+    - **Đứng yên** thì ma áp sát; khi nó sắp tới nơi mới hiện **"CHẠY ĐI!"**. Không chạy tiếp → bị bắt (ngã, bàn tay túm, hét, cắt đen).
+    - Tới **cửa sắt** cuối hành lang = thoát (sập cửa, ma đập hai cái, tối, *"Anh Khôi ơi."*).
+    - Thoát hay bị bắt đều **bật dậy trên giường** (*"Lại cái hành lang đấy."* / *"...Mơ. Mơ thôi."*) → cắt cảnh **đưa tang** → Đêm 3. Chỉ lưu cờ `mo2_thoat` / `mo2_bi_bat`.
 
 **Tùy chọn Đêm 2:** rút quần áo sân phơi (trước hoảng loạn) ✅ · chỗ ngồi quanh bàn ăn ✅ · **bát gạo, bát muối, bó mía** nhặt được ✅ nhưng **không dùng vào đâu** ⚠️ · ra cổng: *"Không được…"* ✅ · quay lại phòng Nhím: *"Bật đèn cho em."* ✅
 

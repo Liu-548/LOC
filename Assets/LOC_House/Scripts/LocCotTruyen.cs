@@ -57,6 +57,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         LocNhim.SauEvil = () => StartCoroutine(KetThuc("Anh không đếm lại bao giờ."));
         foreach (var n in tenCong) { var d = GameObject.Find(n)?.GetComponent<LocDoor>(); if (d) cong.Add(d); }
         KhoiTaoV34();
+        KhoiTaoGiacMo();
         ApDem(LocMa.dem); DauDem();
     }
 
@@ -71,6 +72,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
 #if UNITY_EDITOR
         if (k != null && k.digit9Key.wasPressedThisFrame && LocMa.dem < 3 && !LocFirstPerson.khoa && !LocMenu.DangChe) StartCoroutine(HetDemThu());   // [22/10] thử: phím 9 = hết đêm ngay (xem cảnh ban ngày)
 #endif
+        PhimThuGiacMo(k);
         if (LocMa.dem == 1) Dem1();
         if (LocMa.dem == 2) Dem2();
         if (LocMa.dem == 3) Dem3();
@@ -321,9 +323,9 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     {
         dangCanh = true;
         while (dangNoiHam || (LocTui.Co("thap_huong") && !LocTui.Co("ho_hang_ve"))) yield return null;   // không cắt ngang thoại Đêm 1
-        yield return new WaitForSeconds(1.2f);   // kịp thấy đèn hầm tắt sau lưng
+        if (LocFirstPerson.den < 0.99f) yield return new WaitForSeconds(1.2f);   // kịp thấy đèn hầm tắt sau lưng (từ giấc mơ về thì màn đã đen)
         bool daNuaTinh = false;
-        if (LocMa.dem == 2 && LocNhim.I && !LocBanNgay.chup)   // [27/10] cảnh nửa tỉnh cuối Đêm 2 (đã có sẵn, nay nối vào): đi ngang cửa phòng em đang hé
+        if (LocMa.dem == 2 && LocNhim.I && !LocBanNgay.chup && !LocTui.Co("nua_tinh_2"))   // [02/11] đã nửa tỉnh (đi ngủ → mơ) thì thôi · [27/10] cảnh nửa tỉnh cuối Đêm 2 (đã có sẵn, nay nối vào): đi ngang cửa phòng em đang hé
         {
             LocNhim.I.CanhNuaTinh(true);
             yield return null;
@@ -331,7 +333,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
             daNuaTinh = true;   // cảnh tự cắt đen, màn vẫn đen
         }
         LocFirstPerson.khoa = true; LocMa.tamDung = true;
-        if (!daNuaTinh) for (float t = 0; t < 1; t += Time.deltaTime / 0.6f) { LocFirstPerson.den = t; yield return null; }
+        if (!daNuaTinh) for (float t = LocFirstPerson.den; t < 1; t += Time.deltaTime / 0.6f) { LocFirstPerson.den = t; yield return null; }
         LocFirstPerson.den = 1; LocFirstPerson.PhuDe("", 0.01f);
         // [22/10] cắt cảnh ban ngày (LocBanNgay) thay màn đen; nhà đổi sang trạng thái đêm sau ngay lúc còn đen
         var bn = GetComponent<LocBanNgay>(); int sau = LocMa.dem + 1;
@@ -348,6 +350,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         string id = null; string[] bac = null;
         if (LocMa.dem == 1 && LocTui.Co("thu_ket") && !LocTui.Co("ket_mo"))
         { id = "ma_ket"; bac = new[] { "Bố mẹ chắc gì nhớ được mã. Phải ghi ở đâu đó.", "Giấy tờ nhà mình toàn để bên phòng làm việc của bố.", "...Sao lại có dòng ứng tiền cho anh Phong." }; }
+        if (id == null) GoiYGiacMo(ref id, ref bac);
         if (id == null) GoiYHV34(ref id, ref bac);
         if (id == null) return;
         bacGoiY.TryGetValue(id, out int i);
@@ -362,7 +365,9 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         if (LocNhim.daTham[2] && !LocTui.Co("goi_2") && KC(dienThoai) < 6f) { LocTui.Dat("goi_2"); StartCoroutine(Reo(8, true)); }
         if (LocTui.Co("so_bo_het") && !LocNhim.daHoangLoan && !LocTui.Mo && !LocNhim.dangCanh && !LocFirstPerson.khoa && LocNhim.I)
         { LocNhim.I.CanhHoangLoan(); if (LocMa.I) LocMa.I.LoSom(); }
-        if (LocTui.Co("giu_huong_2") && !LocNhim.dangCanh && !LocFirstPerson.khoa && !LocTui.Mo) StartCoroutine(HetDem());
+        // [02/11] giữ hương → nửa tỉnh → "Ngủ thôi." → [E] Đi ngủ ở giường Khôi → giấc mơ → hết đêm (LocCotTruyen_GiacMo.cs)
+        if (LocTui.Co("giu_huong_2") && !LocTui.Co("nua_tinh_2") && !LocNhim.dangCanh && !LocFirstPerson.khoa && !LocTui.Mo) StartCoroutine(SauGiuHuong2());
+        if (LocTui.Co("nua_tinh_2")) LocMa.tamDung = true;   // hết việc của đêm, đang về phòng ngủ: ma nhà thôi dọa
     }
 
     // chuông điện thoại bàn: lan hồi, lại gần (khi không cho nhấc) thì tắt; cho nhấc thì [E] Nhấc máy → tiếng rè, cái đài, không ai nói

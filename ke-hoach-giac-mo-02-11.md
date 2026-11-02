@@ -1,4 +1,4 @@
-# LỘC — Kế hoạch tính năng GIẤC MƠ (02/11/2026) · CHƯA LÀM, chờ duyệt
+# LỘC — Kế hoạch tính năng GIẤC MƠ (02/11/2026) · ĐÃ CHỐT 02/11 · đã làm GIẤC MƠ 2 (nhánh `claude/giac-mo-dem2`) — xem mục 8
 
 Dựa trên bản dựng `main` (commit `f5e8a1e`, 1/11) và kịch bản v3.3 + v3.4.
 
@@ -152,3 +152,41 @@ Chèn vào `LocCotTruyen.HetDem()` ngay trước `LocBanNgay.Chay()`. Đêm 3 kh
 | GM-8 | Cảnh hét: **âm thanh + rung + mặt lao vào** (model giữ nguyên), hay sửa model cho miệng há? | Giữ model |
 | GM-9 | Câu *"Anh Khôi ơi."* sau cánh cửa khi thoát (mục 3.6)? | Có |
 | GM-10 | Bị bắt / thoát có ảnh hưởng gì về sau không? | Không (chỉ lưu cờ) |
+
+---
+
+## 8. Đã chốt (02/11) và đã làm
+
+### Chốt
+
+| # | Chốt | Ghi chú |
+|---|---|---|
+| GM-1 | **Chỉ một giấc mơ, cuối Đêm 2** | Bỏ giấc mơ 1 (Đêm 1 giữ nguyên như cũ) |
+| GM-2 | **[E] Đi ngủ** ở `GiuongDon_Khoi` | |
+| GM-3 | — | Không làm mơ 1 |
+| GM-4 | **Giữ W để chạy** (không tự chạy), A/D đổi làn | Thả W là dừng |
+| GM-5 | Rẽ tự động + lối giả | Theo đề xuất |
+| GM-6 | Bóng đen **không mắt** | |
+| GM-7 | Viền màn hình tối + nứt | Theo đề xuất |
+| GM-8 | Giữ model, bán cảnh hét bằng âm + rung + mặt lao vào | Theo đề xuất |
+| GM-9 | Có *"Anh Khôi ơi."* sau cánh cửa | Theo đề xuất |
+| GM-10 | Không ảnh hưởng về sau, chỉ lưu cờ | Có công tắc `LocCotTruyen.biBatLaChet` nếu muốn bị bắt = chết thật (mặc định tắt) |
+| mới | **Không chạy thì ma bắt và giết.** Chữ **"CHẠY ĐI!"** chỉ hiện khi người chơi **đứng yên (không giữ W) và ma đã cách < 5 m** | Đầu giấc mơ không có chữ "giữ W"; chạy được rồi mới nhắc "A / D đổi làn" |
+
+### Đã làm (chưa chạy thử trong Unity — chỉ biên dịch sạch)
+
+| File | Nội dung |
+|---|---|
+| `Scripts/LocGiacMo.cs` (mới) | Cả giấc mơ, dựng **lúc chạy** (không cần Dựng nhà, scene không nặng thêm): hành lang 7 đoạn / 6 khúc rẽ (~435 m, ~93 s chạy), rộng 4,8 m = 3 làn × 1,2 m + đồ chất sát tường; sàn gạch bông + tường vôi lấy vật liệu của nhà; đồ đạc **nhân bản hình** từ chính đồ trong nhà (ghế nhựa, ghế đẩu, chậu, xô, thùng, bao xi măng, quạt…); 10 lối giả (hõm tối, đồ chặn, 40% có bóng đen đứng trong — tới gần thì biến mất); bóng đèn tròn treo, 1/4 chập chờn; sương đen; 2 đèn đi theo người + 1 đèn đầu hành lang để thấy bóng đen lúc quay lại. Ma = model `Ma_VanNguoi` của `LocMa` (vật liệu khói / ma nữ), **tắt mắt**. Ném đồ theo đúng bảng nhịp mục 3.4 (đồ đã chạy qua tự nhấc lên → vòng cung → tới đúng lúc hết 1,5 s; 70% làn đang đứng / 30% làn bên; 60 s+ có ném đôi, luôn chừa một làn; 6 s cuối thôi ném, ma áp sát hơn). Trúng: rung, chớp tối, khựng 0,5 s, thở gấp, ma gần thêm 2 m; 3 lần = bắt. Cửa cuối = **hình cánh cửa sắt hầm thật** (`CuaSatHam (mở)`, ổ khoá quay về phía người chạy tới). Cảnh thoát và cảnh bị bắt đúng mục 3.6 / 3.7. Giữ Space 0,8 s bỏ qua (`LocGiacMo.choBoQua`, tắt trước khi nộp). Mọi lỗi bất ngờ (thiếu model…) → ghi lỗi, dọn, coi như thoát — không kẹt màn đen. |
+| `Scripts/LocCotTruyen_GiacMo.cs` (mới) | Nối mạch: giữ hương → nửa tỉnh → sáng lại *"Ngủ thôi."* (cờ `nua_tinh_2`, ma nhà thôi dọa) → **[E] Đi ngủ** (Khôi kéo tấm nilon phủ giường ra) → mơ → **bật dậy trên giường** (nằm ngửa → ngồi bật dậy 0,4 s, thở dốc, nhìn quanh; *"Lại cái hành lang đấy."* / *"...Mơ. Mơ thôi."*, bản bị bắt run và lâu hơn) → hết đêm → đưa tang → Đêm 3. Cờ `mo_2_xong` + `mo2_thoat` / `mo2_bi_bat`. H: *"Muộn rồi. Về phòng mình ngủ."* Phím thử **8** (Editor). |
+| `Scripts/LocCotTruyen.cs` | `Dem2()` gọi `SauGiuHuong2()` thay `HetDem()`; `HetDem()` bỏ cảnh nửa tỉnh khi đã có `nua_tinh_2`, tối dần từ độ đen hiện tại |
+| `Scripts/LocTuKiemGiacMo.cs` (mới) | Menu **LOC → Tự kiểm giấc mơ (Play)**: máy chơi 4 lần (né / không né / đứng yên / nối mạch Đêm 2 → Đêm 3), kiểm thời lượng 80–130 s, số lần ném, ném đôi, luôn có làn trống, "CHẠY ĐI!" chỉ hiện khi đứng yên, ma không lộ mắt, dọn sạch, trả môi trường → `LOC_KiemTra/GiacMo/` |
+| `Scripts/LocChoiThu.cs` | Chơi thử một mạch: sau giữ hương chờ nửa tỉnh → đi ngủ → mơ (máy né) → Đêm 3 |
+| `Scripts/LocMenu.cs` | Thêm khoá `LOC_TuKiemGiacMo` vào danh sách tắt menu khi tự kiểm |
+
+**Âm thanh:** tim, gió rít khi đồ bay, đồ rơi (3 kiểu), ma thở, đập cửa là **âm tổng hợp tạm** (`AmTong` cuối `LocGiacMo.cs`); kéo lê dùng tạm `Cua_Ken` hạ giọng; sập cửa `Cua_Dong` + `Cong_Sat`; khoá `OKhoa_Mo`; hét `Ma_TiengThet`; thở `Khoi_Tho`. Có file thật thì thay trong `AmTong`.
+
+**Chỉnh nhanh trong Inspector / code:** `LocGiacMo` — `tocChay`, `khoangMa` (8 m), `tocMaKhiDung` (2,2 m/s), `canhBaoKhi` (5 m), `batKhi` (0,8 m), `baoTruoc` (1,5 s); độ dài / khúc rẽ ở mảng `DAI` / `RE`; `LocCotTruyen.biBatLaChet`.
+
+**Còn lại:** chạy thử trong Unity + chụp ảnh duyệt (menu Tự kiểm giấc mơ), âm thanh thật, kiểm hướng bàn tay `Ma_Tay` trong cảnh bị bắt (model chưa biết trục, có thể phải xoay).
+

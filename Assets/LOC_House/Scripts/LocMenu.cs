@@ -163,7 +163,7 @@ public class LocMenu : MonoBehaviour
     {
         I = this;
 #if UNITY_EDITOR
-        foreach (var k in new[] { "LOC_TuKiemGamePlay", "LOC_TuKiemNhim", "LOC_TuKiemMa", "LOC_ThuCauThang", "LOC_ChanDoanNhay", "LOC_ThuXeBuyt" })
+        foreach (var k in new[] { "LOC_TuKiemGamePlay", "LOC_TuKiemNhim", "LOC_TuKiemMa", "LOC_ThuCauThang", "LOC_ChanDoanNhay", "LOC_ThuXeBuyt", "LOC_TuKiemGiacMo" })
             if (UnityEditor.EditorPrefs.GetBool(k, false)) tat = true;
 #endif
         if (tat) { enabled = false; return; }

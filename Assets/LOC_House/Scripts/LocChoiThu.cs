@@ -221,6 +221,17 @@ public class LocChoiThu : MonoBehaviour
         Muc("ĐÊM 2 — GIỮ HƯƠNG");
         var ct = LocCotTruyen.I; Toi(ct.demSauDung, ct.demSauNhin); yield return Cho(0.5f);
         var v = Viec("thap_huong"); G("gợi ý: " + v.GoiY); v.Bam();
+        // [02/11] giữ hương → nửa tỉnh → [E] Đi ngủ ở giường Khôi → giấc mơ (máy tự né) → tỉnh dậy → Đêm 3
+        yield return ChoDen(() => LocTui.Co("nua_tinh_2") && !LocFirstPerson.khoa, 60, "nửa tỉnh xong, trả điều khiển để đi ngủ");
+        yield return Chup("nua_tinh_xong");
+        G("giường Khôi: " + (ct.ChoNgu ? ct.ChoNgu.GoiY : "KHÔNG có chỗ ngủ"));
+        LocGiacMo.bot = LocGiacMo.Bot.Ne; ct.DiNguNgay();
+        yield return ChoDen(() => LocGiacMo.dangMo, 6, "vào giấc mơ");
+        yield return Cho(8); yield return Chup("giac_mo_chay");
+        yield return ChoDen(() => !LocGiacMo.dangMo, 180, "giấc mơ xong");
+        var kq = LocGiacMo.cuoi; if ((object)kq != null) G($"giấc mơ: {(kq.ketThoat ? "THOÁT" : "BỊ BẮT")} · {kq.tgChay:0} s · ném {kq.soNem} · trúng {kq.soTrung}");
+        LocGiacMo.bot = LocGiacMo.Bot.Khong;
+        yield return Cho(1.5f); yield return Chup("tinh_day");
         yield return ChoDen(() => LocMa.dem == 3, 75, "sang Đêm 3");
         yield return Cho(2); yield return Chup("ban_ngay_dem2_3");
         yield return ChoDen(() => !LocFirstPerson.khoa && LocFirstPerson.den == 0, 25, "trả điều khiển đầu Đêm 3");
