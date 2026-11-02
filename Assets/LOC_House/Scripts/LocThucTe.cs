@@ -90,6 +90,10 @@ public class LocThucTe : MonoBehaviour
             if (!VUNG.Contains(r.bounds.center)) continue;
             if (goc.ContainsKey(r)) continue;
             var cu = r.sharedMaterials; Material[] moi = null;
+            // [03/11] bóng / tuýp / chao do LocCongTac + LocMa bật tắt bằng cách tráo vật liệu: đổi sang PBR ở đây thì khi tắt "Thực tế"
+            //  KhoiPhuc trả vật liệu sáng về dù đèn đang tắt (hoặc ngược lại trả bản tắt khi đèn đã bật lại) → để nguyên các vật này
+            bool doDien = false; foreach (var m0 in cu) if (LocDien.DoDien(m0) || LocDien.LaBanTat(m0)) { doDien = true; break; }
+            if (doDien) continue;
             for (int i = 0; i < cu.Length; i++)
             {
                 var m = cu[i]; if (!m || !m.shader) continue;
