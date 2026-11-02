@@ -29,7 +29,7 @@ public class LocCongTac : MonoBehaviour
         ["Bep_GiengTroi"] = new[] { "Bep" },
         ["WC_T1"] = new[] { "WC_T1" },
         ["BoMe"] = new[] { "BoMe_OpTran" },
-        ["HanhLang_ChieuNghi"] = new[] { "ChieuNghi_T2", "HanhLang_T2" },
+        ["HanhLang_ChieuNghi"] = new[] { "ChieuNghi_T2", "HanhLang_T2", "Sanh_T2" },   // [03/11] sảnh T2 (đầu hành lang, trước cửa phòng bố mẹ) trước đây không công tắc nào tắt được
         ["HanhLang_Khoi"] = new[] { "HanhLang_T2" },
         ["PhongKhoi"] = new[] { "Khoi_Tran", "DenBan_Khoi" },
         ["PhongNhim"] = new[] { "DenNgu_Nhim" },   // [1/11] "Bật đèn cho em": công tắc phòng em bật/tắt được đèn ngủ (mất điện vẫn do LocMa)
