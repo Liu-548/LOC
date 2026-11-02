@@ -4,7 +4,7 @@ Hai chỗ phát hiện lúc chơi thử nhánh `claude/giac-mo-dem2`. **Tạm d�
 
 ---
 
-## 1. Phòng Nhím trần nhà có hai màu (cam một nửa, xanh một nửa)
+## 1. Phòng Nhím trần nhà có hai màu (cam một nửa, xanh một nửa) — ✅ ĐÃ SỬA (nhánh `claude/walkthrough-tiep`: cách b, đèn phụ `DenPhu_Nhim` do `LocSuaNha` thêm lúc chạy, đi theo đèn ngủ qua `LocDenTheo`)
 
 **Nguyên nhân (không phải lỗi vật liệu):**
 - Phòng Nhím chỉ có **một đèn**: `Den_DenNgu_Nhim` (đèn ngủ, màu cam `#FFB36B`, tầm 4,5 m, cường độ 0,9, đổ bóng) — `LocHouseBuilder.cs` dòng ~995.
@@ -23,7 +23,7 @@ Lưu ý: đèn ngủ Nhím do cốt truyện + `LocMa` điều khiển (mất đ
 
 ---
 
-## 2. Tủ đứng ở hành lang tầng 2, trước cửa phòng Khôi — cửa 2 cánh nhưng chỉ mở như 1 cánh
+## 2. Tủ đứng ở hành lang tầng 2, trước cửa phòng Khôi — cửa 2 cánh nhưng chỉ mở như 1 cánh — ✅ ĐÃ SỬA (nhánh `claude/walkthrough-tiep`: `LocSuaNha` tách cánh + chuyển tay nắm lúc chạy; `LocTuMo.Bang` đã khai 2 cánh cho lần dựng nhà sau)
 
 **Vật:** `TuDung_RuongChanMan` đặt tại `(0,33 ; T2 ; 13,25)`, xoay 90°, dài 2,32 m dọc tường trái hành lang T2 (`LocHouseBuilder.cs` dòng ~920).
 

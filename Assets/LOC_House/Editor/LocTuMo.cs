@@ -81,7 +81,10 @@ public static class LocTuMo
                           H(-0.57f, -0.03f, 1.205f, 1.555f, 0.212f, -0.2f, 0f, 0.2195f), H(0.03f, 0.57f, 1.205f, 1.555f, 0.212f, -0.2f, 0f, 0.2195f) } },
         new Tu { ten = "KetSat_KhoaSo", moHinh = "KetSat_KhoaSo", canh = new[] { Q(-0.19f, 0.19f, 0.01f, 0.23f, 0.168f, 0.205f, 0.185f, 0.178f, "cửa két sắt") },
             hoc = new[] { H(-0.185f, 0.185f, 0.015f, 0.225f, 0.17f, -0.165f, 0f, 0.1745f) } },
-        new Tu { fMin = new Vector3(-1.16f, 0f, -0.324f), fMax = new Vector3(1.16f, 1.8f, 0.324f), ten = "TuDung_RuongChanMan", moHinh = "TuDung_RuongChanMan", canh = new[] { Q(-1.13f, -0.29f, 0.045f, 1.755f, 0.29f, 0.31f, -1.125f, 0.301f, "cửa tủ đứng") },
+        new Tu { fMin = new Vector3(-1.16f, 0f, -0.324f), fMax = new Vector3(1.16f, 1.8f, 0.324f), ten = "TuDung_RuongChanMan", moHinh = "TuDung_RuongChanMan", canh = new[] {
+            // [02/11] file .glb là HAI cánh (x −1,125…−0,725 và −0,695…−0,295) + hai tay nắm ở giữa (z tới 0,324) — trước khai 1 cánh, tay nắm nằm lại trên thân
+            Q(-1.13f, -0.71f, 0.045f, 1.755f, 0.29f, 0.33f, -1.125f, 0.301f, "cửa tủ đứng"),
+            Q(-0.71f, -0.29f, 0.045f, 1.755f, 0.29f, 0.33f, -0.295f, 0.301f, "cửa tủ đứng") },
             hoc = new[] { H(-1.125f, -0.295f, 0.05f, 1.75f, 0.296f, -0.28f, 0f, 0.3045f, 1.2f) } },
         new Tu { fMin = new Vector3(-0.8f, 0f, -0.323f), fMax = new Vector3(0.8f, 1.2f, 0.323f), ten = "TuKinh", moHinh = "TuKinh", canh = new[] {
             new Canh { a = new Vector3(-0.002f, 0.035f, 0.309f), b = new Vector3(0.765f, 1.165f, 0.33f), kieu = Kieu.Truot, truot = new Vector3(-0.72f, 0, 0), ten = "kính tủ" },
