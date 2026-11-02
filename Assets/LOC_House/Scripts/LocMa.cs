@@ -61,9 +61,7 @@ public class LocMa : MonoBehaviour
     readonly List<(Renderer r, Material[] goc, Material[] tat)> phat = new();
     readonly List<GameObject> vatSang = new();
     readonly Dictionary<Material, Material> banTat = new();
-    static bool PhatSang(Material m) =>
-        (m.HasProperty("_EmissionColor") && m.GetColor("_EmissionColor").maxColorComponent > 0.02f) ||
-        (m.HasProperty("emissiveFactor") && m.GetColor("emissiveFactor").maxColorComponent > 0.02f);
+    static bool PhatSang(Material m) => LocDien.DoDien(m);   // [03/11] chỉ đồ điện — lửa đèn dầu, nến sáp, đầu nhang không tắt khi mất điện (LocDien)
     Material BanTat(Material m)
     {
         if (banTat.TryGetValue(m, out var t)) return t;
@@ -95,11 +93,14 @@ public class LocMa : MonoBehaviour
         cam = fp && fp.cam ? fp.cam : Camera.main ? Camera.main.transform : null;
         am = gameObject.AddComponent<AudioSource>(); am.playOnAwake = false; am.spatialBlend = 0;
         foreach (var l in FindObjectsByType<Light>(FindObjectsSortMode.None))
-            if (l.type != LightType.Directional && !l.name.Contains("Ham") && !l.transform.IsChildOf(transform)) { dens.Add(l); goc[l] = l.intensity; }
+            if (l.type != LightType.Directional && !l.name.Contains("Ham") && !l.transform.IsChildOf(transform) && !LocDien.LaLua(l)) { dens.Add(l); goc[l] = l.intensity; }   // [03/11] đèn dầu không ăn điện
         ambient0 = RenderSettings.ambientLight;
-        foreach (var r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
+        // [03/11] lấy cả vật đang ẩn (bàn thờ / rạp theo đêm bật về sau) — trước đây đồ điện trong nhóm bật sau vẫn sáng lúc mất điện
+        foreach (var r in FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
-            if (r.transform.IsChildOf(transform) || r.bounds.center.y < -0.4f) continue;
+            if (!r || r.transform.IsChildOf(transform) || r.gameObject.scene != gameObject.scene) continue;
+            float y = r.gameObject.activeInHierarchy && r.enabled ? r.bounds.center.y : r.transform.position.y;   // vật ẩn: bounds rỗng
+            if (y < -0.4f) continue;
             var ms = r.sharedMaterials; bool co = false; var tat = new Material[ms.Length];
             for (int i = 0; i < ms.Length; i++) { tat[i] = ms[i]; if (ms[i] && PhatSang(ms[i])) { tat[i] = BanTat(ms[i]); co = true; } }
             if (co) phat.Add((r, ms, tat));
