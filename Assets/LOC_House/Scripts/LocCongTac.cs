@@ -40,11 +40,15 @@ public class LocCongTac : MonoBehaviour
     static readonly Dictionary<Light, Renderer[]> bong = new Dictionary<Light, Renderer[]>();
     static readonly Dictionary<Renderer, Material[]> gocMat = new Dictionary<Renderer, Material[]>(), tatMat = new Dictionary<Renderer, Material[]>();
     static Renderer[] tatCaR;
+    static int canhCache;   // [03/11] cảnh mà các bảng tĩnh trên đang trỏ vào
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void Reset0() { muon.Clear(); bong.Clear(); gocMat.Clear(); tatMat.Clear(); tatCaR = null; }
+    static void Reset0() { muon.Clear(); bong.Clear(); gocMat.Clear(); tatMat.Clear(); tatCaR = null; canhCache = 0; }
 
     void Awake()
     {
+        // [03/11] Chơi lại / Về menu nạp lại cảnh nhà trong cùng phiên: tatCaR còn giữ renderer của cảnh cũ (đã huỷ) → BongCua không tìm thấy
+        //  bóng nào → tắt công tắc chỉ tắt nguồn sáng, bóng / tuýp vẫn sáng rực. Cảnh mới (handle khác) thì làm lại bảng từ đầu.
+        int hc = gameObject.scene.GetHashCode(); if (hc != canhCache) { Reset0(); canhCache = hc; }   // Scene.GetHashCode() = handle của cảnh
         var l = new List<Transform>();
         foreach (var t in GetComponentsInChildren<Transform>(true)) if (t.name == "Phim") l.Add(t);
         phim = l.ToArray();
