@@ -507,6 +507,41 @@ public partial class LocCotTruyen
         VeMenu();
     }
 
+    // [02/11] Evil "năm năm sau" (walkthrough ❌): ngoài cổng ban ngày, nhà buôn bán lại · dưới hầm năm cái chén mới lành lặn, hũ niêm mới ·
+    //  đêm, cuối hành lang tầng một: nửa cái đầu lấp ló ở mép cửa (LocMa.ThuLo — không có chỗ hợp lệ thì bỏ khung này)
+    IEnumerator NamNamSau()
+    {
+        TroiSang();
+        fp.DatTuThe(dem1Dung, dem1Nhin);
+        yield return Den(1, 0, 1.2f); yield return new WaitForSeconds(2.4f); yield return Den(0, 1, 0.8f);
+        TroiToi();
+        var bo = GameObject.Find("Bo_Chen_Tren_De");
+        if (bo)
+        {
+            foreach (var t in bo.GetComponentsInChildren<Transform>(true)) if (t.name.StartsWith("ChenNguyen_")) t.gameObject.SetActive(true);   // năm chén mới
+            var tt = TimV("ChenHam_TrangThai"); if (tt) tt.gameObject.SetActive(false);
+            var b = BaoV(bo.transform);
+            var dung = b.center + new Vector3(0, 0.3f, 0.8f);
+            fp.DatTuThe(dung + Vector3.down * (fp.cam ? fp.cam.localPosition.y : 1.52f), b.center);
+            var den = new GameObject("Ket_DenNamNam").AddComponent<Light>(); den.type = LightType.Point; den.range = 2.4f; den.intensity = 1.1f; den.color = new Color(1f, 0.62f, 0.32f);
+            den.transform.position = b.center + Vector3.up * 0.9f;
+            yield return Den(1, 0, 1.0f); yield return new WaitForSeconds(2.8f); yield return Den(0, 1, 0.8f);
+            Destroy(den.gameObject);
+        }
+        if (LocMa.I)
+        {
+            fp.DatTuThe(new Vector3(3.0f, 0.05f, 9.0f), new Vector3(1.0f, 1.4f, 16f));   // sảnh sau tầng một nhìn về giếng trời / kho / WC
+            yield return Den(1, 0, 1.0f);
+            thaKhoaKet = true; LocFirstPerson.khoa = true; LocMa.tamDung = false;
+            bool lo = false;
+            try { var m = typeof(LocMa).GetMethod("ThuLo", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance); lo = m != null && (bool)m.Invoke(LocMa.I, new object[] { -1 }); }
+            catch (System.Exception e) { Debug.LogWarning("[LOC] Evil năm năm sau: không gọi được lấp ló — " + e.Message); }
+            yield return new WaitForSeconds(lo ? 3.6f : 1.6f);
+            LocMa.tamDung = true; thaKhoaKet = false;
+            yield return Den(0, 1, 0.8f);
+        }
+    }
+
     // khối hình đơn giản cho các cảnh kết (không va chạm, không đổ bóng, vật liệu Lit một màu lấy theo vật liệu sẵn có trong cảnh)
     static Material vlKhoiGoc;
     static GameObject Khoi(Transform cha, string ten, PrimitiveType kieu, Vector3 p, Vector3 co, Color mau)
@@ -592,6 +627,9 @@ public partial class LocCotTruyen
         if (cTut && amReo) { amReo.PlayOneShot(cTut, 0.8f); yield return new WaitForSeconds(cTut.length); }
         LocFirstPerson.chuGiua = "Năm năm sau.";
         yield return new WaitForSeconds(3f);
+        LocFirstPerson.chuGiua = null;
+        yield return NamNamSau();   // [02/11] cảnh thật thay cho chỉ có chữ
+        LocFirstPerson.den = 1;
         LocFirstPerson.chuGiua = "Anh không đếm lại bao giờ.";
         yield return new WaitForSeconds(6f);
         VeMenu();
