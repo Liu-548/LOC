@@ -296,8 +296,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     {
         if (!coBoQua || LocMenu.DangChe) return;
         float k = Screen.height / 1080f;
-        var st = new GUIStyle(GUI.skin.label) { font = LocMenu.FontChu(1), fontSize = Mathf.RoundToInt(19 * k), alignment = TextAnchor.LowerRight };
-        st.normal.textColor = new Color(0.75f, 0.72f, 0.66f, 0.38f + 0.5f * Mathf.Clamp01(giuSpace / 0.8f));
+        var st = LocKieuChu.Lay("ct.boQua", LocMenu.FontChu(1), Mathf.RoundToInt(19 * k), GUI.skin.label.fontStyle, TextAnchor.LowerRight, new Color(0.75f, 0.72f, 0.66f, 0.38f + 0.5f * Mathf.Clamp01(giuSpace / 0.8f)));   // [02/11] dùng lại kiểu chữ, không tạo mới mỗi OnGUI
         GUI.Label(new Rect(0, 0, Screen.width - 36 * k, Screen.height - 30 * k), LocFirstPerson.CHU_BO_QUA, st);
         if (giuSpace > 0) { float w = 170 * k * Mathf.Clamp01(giuSpace / 0.8f); GUI.color = new Color(0.75f, 0.72f, 0.66f, 0.7f); GUI.DrawTexture(new Rect(Screen.width - 36 * k - w, Screen.height - 26 * k, w, 2 * k), Texture2D.whiteTexture); GUI.color = Color.white; }
     }
