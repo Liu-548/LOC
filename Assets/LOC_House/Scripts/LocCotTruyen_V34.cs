@@ -315,9 +315,12 @@ public partial class LocCotTruyen
         yield return new WaitForSeconds(0.8f);
         yield return Den(1, 0, 1.6f);
         yield return new WaitForSeconds(1.0f);
+        // [02/11] độc thoại cổng theo v3.3 (bản tạm cũ: "Sáng rồi." / "Không có chuyện gì cả."):
+        //  Bad (c) — đã đọc lời nhắn của mẹ: "Mẹ bảo không được niêm." · chưa đọc: "Ông ấy bảo đem lên chùa."
+        //  Evil — không đưa hũ (giữ lại): chỉ "Mùng một." + "Sáng rồi." (câu "Làm đúng như ông ấy dặn." cũ trái nghĩa: thầy muốn đem đi)
         LocFirstPerson.PhuDe("Mùng một.", 2.2f); yield return new WaitForSeconds(2.6f);
-        LocFirstPerson.PhuDe("Sáng rồi.", 2.2f); yield return new WaitForSeconds(2.6f);
-        LocFirstPerson.PhuDe(evil ? "Làm đúng như ông ấy dặn." : "Không có chuyện gì cả.", 2.6f); yield return new WaitForSeconds(3.2f);
+        if (evil) { LocFirstPerson.PhuDe("Sáng rồi.", 2.2f); yield return new WaitForSeconds(2.8f); }
+        else { LocFirstPerson.PhuDe(LocTui.Co("doc:loi_nhan_me") ? "Mẹ bảo không được niêm." : "Ông ấy bảo đem lên chùa.", 2.8f); yield return new WaitForSeconds(3.4f); }
         yield return Den(0, 1, 1.2f);
     }
     Light nangSang; Color amb0, fog0; bool daSang;
