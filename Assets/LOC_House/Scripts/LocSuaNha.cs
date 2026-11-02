@@ -19,6 +19,7 @@ public static class LocSuaNha
         if (sc.name == LocGiacMo.TEN_CANH) return;
         try { DenPhuNhim(sc); } catch (System.Exception e) { Debug.LogException(e); }
         try { TachTuDung(sc); } catch (System.Exception e) { Debug.LogException(e); }
+        try { LocNuocChen.Gan(sc); } catch (System.Exception e) { Debug.LogException(e); }   // [03/11] nước trong chén hầm, chén 5 vơi nửa từ Đêm 3
     }
 
     // ───────── 1. đèn phụ phòng Nhím
