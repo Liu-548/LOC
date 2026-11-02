@@ -65,7 +65,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     {
         if (LocMa.dem != demDangAp) ApDem(LocMa.dem);
         DenHam();
-        if (dangKet) { LocFirstPerson.khoa = true; LocMa.tamDung = true; }   // [27/10] phần kết: cảnh khác (LocNhim) có nhả khoá cũng giữ lại
+        if (dangKet && !thaKhoaKet) { LocFirstPerson.khoa = true; LocMa.tamDung = true; }   // [02/11] trừ đoạn Evil cho đi tới chân cầu thang   // [27/10] phần kết: cảnh khác (LocNhim) có nhả khoá cũng giữ lại
         if (dangCanh) return;
         var k = Keyboard.current;
         if (k != null && k.hKey.wasPressedThisFrame && !LocFirstPerson.khoa && !LocTui.Mo) GoiYH();

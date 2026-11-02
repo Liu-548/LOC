@@ -237,7 +237,7 @@ public partial class LocCotTruyen
             fp.DatTuThe(new Vector3(1.45f, 0.05f, 6.75f), new Vector3(1.45f, 3.4f, 9.6f));
             yield return Den(1, 0, 1.2f);
             yield return new WaitForSeconds(1.5f);
-            if (LocNhim.I) LocNhim.I.GoiTuTrenGac(); else StartCoroutine(KetEvil());
+            yield return EvilCauThang();   // [02/11] v3.3: đi được tới chân cầu thang nhưng khựng ở bậc thứ nhất, tiếng chén vỡ
         }
         else { yield return ThayNhanHu(hu); TroiToi(); if (LocNhim.I) LocNhim.I.CanhBad(); else StartCoroutine(KetBad()); }
     }
@@ -340,6 +340,32 @@ public partial class LocCotTruyen
         }
     }
 
+    // [02/11] Evil theo walkthrough (v3.3): tiếng gọi từ trên gác hai lần → người chơi đi được, bước lên bậc thứ nhất thì khựng lại,
+    //  dưới hầm có tiếng chén vỡ → điện thoại. Không bước lên thì ~25 s sau cũng khựng (để cảnh không kẹt).
+    bool thaKhoaKet;   // đang trong phần kết mà cho người chơi đi (LocCotTruyen.Update không ép khoá)
+    IEnumerator EvilCauThang()
+    {
+        LocMenu.DatKet("evil");
+        LocFirstPerson.PhuDe("NHÍM: Anh Khôi ơi...", 2.6f, false); yield return new WaitForSeconds(5f);
+        LocFirstPerson.PhuDe("NHÍM: Anh Khôi ơi...", 2.6f, false); yield return new WaitForSeconds(2.6f);
+        var p0 = fp.transform.position;
+        thaKhoaKet = true; LocFirstPerson.khoa = false;
+        for (float t = 0; t < 25f; t += Time.deltaTime)
+        {
+            var p = fp.transform.position;
+            if (p.y > p0.y + 0.1f || p.z > p0.z + 0.45f) break;   // chân đã đặt lên bậc thứ nhất (thang đi lên theo +z)
+            yield return null;
+        }
+        thaKhoaKet = false; LocFirstPerson.khoa = true;
+        var cam = fp.cam; var lp = cam.localPosition;
+        for (float t = 0; t < 0.25f; t += Time.deltaTime) { cam.localPosition = lp + Vector3.down * 0.05f * Mathf.Sin(t / 0.25f * Mathf.PI); yield return null; }   // khựng
+        cam.localPosition = lp;
+        var chen = GameObject.Find("Bo_Chen_Tren_De");
+        if (LocMa.I && LocMa.I.chenVo) AudioSource.PlayClipAtPoint(LocMa.I.chenVo, chen ? chen.transform.position : fp.transform.position + Vector3.down * 2f, 1f);
+        yield return new WaitForSeconds(2.2f);
+        StartCoroutine(KetEvil());
+    }
+
     // ───── thân các kết
     IEnumerator BadB()
     {
@@ -402,7 +428,8 @@ public partial class LocCotTruyen
         yield return new WaitForSeconds(1.0f);
         if (cReo && amReo) { amReo.PlayOneShot(cReo, 0.9f); yield return new WaitForSeconds(Mathf.Max(1.5f, cReo.length)); amReo.PlayOneShot(cReo, 0.9f); yield return new WaitForSeconds(Mathf.Max(1.5f, cReo.length)); }
         yield return Den(LocFirstPerson.den, 1, 0.8f);
-        yield return Thoai(("KHÔI", "A lô."), (THAY, "Xong rồi chứ."), ("KHÔI", "Vâng."), (THAY, "Cháu khá hơn bố cháu."));
+        // [02/11] cuộc gọi đúng chữ v3.3 (trước: "Xong rồi chứ." — nghĩa ngược, như thể thầy tưởng mọi thứ theo ý mình)
+        yield return Thoai((THAY, "Cháu giữ nó lại à."), ("KHÔI", "..."), (THAY, "Cháu khá hơn bố cháu."), ("KHÔI", "Dạ."));
         if (cTut && amReo) { amReo.PlayOneShot(cTut, 0.8f); yield return new WaitForSeconds(cTut.length); }
         LocFirstPerson.chuGiua = "Năm năm sau.";
         yield return new WaitForSeconds(3f);
