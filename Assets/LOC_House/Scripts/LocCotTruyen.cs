@@ -172,7 +172,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     {
         if (dangCanh) return "";
         int d = LocMa.dem;
-        if (id == "dien_thoai") return dangReo && nhacMay ? "[E] Nhấc máy" : "";
+        if (id == "dien_thoai") return dangReo && nhacMay ? "[E] Nhấc máy" : ChoGoiThay() ? "[E] Gọi số ở bìa sổ (826 315)" : "";
         if (id == "thap_huong_t3")
             return d == 3 && LocMa.huDaHe && !LocTui.Co("thap_huong_t3") ? (DungChinhDien(banThoT3) ? "[E] Thắp hương" : "Đứng thẳng trước bàn thờ để thắp hương") : "";
         if (id != "thap_huong") return "";
@@ -184,7 +184,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     public void Bam(LocViec v)
     {
         if (!GoiY(v.id).StartsWith("[E]")) return;
-        if (v.id == "dien_thoai") { nhacMay = false; dangReo = false; return; }
+        if (v.id == "dien_thoai") { if (dangReo) { nhacMay = false; dangReo = false; } else StartCoroutine(GoiThay()); return; }
         if (v.id == "thap_huong_t3") { StartCoroutine(GiuCamera(v.transform, "thap_huong_t3")); return; }
         if (LocMa.dem == 1 && !LocTui.Co("thap_huong")) StartCoroutine(ThapHuong(v.transform));
         else StartCoroutine(GiuCamera(v.transform, "giu_huong_" + LocMa.dem));

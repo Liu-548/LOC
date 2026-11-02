@@ -159,28 +159,50 @@ public partial class LocCotTruyen
     {
         if (!daDanChen && LocTui.Co("dan_chen")) { daDanChen = true; ChenHam(true, false, false); }
         if (LocTui.Co("goi_2") && tGoi2 < 0) tGoi2 = Time.time;
-        if (!CoGoiThay || !LocTui.Co("goi_2") || LocTui.Co("goi_thay") || dangReo || dangCanh || LocNhim.dangCanh || LocFirstPerson.khoa || LocTui.Mo) return;
-        var p = fp.transform.position;
-        if (hamPhong.Contains(p) || hopThang.Contains(p) || Time.time - tGoi2 < 35f || Time.time < tReoThay || KC(dienThoai) > 16f) return;
-        tReoThay = Time.time + 55f;   // không nhấc thì một lúc sau reo lại
-        StartCoroutine(Reo(10, true, CuocGoiThay));
+        // [02/11] v3.3: thầy KHÔNG tự gọi tới nữa — Khôi đọc sổ tới bìa sau (số thầy Đồng 826 315), qua đoạn hoảng loạn, rồi tự gọi (ChoGoiThay / GoiThay)
     }
 
+    // [02/11] [E] Gọi số ở bìa sổ: điện thoại phòng khách, Đêm 2, sau khi đã thấy số ở bìa sau sổ của bố và qua đoạn hoảng loạn
+    bool ChoGoiThay() => LocMa.dem == 2 && CoGoiThay && !LocTui.Co("goi_thay") && LocTui.Co("so_bo_het") && LocNhim.daHoangLoan && !dangReo && !dangCanh;
+    IEnumerator GoiThay()
+    {
+        if (!ChoGoiThay()) yield break;
+        dangCanh = true; LocFirstPerson.khoa = true; LocMa.tamDung = true;
+        LocFirstPerson.PhuDe("Tám. Hai. Sáu. Ba. Một. Năm.", 2.4f); yield return new WaitForSeconds(2.6f);   // quay số
+        var hoi = HoiChuong();
+        for (int i = 0; i < 3; i++) { amReo.PlayOneShot(hoi, 0.6f); yield return new WaitForSeconds(hoi.length + 0.4f); }   // chuông chờ đầu dây bên kia
+        yield return CuocGoiThay();
+        LocMa.tamDung = false; LocFirstPerson.khoa = false; dangCanh = false;
+    }
+    // tiếng "tuuu" chờ bắt máy (425 Hz, 1 s) — tổng hợp tạm; có file thì đặt Resources/LOC_V33/DienThoai_Cho
+    static AudioClip hoiChuong;
+    static AudioClip HoiChuong()
+    {
+        if (hoiChuong) return hoiChuong;
+        var f = Resources.Load<AudioClip>("LOC_V33/DienThoai_Cho"); if (f) return hoiChuong = f;
+        const int HZ = 22050; int n = HZ * 2; var d = new float[n];
+        for (int i = 0; i < n; i++) { float t = i / (float)HZ; d[i] = t < 1f ? Mathf.Sin(2 * Mathf.PI * 425f * t) * 0.35f * Mathf.Clamp01(t * 40f) * Mathf.Clamp01((1f - t) * 40f) : 0f; }
+        hoiChuong = AudioClip.Create("DienThoai_Cho", n, 1, HZ, false); hoiChuong.SetData(d, 0); hoiChuong.hideFlags = HideFlags.DontUnloadUnusedAsset;
+        return hoiChuong;
+    }
+
+    // [02/11] thứ tự + mấy câu theo v3.3 (walkthrough Đêm 2 ⚠️): "Ông ấy đâu?" · im bảy giây · "Nhà còn ai lớn không?" · "Không mở hũ." tách riêng.
+    //  Phần giữa vẫn là THOẠI TẠM của nhóm — sửa thẳng ở đây khi có toàn văn v3.3.
     IEnumerator CuocGoiThay()
     {
-        yield return Thoai(("KHÔI", "A lô."));
         if (cRe) { amReo.PlayOneShot(cRe, 0.5f); yield return new WaitForSeconds(1.2f); }
-        yield return Thoai((THAY, "Khôi đấy phải không."),
-            ("KHÔI", "Vâng. Ai đấy ạ."),
-            (THAY, "Người lo việc thờ cúng cho nhà anh. Bố anh chắc có nhắc."),
+        yield return Thoai((THAY, "Ông ấy đâu?"));
+        LocFirstPerson.PhuDe("KHÔI: ...", 7f, false); yield return new WaitForSeconds(7f);   // bảy giây im
+        yield return Thoai((THAY, "Nhà còn ai lớn không?"),
+            ("KHÔI", "...Cháu. Cháu là Khôi."),
             (THAY, "Nghe cho kỹ, tôi chỉ nói một lần."),
             (THAY, "Dưới hầm có hai cái chén vỡ. Dán lại cho lành. Keo ở cửa hàng nhà anh."),
             (THAY, "Cái chén trên phòng thờ, đem xuống đặt vào chỗ thứ ba."),
             (THAY, "Bát cháo bác anh nấu, bưng xuống để lên bàn thờ dưới ấy."),
             (THAY, "Giữ hương trên linh cữu đến sáng."),
             (THAY, "Tối mai mùng một. Tôi gửi đồ sang. Làm đúng như trong giấy."),
-            ("KHÔI", "Ông là thầy Đồng?"),
-            (THAY, "Làm đúng thì con bé khỏi. Đừng có mở cái hũ."));
+            (THAY, "Làm đúng thì con bé khỏi."),
+            (THAY, "Không mở hũ."));
         if (cTut) { amReo.PlayOneShot(cTut, 0.8f); yield return new WaitForSeconds(cTut.length); }
         LocTui.Dat("goi_thay");
         yield return new WaitForSeconds(0.6f);
@@ -641,7 +663,7 @@ public partial class LocCotTruyen
         int d = LocMa.dem;
         if (d == 2)
         {
-            if (CoGoiThay && LocTui.Co("goi_2") && !LocTui.Co("goi_thay")) { id = "goi_thay"; bac = new[] { "Lúc nãy điện thoại reo.", "Cứ ở gần điện thoại phòng khách.", "Reo thì nhấc máy." }; return; }
+            if (CoGoiThay && LocNhim.daHoangLoan && !LocTui.Co("goi_thay")) { id = "goi_thay"; bac = LocTui.Co("so_bo_het") ? new[] { "Bố có ghi số ông thầy.", "Bìa sau quyển sổ. 826 315.", "Điện thoại ở phòng khách." } : new[] { "Đọc nốt quyển sổ của bố đã.", "Lật tới bìa sau." }; return; }
             if (LocTui.Co("goi_thay") && mgDanChen && vpKeo && vpChen3 && !LocTui.Co("dan_chen")) { id = "dan_chen"; bac = new[] { "Ông ấy bảo dán hai cái chén dưới hầm.", "Keo thì cửa hàng nhà mình có bán, trên quầy.", "Còn cái chén trên phòng thờ tầng ba." }; return; }
             if (LocTui.Co("goi_thay") && vpChao && choDatChao && !LocTui.Co("cung_chao")) { id = "cung_chao"; bac = new[] { "Còn bát cháo.", "Bác để cháo trên bàn ăn dưới bếp.", "Bưng xuống bàn thờ dưới hầm." }; return; }
         }
