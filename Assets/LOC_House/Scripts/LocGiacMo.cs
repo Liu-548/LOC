@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 //  · tới cửa sắt cuối hành lang = thoát (sập cửa, ma đập cửa, "Anh Khôi ơi.") · bị bắt = ngã, bàn tay túm, hét, cắt đen
 //  Mơ không có thua thật: kết quả chỉ để LocCotTruyen chọn cảnh tỉnh dậy + lưu cờ.
 //  Hành lang dựng lúc vào mơ (khối + đồ nhân bản từ chính đồ trong nhà), ở xa dưới nhà (y −60) → scene không nặng thêm, xong thì xoá.
-//  Âm thanh tim / gió rít / đồ rơi / thở của ma là âm tổng hợp tạm (AmTong) — thay bằng file thật sau.
+//  Âm thanh tim / gió rít / đồ rơi / thở của ma / đập cửa: AmTong (cuối file) — có file thật trong Resources/LOC_AmThanh/GM_* thì tự dùng.
 public class LocGiacMo : MonoBehaviour
 {
     public static bool dangMo;
@@ -56,7 +56,8 @@ public class LocGiacMo : MonoBehaviour
     GameObject[] nguonDo, nguonNem;
 
     class DoVat { public Transform t; public float s; public bool nemDuoc, daNem; }
-    class Nem { public Transform t; public int lan; public float t0; public Vector3 pDat, pNhac, truoc, vBay; public Quaternion q0; public bool xong, daDat; public float tDat; public AudioSource am; }
+    class Nem { public Transform t; public int lan; public float t0; public Vector3 pDat, pNhac, vBay; public Quaternion q0; public bool xong, daDat; public float tDat; public AudioSource am, keo; }
+    AudioClip amKeo; bool daTimKeo; float tChapCuoi;
 
     // ═════════════════════════ vào mơ
     public static LocGiacMo Tao() => cuoi = new GameObject("LOC_GiacMo").AddComponent<LocGiacMo>();
@@ -561,7 +562,10 @@ public class LocGiacMo : MonoBehaviour
             t = g.transform;
         }
         var n = new Nem { t = t, lan = lan, t0 = Time.time, pDat = t.position, q0 = t.rotation };
-        LocAm.Phat("Cua_Ken", t.position, 0.45f, 0.55f);   // tiếng kéo lê lúc đồ tự nhấc lên (tạm: tiếng cửa kẽo kẹt hạ giọng)
+        // tiếng kéo lê lúc đồ tự nhấc lên: tiếng kéo hũ (Hu_KeoHu, LocHuCot.keo) — không có thì tiếng cửa kẽo kẹt hạ giọng
+        if (!daTimKeo) { daTimKeo = true; foreach (var h in FindObjectsByType<LocHuCot>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (h.keo) { amKeo = h.keo; break; } }
+        if (amKeo) { n.keo = t.gameObject.AddComponent<AudioSource>(); n.keo.clip = amKeo; n.keo.spatialBlend = 0.8f; n.keo.minDistance = 1.5f; n.keo.maxDistance = 16f; n.keo.volume = 0.7f; n.keo.pitch = Random.Range(1.1f, 1.35f); n.keo.Play(); }
+        else LocAm.Phat("Cua_Ken", t.position, 0.45f, 0.55f);
         n.am = t.gameObject.AddComponent<AudioSource>(); n.am.clip = AmTong.Gio(); n.am.spatialBlend = 0.6f; n.am.minDistance = 2f; n.am.maxDistance = 20f; n.am.volume = 0.9f; n.am.Play();
         nem.Add(n);
     }
@@ -572,6 +576,7 @@ public class LocGiacMo : MonoBehaviour
         float tt = Time.time - n.t0, nhac = 0.35f;
         if (!n.xong)
         {
+            if (tt >= nhac && n.keo && n.keo.isPlaying) n.keo.Stop();   // nhấc khỏi sàn rồi: hết tiếng kéo, còn tiếng gió
             if (tt < nhac)
             {
                 float e = tt / nhac;
@@ -613,7 +618,15 @@ public class LocGiacMo : MonoBehaviour
 
     void CapNhatDen(float dt)
     {
-        foreach (var (r, hz, pha) in chapChon) if (r) r.enabled = Mathf.PerlinNoise(Time.time * hz * 0.3f, pha) > 0.32f;
+        foreach (var (r, hz, pha) in chapChon)
+        {
+            if (!r) continue;
+            bool sang = Mathf.PerlinNoise(Time.time * hz * 0.3f, pha) > 0.32f;
+            // bóng gần chớp sáng lại thì rè một tiếng (Dien_Chap của LocNhim), tối đa ~1 lần / giây
+            if (sang && !r.enabled && fp && Time.time - tChapCuoi > 1f && LocNhim.I && LocNhim.I.dienChap && (r.transform.position - fp.transform.position).sqrMagnitude < 36f)
+            { tChapCuoi = Time.time; AudioSource.PlayClipAtPoint(LocNhim.I.dienChap, r.transform.position, 0.25f); }
+            r.enabled = sang;
+        }
     }
 
     // ═════════════════════════ thoát: tới cửa sắt
@@ -935,48 +948,75 @@ public class LocGiacMo : MonoBehaviour
     static Transform Tim(Transform t, string ten) { foreach (var c in t.GetComponentsInChildren<Transform>(true)) if (c.name == ten) return c; return null; }
 }
 
-// Âm tổng hợp tạm cho giấc mơ (tim, gió rít, đồ rơi, ma thở, đập cửa) — tạo một lần, giữ trong bộ nhớ
+// Âm của giấc mơ. Có file thật thì thả vào Assets/LOC_House/Resources/LOC_AmThanh/ đúng tên dưới đây là tự dùng, không phải sửa code:
+//   GM_Tim (nhịp tim, lặp) · GM_Gio (gió rít khi đồ bay, ~1,5 s, to dần) · GM_Roi_0/1/2 (đồ rơi / va: nhựa, gỗ, sắt) · GM_MaTho (ma thở, lặp) · GM_DapCua (đập cửa sắt)
+//  Chưa có file thì dùng âm tổng hợp tạm (tạo một lần, giữ trong bộ nhớ qua các lần nạp lại scene).
 public static class AmTong
 {
     const int HZ = 22050;
     static AudioClip tim, gio, maTho, dap; static AudioClip[] roi;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset0() { tim = gio = maTho = dap = null; roi = null; }
+    static AudioClip That(string ten) => Resources.Load<AudioClip>("LOC_AmThanh/" + ten);
     static AudioClip Tao(string ten, float giay, System.Func<float, System.Random, float> f, int hat)
     {
         int n = (int)(giay * HZ); var d = new float[n]; var rd = new System.Random(hat);
         for (int i = 0; i < n; i++) d[i] = Mathf.Clamp(f(i / (float)HZ, rd), -1f, 1f);
-        var c = AudioClip.Create(ten, n, 1, HZ, false); c.SetData(d, 0); return c;
+        var c = AudioClip.Create(ten, n, 1, HZ, false); c.SetData(d, 0);
+        c.hideFlags = HideFlags.DontUnloadUnusedAsset;   // nạp lại scene (UnloadUnusedAssets) không xoá mất clip đang giữ trong biến tĩnh
+        return c;
     }
-    public static AudioClip Tim() => tim ??= Tao("GM_Tim", 1.0f, (t, r) =>
+    // so sánh kiểu Unity (!clip): clip đã bị huỷ cũng tính là chưa có
+    public static AudioClip Tim()
     {
-        float a = Mathf.Exp(-t / 0.07f) * Mathf.Sin(2 * Mathf.PI * 52 * t), b = t > 0.28f ? Mathf.Exp(-(t - 0.28f) / 0.06f) * Mathf.Sin(2 * Mathf.PI * 46 * (t - 0.28f)) * 0.7f : 0;
-        return (a + b) * 0.9f;
-    }, 1);
-    static float lp;
-    public static AudioClip Gio() => gio ??= Tao("GM_Gio", 1.6f, (t, r) =>
+        if (!tim) tim = That("GM_Tim");
+        if (!tim) tim = Tao("GM_Tim", 1.0f, (t, r) =>
+        {
+            float a = Mathf.Exp(-t / 0.07f) * Mathf.Sin(2 * Mathf.PI * 52 * t), b = t > 0.28f ? Mathf.Exp(-(t - 0.28f) / 0.06f) * Mathf.Sin(2 * Mathf.PI * 46 * (t - 0.28f)) * 0.7f : 0;
+            return (a + b) * 0.9f;
+        }, 1);
+        return tim;
+    }
+    public static AudioClip Gio()
     {
-        float nhieu = (float)r.NextDouble() * 2 - 1; float k = Mathf.Lerp(0.02f, 0.25f, t / 1.6f);
-        lp += (nhieu - lp) * k; return lp * Mathf.Lerp(0.1f, 1.6f, t / 1.6f) * (t > 1.5f ? (1.6f - t) / 0.1f : 1f);
-    }, 2);
+        if (!gio) gio = That("GM_Gio");
+        if (!gio) { float lp = 0; gio = Tao("GM_Gio", 1.6f, (t, r) =>
+        {
+            float nhieu = (float)r.NextDouble() * 2 - 1; float k = Mathf.Lerp(0.02f, 0.25f, t / 1.6f);
+            lp += (nhieu - lp) * k; return lp * Mathf.Lerp(0.1f, 1.6f, t / 1.6f) * (t > 1.5f ? (1.6f - t) / 0.1f : 1f);
+        }, 2); }
+        return gio;
+    }
     public static AudioClip Roi()
     {
-        if (roi == null)
+        if (roi == null || !roi[0] || !roi[1] || !roi[2])
         {
             roi = new AudioClip[3];
             for (int j = 0; j < 3; j++)
             {
+                roi[j] = That("GM_Roi_" + j);
+                if (roi[j]) continue;
                 float f0 = 70 + 35 * j; float lpr = 0;
-                roi[j] = Tao("GM_Roi" + j, 0.5f, (t, r) => { float nh = (float)r.NextDouble() * 2 - 1; lpr += (nh - lpr) * 0.35f; return Mathf.Exp(-t / 0.05f) * lpr * 1.2f + Mathf.Exp(-t / 0.12f) * Mathf.Sin(2 * Mathf.PI * f0 * t) * 0.8f; }, 10 + j);
+                roi[j] = Tao("GM_Roi_" + j, 0.5f, (t, r) => { float nh = (float)r.NextDouble() * 2 - 1; lpr += (nh - lpr) * 0.35f; return Mathf.Exp(-t / 0.05f) * lpr * 1.2f + Mathf.Exp(-t / 0.12f) * Mathf.Sin(2 * Mathf.PI * f0 * t) * 0.8f; }, 10 + j);
             }
         }
         return roi[Random.Range(0, 3)];
     }
-    public static AudioClip MaTho() => maTho ??= Tao("GM_MaTho", 3.2f, (t, r) =>
+    public static AudioClip MaTho()
     {
-        float nh = (float)r.NextDouble() * 2 - 1; lp += (nh - lp) * 0.06f;
-        float hoi = Mathf.Pow(Mathf.Abs(Mathf.Sin(Mathf.PI * t / 1.6f)), 2.5f);
-        return lp * hoi * 2.2f;
-    }, 3);
-    public static AudioClip Dap() => dap ??= Tao("GM_Dap", 0.9f, (t, r) =>
-        Mathf.Exp(-t / 0.15f) * Mathf.Sin(2 * Mathf.PI * 68 * t) + Mathf.Exp(-t / 0.35f) * (Mathf.Sin(2 * Mathf.PI * 410 * t) * 0.25f + Mathf.Sin(2 * Mathf.PI * 633 * t) * 0.18f + Mathf.Sin(2 * Mathf.PI * 951 * t) * 0.1f), 4);
+        if (!maTho) maTho = That("GM_MaTho");
+        if (!maTho) { float lp = 0; maTho = Tao("GM_MaTho", 3.2f, (t, r) =>
+        {
+            float nh = (float)r.NextDouble() * 2 - 1; lp += (nh - lp) * 0.06f;
+            float hoi = Mathf.Pow(Mathf.Abs(Mathf.Sin(Mathf.PI * t / 1.6f)), 2.5f);
+            return lp * hoi * 2.2f;
+        }, 3); }
+        return maTho;
+    }
+    public static AudioClip Dap()
+    {
+        if (!dap) dap = That("GM_DapCua");
+        if (!dap) dap = Tao("GM_DapCua", 0.9f, (t, r) =>
+            Mathf.Exp(-t / 0.15f) * Mathf.Sin(2 * Mathf.PI * 68 * t) + Mathf.Exp(-t / 0.35f) * (Mathf.Sin(2 * Mathf.PI * 410 * t) * 0.25f + Mathf.Sin(2 * Mathf.PI * 633 * t) * 0.18f + Mathf.Sin(2 * Mathf.PI * 951 * t) * 0.1f), 4);
+        return dap;
+    }
 }
