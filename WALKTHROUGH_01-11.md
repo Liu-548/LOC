@@ -54,8 +54,8 @@ Ngồi xe, chỉ nhìn quanh. Giữ Enter để bỏ qua. Xuống xe trước c�
 **Tùy chọn Đêm 1:** dọn bàn nước (sau khi bác về) ✅ · xếp lại giấy tờ (sau khi mở két) ✅ · xếp lại bàn học phòng Khôi ✅ · tờ lịch phòng khách *"Mẹ khoanh ngày chín"* ✅ · quay lại phòng Nhím: *"Anh chưa đi ngủ à."* ✅
 
 **Chưa làm / lệch Đêm 1:**
-- ❌ Két nhận mọi bộ bốn số, năm sinh người khác → *"Không phải."* (v3.3 C5).
-- ❌ Tờ giấy nợ tiền xi măng trong bộ hồ sơ.
+- ✅ *(rà 03/11: đã có từ trước, tài liệu ghi nhầm)* Két nhận mọi bộ bốn số; năm sinh người khác trong nhà (1959, 1960, 1982, 1995) → *"Không phải."* (v3.3 C5).
+- ❌ Tờ giấy nợ tiền xi măng trong bộ hồ sơ — 🗣 cần toàn văn v3.3 (không có trong repo / Project).
 - ⚠️ Bàn tay Khôi: đã có, nhưng thay khăn chưa ai chơi tay kiểm (kiem-thu C9).
 
 ---
@@ -116,7 +116,7 @@ Bắt đầu giữa phòng khách, linh cữu không còn. **Đồng hồ quả 
 - ❌ **Cảnh két: hai tờ giấy gói đặt cạnh nhau**, lời nhắn rơi ra từ giấy gói cũ, Khôi lật lại trang 10–12, trang 7 — *cú lật quan trọng nhất của game*. Bản dựng: giấy gói đến trong kiện hàng, lời nhắn nằm riêng trên bàn trang điểm với **nội dung tạm** (khác toàn văn v3.3).
 - ✅ *(02/11)* Hé hũ bị khóa tới khi đọc lời nhắn của mẹ.
 - ✅ *(02/11)* Kiện hàng: chuông cổng + xe máy + cái đài (chuông, chuông chờ điện thoại là âm tổng hợp tạm).
-- ❌ Chén số 5 vơi nửa nước khi xuống hầm Đêm 3.
+- ✅ *(03/11, nhánh `claude/ra-soat-03-11`)* Chén hầm có nước (chén 4, chén 5 — ba chén dán lại không ai rót nên rỗng); từ Đêm 3 chén số 5 vơi còn nửa (`LocNuocChen`).
 - ⚠️ Vòng 2 nghi lễ: v3.3 là mini game đọc **năm đoạn theo năm vạch tàn nhang** (±0,6 s); bản dựng chỉ cần lật hết trang. Văn khấn tạm, chưa có đoạn 5 *"ở yên trong hũ"* đúng chữ.
 - ✅ *(02/11)* Gợi ý H theo v3.3: kiện hàng *"trông quen mắt"* → lời nhắn của mẹ → cái hũ → quyển sách → thiếu đồ mâm → chỗ rẽ, bậc cuối *"Tiễn người ta đi mà lại khóa người ta lại à?"* (câu chữ các bậc giữa là tạm).
 
@@ -132,7 +132,7 @@ Diễn ra: xé niêm, đốt, mở hũ → **bốn lọn tóc** → bùa trên t
 - ✅ *(02/11)* Câu "Cảm ơn" giọng con vong, không tên (`...: Cảm ơn.`).
 - ✅ *(02/11)* Thêm *"KHÔI: Đi đi. Nhà tôi giữ lâu quá rồi."* trước lúc bùa rơi.
 - ❌ Rắc gạo muối theo đường ra (tùy chọn).
-- ❌ Cái hũ bọc vải trắng trong túi cạnh cửa.
+- ❌ Cái hũ bọc vải trắng trong túi cạnh cửa — 🗣 cần v3.3: cảnh sáng Good chỉ quay trong phòng Nhím, chưa rõ "cửa" là cửa phòng hay cửa chính.
 - 🗣 Nhím chỉ có một câu (TL-09).
 
 ### DEATH — "Nhà này còn một cái chén" ✅
@@ -172,6 +172,7 @@ Diễn ra: cổng sáng → Khôi ở chân cầu thang, *"NHÍM: Anh Khôi ơi.
 - ✅ *(02/11)* Người chơi đi được tới chân cầu thang, **khựng ở bậc thứ nhất**, tiếng chén vỡ.
 - ✅ *(02/11)* Cuộc gọi đúng chữ v3.3: *"Cháu giữ nó lại à." / … / "Cháu khá hơn bố cháu." / "Dạ."*
 - ✅ *(02/11)* Cảnh năm năm sau: nhà ban ngày, dưới hầm **năm chén mới**, hũ đã niêm, đêm — **nửa cái đầu lấp ló** ở mép cửa sảnh sau. (Chưa có: cửa hàng mở lại, bùa mới.)
+  - ✅ *(03/11)* Sửa: trước đây khung hầm chỉ thấy **đế trống** (bước dựng nhà 01/11 đã bỏ năm chén liền khỏi lưới đế) — nay dựng lại năm chén lành đúng chỗ.
 - 🗣 TL-29: bốn câu hỏi còn mở (có cần cờ đọc sách không, hũ niêm có giữ được nó sau mùng một không…).
 
 ---
