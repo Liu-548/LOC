@@ -21,6 +21,16 @@ public static class LocDien
     public static bool CamORieng(Material m) => m && Co(m.name, O_RIENG);
     public static bool DoDien(Material m) => PhatSang(m) && !KhongAnDien(m);   // phát sáng nhờ điện
 
+    // bản tắt của vật liệu phát sáng: tắt cả hai kiểu phát sáng (URP: _EmissionColor + từ khoá _EMISSION · glTFast: emissiveFactor)
+    public static Material BanTat(Material m, string hauTo)
+    {
+        var t = new Material(m) { name = m.name + hauTo };
+        if (t.HasProperty("_EmissionColor")) t.SetColor("_EmissionColor", Color.black);
+        if (t.HasProperty("emissiveFactor")) t.SetColor("emissiveFactor", Color.black);
+        t.DisableKeyword("_EMISSION");
+        return t;
+    }
+
     // đèn mô phỏng lửa (đèn dầu dưới gầm linh cữu…): không tắt khi mất điện
     public static bool LaLua(Light l) => l && l.GetComponent<LocLuaNhapNhay>();
 

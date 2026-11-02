@@ -157,14 +157,16 @@ public class LocCongTac : MonoBehaviour
         var l = new List<Renderer>(); var p = d.transform.position;
         foreach (var r in tatCaR)
         {
-            if (!r || (r.bounds.center - p).sqrMagnitude > 0.81f) continue;
+            if (!r || r.bounds.size == Vector3.zero || (r.bounds.center - p).sqrMagnitude > 0.81f) continue;   // vật ẩn: bounds rỗng ở gốc toạ độ
             var ms = r.sharedMaterials; bool co = false; var tat = new Material[ms.Length];
             for (int i = 0; i < ms.Length; i++)
             {
                 tat[i] = ms[i];
-                if (ms[i] && ms[i].HasProperty("_EmissionColor") && ms[i].GetColor("_EmissionColor").maxColorComponent > 0.02f
-                    && !LocDien.KhongAnDien(ms[i]) && !LocDien.CamORieng(ms[i]))   // [03/11] lửa / nhang / nến điện cắm ổ riêng không theo công tắc phòng
-                { var m = new Material(ms[i]) { name = ms[i].name + "_CongTacTat" }; m.SetColor("_EmissionColor", Color.black); m.DisableKeyword("_EMISSION"); tat[i] = m; co = true; }
+                // [03/11] bóng / tuýp / chao của model .glb (glTFast) phát sáng qua "emissiveFactor", không phải "_EmissionColor":
+                //  trước đây chỉ xét _EmissionColor → tắt công tắc chỉ tắt nguồn sáng, ống tuýp / bóng compact / bóng đèn chùm vẫn sáng rực
+                //  (cả 21 bộ đèn trong nhà đều giữ vật liệu glTF ở ô phát sáng). Lửa / nhang / nến điện cắm ổ riêng không theo công tắc phòng.
+                if (LocDien.PhatSang(ms[i]) && !LocDien.KhongAnDien(ms[i]) && !LocDien.CamORieng(ms[i]))
+                { tat[i] = LocDien.BanTat(ms[i], "_CongTacTat"); co = true; }
             }
             if (!co) continue;
             if (!gocMat.ContainsKey(r)) { gocMat[r] = ms; tatMat[r] = tat; }
