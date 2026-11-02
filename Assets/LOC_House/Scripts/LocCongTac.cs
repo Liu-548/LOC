@@ -143,6 +143,13 @@ public class LocCongTac : MonoBehaviour
     {
         bool on = muon[d] && !LocMa.MatDien;
         d.enabled = on;
+        ApBong(d, on);
+        var th = d.GetComponent<LocBongTheoDen>(); if (!th) th = d.gameObject.AddComponent<LocBongTheoDen>(); th.Gan(d, on);
+    }
+
+    // bóng / tuýp quanh đèn sáng hay tắt theo đèn
+    public static void ApBong(Light d, bool on)
+    {
         foreach (var r in BongCua(d)) if (r && gocMat.TryGetValue(r, out var g) && tatMat.TryGetValue(r, out var t)) r.sharedMaterials = on ? g : t;
     }
 
