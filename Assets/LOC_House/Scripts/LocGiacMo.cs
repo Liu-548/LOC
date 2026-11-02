@@ -684,7 +684,10 @@ public class LocGiacMo : MonoBehaviour
         if (amMaTho) amMaTho.Stop(); if (amTim) amTim.volume = 0.12f;
         if (denTruoc) denTruoc.enabled = false; if (denSau) denSau.enabled = false;
         LocFirstPerson.den = 1f;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2.2f);
+        // trong bóng tối, sát sau lưng (phía bên này cánh cửa): tiếng thở khò khè của Nhím rồi mới tới câu gọi — chưa có giọng đọc, chỉ phụ đề
+        if (LocNhim.I && LocNhim.I.tho) AudioSource.PlayClipAtPoint(LocNhim.I.tho, cam.position - fp.transform.forward * 1.1f + Vector3.down * 0.3f, 0.55f);
+        yield return new WaitForSeconds(0.8f);
         LocFirstPerson.PhuDe("NHÍM: Anh Khôi ơi.", 2.6f, false);
         yield return new WaitForSeconds(3.0f);
     }
