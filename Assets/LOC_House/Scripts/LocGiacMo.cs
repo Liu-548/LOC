@@ -961,7 +961,7 @@ public class LocGiacMo : MonoBehaviour
             foreach (var m in Resources.FindObjectsOfTypeAll<Material>())
                 if (m && m.name == ten) { var k = Moi(new Material(m), ten); if (k.HasProperty("_BaseColor")) k.SetColor("_BaseColor", m.GetColor("_BaseColor") * nhanMau); return k; }
         Material goc = null;
-        foreach (var r in FindObjectsByType<MeshRenderer>(FindObjectsSortMode.None)) { var m = r.sharedMaterial; if (m && m.shader && !m.name.EndsWith(HAU_TO) && m.shader.name.Contains("Universal Render Pipeline/Lit")) { goc = m; break; } }
+        foreach (var r in FindObjectsByType<MeshRenderer>(FindObjectsSortMode.None)) { var m = r.sharedMaterial; if (m && m.shader && !m.name.EndsWith(HAU_TO) && !m.name.EndsWith("_PBR") && !m.name.EndsWith("_phang") && m.shader.name.Contains("Universal Render Pipeline/Lit")) { goc = m; break; }   // [03/11] bỏ vật liệu của bản "Thực tế" (mang normal map vữa) }
         Material v;
         if (goc) v = Moi(new Material(goc), "VL"); else { var sh = Shader.Find("Universal Render Pipeline/Lit"); if (!sh) return null; v = Moi(new Material(sh), "VL"); }
         if (v.HasProperty("_BaseMap")) v.SetTexture("_BaseMap", null);

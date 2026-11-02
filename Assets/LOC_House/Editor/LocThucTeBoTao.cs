@@ -15,7 +15,7 @@ public static class LocThucTeBoTao
     [MenuItem("LOC/Tạo bộ PBR thực tế")]
     public static void Tao()
     {
-        Directory.CreateDirectory(DIR);
+        if (!AssetDatabase.IsValidFolder(DIR)) AssetDatabase.CreateFolder("Assets/LOC_House", "Resources");   // CreateAsset cần thư mục đã có trong AssetDatabase
         var bo = ScriptableObject.CreateInstance<LocThucTeBo>();
         var ds = new System.Collections.Generic.List<string>();
         var A = new System.Collections.Generic.List<Texture2D>(); var N = new System.Collections.Generic.List<Texture2D>(); var M = new System.Collections.Generic.List<Texture2D>();
