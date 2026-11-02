@@ -177,6 +177,7 @@ public class LocMenu : MonoBehaviour
         if (fp) lookGoc = fp.look;
         ApDung(); ApBong();
         LocHieuNang.ApDoHoa(CD("DoHoa", 1));   // [02/11] mức đồ hoạ đã lưu (mặc định 1 = Cân bằng) — sau ApBong để LocHieuNang đọc đúng cài đặt bóng
+        if (LocThucTe.Bat) LocThucTe.Ap();   // [02/11] bản thử "Thực tế" (phòng khách) đã bật từ lần trước
     }
 
     void OnApplicationFocus(bool f)
@@ -437,6 +438,7 @@ public class LocMenu : MonoBehaviour
                 hangs.Add(new Hang { ten = "Độ sáng", gt = () => "Chỉnh  ›", vao = () => { sangCu = CD("DoSang", 50); man = Man.DoSang; } });
                 hangs.Add(Chon("Lớp phim cũ", "Phim", 0, new[] { "Đầy đủ", "Nhẹ", "Tắt" }));
                 hangs.Add(Chon("Chất lượng hình ảnh", "DoHoa", 1, LocHieuNang.TEN_MUC, () => LocHieuNang.ApDoHoa(CD("DoHoa", 1))));   // [02/11] Tiết kiệm · Cân bằng · Đẹp (LocHieuNang)
+                hangs.Add(Chon("Hình ảnh thực tế (thử)", "ThucTe", 0, new[] { "Tắt", "Bật" }, () => LocThucTe.Ap()));   // [02/11] chỉ phòng khách
                 hangs.Add(Chon("Chất lượng bóng đổ", "Bong", 2, new[] { "Tắt", "Thấp", "Vừa" }, () => { ApBong(); LocHieuNang.DocLaiBong(); }));
                 hangs.Add(Chon("Giới hạn khung hình", "Fps", 1, new[] { "30", "60", "120", "144", "Không giới hạn" }));
                 hangs.Add(Chon("Đồng bộ dọc", "VSync", 1, new[] { "Tắt", "Bật" }));
