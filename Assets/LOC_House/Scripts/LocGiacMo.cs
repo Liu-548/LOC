@@ -19,7 +19,13 @@ using UnityEngine.SceneManagement;
 public class LocGiacMo : MonoBehaviour
 {
     public static bool dangMo;
-    public static bool choBoQua = true;          // giữ Enter 0,8 s để bỏ qua (như xe buýt / đoạn bác — LocFirstPerson.GiuBoQua) — TẮT trước khi nộp, như nút B của mini game
+    // giữ Enter 0,8 s để bỏ qua (như xe buýt / đoạn bác — LocFirstPerson.GiuBoQua). Giống nút B của mini game: chỉ có ở Editor / bản Development,
+    //  và tắt hẳn khi bật menu LOC → Bản nộp (ký hiệu LOC_BAN_NOP)
+#if (UNITY_EDITOR || DEVELOPMENT_BUILD) && !LOC_BAN_NOP
+    public static bool choBoQua = true;
+#else
+    public static bool choBoQua = false;
+#endif
     public enum Bot { Khong, Ne, KhongNe, DungYen }
     public static Bot bot = Bot.Khong;           // tự kiểm (LocTuKiemGiacMo): máy tự chơi
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset0() { dangMo = false; bot = Bot.Khong; cuoi = null; canhNha = default; }
