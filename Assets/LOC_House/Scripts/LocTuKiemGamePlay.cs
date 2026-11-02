@@ -81,6 +81,63 @@ public class LocTuKiemGamePlay : MonoBehaviour
     // [21/10] mini game: đứng cách điểm ~1,1 m, tia nhìn trúng điểm, có gợi ý → bấm E mở → bỏ qua → cờ bật, trả điều khiển
     static GameObject Tim(string ten) { foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (t.name == ten) return t.gameObject; return null; }
     // đứng chéo phía trên nhóm đồ ~1,3 m, nhìn xuống rồi chụp (so trước/sau)
+    // [03/11] các sửa của nhánh rà soát: nước chén hầm, năm chén mới (Evil), chạn hai hàng cánh, công tắc tắt cả bóng, mất điện không dập lửa
+    IEnumerator SuaLoi0311()
+    {
+        sb.AppendLine("— sửa 03/11");
+        var nhom = GameObject.Find("ChenHam_TrangThai")?.transform;
+        if (!nhom) foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (t.name == "ChenHam_TrangThai") { nhom = t; break; }
+        Kt(nhom && nhom.GetComponent<LocNuocChen>(), "chén hầm: có LocNuocChen");
+        Transform Nuoc(string chen) { var c = nhom ? nhom.Find(chen) : null; if (!c) return null; foreach (var t in c.GetComponentsInChildren<Transform>(true)) if (t.name == "MatNuoc") return t; return null; }
+        var n4 = Nuoc("Chen4"); var n5 = Nuoc("Chen5");
+        Kt(n4 && n5, "chén 4, chén 5 có mặt nước");
+        if (n4 && n5)
+        {
+            LocMa.dem = 2; yield return null; yield return null; float y2 = n5.localPosition.y;
+            LocMa.dem = 3; yield return null; yield return null; float y3 = n5.localPosition.y;
+            Kt(y3 < y2 - 0.008f && Mathf.Abs(n4.localPosition.y - y2) < 1e-4f, $"Đêm 3: chén 5 vơi còn nửa (mặt nước {y2:0.000} → {y3:0.000} m), chén 4 vẫn đầy");
+        }
+        var moi = LocNuocChen.ChenMoi(nhom);
+        bool du = moi.Count == 5; foreach (var g in moi) du &= g.GetComponent<MeshFilter>().sharedMesh && g.GetComponent<MeshFilter>().sharedMesh.vertexCount > 100 && g.transform.Find("MatNuoc");
+        Kt(du, $"Evil năm năm sau: dựng được năm chén mới có nước ({moi.Count})");
+        foreach (var g in moi) Destroy(g);
+
+        int tren = 0, duoi = 0; Transform chaChan = null; bool cungCha = true;
+        foreach (var d in FindObjectsByType<LocDoor>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (d.ten != "cửa chạn" && d.ten != "cửa chạn dưới") continue;
+            if (d.ten == "cửa chạn") tren++; else duoi++;
+            if (!chaChan) chaChan = d.transform.parent; else cungCha &= d.transform.parent == chaChan;
+        }
+        Kt(tren == 2 && duoi == 2 && cungCha, $"chạn: 2 cánh trên + 2 cánh dưới tách thành hai cửa đôi ({tren} + {duoi})");
+
+        // công tắc phòng khách: tắt thì không còn vật ăn điện nào phát sáng quanh các đèn
+        var ct = GameObject.Find("CongTac_PhongKhach")?.GetComponent<LocCongTac>();
+        if (ct && ct.dens != null && ct.dens.Length > 0)
+        {
+            bool batTruoc = ct.dens[0].enabled;
+            if (batTruoc) ct.Toggle(); yield return null;
+            int sang = 0;
+            foreach (var r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
+                foreach (var d in ct.dens)
+                    if (d && (r.bounds.center - d.transform.position).sqrMagnitude < 0.81f)
+                        foreach (var m in r.sharedMaterials) if (LocDien.DoDien(m) && !LocDien.CamORieng(m)) sang++;   // cả _EmissionColor lẫn emissiveFactor (glTF)
+            Kt(!ct.dens[0].enabled && sang == 0, $"tắt công tắc phòng khách: đèn tắt, không còn bóng / tuýp nào sáng ({sang})");
+            if (batTruoc) ct.Toggle(); yield return null;
+        }
+        else Kt(false, "có CongTac_PhongKhach nối đèn");
+
+        // mất điện chỉ tắt đồ điện: bảng 'phat' của LocMa không chứa vật liệu lửa / nhang
+        int sai = 0, tong = 0;
+        var f = typeof(LocMa).GetField("phat", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        if (LocMa.I && f != null && f.GetValue(LocMa.I) is System.Collections.IEnumerable ds)
+            foreach (var o in ds) if (o is System.Runtime.CompilerServices.ITuple t && t[1] is Material[] goc) { tong++; foreach (var m in goc) if (m && LocDien.KhongAnDien(m) && LocDien.PhatSang(m)) sai++; }
+        Kt(tong > 0 && sai == 0, $"mất điện: {tong} vật ăn điện, không vật nào là lửa / nhang ({sai})");
+        var dau = GameObject.Find("Den_DenDau_GamQuanTai")?.GetComponent<Light>();
+        var fd = typeof(LocMa).GetField("dens", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        if (dau && LocMa.I && fd != null) Kt(!((System.Collections.Generic.List<Light>)fd.GetValue(LocMa.I)).Contains(dau), "mất điện không tắt đèn dầu dưới gầm linh cữu");
+    }
+
     IEnumerator ChupVao(Transform g, string ten)
     {
         var fp = FindAnyObjectByType<LocFirstPerson>(); if (!fp) yield break;
@@ -207,6 +264,8 @@ public class LocTuKiemGamePlay : MonoBehaviour
         yield return ThuMiniGame("nl_bay_mam", "13_bay_mam");
         LocTui.Dat("nl_doc_van");   // [27/10] vòng 2 đọc bài khấn
         yield return ThuMiniGame("nl_giu_nhang", "14_giu_nhang");
+
+        yield return SuaLoi0311();
 
         sb.AppendLine(loi == 0 ? "KẾT QUẢ: ĐẠT" : $"KẾT QUẢ: {loi} LỖI");
         System.IO.File.WriteAllText("LOC_KiemTra/GamePlay/BaoCao.txt", sb.ToString());
