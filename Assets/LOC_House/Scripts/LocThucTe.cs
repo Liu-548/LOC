@@ -52,12 +52,13 @@ public class LocThucTe : MonoBehaviour
     }
     bool choTuBat;
     void Start() { if (choTuBat && !daAp && Bat) Dat(true); }
-    LocVetBan vetBan;
+    LocVetBan vetBan; LocDoMoi doMoi;
 
     void Dat(bool b)
     {
         dangBat = b; daAp = true; mucDaAp = Muc; StopAllCoroutines(); KhoiPhuc();
         if (vetBan) { Destroy(vetBan.gameObject); vetBan = null; }
+        if (doMoi) { Destroy(doMoi.gameObject); doMoi = null; }
         if (b) { VUNG = Muc == 2 ? TinhNha() : PK; TaoHauKy(); if (vol) vol.enabled = true; StartCoroutine(BatVatLieu()); }
         else { if (vol) vol.enabled = false; KhoiPhuc(); foreach (var g in probes) if (g) g.SetActive(false); if (bui) bui.gameObject.SetActive(false); }
     }
@@ -111,7 +112,7 @@ public class LocThucTe : MonoBehaviour
         {
             if (!dangBat) yield break;
             if (!r || r is ParticleSystemRenderer || r is LineRenderer || r is TrailRenderer) continue;
-            if (!VUNG.Contains(r.bounds.center)) continue;
+            if (!VUNG.Contains(r.bounds.center) && !VUNG.Contains(r.transform.position)) continue;   // vật đang ẩn (đồ của đêm khác) có bounds = 0 → xét thêm vị trí
             if (goc.ContainsKey(r)) continue;
             var cu = r.sharedMaterials; Material[] moi = null;
             // [03/11] bóng / tuýp / chao do LocCongTac + LocMa bật tắt bằng cách tráo vật liệu: đổi sang PBR ở đây thì khi tắt "Thực tế"
@@ -135,6 +136,8 @@ public class LocThucTe : MonoBehaviour
         TaoBui();
         // vết bẩn / ố / mốc / nứt trên vỏ nhà (1 draw call)
         if (!vetBan) vetBan = LocVetBan.Tao(transform, VUNG, LaVoNha);
+        // đồ vật dựng lại chi tiết cao (Blender): vòng hoa tang, ảnh thờ
+        if (!doMoi) doMoi = LocDoMoi.Tao(transform, VUNG);
     }
 
     // Normal map cần tangent. Tường/sàn dựng bằng code (lưới "BoxWorldUV") KHÔNG có tangent → normal map sẽ vỡ sáng.
