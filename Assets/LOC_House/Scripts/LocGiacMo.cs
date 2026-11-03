@@ -83,7 +83,9 @@ public class LocGiacMo : MonoBehaviour
         yield return AnToan(ChayTrong(nguoi), () => loi = true);
         if (loi)
         {
-            ketThoat = true;
+            // [03/11] lỗi xảy ra SAU khi đã bị bắt (giữa cảnh ngã / lật / hét) thì kết quả vẫn là BỊ BẮT — trước đây bị tính THOÁT
+            //  (tự kiểm "đứng yên": ma áp sát, cảnh bị bắt gãy giữa chừng → ghi THOÁT). Chỉ lỗi trước lúc bị bắt mới coi như thoát.
+            ketThoat = !daBiBat;
             try { if (!daDon) DonDep(); } catch (System.Exception e) { Debug.LogException(e); }
         }
         LocFirstPerson.den = 1f;
@@ -758,9 +760,10 @@ public class LocGiacMo : MonoBehaviour
     IEnumerator LacKhoa() { var r0 = khoaTreo.localRotation; for (float t = 0; t < 1.2f; t += Time.deltaTime) { if (!khoaTreo) yield break; khoaTreo.localRotation = r0 * Quaternion.Euler(0, 0, Mathf.Sin(t * 30f) * 18f * (1 - t / 1.2f)); yield return null; } }
 
     // ═════════════════════════ bị bắt: ngã sấp → lật ngửa, bóng đen cúi xuống → bàn tay túm cổ áo, giật lên sát mặt → hét → cắt đen
+    bool daBiBat;
     IEnumerator BiBat()
     {
-        ketThuc = true; ketThoat = false;
+        ketThuc = true; ketThoat = false; daBiBat = true;
         foreach (var n in nem) if (n.am) n.am.Stop();
         var t0 = Tiep(s); var chan = fp.transform.position;
         // 1. ngã sấp

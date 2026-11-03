@@ -97,11 +97,24 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         // nhà có tang: từ Đêm 2 các cửa phòng để mở (mép cửa là chỗ cái bóng lấp ló — cửa đóng thì không có chỗ)
         if (d >= 2 && LocMa.I && LocMa.I.cuaRef != null) foreach (var c in LocMa.I.cuaRef) if (c && !c.khoa) c.DatNgay(true);
         foreach (var c in cong) { c.DatNgay(false); c.khoa = d >= 2; c.loiKhoa = "Không được. Không phải bây giờ."; }
+        if (d == 1) StartCoroutine(GiuCongDem1());
         if (ctHam) ctHam.Dat(false);
         ApDemV34(d);
     }
 
     // đặt người chơi ở chỗ đầu đêm + lời mở đầu (chỉ lúc vào scene và lúc hết đêm)
+    // [03/11] tự kiểm thấy đầu Đêm 1 hai cánh cổng lớn đang mở (kịch bản: đứng trước cổng → [E] mở cổng). Chưa tìm ra script nào mở
+    //  (Console sẽ ghi "[Cổng] …" kèm nơi gọi) → trong lúc vào đêm (màn đen / xe buýt, người chơi chưa bấm được gì) giữ cổng đóng.
+    IEnumerator GiuCongDem1()
+    {
+        for (float t = 0; t < 2.5f || LocFirstPerson.den > 0.05f || LocXeBuyt.dangChay; t += Time.deltaTime)
+        {
+            if (LocMa.dem != 1 || t > 30f) yield break;
+            foreach (var c in cong) if (c && c.DangMo) c.DatNgay(false);
+            yield return null;
+        }
+    }
+
     void DauDem()
     {
         int d = LocMa.dem;

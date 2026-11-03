@@ -13,7 +13,8 @@ using UnityEngine.Rendering.Universal;
 public class LocThucTe : MonoBehaviour
 {
     public static LocThucTe I;
-    public static int Muc => PlayerPrefs.GetInt("LOC_CD_ThucTe", 0);   // 0 tắt · 1 phòng khách · 2 cả nhà
+    // [03/11] MẶC ĐỊNH: người chơi chưa tự chọn thì theo mức đồ hoạ — Tiết kiệm = Tắt, Cân bằng / Đẹp = Cả nhà
+    public static int Muc => PlayerPrefs.HasKey("LOC_CD_ThucTe") ? PlayerPrefs.GetInt("LOC_CD_ThucTe", 2) : (PlayerPrefs.GetInt("LOC_CD_DoHoa", 1) == 0 ? 0 : 2);   // 0 tắt · 1 phòng khách · 2 cả nhà
     public static bool Bat => Muc > 0;
 
     // Hộp bao phòng khách (toạ độ thế giới) — chỉnh ở đây nếu muốn mở rộng/thu hẹp vùng thử
@@ -34,23 +35,42 @@ public class LocThucTe : MonoBehaviour
     public static void Ap()
     {
         if (!I) { I = new GameObject("LocThucTe").AddComponent<LocThucTe>(); }
+        if (I.daAp && I.mucDaAp == Muc) return;   // gọi lại cùng mức (LocMenu.Start + tự bật) → không làm lại từ đầu
         I.Dat(Bat);
     }
+    bool daAp; int mucDaAp = -1;
 
     void Awake() { I = this; }
 
+    // [03/11] tự bật khi vào cảnh nhà — kể cả khi LocMenu tắt (bài tự kiểm) → đồ hoạ mặc định được kiểm cùng gameplay
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    static void TuBat()
+    {
+        if (!GameObject.Find("NhaLoc")) return;   // chỉ cảnh nhà (không phải cảnh mơ / menu riêng)
+        if (!I) I = new GameObject("LocThucTe").AddComponent<LocThucTe>();
+        I.choTuBat = true;
+    }
+    bool choTuBat;
+    void Start() { if (choTuBat && !daAp && Bat) Dat(true); }
+    LocVetBan vetBan;
+
     void Dat(bool b)
     {
-        dangBat = b; StopAllCoroutines(); KhoiPhuc();
+        dangBat = b; daAp = true; mucDaAp = Muc; StopAllCoroutines(); KhoiPhuc();
+        if (vetBan) { Destroy(vetBan.gameObject); vetBan = null; }
         if (b) { VUNG = Muc == 2 ? TinhNha() : PK; TaoHauKy(); if (vol) vol.enabled = true; StartCoroutine(BatVatLieu()); }
         else { if (vol) vol.enabled = false; KhoiPhuc(); foreach (var g in probes) if (g) g.SetActive(false); if (bui) bui.gameObject.SetActive(false); }
     }
 
+    float docPhim; bool tuChonPhim;
     void Update()
     {
         if (!dangBat) return;
         if (bui && Camera.main) bui.transform.position = Camera.main.transform.position;
         // giữ lớp VHS tắt trong lúc bật (LocMenu.ApDung đặt lại mỗi khi chỉnh cài đặt khác)
+        //  [03/11] trừ khi người chơi đã TỰ chọn "Lớp phim cũ" trong Cài đặt → tôn trọng lựa chọn đó
+        if (Time.unscaledTime >= docPhim) { docPhim = Time.unscaledTime + 1f; tuChonPhim = PlayerPrefs.HasKey("LOC_CD_Phim"); }   // đọc 1 lần/giây
+        if (tuChonPhim) return;
         LocFirstPerson.vhs = 0f;
         if (!hinhCu) { var g = GameObject.Find("LocHinhCu"); if (g) hinhCu = g.GetComponent<Volume>(); }
         if (hinhCu) hinhCu.weight = 0f;
@@ -70,7 +90,8 @@ public class LocThucTe : MonoBehaviour
             var sm = ho.Add<ShadowsMidtonesHighlights>(true);   // bóng ngả xanh lạnh, vùng sáng giữ ấm của đèn
             sm.shadows.Override(new Vector4(0.92f, 0.98f, 1.08f, -0.08f));
             sm.highlights.Override(new Vector4(1.05f, 1.0f, 0.93f, 0.02f));
-            var vg = ho.Add<Vignette>(true); vg.intensity.Override(0.28f); vg.smoothness.Override(0.5f);
+            var vg = ho.Add<Vignette>(true); vg.intensity.Override(0.26f); vg.smoothness.Override(0.5f);
+            var fg = ho.Add<FilmGrain>(true); fg.type.Override(FilmGrainLookup.Medium1); fg.intensity.Override(0.22f); fg.response.Override(0.85f);   // hạt như máy quay thật (Outlast), chủ yếu ở vùng tối
         }
         if (!vol)
         {
@@ -112,6 +133,8 @@ public class LocThucTe : MonoBehaviour
         yield return null;
         StartCoroutine(TaoProbes());
         TaoBui();
+        // vết bẩn / ố / mốc / nứt trên vỏ nhà (1 draw call)
+        if (!vetBan) vetBan = LocVetBan.Tao(transform, VUNG, LaVoNha);
     }
 
     // Normal map cần tangent. Tường/sàn dựng bằng code (lưới "BoxWorldUV") KHÔNG có tangent → normal map sẽ vỡ sáng.
@@ -168,6 +191,7 @@ public class LocThucTe : MonoBehaviour
         n.SetFloat("_Metallic", 0f);
         n.SetFloat("_Smoothness", DoBong(m.name, r.name));
         ThemChiTiet(n, m, r);
+        ThemGrunge(n, m, r);
         return n;
     }
 
@@ -190,6 +214,22 @@ public class LocThucTe : MonoBehaviour
         if (M) { n.SetTexture("_OcclusionMap", M); n.SetFloat("_OcclusionStrength", 0.5f); n.EnableKeyword("_OCCLUSIONMAP"); n.SetTextureScale("_OcclusionMap", sc); }
     }
 
+    // [03/11] chống "nhựa": phủ texture chi tiết (detail albedo ×2) lên MỌI vật liệu đã đổi — vết loang, sạn, xước mịn,
+    //  để mặt không còn một màu phẳng lì. Trung tính ~xám 50% nên không đổi màu gốc, chỉ thêm biến thiên. Rẻ: thêm 1 lần lấy mẫu texture.
+    static Texture2D grunge; static bool thieuGrunge;
+    static void ThemGrunge(Material n, Material goc, Renderer r)
+    {
+        if (!grunge && !thieuGrunge) { grunge = Resources.Load<Texture2D>("LOC_ThucTe/ChiTiet_Grunge"); thieuGrunge = !grunge; }
+        if (!grunge || !n.HasProperty("_DetailAlbedoMap")) return;
+        string vl = goc.name.StartsWith("M_") ? goc.name.Substring(2) : goc.name;
+        bool vo = LaVoNha(r.name) || LaVoNha(vl);
+        float lap = vo ? 0.4f : 1.6f;   // vỏ nhà UV theo mét → 1 ô ≈ 2,5 m · đồ vật UV 0–1 → lặp 1,6 lần
+        n.SetTexture("_DetailAlbedoMap", grunge); n.SetTextureScale("_DetailAlbedoMap", new Vector2(lap, lap));
+        n.SetFloat("_DetailAlbedoMapScale", vo ? 1f : 0.8f);
+        n.EnableKeyword("_DETAIL_MULX2");
+    }
+
+    static bool LaVoNha(string t) => LaVo(t) || t.StartsWith("San") || t.StartsWith("Nen");
     static bool LaVo(string t) => (t.StartsWith("Tuong") && !t.StartsWith("TuongRao")) || (t.StartsWith("Vach") && !t.StartsWith("VachSan")) || (t.StartsWith("Tran") && !t.StartsWith("Tranh"));
 
     // độ bóng theo tên vật liệu/vật thể (0 = nhám hoàn toàn, 1 = gương)
@@ -204,8 +244,8 @@ public class LocThucTe : MonoBehaviour
         if (s.Contains("kinh") || s.Contains("glass") || s.Contains("guong")) return 0.9f;
         if (s.Contains("kimloai") || s.Contains("metal") || s.Contains("inox") || s.Contains("chum")) return 0.55f;
         if (s.Contains("vai") || s.Contains("sofa") || s.Contains("tham") || s.Contains("rem")) return 0.08f;
-        if (s.Contains("go") || s.Contains("wood") || s.Contains("ban") || s.Contains("ghe") || s.Contains("tu")) return 0.4f;
-        return 0.3f;
+        if (s.Contains("go") || s.Contains("wood") || s.Contains("ban") || s.Contains("ghe") || s.Contains("tu")) return 0.32f;
+        return 0.22f;   // [03/11] mặc định nhám hơn: độ bóng đều 0,3 là nguồn chính của cảm giác "nhựa"
     }
 
     void KhoiPhuc()
