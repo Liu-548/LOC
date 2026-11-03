@@ -194,6 +194,7 @@ public class LocThucTe : MonoBehaviour
         n.SetFloat("_Metallic", 0f);
         n.SetFloat("_Smoothness", DoBong(m.name, r.name));
         ThemChiTiet(n, m, r);
+        ThemTuongSan(n, m);
         ThemGrunge(n, m, r);
         return n;
     }
@@ -215,6 +216,30 @@ public class LocThucTe : MonoBehaviour
         if (!coTex && A) { n.SetTexture("_BaseMap", A); n.SetTextureScale("_BaseMap", new Vector2(1f / 1.0f, 1f / 1.0f)); sc = n.GetTextureScale("_BaseMap"); }
         if (N) { n.SetTexture("_BumpMap", N); n.SetFloat("_BumpScale", 0.8f); n.EnableKeyword("_NORMALMAP"); n.SetTextureScale("_BumpMap", sc); }
         if (M) { n.SetTexture("_OcclusionMap", M); n.SetFloat("_OcclusionStrength", 0.5f); n.EnableKeyword("_OCCLUSIONMAP"); n.SetTextureScale("_OcclusionMap", sc); }
+    }
+
+    // [03/11 tối] tường / sàn chất nhà Việt (LOC_Nguon/ThucTe/tuong_san_tex.py): đổi albedo của vật liệu vỏ nhà, GIỮ tỉ lệ lặp + offset
+    //  của bản gốc (texture mới cùng khổ: gạch bông 4 × 4 viên = 0,8 m, ron trùng ron cũ; tường vôi 2,0 × 3,3 m, đáy ảnh = chân tường).
+    //  Sàn gạch bông thêm normal map riêng (ron lõm — khớp ron thật nên không lệch như D2). Tường giữ normal + AO vữa của ThemChiTiet.
+    static Texture2D gachA, gachN, tuongA; static bool daNapTS;
+    static void ThemTuongSan(Material n, Material goc)
+    {
+        if (!daNapTS)
+        {
+            daNapTS = true;
+            gachA = Resources.Load<Texture2D>("LOC_ThucTe/GachBong_HQ"); gachN = Resources.Load<Texture2D>("LOC_ThucTe/GachBong_HQ_N");
+            tuongA = Resources.Load<Texture2D>("LOC_ThucTe/TuongVoi_HQ");
+        }
+        if (!goc.HasProperty("_BaseMap") || !goc.GetTexture("_BaseMap")) return;
+        var sc = goc.GetTextureScale("_BaseMap"); var of = goc.GetTextureOffset("_BaseMap");
+        if (goc.name.StartsWith("M_SanGachBong_T1_Tex") && gachA)
+        {
+            n.SetTexture("_BaseMap", gachA); n.SetTextureScale("_BaseMap", sc); n.SetTextureOffset("_BaseMap", of);
+            if (gachN) { n.SetTexture("_BumpMap", gachN); n.SetFloat("_BumpScale", 1f); n.EnableKeyword("_NORMALMAP"); n.SetTextureScale("_BumpMap", sc); n.SetTextureOffset("_BumpMap", of); }
+            n.SetFloat("_Smoothness", 0.34f);   // gạch xi măng cũ, mặt hơi bóng do lau chùi
+        }
+        else if ((goc.name.StartsWith("M_TuongVoi_Tex") || goc.name.StartsWith("M_TuongNgoai_Tex")) && tuongA)
+        { n.SetTexture("_BaseMap", tuongA); n.SetTextureScale("_BaseMap", sc); n.SetTextureOffset("_BaseMap", of); }
     }
 
     // [03/11] chống "nhựa": phủ texture chi tiết (detail albedo ×2) lên MỌI vật liệu đã đổi — vết loang, sạn, xước mịn,
