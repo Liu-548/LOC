@@ -9,6 +9,9 @@ from mathutils import Vector, Matrix, Quaternion
 args = sys.argv[sys.argv.index('--') + 1:]
 SRC, OUT = args[0], args[1]; OUT_XEM = args[2] if len(args) > 2 else None
 rng = random.Random(7105)
+rng_o = random.Random(4242)   # [03/11 tối] chọn ô texture cánh (tươi / úa mép / úa đầu / dập) — bộ sinh riêng để hình dáng vòng không đổi
+def o_canh():
+    x = rng_o.random(); return 0 if x < 0.45 else 1 if x < 0.75 else 2 if x < 0.92 else 3
 TAM = Vector((0.0, -0.005, 1.116)); R_LOI = 0.405
 
 def mat(ten, mau, nham=0.75, sss=0.0):
@@ -90,11 +93,15 @@ def bong_cuc(goc, truc, ban_kinh, mi, nho=False):
             # đầu tù: một đỉnh ở mút
             tip = goc + M @ (d * (s * 0.12 + L * 1.06 * math.cos(el0 + math.radians(cuon))) + Vector((0, 0, s * 0.12 + L * 1.06 * math.sin(el0 + math.radians(cuon)))))
             V = [[bm.verts.new(p) for p in h_] for h_ in hang]; vt = bm.verts.new(tip)
+            # UV cánh (CanhHoa.png 4 ô ngang): u ngang cánh trong ô, v gốc (0) → mút (1)
+            o_ = o_canh(); U = lambda q: (o_ + 0.04 + 0.92 * q / 2) / 4
             for j in range(2):
                 for q in range(2):
                     f = bm.faces.new((V[j][q], V[j + 1][q], V[j + 1][q + 1], V[j][q + 1])); f.material_index = mi; f.smooth = True
+                    for l, (qq, jj) in zip(f.loops, ((q, j), (q, j + 1), (q + 1, j + 1), (q + 1, j))): l[uv].uv = (U(qq), jj * 0.47)
             for q in range(2):
                 f = bm.faces.new((V[2][q], vt, V[2][q + 1])); f.material_index = mi; f.smooth = True
+                for l, uu in zip(f.loops, ((U(q), 0.94), (U(1), 1.0), (U(q + 1), 0.94))): l[uv].uv = uu
 
 # ───── lõi vòng: xuyến dẹt rêu/xốp (nhiễu bề mặt)
 N, Mr, RT = 64, 12, 0.058

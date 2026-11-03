@@ -21,6 +21,7 @@ public class LocDoMoi : MonoBehaviour
     readonly List<(Renderer r, Material[] vl)> daDoiVL = new();
     readonly List<GameObject> daTao = new();
     static Dictionary<string, Material> vlHQ;
+    static Texture2D texCanh;
 
     public static LocDoMoi Tao(Transform cha, Bounds vung)
     {
@@ -190,6 +191,8 @@ public class LocDoMoi : MonoBehaviour
                 v = new Material(lit) { name = "HQ_" + ten[k], enableInstancing = true };
                 v.SetColor("_BaseColor", mau[k]); v.SetFloat("_Smoothness", bong[k]); v.SetFloat("_Metallic", 0);
                 if (k <= 5) { v.SetFloat("_Cull", 0); v.doubleSidedGI = true; }
+                // [03/11 tối] cánh cúc: texture gân + mép úa (CanhHoa.png 4 ô, UV đã gán trong vong_hoa_hq.py), nhân với màu cánh
+                if (k <= 3) { texCanh ??= Resources.Load<Texture2D>("LOC_ThucTe/Mo/CanhHoa"); if (texCanh) v.SetTexture("_BaseMap", texCanh); }
                 vlHQ[ten[k]] = v;
             }
             ds[i] = v;
