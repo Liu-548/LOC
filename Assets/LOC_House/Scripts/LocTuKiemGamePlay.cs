@@ -15,9 +15,22 @@ public class LocTuKiemGamePlay : MonoBehaviour
 
     readonly System.Text.StringBuilder sb = new();
     int loi;
-    void Kt(bool ok, string s) { sb.AppendLine((ok ? "  OK   " : "  LỖI  ") + s); if (!ok) loi++; }
+    void Kt(bool ok, string s)
+    {
+        sb.AppendLine((ok ? "  OK   " : "  LỖI  ") + s); if (!ok) loi++;
+        soMuc++; cuoi = s;   // [03/11] báo tiến độ ra Console + góc màn hình: bài chạy bằng code (dịch chuyển, bấm, chờ thoại) nên nhìn như đứng yên
+        if (ok) Debug.Log("[Tự kiểm gameplay] OK   " + s); else Debug.LogWarning("[Tự kiểm gameplay] LỖI  " + s);
+    }
+    int soMuc; string cuoi = "đang khởi động…"; static bool dangChup;   // ẩn dòng tiến độ lúc chụp ảnh kiểm tra
+    void OnGUI()
+    {
+        if (dangChup) return;
+        GUI.color = new Color(0, 0, 0, 0.6f); GUI.DrawTexture(new Rect(8, 8, 620, 46), Texture2D.whiteTexture); GUI.color = Color.white;
+        GUI.Label(new Rect(16, 10, 610, 22), $"TỰ KIỂM GAMEPLAY đang chạy (máy tự chơi, đừng bấm gì) · {soMuc} mục · {loi} lỗi");
+        GUI.Label(new Rect(16, 30, 610, 22), "› " + cuoi);
+    }
     static LocVatPham V(string id) { foreach (var v in FindObjectsByType<LocVatPham>(FindObjectsInactive.Include, FindObjectsSortMode.None)) if (v.id == id) return v; return null; }
-    static IEnumerator Chup(string ten) { ScreenCapture.CaptureScreenshot($"LOC_KiemTra/GamePlay/{ten}.png"); yield return null; yield return null; }   // không chờ cuối khung: Unity mất tiêu điểm thì Game view không vẽ
+    static IEnumerator Chup(string ten) { dangChup = true; yield return null; ScreenCapture.CaptureScreenshot($"LOC_KiemTra/GamePlay/{ten}.png"); yield return null; yield return null; dangChup = false; }   // không chờ cuối khung: Unity mất tiêu điểm thì Game view không vẽ
 
     // [8/10] hệ thống đêm + chuỗi Đêm 1 (LocCotTruyen)
     IEnumerator CotTruyenDem1()
