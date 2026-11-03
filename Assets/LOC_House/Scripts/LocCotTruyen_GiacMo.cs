@@ -21,7 +21,8 @@ public partial class LocCotTruyen
         giuongKhoi = TimV("GiuongDon_Khoi");
         if (!giuongKhoi) { Debug.LogWarning("[LOC] Không thấy GiuongDon_Khoi — cuối Đêm 2 vào mơ thẳng sau cảnh nửa tỉnh"); return; }
         var b = BaoV(giuongKhoi);
-        var g = new GameObject("CHO_DiNgu"); g.transform.SetParent(transform, false);
+        // [3/11] SỬA: trước đây SetParent(transform) — LocCotTruyen nằm trên NguoiChoi nên chỗ bấm đi theo người chơi, không bao giờ nằm trên giường → để ở gốc cảnh.
+        var g = new GameObject("CHO_DiNgu");
         float cao = Mathf.Clamp(b.size.y, 0.45f, 1.1f);
         g.transform.position = new Vector3(b.center.x, b.min.y + cao / 2f, b.center.z);
         var bc = g.AddComponent<BoxCollider>(); bc.size = new Vector3(b.size.x + 0.06f, cao + 0.04f, b.size.z + 0.06f);   // phủ ngoài hộp va chạm của giường để tia nhìn trúng
