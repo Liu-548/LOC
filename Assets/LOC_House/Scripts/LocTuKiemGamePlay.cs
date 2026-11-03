@@ -40,7 +40,8 @@ public class LocTuKiemGamePlay : MonoBehaviour
         var p0 = fp.transform.position;
         Kt(p0.z < -5.5f, $"đầu Đêm 1: đứng ngoài cổng (z = {p0.z:0.00})");
         int dong = 0; foreach (var n in new[] { "CanhCong_Trai (mở)", "CanhCong_Phai (mở)", "CuaNgachCong (mở)" }) { var d = GameObject.Find(n)?.GetComponent<LocDoor>(); if (d && !d.DangMo && !d.khoa) dong++; }
-        Kt(dong == 3, $"đầu Đêm 1: 3 cánh cổng đóng, chưa khoá ({dong}/3)");
+        string ctCong = ""; foreach (var n in new[] { "CanhCong_Trai (mở)", "CanhCong_Phai (mở)", "CuaNgachCong (mở)" }) { var d = GameObject.Find(n)?.GetComponent<LocDoor>(); ctCong += $" {n.Replace(" (mở)", "")}=" + (d ? (d.DangMo ? "mở" : "đóng") + (d.khoa ? "+khoá" : "") : "không thấy"); }   // [03/11] ghi từng cánh để biết vì sao lỗi
+        Kt(dong == 3, $"đầu Đêm 1: 3 cánh cổng đóng, chưa khoá ({dong}/3 ·{ctCong} · đêm {LocMa.dem})");
         var cham = GameObject.Find("CongTac_Ham")?.GetComponent<LocCongTac>();
         Kt(cham && !cham.bat, "đầu Đêm 1: đèn hầm tắt");
         yield return Chup("05_dau_dem1_ngoai_cong");

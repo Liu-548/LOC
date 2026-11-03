@@ -19,6 +19,7 @@ using UnityEngine.SceneManagement;
 public class LocGiacMo : MonoBehaviour
 {
     public static bool dangMo;
+    public static string loiCuoi;   // [03/11] lỗi bất ngờ gần nhất trong giấc mơ (khi đó kết quả bị tính là THOÁT) — tự kiểm ghi ra
     // giữ Enter 0,8 s để bỏ qua (như xe buýt / đoạn bác — LocFirstPerson.GiuBoQua). Giống nút B của mini game: chỉ có ở Editor / bản Development,
     //  và tắt hẳn khi bật menu LOC → Bản nộp (ký hiệu LOC_BAN_NOP)
 #if (UNITY_EDITOR || DEVELOPMENT_BUILD) && !LOC_BAN_NOP
@@ -78,7 +79,7 @@ public class LocGiacMo : MonoBehaviour
     // chạy cả giấc mơ; lỗi bất ngờ ở bất kỳ đâu (vd thiếu model) → ghi lỗi, dọn dẹp, coi như thoát — không bao giờ kẹt màn đen
     public IEnumerator Chay(LocFirstPerson nguoi, System.Action<bool> xong)
     {
-        bool loi = false;
+        bool loi = false; loiCuoi = null;
         yield return AnToan(ChayTrong(nguoi), () => loi = true);
         if (loi)
         {
@@ -95,7 +96,7 @@ public class LocGiacMo : MonoBehaviour
         {
             object cur;
             try { if (!e.MoveNext()) yield break; cur = e.Current; }
-            catch (System.Exception ex) { Debug.LogException(ex); khiLoi?.Invoke(); yield break; }
+            catch (System.Exception ex) { Debug.LogException(ex); loiCuoi = ex.GetType().Name + ": " + ex.Message + " @ " + (ex.StackTrace ?? "").Split('\n')[0].Trim(); khiLoi?.Invoke(); yield break; }
             if (cur is IEnumerator con) { bool hong = false; yield return AnToan(con, () => hong = true); if (hong) { khiLoi?.Invoke(); yield break; } }
             else yield return cur;
         }

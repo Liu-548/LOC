@@ -187,6 +187,7 @@ public class LocTuKiemGiacMo : MonoBehaviour
         KiemTraLai(ten);
         var kq = LocGiacMo.cuoi;
         G($"{ten}: {(kq.ketThoat ? "THOÁT" : "BỊ BẮT")} · chạy {kq.tgChay:0.0} s · ném {kq.soNem} (đôi {kq.soNemDoi}) · trúng {kq.soTrung} · cảnh báo {(kq.daCanhBao ? $"ở giây {kq.tCanhBao:0.0}" : "không")}");
+        if (!string.IsNullOrEmpty(LocGiacMo.loiCuoi)) Kt(false, $"{ten}: giấc mơ gặp lỗi giữa chừng (bị tính THOÁT) — {LocGiacMo.loiCuoi}");   // [03/11]
         a = Time.time; while ((LocFirstPerson.khoa || LocFirstPerson.den > 0.01f) && Time.time - a < 20f) yield return null;
         Kt(!LocFirstPerson.khoa, ten + ": tỉnh dậy xong, trả điều khiển");
         Kt(!GameObject.Find("LOC_GiacMo"), ten + ": đã xoá hành lang");
