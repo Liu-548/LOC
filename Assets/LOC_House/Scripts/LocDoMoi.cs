@@ -25,6 +25,7 @@ public class LocDoMoi : MonoBehaviour
         var dm = go.AddComponent<LocDoMoi>();
         try { dm.VongHoa(vung); } catch (System.Exception e) { Debug.LogWarning("[LocDoMoi] vòng hoa: " + e.Message); }
         try { dm.AnhTho(vung); } catch (System.Exception e) { Debug.LogWarning("[LocDoMoi] ảnh thờ: " + e.Message); }
+        try { dm.BanTho(vung); } catch (System.Exception e) { Debug.LogWarning("[LocDoMoi] bàn thờ: " + e.Message); }
         return dm;
     }
 
@@ -198,6 +199,57 @@ public class LocDoMoi : MonoBehaviour
         if (n.Contains("Canh_Hoa")) return 6; if (n.Contains("tre")) return 7; return macDinh;
     }
     static Color C(string h) { ColorUtility.TryParseHtmlString(h, out var c); return c; }
+
+    // ───────── bộ bàn thờ (BanThoVong_Dem1/2/3.glb): bàn phủ khăn, bát hương, lọ hoa, bát cơm quả trứng, đĩa trầu cau
+    //  Giữ nguyên: ảnh thờ (đã đổi texture), chén nước (LocNuocChen), nhang đang cháy, đèn dầu, nến, vàng mã, mọi va chạm / chỗ bấm.
+    static readonly (string hq, string cha, bool chaDauTien, string[] con, bool theoTruc)[] BO =
+    {
+        ("BanThoVong_HQ", "BanThoVong", false, new[] { "Khan_Phu", "Khan_MatBan", "Khan_GocGapLoi", "Than_Ban_Go", "Bac_Ke" }, true),
+        ("BatHuong_HQ", "BatHuong", false, new[] { "BatHuong_Than", "BatHuong_MatTro" }, false),
+        ("LoHoaCuc_HQ", "LoHoaCuc", false, new[] { "LoHoaCuc_" }, false),
+        ("BatCom_HQ", "BatComQuaTrung_", true, new[] { "BatCom_" }, false),
+        ("DiaTrauCau_HQ", "DiaTrauCau", false, new[] { "DiaTrauCau_" }, false),
+    };
+    void BanTho(Bounds vung)
+    {
+        var mau = Resources.Load<GameObject>("LOC_ThucTe/Mo/BanTho_HQ");
+        if (!mau) { Debug.LogWarning("[LocDoMoi] thiếu Resources/LOC_ThucTe/Mo/BanTho_HQ.glb"); return; }
+        var hq = new Dictionary<string, (Mesh m, Material[] vl)>();
+        foreach (var f in mau.GetComponentsInChildren<MeshFilter>(true))
+        {
+            var r = f.GetComponent<Renderer>(); if (!f.sharedMesh || !r) continue;
+            string k = f.name; foreach (var b in BO) if (f.name.StartsWith(b.hq) || f.sharedMesh.name.StartsWith(b.hq)) k = b.hq;
+            hq[k] = (f.sharedMesh, r.sharedMaterials);
+        }
+        int dem = 0;
+        foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (!t || !vung.Contains(t.position)) continue;
+            foreach (var b in BO)
+            {
+                if (!(b.chaDauTien ? t.name.StartsWith(b.cha) : t.name == b.cha) || !hq.TryGetValue(b.hq, out var h)) continue;
+                var an = new List<Renderer>();
+                foreach (var r in t.GetComponentsInChildren<MeshRenderer>(true))
+                {
+                    if (r.transform.parent != t) continue;
+                    foreach (var c in b.con) if (r.name.StartsWith(c)) { an.Add(r); break; }
+                }
+                if (an.Count == 0) continue;
+                var hop = HopCucBo(t, an); var hb = h.m.bounds;
+                Vector3 s3;
+                if (b.theoTruc) s3 = new Vector3(hop.size.x / Mathf.Max(1e-3f, hb.size.x), hop.size.y / Mathf.Max(1e-3f, hb.size.y), hop.size.z / Mathf.Max(1e-3f, hb.size.z));
+                else { float k = (hop.size.x / Mathf.Max(1e-3f, hb.size.x) + hop.size.z / Mathf.Max(1e-3f, hb.size.z)) * 0.5f; s3 = new Vector3(k, k, k); }
+                var go = new GameObject(b.hq); go.transform.SetParent(t, false);
+                go.transform.localScale = s3;
+                go.transform.localPosition = new Vector3(hop.center.x - hb.center.x * s3.x, hop.min.y - hb.min.y * s3.y, hop.center.z - hb.center.z * s3.z);
+                go.AddComponent<MeshFilter>().sharedMesh = h.m;
+                var mr = go.AddComponent<MeshRenderer>(); mr.sharedMaterials = h.vl; mr.shadowCastingMode = ShadowCastingMode.On;
+                foreach (var r in an) if (r.enabled) { r.enabled = false; daAn.Add(r); }
+                daTao.Add(go); dem++;
+            }
+        }
+        Debug.Log($"[LocDoMoi] bàn thờ: thay {dem} món bằng bản chi tiết");
+    }
 
     // ───────── ảnh thờ
     void AnhTho(Bounds vung)
