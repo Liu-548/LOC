@@ -12,6 +12,8 @@ using UnityEngine.SceneManagement;
 //  3. [03/11] Tủ nhiều hàng cánh cùng tên (chạn bát) — chia hàng để không mở cả tủ một lúc (TachHangCanh).
 //  4. [03/11 tối] Quan tài: QuanTai_LOC.glb là HAI linh cữu đặt cạnh nhau nhưng chỉ một cái có "Nap_Song" → lúc dựng nhà chỉ có VaiPhuQuanTai_A.
 //     Ở đây chép tấm vải A sang linh cữu thứ hai (đối xứng qua tâm cụm), tên VaiPhuQuanTai_B (LocCotTruyen ẩn cả hai ở Đêm 3 như cũ).
+//  5. [03/11 chiều] Ảnh thờ ở chế độ thường: đổi ảnh pixel cũ sang ảnh ông / bà của bản Blender (thu 512 px, lọc Point cho hợp PSX).
+//     Chép vật liệu (không sửa asset), tên vẫn bắt đầu "Anh_Tho_Atlas" để bản "Thực tế" (LocDoMoi.AnhTho) đổi tiếp sang ảnh nét như cũ.
 //  Chi tiết + số đo: GHI_CHU_CHO_SUA_02-11.md mục 1–2.
 public static class LocSuaNha
 {
@@ -25,6 +27,35 @@ public static class LocSuaNha
         try { LocNuocChen.Gan(sc); } catch (System.Exception e) { Debug.LogException(e); }   // [03/11] nước trong chén hầm, chén 5 vơi nửa từ Đêm 3
         try { TachHangCanh(sc); } catch (System.Exception e) { Debug.LogException(e); }
         try { VaiQuanTaiB(sc); } catch (System.Exception e) { Debug.LogException(e); }
+        try { AnhThoThuong(sc); } catch (System.Exception e) { Debug.LogException(e); }
+    }
+
+    // ───────── 5. [03/11 chiều] ảnh thờ chế độ thường
+    static void AnhThoThuong(Scene sc)
+    {
+        var tex = Resources.Load<Texture2D>("LOC_ThucTe/Mo/AnhTho_Atlas_Thuong");
+        if (!tex) return;
+        tex.filterMode = FilterMode.Point; tex.wrapMode = TextureWrapMode.Clamp;   // như sampler của atlas gốc (glb: NEAREST, CLAMP)
+        var moi = new Dictionary<Material, Material>(); int dem = 0;
+        foreach (var g in sc.GetRootGameObjects())
+            foreach (var r in g.GetComponentsInChildren<Renderer>(true))
+            {
+                var ms = r.sharedMaterials; bool doi = false;
+                for (int i = 0; i < ms.Length; i++)
+                {
+                    var m = ms[i]; if (!m || !m.name.StartsWith("Anh_Tho_Atlas") || m.name.EndsWith("_Thuong")) continue;
+                    if (!moi.TryGetValue(m, out var n))
+                    {
+                        n = new Material(m) { name = m.name + "_Thuong" };
+                        foreach (var p in new[] { "_BaseMap", "_MainTex", "baseColorTexture" }) if (n.HasProperty(p)) n.SetTexture(p, tex);
+                        moi[m] = n;
+                    }
+                    if (!doi) { ms = (Material[])ms.Clone(); doi = true; }
+                    ms[i] = n; dem++;
+                }
+                if (doi) r.sharedMaterials = ms;
+            }
+        if (dem > 0) Debug.Log($"[LocSuaNha] ảnh thờ chế độ thường: {dem} ô ảnh → ảnh ông / bà");
     }
 
     // ───────── 4. [03/11 tối] vải phủ cho linh cữu thứ hai

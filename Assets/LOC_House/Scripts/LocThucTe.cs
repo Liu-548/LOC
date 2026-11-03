@@ -22,6 +22,7 @@ public class LocThucTe : MonoBehaviour
     static Bounds VUNG = PK;
     readonly List<GameObject> probes = new();
 
+    const bool LAM_NGAY = true;   // [03/11 chiều] false = trả lại cách cũ (rải nhiều khung)
     static VolumeProfile ho; Volume vol;
     ParticleSystem bui;
     readonly Dictionary<Renderer, Material[]> goc = new();
@@ -109,7 +110,10 @@ public class LocThucTe : MonoBehaviour
     {
         var lit = Shader.Find("Universal Render Pipeline/Lit");
         if (!lit) { Debug.LogWarning("[LocThucTe] Không tìm thấy shader URP/Lit trong bản build — bỏ qua phần vật liệu."); yield break; }
-        yield return null;
+        // [03/11 chiều] làm XONG TRONG MỘT KHUNG (trước: 40 vật / khung → người chơi thấy đồ đổi dần từ bản thường sang bản Blender ~1–2 s).
+        //  Lúc vào cảnh thì chạy trong Start (DefaultExecutionOrder 200, sau Start của mọi script khác) → khung đầu tiên đã là bản Thực tế.
+        //  Bật / đổi mức trong Cài đặt thì khựng một nhịp sau màn menu, không còn cảnh đổi dần.
+        if (!LAM_NGAY) yield return null;
         int dem = 0;
         foreach (var r in FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
@@ -132,9 +136,9 @@ public class LocThucTe : MonoBehaviour
                 moi[i] = n;
             }
             if (moi != null) { goc[r] = cu; r.sharedMaterials = moi; CanTangent(r, moi); }
-            if (++dem % 40 == 0) yield return null;   // rải ra nhiều khung, không giật
+            if (!LAM_NGAY && ++dem % 40 == 0) yield return null;   // (tắt) rải ra nhiều khung
         }
-        yield return null;
+        if (!LAM_NGAY) yield return null;
         StartCoroutine(TaoProbes());
         TaoBui();
         // vết bẩn / ố / mốc / nứt trên vỏ nhà (1 draw call)
