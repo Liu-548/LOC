@@ -29,7 +29,11 @@ public static class LocTuKiemTatCa
     [MenuItem("LOC/Tự kiểm TẤT CẢ (nối tiếp)", false, 0)]
     static void BatDau()
     {
-        if (EditorApplication.isPlaying) { Debug.LogWarning("[Tự kiểm tất cả] Đang Play — bấm Stop rồi chạy lại."); return; }
+        if (EditorApplication.isPlaying)
+        {   // đang Play: tự dừng rồi bắt đầu từ bài 1 (KhiDoiChe cộng 1 khi về Edit → -1 + 1 = 0)
+            Debug.Log("[Tự kiểm tất cả] Đang Play → tự dừng Play, rồi bắt đầu bài 1.");
+            EditorPrefs.SetInt(KHOA, -1); EditorApplication.isPlaying = false; return;
+        }
         EditorPrefs.SetInt(KHOA, 0);
         Chay();
     }
