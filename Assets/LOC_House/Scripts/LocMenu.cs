@@ -376,7 +376,9 @@ public class LocMenu : MonoBehaviour
         // độ sáng: một Volume riêng trên LocHinhCu (ưu tiên 10) và dưới LocMatDien (11) — lúc mất điện vẫn tối hẳn
         if (!hoSoSang) { hoSoSang = ScriptableObject.CreateInstance<VolumeProfile>(); hoSoSang.Add<ColorAdjustments>(); }
         if (!volSang) { volSang = new GameObject("LocDoSang").AddComponent<Volume>(); volSang.isGlobal = true; volSang.priority = 10.5f; volSang.sharedProfile = hoSoSang; }
-        if (hoSoSang.TryGet(out ColorAdjustments ca)) ca.postExposure.Override(-0.15f * phim + EV());
+        // [03/11 chiều] "Hình ảnh thực tế" (ACES + tông u ám) tối hơn bản thường → bù +0,45 stop cho dễ nhìn đồ đạc. Phơi sáng chỉ đặt ở đây:
+        //  LocDoSang (10,5) đè lên volume của LocThucTe (9,5) nên đặt postExposure bên đó không có tác dụng.
+        if (hoSoSang.TryGet(out ColorAdjustments ca)) ca.postExposure.Override(-0.15f * phim + EV() + (LocThucTe.Bat ? 0.45f : 0f));
         Application.targetFrameRate = new[] { 30, 60, 120, 144, -1 }[Mathf.Clamp(CD("Fps", 1), 0, 4)];
         QualitySettings.vSyncCount = CD("VSync", 1);
         AudioListener.volume = CD("AmLuong", 80) / 100f;

@@ -41,13 +41,16 @@ public class LocDoMoi : MonoBehaviour
         if (!mau) { Debug.LogWarning("[LocDoMoi] thiếu Resources/LOC_ThucTe/Mo/VongHoa_HQ.glb"); return; }
         var hq = TimHQ(mau, out var lod1, out tenVL);
         if (!hq) { Debug.LogWarning("[LocDoMoi] VongHoa_HQ không có lưới"); return; }
+        // [03/11 tối] vòng ĐẶC cho vòng gốc có tấm lót kín giữa (VongHoaTang_2: _VanLot) — trước dùng chung vòng rỗng nên giữa vòng _2 bị thủng
+        var mauDay = Resources.Load<GameObject>("LOC_ThucTe/Mo/VongHoaDay_HQ");
+        Mesh hqDay = null, lod1Day = null; if (mauDay) hqDay = TimHQ(mauDay, out lod1Day, out _);
         int dem = 0;
         foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
             if (!t || !(t.name == "VongHoaTang_1" || t.name == "VongHoaTang_2")) continue;
             var mf = t.GetComponent<MeshFilter>(); var mr = t.GetComponent<MeshRenderer>();
             if (mf && mr && mf.sharedMesh) { if (vung.Contains(t.position) && VongDon(t, mf, mr, hq, lod1)) dem++; }
-            else if (t.childCount > 0) { if (VongNhieuPhan(t, hq, lod1, vung)) dem++; }
+            else if (t.childCount > 0) { if (VongNhieuPhan(t, hq, lod1, hqDay, lod1Day, vung)) dem++; }
         }
         Debug.Log($"[LocDoMoi] thay {dem} vòng hoa tang bằng bản chi tiết cao");
     }
@@ -70,15 +73,17 @@ public class LocDoMoi : MonoBehaviour
     }
 
     // vòng trong bộ bàn thờ: cha rỗng + các phần con
-    bool VongNhieuPhan(Transform t, Mesh hq, Mesh lod1, Bounds vung)
+    bool VongNhieuPhan(Transform t, Mesh hq, Mesh lod1, Mesh hqDay, Mesh lod1Day, Bounds vung)
     {
-        var an = new List<Renderer>(); var bang = new List<Renderer>();
+        var an = new List<Renderer>(); var bang = new List<Renderer>(); bool day = false;
         foreach (var r in t.GetComponentsInChildren<MeshRenderer>(true))
         {
             if (r.transform.parent != t) continue;
             bool cu = false; foreach (var h in PHAN_CU) if (r.name.EndsWith(h)) { cu = true; break; }
             if (cu) an.Add(r); else if (r.name.Contains("Bang")) bang.Add(r);
+            if (r.name.EndsWith("_VanLot")) day = true;
         }
+        if (day && hqDay) { hq = hqDay; lod1 = lod1Day; }
         if (an.Count == 0 || !vung.Contains(t.position)) return false;   // vị trí transform, không dùng bounds: bộ bàn thờ của đêm khác đang ẩn thì bounds = 0
         var hop = HopCucBo(t, an);
         foreach (var r in an) if (r.enabled) { r.enabled = false; daAn.Add(r); }
@@ -130,11 +135,13 @@ public class LocDoMoi : MonoBehaviour
     void DatHQ(Transform t, Bounds hop, Mesh hq, Mesh lod1, List<Renderer> bang, Vector3 lui = default)
     {
         var hb = hq.bounds;
-        // vừa theo CHIỀU CAO (giá chạm đất, băng chữ cũ vắt ngang vòng như bản gốc). Vòng HQ có thể rộng hơn vòng cũ vài cm.
-        float s = hop.size.y / Mathf.Max(0.01f, hb.size.y);
+        // [03/11 chiều] khít BỀ NGANG + CHIỀU CAO của vòng gốc (trước chỉ theo chiều cao → vòng HQ rộng hơn vòng cũ 12–31 cm, lệch chỗ đứng).
+        //  Bề dày lấy trung bình hai tỉ lệ kia để hoa không bị ép dẹt / phồng.
+        float sx = hop.size.x / Mathf.Max(0.01f, hb.size.x), sy = hop.size.y / Mathf.Max(0.01f, hb.size.y);
+        var s3 = new Vector3(sx, sy, (sx + sy) * 0.5f);
         var go = new GameObject("VongHoa_HQ"); go.transform.SetParent(t, false);
-        go.transform.localScale = Vector3.one * s;
-        go.transform.localPosition = new Vector3(hop.center.x - hb.center.x * s, hop.min.y - hb.min.y * s, hop.center.z - hb.center.z * s) + lui;
+        go.transform.localScale = s3;
+        go.transform.localPosition = new Vector3(hop.center.x - hb.center.x * s3.x, hop.min.y - hb.min.y * s3.y, hop.center.z - hb.center.z * s3.z) + lui;
         var vl = VatLieu(hq, tenVL);
         var r0 = TaoLuoi(go.transform, "LOD0", hq, vl, ShadowCastingMode.Off);
         if (lod1)
@@ -211,11 +218,12 @@ public class LocDoMoi : MonoBehaviour
     //  Giữ nguyên: ảnh thờ (đã đổi texture), chén nước (LocNuocChen), nhang đang cháy, đèn dầu, nến, vàng mã, mọi va chạm / chỗ bấm.
     static readonly (string hq, string cha, bool chaDauTien, string[] con, bool theoTruc)[] BO =
     {
+        // [03/11 chiều] mọi món khít THEO TỪNG TRỤC với bản gốc (trước: tỉ lệ đều theo bề ngang → lọ hoa cao hơn 12 cm, bát hương 3 cm, đĩa trầu mỏng hơn)
         ("BanThoVong_HQ", "BanThoVong", false, new[] { "Khan_Phu", "Khan_MatBan", "Khan_GocGapLoi", "Than_Ban_Go", "Bac_Ke" }, true),
-        ("BatHuong_HQ", "BatHuong", false, new[] { "BatHuong_Than", "BatHuong_MatTro" }, false),
-        ("LoHoaCuc_HQ", "LoHoaCuc", false, new[] { "LoHoaCuc_" }, false),
-        ("BatCom_HQ", "BatComQuaTrung_", true, new[] { "BatCom_" }, false),
-        ("DiaTrauCau_HQ", "DiaTrauCau", false, new[] { "DiaTrauCau_" }, false),
+        ("BatHuong_HQ", "BatHuong", false, new[] { "BatHuong_Than", "BatHuong_MatTro" }, true),
+        ("LoHoaCuc_HQ", "LoHoaCuc", false, new[] { "LoHoaCuc_" }, true),
+        ("BatCom_HQ", "BatComQuaTrung_", true, new[] { "BatCom_" }, true),
+        ("DiaTrauCau_HQ", "DiaTrauCau", false, new[] { "DiaTrauCau_" }, true),
     };
     void BanTho(Bounds vung)
     {

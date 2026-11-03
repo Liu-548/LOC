@@ -86,13 +86,16 @@ public class LocThucTe : MonoBehaviour
             var bl = ho.Add<Bloom>(true);
             bl.threshold.Override(1.0f); bl.intensity.Override(0.22f); bl.scatter.Override(0.65f);
             var ca = ho.Add<ColorAdjustments>(true);
-            ca.contrast.Override(10f); ca.saturation.Override(-14f); ca.postExposure.Override(0.1f);
+            // [03/11 chiều] sáng hơn cho dễ nhìn đồ đạc và dễ chơi (trước: tương phản 10 · bóng −0,08 · viền tối 0,26 → quá tối).
+            //  Phơi sáng KHÔNG đặt ở đây (LocDoSang ưu tiên cao hơn đè mất) — LocMenu.ApDung cộng +0,45 stop khi Thực tế bật.
+            ca.contrast.Override(4f); ca.saturation.Override(-10f);
             var wb = ho.Add<WhiteBalance>(true); wb.temperature.Override(-9f); wb.tint.Override(4f);
             var sm = ho.Add<ShadowsMidtonesHighlights>(true);   // bóng ngả xanh lạnh, vùng sáng giữ ấm của đèn
-            sm.shadows.Override(new Vector4(0.92f, 0.98f, 1.08f, -0.08f));
+            sm.shadows.Override(new Vector4(0.95f, 0.99f, 1.05f, 0.06f));
+            sm.midtones.Override(new Vector4(1f, 1f, 1f, 0.04f));
             sm.highlights.Override(new Vector4(1.05f, 1.0f, 0.93f, 0.02f));
-            var vg = ho.Add<Vignette>(true); vg.intensity.Override(0.26f); vg.smoothness.Override(0.5f);
-            var fg = ho.Add<FilmGrain>(true); fg.type.Override(FilmGrainLookup.Medium1); fg.intensity.Override(0.22f); fg.response.Override(0.85f);   // hạt như máy quay thật (Outlast), chủ yếu ở vùng tối
+            var vg = ho.Add<Vignette>(true); vg.intensity.Override(0.16f); vg.smoothness.Override(0.5f);
+            var fg = ho.Add<FilmGrain>(true); fg.type.Override(FilmGrainLookup.Medium1); fg.intensity.Override(0.16f); fg.response.Override(0.85f);   // hạt như máy quay thật (Outlast), chủ yếu ở vùng tối
         }
         if (!vol)
         {

@@ -7,6 +7,8 @@ import bpy, bmesh, sys, math, random
 from mathutils import Vector, Matrix, Quaternion
 
 args = sys.argv[sys.argv.index('--') + 1:]
+# [03/11 tối] --day: vòng ĐẶC (lõi kín hoa) cho VongHoaTang_2 — bản gốc _2 có tấm lót (_VanLot) phủ kín giữa vòng, _1 là vòng rỗng
+DAY = '--day' in args; args = [x for x in args if x != '--day']
 SRC, OUT = args[0], args[1]; OUT_XEM = args[2] if len(args) > 2 else None
 rng = random.Random(7105)
 rng_o = random.Random(4242)   # [03/11 tối] chọn ô texture cánh (tươi / úa mép / úa đầu / dập) — bộ sinh riêng để hình dáng vòng không đổi
@@ -160,6 +162,27 @@ for i in range(14):   # mặt sau thưa hơn
     a = 2 * math.pi * (i + rng.uniform(-0.3, 0.3)) / 14
     p = TAM + Vector((math.cos(a) * R_LOI, RT * 0.5, math.sin(a) * R_LOI))
     bong_cuc(p, huong_bong(a, 0.1, False), 0.045, MI["hq__cuc_trang_nga"])
+
+# ───── [03/11 tối] vòng đặc: tấm lót rêu kín lòng vòng + các vòng cúc phủ kín giữa (giống VongHoaTang_2 gốc)
+if DAY:
+    n_l = 40
+    for yl, xuoi in ((0.012, True), (0.016, False)):   # hai mặt (mặt sau lùi 4 mm, đỉnh riêng)
+        tam_l = bm.verts.new(TAM + Vector((0, yl, 0)))
+        vien_l = [bm.verts.new(TAM + Vector((math.cos(2 * math.pi * k / n_l) * (R_LOI + 0.01), yl, math.sin(2 * math.pi * k / n_l) * (R_LOI + 0.01)))) for k in range(n_l)]
+        for k in range(n_l):
+            q = (tam_l, vien_l[k], vien_l[(k + 1) % n_l]) if xuoi else (tam_l, vien_l[(k + 1) % n_l], vien_l[k])
+            f = bm.faces.new(q); f.material_index = MI["Canh_Hoa"]; f.smooth = True
+    bong_cuc(TAM + Vector((0, -0.03, 0)), Vector((0, -1, 0)), 0.06, MI["nhua__hoa_cuc_vang_D8C77D"])
+    for (rv, so, rb) in ((0.10, 7, 0.050), (0.19, 13, 0.052), (0.28, 19, 0.054)):
+        for i in range(so):
+            a = 2 * math.pi * (i + rng.uniform(-0.3, 0.3)) / so
+            p = TAM + Vector((math.cos(a) * rv, -0.022 - rng.uniform(0, 0.012), math.sin(a) * rv))
+            k = rng.random(); mi = MI["nhua__hoa_cuc_vang_D8C77D"] if k < 0.14 else (MI["hq__cuc_trang_nga"] if k < 0.40 else MI["nhua__hoa_cuc_trang_F2EEE5"])
+            bong_cuc(p, huong_bong(a, rv * 0.5), rb * rng.uniform(0.9, 1.1), mi)
+    for i in range(26):   # cúc nhỏ lấp khe trong lòng
+        a = rng.uniform(0, 6.283); rv = rng.uniform(0.05, R_LOI - 0.08)
+        p = TAM + Vector((math.cos(a) * rv, -0.03, math.sin(a) * rv))
+        bong_cuc(p, huong_bong(a, rng.uniform(-0.3, 0.3)), rng.uniform(0.022, 0.03), MI["son__hoa_cuc_nho_E3D8C4"], nho=True)
 
 # ───── giá tre ba chân có đốt
 def ong(a, b, r, mi, so=8, dot=0.32):

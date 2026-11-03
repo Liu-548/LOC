@@ -474,7 +474,10 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     {
         var rs = t.GetComponentsInChildren<Renderer>();
         if (rs.Length == 0) return new Bounds(t.position + Vector3.up, Vector3.one * 0.1f);
-        var b = rs[0].bounds; foreach (var r in rs) b.Encapsulate(r.bounds);
+        // [03/11 tối] bỏ renderer đang tắt (bản "Thực tế" ẩn đồ cũ, hiện bản Blender là con của nó) — hộp bao rỗng làm lệch chỗ nhìn khi thắp hương
+        bool co = false; var b = new Bounds();
+        foreach (var r in rs) { if (!r.enabled) continue; if (!co) { b = r.bounds; co = true; } else b.Encapsulate(r.bounds); }
+        if (!co) { b = rs[0].bounds; foreach (var r in rs) b.Encapsulate(r.bounds); }
         return b;
     }
 }

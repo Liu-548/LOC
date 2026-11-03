@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 //     Hai cánh cùng tên, cùng cha → LocDoor tự ghép cửa đôi: bấm E vào cánh nào cũng mở / đóng cả hai.
 //     Dựng nhà lại với LocTuMo.Bang mới (đã khai 2 cánh) thì tủ có sẵn 2 cánh → bước này tự bỏ qua.
 //  3. [03/11] Tủ nhiều hàng cánh cùng tên (chạn bát) — chia hàng để không mở cả tủ một lúc (TachHangCanh).
+//  4. [03/11 tối] Quan tài: QuanTai_LOC.glb là HAI linh cữu đặt cạnh nhau nhưng chỉ một cái có "Nap_Song" → lúc dựng nhà chỉ có VaiPhuQuanTai_A.
+//     Ở đây chép tấm vải A sang linh cữu thứ hai (đối xứng qua tâm cụm), tên VaiPhuQuanTai_B (LocCotTruyen ẩn cả hai ở Đêm 3 như cũ).
 //  Chi tiết + số đo: GHI_CHU_CHO_SUA_02-11.md mục 1–2.
 public static class LocSuaNha
 {
@@ -22,6 +24,32 @@ public static class LocSuaNha
         try { TachTuDung(sc); } catch (System.Exception e) { Debug.LogException(e); }
         try { LocNuocChen.Gan(sc); } catch (System.Exception e) { Debug.LogException(e); }   // [03/11] nước trong chén hầm, chén 5 vơi nửa từ Đêm 3
         try { TachHangCanh(sc); } catch (System.Exception e) { Debug.LogException(e); }
+        try { VaiQuanTaiB(sc); } catch (System.Exception e) { Debug.LogException(e); }
+    }
+
+    // ───────── 4. [03/11 tối] vải phủ cho linh cữu thứ hai
+    static void VaiQuanTaiB(Scene sc)
+    {
+        foreach (var r in sc.GetRootGameObjects())
+            foreach (var qt in r.GetComponentsInChildren<Transform>(true))
+            {
+                if (qt.name != "QuanTai_LOC") continue;
+                Transform a = null, b = null, nap = null;
+                foreach (var t in qt.GetComponentsInChildren<Transform>(true))
+                {
+                    if (t.name == "VaiPhuQuanTai_A") a = t; else if (t.name == "VaiPhuQuanTai_B") b = t; else if (t.name == "Nap_Song") nap = t;
+                }
+                if (!a || b || !nap) continue;   // đã có B (dựng nhà mới) hoặc thiếu A → thôi
+                // tâm cụm 2 linh cữu = gốc QuanTai_LOC (glb đối xứng, hộp bao −1,05…1,05). Trục đôi = trục cục bộ x/z mà nắp lệch xa gốc nhất.
+                var mf = nap.GetComponent<MeshFilter>(); if (!mf || !mf.sharedMesh) continue;
+                var c = qt.InverseTransformPoint(nap.TransformPoint(mf.sharedMesh.bounds.center));
+                var lech = Mathf.Abs(c.x) > Mathf.Abs(c.z) ? new Vector3(-2f * c.x, 0, 0) : new Vector3(0, 0, -2f * c.z);
+                if (lech.magnitude < 0.5f) continue;   // không phải cụm đôi
+                var g = Object.Instantiate(a.gameObject, a.parent, false); g.name = "VaiPhuQuanTai_B";
+                g.transform.localPosition = a.localPosition + (a.parent == qt ? lech : a.parent.InverseTransformVector(qt.TransformVector(lech)));
+                g.transform.localRotation = a.localRotation; g.transform.localScale = a.localScale;
+                Debug.Log("[LocSuaNha] thêm vải phủ cho linh cữu thứ hai (VaiPhuQuanTai_B)");
+            }
     }
 
     // ───────── 3. [03/11] tủ nhiều hàng cánh cùng tên (chạn bát: 2 cánh trên + 2 cánh dưới, đều "cửa chạn") → LocDoor ghép cả 4 thành một cửa:

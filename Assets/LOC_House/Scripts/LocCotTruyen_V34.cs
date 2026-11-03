@@ -160,7 +160,16 @@ public partial class LocCotTruyen
         if (!daDanChen && LocTui.Co("dan_chen")) { daDanChen = true; ChenHam(true, false, false); }
         if (LocTui.Co("goi_2") && tGoi2 < 0) tGoi2 = Time.time;
         // [02/11] v3.3: thầy KHÔNG tự gọi tới nữa — Khôi đọc sổ tới bìa sau (số thầy Đồng 826 315), qua đoạn hoảng loạn, rồi tự gọi (ChoGoiThay / GoiThay)
+        // [03/11 tối] chơi thử: không ai biết phải tự gọi → thiếu "goi_thay" → Đêm 2 không hiện "Thắp nén mới", không đi ngủ được (kẹt cả đêm).
+        //  Dự phòng giống bản trước 02/11: qua hoảng loạn 60 s mà chưa gọi thì thầy gọi tới (nhấc máy = cùng cuộc gọi). Tự gọi vẫn được như cũ.
+        if (LocNhim.daHoangLoan && tHoangLoan < 0) tHoangLoan = Time.time;
+        if (!CoGoiThay || !LocNhim.daHoangLoan || LocTui.Co("goi_thay") || dangReo || dangCanh || LocNhim.dangCanh || LocFirstPerson.khoa || LocTui.Mo) return;
+        var p = fp.transform.position;
+        if (hamPhong.Contains(p) || hopThang.Contains(p) || Time.time - tHoangLoan < 60f || Time.time < tReoThay || KC(dienThoai) > 16f) return;
+        tReoThay = Time.time + 55f;   // không nhấc thì một lúc sau reo lại
+        StartCoroutine(Reo(10, true, CuocGoiThay));
     }
+    float tHoangLoan = -1f;
 
     // [02/11] [E] Gọi số ở bìa sổ: điện thoại phòng khách, Đêm 2, sau khi đã thấy số ở bìa sau sổ của bố và qua đoạn hoảng loạn
     bool ChoGoiThay() => LocMa.dem == 2 && CoGoiThay && !LocTui.Co("goi_thay") && LocTui.Co("so_bo_het") && LocNhim.daHoangLoan && !dangReo && !dangCanh;
