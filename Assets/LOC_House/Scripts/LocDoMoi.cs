@@ -8,6 +8,9 @@ using UnityEngine.Rendering;
 //     "THÀNH KÍNH PHÂN ƯU" (chữ do LocCotTruyen gắn lúc chạy), đặt vòng hoa HQ khít vào hộp bao của vòng cũ.
 //     HQ ~59k tam giác + LOD1 ~18k (xa thì đổi, bóng đổ dùng LOD1).
 //  2. Ảnh thờ (vật liệu Anh_Tho_Atlas): ảnh pixel → ảnh cũ đen trắng ngả nâu (Resources/LOC_ThucTe/Mo/AnhTho_Atlas).
+//  3. Bộ bàn thờ (BanTho_HQ.glb).
+//  4. [03/11] Đồ đạc (NoiThat_HQ.glb, LOC_Nguon/ThucTe/noi_that_hq.py): ghế salon dài, tủ TV, ghế đẩu, quạt trần (thân + từng cánh), 2 cánh cửa chính.
+//     Chỉ ẩn renderer cũ + đặt bản mới khít hộp bao (cục bộ) — va chạm, chỗ bấm, cánh cửa / cánh quạt quay vẫn là object cũ (bản mới là con nên quay theo).
 public class LocDoMoi : MonoBehaviour
 {
     static readonly string[] PHAN_CU = { "_Gia", "_Vanh", "_HoaTrang", "_HoaVang", "_HoaNho", "_LaDuongXi", "_VanLot" };
@@ -26,6 +29,7 @@ public class LocDoMoi : MonoBehaviour
         try { dm.VongHoa(vung); } catch (System.Exception e) { Debug.LogWarning("[LocDoMoi] vòng hoa: " + e.Message); }
         try { dm.AnhTho(vung); } catch (System.Exception e) { Debug.LogWarning("[LocDoMoi] ảnh thờ: " + e.Message); }
         try { dm.BanTho(vung); } catch (System.Exception e) { Debug.LogWarning("[LocDoMoi] bàn thờ: " + e.Message); }
+        try { dm.NoiThat(vung); } catch (System.Exception e) { Debug.LogWarning("[LocDoMoi] đồ đạc: " + e.Message); }
         return dm;
     }
 
@@ -249,6 +253,60 @@ public class LocDoMoi : MonoBehaviour
             }
         }
         Debug.Log($"[LocDoMoi] bàn thờ: thay {dem} món bằng bản chi tiết");
+    }
+
+    // ───────── đồ đạc (NoiThat_HQ.glb). Bản HQ dựng đúng hộp bao của bản gốc → tỉ lệ ≈ 1; vẫn khít theo từng trục cho chắc.
+    //  chiAn = null: ẩn mọi MeshRenderer bên dưới object; khác null: chỉ ẩn con trực tiếp tên đó (cửa chính: tấm "Canh", giữ núm đồng + bản lề).
+    static readonly (string hq, string ten, bool tienTo, string chiAn)[] NOI_THAT =
+    {
+        ("SalonGheDai_HQ", "Salon_GheDai", false, null),
+        ("TuTVDung_HQ", "TuTV_Dung", false, null),
+        ("GheDauGo_HQ", "GheDau_Go", false, null),
+        ("QuatTranThan_HQ", "QuatTran_Than", false, null),
+        ("QuatTranCanh_HQ", "QuatTran_Canh", false, null),
+        ("CuaChinh_HQ", "CuaChinh_", true, "Canh"),
+    };
+    static bool TenKhop(string n, string ten) => n == ten || n.StartsWith(ten + " (");
+    void NoiThat(Bounds vung)
+    {
+        var mau = Resources.Load<GameObject>("LOC_ThucTe/Mo/NoiThat_HQ");
+        if (!mau) { Debug.LogWarning("[LocDoMoi] thiếu Resources/LOC_ThucTe/Mo/NoiThat_HQ.glb"); return; }
+        var hq = new Dictionary<string, (Mesh m, Material[] vl)>();
+        foreach (var f in mau.GetComponentsInChildren<MeshFilter>(true))
+        {
+            var r = f.GetComponent<Renderer>(); if (!f.sharedMesh || !r) continue;
+            foreach (var b in NOI_THAT) if (f.name.StartsWith(b.hq) || f.sharedMesh.name.StartsWith(b.hq)) hq[b.hq] = (f.sharedMesh, r.sharedMaterials);
+        }
+        var dem = new Dictionary<string, int>();
+        foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (!t || !vung.Contains(t.position)) continue;
+            foreach (var b in NOI_THAT)
+            {
+                if (!(b.tienTo ? t.name.StartsWith(b.ten) : TenKhop(t.name, b.ten)) || !hq.TryGetValue(b.hq, out var h)) continue;
+                var an = new List<Renderer>();
+                foreach (var r in t.GetComponentsInChildren<MeshRenderer>(true))
+                {
+                    if (!r.enabled) continue;   // đang bị ẩn (cất đi / logic game) → không hiện bản mới thay nó
+                    if (b.chiAn != null ? (r.transform.parent == t && r.name == b.chiAn) : true) an.Add(r);
+                }
+                if (an.Count == 0) continue;
+                var hop = HopCucBo(t, an); var hb = h.m.bounds;
+                var s3 = new Vector3(hop.size.x / Mathf.Max(1e-3f, hb.size.x), hop.size.y / Mathf.Max(1e-3f, hb.size.y), hop.size.z / Mathf.Max(1e-3f, hb.size.z));
+                if (s3.x < 0.5f || s3.x > 2f || s3.y < 0.5f || s3.y > 2f || s3.z < 0.5f || s3.z > 2f)
+                { Debug.LogWarning($"[LocDoMoi] {t.name}: hộp bao lệch quá xa bản HQ (tỉ lệ {s3}) — giữ bản cũ"); continue; }
+                var go = new GameObject(b.hq); go.transform.SetParent(t, false); go.layer = t.gameObject.layer;
+                go.transform.localScale = s3;
+                go.transform.localPosition = new Vector3(hop.center.x - hb.center.x * s3.x, hop.center.y - hb.center.y * s3.y, hop.center.z - hb.center.z * s3.z);
+                go.AddComponent<MeshFilter>().sharedMesh = h.m;
+                var mr = go.AddComponent<MeshRenderer>(); mr.sharedMaterials = h.vl; mr.shadowCastingMode = ShadowCastingMode.On;
+                foreach (var r in an) { r.enabled = false; daAn.Add(r); }
+                daTao.Add(go); dem[b.hq] = dem.TryGetValue(b.hq, out var d) ? d + 1 : 1;
+            }
+        }
+        var sb = new System.Text.StringBuilder("[LocDoMoi] đồ đạc:");
+        foreach (var b in NOI_THAT) sb.Append($" {b.hq}×{(dem.TryGetValue(b.hq, out var d) ? d : 0)}");
+        Debug.Log(sb.ToString());
     }
 
     // ───────── ảnh thờ
