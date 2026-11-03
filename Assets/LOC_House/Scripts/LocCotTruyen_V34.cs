@@ -32,6 +32,29 @@ public partial class LocCotTruyen
     // [02/11] v3.3: chưa đọc lời nhắn của mẹ thì chưa hé hũ được (chỉ khoá khi lời nhắn có thật trong cảnh — không có thì không chặn)
     public static bool KhoaHeHu => I && I.vpLoiNhanMe && !LocTui.Co("doc:loi_nhan_me");
 
+    void GanThapHuongDem2()
+    {
+        Transform b1 = null, b2 = null;
+        foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+        {
+            if (t.name == "BanThoVong_Dem1") b1 = t;
+            else if (t.name == "BanThoVong_Dem2") b2 = t;
+        }
+        if (!b2) return;
+        foreach (var v in b2.GetComponents<LocViec>()) if (v.id == "thap_huong") return;   // đã có (cảnh dựng lại bằng bản builder mới)
+        BoxCollider goc = null;
+        if (b1) foreach (var c in b1.GetComponents<BoxCollider>()) if (!goc || c.size.x * c.size.y * c.size.z > goc.size.x * goc.size.y * goc.size.z) goc = c;
+        var bc = b2.gameObject.AddComponent<BoxCollider>();
+        if (goc)
+        {
+            bc.center = b2.InverseTransformPoint(goc.transform.TransformPoint(goc.center));
+            var s = b2.InverseTransformVector(goc.transform.TransformVector(goc.size));
+            bc.size = new Vector3(Mathf.Abs(s.x), Mathf.Abs(s.y), Mathf.Abs(s.z));
+        }
+        else bc.size = new Vector3(2.8f, 1.2f, 0.9f);   // không có bàn Đêm 1 để sao: hộp tạm cỡ bộ bàn thờ vong
+        b2.gameObject.AddComponent<LocViec>().id = "thap_huong";
+    }
+
     // ───── khởi tạo (gọi trong Start, trước ApDem)
     void KhoiTaoV34()
     {
@@ -42,6 +65,10 @@ public partial class LocCotTruyen
             if (t.id == "nl_giu_nhang") mgGiuNhang = t;
         }
         var cha = new GameObject("LOC_CotTruyen_V34").transform;
+
+        // [3/11] SỬA: Đêm 2 không hiện "[E] Thắp nén mới" — LocViec "thap_huong" + hộp va chạm chỉ gắn trên BanThoVong_Dem1 (bị tắt ở Đêm 2),
+        //  còn BanThoVong_Dem2 không có → gắn lại khi vào game (sao hộp va chạm của bàn Đêm 1: hai bàn cùng chỗ, cùng hướng).
+        GanThapHuongDem2();
 
         // ── Đêm 2: lọ keo trên quầy cửa hàng · chén số ba trên bàn thờ ông bà · bát cháo trên bàn ăn
         var keo = TimV("LoKeo", "NganKeo");   // lọ keo nằm trong ngăn kéo quầy (bộ LOC_CanhQuayHang)
