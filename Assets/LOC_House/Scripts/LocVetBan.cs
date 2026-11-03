@@ -24,6 +24,7 @@ public class LocVetBan : MonoBehaviour
         var tex = Resources.Load<Texture2D>("LOC_ThucTe/VetBan_Atlas");
         var sh = Shader.Find("Universal Render Pipeline/Particles/Unlit");
         if (!tex || !sh) { Debug.LogWarning("[LocVetBan] thiếu atlas hoặc shader Particles/Unlit — bỏ qua vết bẩn."); return null; }
+        if (!vl) { var co = Resources.Load<Material>("LOC_ThucTe/BienThe_VetBan"); if (co) vl = new Material(co) { name = "LocThucTe_VetBan" }; }   // bản có sẵn (giữ biến thể shader trong bản build)
         if (!vl)
         {
             vl = new Material(sh) { name = "LocThucTe_VetBan" };
@@ -36,6 +37,7 @@ public class LocVetBan : MonoBehaviour
             vl.EnableKeyword("_SURFACE_TYPE_TRANSPARENT"); vl.EnableKeyword("_ALPHAMODULATE_ON");
             vl.renderQueue = 2990;   // sau vật đục, trước kính / khói
         }
+        if (vl.GetTexture("_BaseMap") != tex) { vl.SetTexture("_BaseMap", tex); vl.mainTexture = tex; }
         var go = new GameObject("LocThucTe_VetBan"); go.transform.SetParent(cha, false);
         var vb = go.AddComponent<LocVetBan>();
         vb.mf = go.AddComponent<MeshFilter>(); vb.mr = go.AddComponent<MeshRenderer>();
