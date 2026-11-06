@@ -39,7 +39,7 @@ public class LocFirstPerson : MonoBehaviour
     public static string chuGiua;       // chữ trắng giữa màn hình (Death Ending)
     static string phuDe; static bool phuDeNghieng; static float phuDeHet;
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    public static void Reset0() { khoa = false; den = 0; chuGiua = null; phuDe = null; ngoi = false; }
+    public static void Reset0() { khoa = false; den = 0; chuGiua = null; phuDe = null; ngoi = false; boQua = false; thoaiDen = 0; }
     // nghieng = độc thoại nội tâm (chữ nghiêng, xám nhạt, không tên) — kịch bản 6.2
     public static void PhuDe(string s, float giay, bool nghieng = true) { phuDe = s; phuDeNghieng = nghieng; phuDeHet = Time.time + giay * nhanChu; }
     // [1/11] click chuột trái = sang câu thoại tiếp (giữ Enter = bỏ qua cả đoạn — LocCotTruyen/LocXeBuyt)
@@ -50,6 +50,17 @@ public class LocFirstPerson : MonoBehaviour
     }
     public static bool GiuBoQua(Keyboard k) => k != null && (k.enterKey.isPressed || k.numpadEnterKey.isPressed) && !LocMenu.DangChe;
     public const string CHU_BO_QUA = "Click: câu tiếp   ·   Giữ Enter: bỏ qua";
+    // [3/11] hội thoại: mọi chỗ chờ thoại (ChoThoai, LocNhim.Noi/Cho) gọi DangNoi() mỗi khung → còn hội thoại thì đứng yên (vẫn nhìn, vẫn E).
+    //  Giữ Enter 0,8 s → boQua: mọi chỗ chờ thoại trả về ngay = tua tới hết đoạn (cờ cốt truyện ở cuối đoạn vẫn được đặt). Hết thoại 0,6 s thì tự nhả.
+    //  Độc thoại nội tâm (LocTui.Noi) không tính là hội thoại. Xe buýt mở đầu có cách bỏ qua riêng (LocXeBuyt).
+    static float thoaiDen, giuEnter; public static bool boQua;
+    public static void DangNoi() => thoaiDen = Time.time + 0.6f;
+    public static bool DangHoiThoai => Time.time < thoaiDen || (LocCotTruyen.I && LocCotTruyen.I.DangDoanBoQua);
+    public static System.Collections.IEnumerator ChoThoai(float giay)
+    {
+        for (float t = 0; t < giay && !boQua; t += Time.deltaTime) { DangNoi(); yield return null; if (BamTiep()) { phuDeHet = Time.time; yield break; } }
+        if (boQua) phuDeHet = Time.time;
+    }
     // [22/10] cài đặt (LocMenu): đảo trục dọc · cỡ chữ phụ đề (ở 1080p) · độ đậm nền sau chữ · hệ số thời gian hiện chữ
     public static bool daoTruc; public static int coChu = 24; public static float nenChu = 0.45f, nhanChu = 1f;
 
@@ -86,6 +97,8 @@ public class LocFirstPerson : MonoBehaviour
         // [1/11] ngoài menu / mini game không bao giờ hiện con trỏ hệ thống (đọc sổ thu chi từng hiện con trỏ)
         if (!LocMenu.DangChe && LocMiniGame.hienTai == null) { Cursor.visible = false; if (LocTui.Mo && Application.isFocused) Cursor.lockState = CursorLockMode.Locked; }
         goiY = "";
+        if (DangHoiThoai && !LocMenu.DangChe) { giuEnter = GiuBoQua(k) ? giuEnter + Time.deltaTime : 0; if (giuEnter >= 0.8f) { boQua = true; phuDeHet = Time.time; } }
+        else { boQua = false; giuEnter = 0; }
         if (khoa || LocTui.Mo || LocXeBuyt.dangChay) return;   // [25/10] trên xe buýt mở đầu: LocXeBuyt tự lo nhìn
 
         if (k.cKey.wasPressedThisFrame || k.leftCtrlKey.wasPressedThisFrame)
@@ -137,10 +150,11 @@ public class LocFirstPerson : MonoBehaviour
             }
         }
 
-        float f = (k.wKey.isPressed ? 1 : 0) - (k.sKey.isPressed ? 1 : 0);
-        float r = (k.dKey.isPressed ? 1 : 0) - (k.aKey.isPressed ? 1 : 0);
+        bool dungYen = DangHoiThoai;   // [3/11] đang hội thoại: không đi, không nhảy
+        float f = dungYen ? 0 : (k.wKey.isPressed ? 1 : 0) - (k.sKey.isPressed ? 1 : 0);
+        float r = dungYen ? 0 : (k.dKey.isPressed ? 1 : 0) - (k.aKey.isPressed ? 1 : 0);
         var mv = (transform.forward * f + transform.right * r).normalized * speed * (ngoi ? 0.5f : k.leftShiftKey.isPressed ? 1.8f : 1f);
-        if (cc.isGrounded) vy = !ngoi && !tuCui && k.spaceKey.wasPressedThisFrame ? Mathf.Sqrt(2f * -Physics.gravity.y * nhayCao) : -1f;   // [27/10] Space nhảy (không nhảy khi ngồi/cúi)
+        if (cc.isGrounded) vy = !ngoi && !tuCui && !dungYen && k.spaceKey.wasPressedThisFrame ? Mathf.Sqrt(2f * -Physics.gravity.y * nhayCao) : -1f;   // [27/10] Space nhảy (không nhảy khi ngồi/cúi)
         else { if (vy > 0 && (cc.collisionFlags & CollisionFlags.Above) != 0) vy = 0; vy += Physics.gravity.y * Time.deltaTime; }   // đụng trần thì rơi xuống ngay
         cc.Move((mv + Vector3.up * vy) * Time.deltaTime);
 
@@ -231,6 +245,13 @@ public class LocFirstPerson : MonoBehaviour
             var nd = new GUIContent(phuDe); var sz = sp.CalcSize(nd); float cy = Screen.height * 0.86f + 22 * k;
             if (nenChu > 0 && phuDe.Length > 0) { GUI.color = new Color(0, 0, 0, nenChu); GUI.DrawTexture(new Rect((Screen.width - sz.x) / 2 - 14 * k, cy - sz.y / 2 - 4 * k, sz.x + 28 * k, sz.y + 8 * k), Texture2D.whiteTexture); GUI.color = Color.white; }
             GUI.Label(new Rect(0, cy - sz.y / 2, Screen.width, sz.y), nd, sp);
+        }
+        if (DangHoiThoai && !LocMenu.DangChe)   // [3/11] dòng nhắc bỏ qua (chuyển từ LocCotTruyen sang, dùng cho mọi hội thoại)
+        {
+            var sb = new GUIStyle(GUI.skin.label) { font = LocMenu.FontChu(1), fontSize = Mathf.RoundToInt(19 * k), alignment = TextAnchor.LowerRight };
+            sb.normal.textColor = new Color(0.75f, 0.72f, 0.66f, 0.38f + 0.5f * Mathf.Clamp01(giuEnter / 0.8f));
+            GUI.Label(new Rect(0, 0, Screen.width - 36 * k, Screen.height - 30 * k), CHU_BO_QUA, sb);
+            if (giuEnter > 0) { float w = 170 * k * Mathf.Clamp01(giuEnter / 0.8f); GUI.color = new Color(0.75f, 0.72f, 0.66f, 0.7f); GUI.DrawTexture(new Rect(Screen.width - 36 * k - w, Screen.height - 26 * k, w, 2 * k), Texture2D.whiteTexture); GUI.color = Color.white; }
         }
         // [27/10 chơi thử] chấm tròn giữa màn hình để biết đang nhắm vào đâu — to và sáng hơn khi nhìn trúng vật bấm E được
         if (chamGiua && !khoa && !LocTui.Mo && !LocXeBuyt.dangChay && !LocMenu.DangChe && den < 0.5f && string.IsNullOrEmpty(chuGiua) && Cursor.lockState == CursorLockMode.Locked && Event.current.type == EventType.Repaint)

@@ -163,7 +163,8 @@ public class LocChoiThu : MonoBehaviour
         Muc("ĐÊM 1 — GIỮ HƯƠNG");
         Toi(ct.demSauDung, ct.demSauNhin); yield return Cho(0.5f);
         G("gợi ý bàn thờ vong cuối đêm: " + v.GoiY);
-        v.Bam(); yield return Cho(1);
+        v.Bam(); yield return Cho(3.5f);
+        var ngu = Viec("di_ngu"); if (ngu) { G("giường Khôi: " + ngu.GoiY); ngu.Bam(); } else Loi("giường Khôi không có LocViec di_ngu");
         yield return ChoDen(() => LocMa.dem == 2, 40, "sang Đêm 2");
         yield return Cho(2); yield return Chup("ban_ngay_hoac_dau_dem2");
         yield return ChoDen(() => !LocFirstPerson.khoa && LocFirstPerson.den == 0, 25, "trả điều khiển đầu Đêm 2");
@@ -220,7 +221,8 @@ public class LocChoiThu : MonoBehaviour
         LocTui.Dat("goi_thay"); LocTui.Dat("dan_chen"); LocTui.Dat("cung_chao");
         Muc("ĐÊM 2 — GIỮ HƯƠNG");
         var ct = LocCotTruyen.I; Toi(ct.demSauDung, ct.demSauNhin); yield return Cho(0.5f);
-        var v = Viec("thap_huong"); G("gợi ý: " + v.GoiY); v.Bam();
+        var v = Viec("thap_huong"); G("gợi ý: " + v.GoiY); v.Bam(); yield return Cho(3.5f);
+        var ngu = Viec("di_ngu"); if (ngu) { G("giường Khôi: " + ngu.GoiY); ngu.Bam(); } else Loi("giường Khôi không có LocViec di_ngu");
         yield return ChoDen(() => LocMa.dem == 3, 75, "sang Đêm 3");
         yield return Cho(2); yield return Chup("ban_ngay_dem2_3");
         yield return ChoDen(() => !LocFirstPerson.khoa && LocFirstPerson.den == 0, 25, "trả điều khiển đầu Đêm 3");

@@ -65,9 +65,15 @@ public class LocTuKiemGamePlay : MonoBehaviour
         Kt(LocMa.dem == 1, "[v3.3] xuống hầm + thăm Nhím nhưng chưa giữ hương → chưa hết Đêm 1");
         fp.DatTuThe(ct.demSauDung, ct.demSauNhin); yield return new WaitForSeconds(0.3f);
         Kt(viec.GoiY == "[E] Thắp nén mới", "[v3.3] cuối Đêm 1: [E] Thắp nén mới ở bàn thờ vong (" + viec.GoiY + ")");
-        viec.Bam(); yield return new WaitForSeconds(0.5f); yield return Chup("07b_giu_huong");
+        LocViec ngu = null; foreach (var v in FindObjectsByType<LocViec>(FindObjectsSortMode.None)) if (v.id == "di_ngu") ngu = v;
+        Kt(ngu && ngu.GoiY == "[E] Đi ngủ", "[3/11] giường Khôi: [E] Đi ngủ");
+        if (ngu) { ngu.Bam(); yield return new WaitForSeconds(2f); }
+        Kt(LocMa.dem == 1, "[3/11] chưa giữ hương mà đi ngủ → không hết đêm (độc thoại gợi ý)");
+        viec.Bam(); yield return new WaitForSeconds(3.5f); yield return Chup("07b_giu_huong");
+        Kt(LocMa.dem == 1, "[3/11] giữ hương xong: chưa tự hết đêm, phải đi ngủ");
+        if (ngu) ngu.Bam();
         t0 = Time.time; while (LocMa.dem == 1 && Time.time - t0 < 25f) yield return null;
-        Kt(LocMa.dem == 2, "đã xuống hầm + thăm Nhím + giữ hương → tự sang Đêm 2");
+        Kt(LocMa.dem == 2, "đã xuống hầm + thăm Nhím + giữ hương + đi ngủ → sang Đêm 2");
         t0 = Time.time; while ((LocFirstPerson.khoa || LocFirstPerson.den > 0) && Time.time - t0 < 10f) yield return null;
         int sai = 0; foreach (var t in GameObject.Find("NhaLoc").GetComponentsInChildren<Transform>(true))
             if (t.name is "Dem1" or "Dem2" or "Dem3" && t.gameObject.activeSelf != (t.name == "Dem2")) sai++;

@@ -96,8 +96,20 @@ public class LocBanNgay : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
     }
 
+    // [6/11] tách scene: đưa tang cần linh cữu + nhà Đêm 2 → chiếu ở scene Đêm 2 ngay trước khi nạp scene Đêm 3. Màn đen sẵn, kết thúc cũng đen.
+    public IEnumerator ChayDuaTang()
+    {
+        dangChay = true;
+        var fp = GetComponent<LocFirstPerson>(); var cam = fp ? fp.cam : Camera.main.transform; var c = cam.GetComponent<Camera>();
+        Vector3 lp = cam.localPosition; Quaternion lr = cam.localRotation;
+        yield return DuaTang(cam, c);
+        cam.localPosition = lp; cam.localRotation = lr;
+        dangChay = false;
+    }
+
     // màn đã đen sẵn khi gọi; apDem: dựng trạng thái nhà của đêm sau (gọi lúc còn đen). Kết thúc cũng đen.
-    public IEnumerator Chay(int demSau, System.Action apDem)
+    // duaTang = false: cảnh đưa tang đã chiếu ở cuối scene Đêm 2 (ChayDuaTang) — scene Đêm 3 chỉ còn sân vắng
+    public IEnumerator Chay(int demSau, System.Action apDem, bool duaTang = true)
     {
         dangChay = true;
         if (chup) System.IO.File.AppendAllText("LOC_KiemTra/BanNgay/log.txt", $"{System.DateTime.Now:HH:mm:ss} bắt đầu cảnh sau đêm {demSau - 1}\n");
@@ -134,7 +146,7 @@ public class LocBanNgay : MonoBehaviour
         else
         {
             // ── [27/10] VIEC_CON_LAI 1.2: cắt cảnh ĐƯA TANG (bản đơn giản: hai khung tĩnh + phụ đề), rồi mới tới sân vắng
-            yield return DuaTang(cam, c);
+            if (duaTang) yield return DuaTang(cam, c);
             apDem?.Invoke();
             // ── 8/8: vắng. Sân trước, ghế nhựa đã xếp chồng, một chiếc xe máy chạy qua ngoài đường
             cam.position = sanCam; cam.rotation = Quaternion.LookRotation(sanNhin - sanCam, Vector3.up);

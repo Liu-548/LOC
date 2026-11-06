@@ -41,9 +41,12 @@ public static partial class LocHouseBuilder
             bn.tungKinh = A("BanNgay_TungKinh"); bn.nguoiVieng = A("BanNgay_NguoiVieng"); bn.kenDam = A("BanNgay_KenDam"); bn.xeMay = A("BanNgay_XeMay"); bn.rotTra = A("Tra_Rot");
         }
         var ma = root.GetComponentInChildren<LocMa>(true); if (ma) ma.demBatDau = 1;   // [8/10] vào game là Đêm 1 (F1–F3 vẫn đổi để thử)
-        var banTho = Tim("BanThoVong_Dem1"); if (banTho) { VaChamBao(banTho.gameObject); banTho.gameObject.AddComponent<LocViec>().id = "thap_huong"; }
+        foreach (var d in new[] { 1, 2 })   // [6/11] Đêm 2 "thắp nén mới" trên bàn thờ của chính nhóm Dem2 (trước chỉ gắn bàn Dem1 — nhóm đó tắt ở Đêm 2, nay không còn trong scene Đêm 2)
+        { var banTho = Tim("BanThoVong_Dem" + d); if (banTho) { VaChamBao(banTho.gameObject); banTho.gameObject.AddComponent<LocViec>().id = "thap_huong"; } }
         // [v3.3] điện thoại bàn (hai cuộc gọi không lời) · khung ảnh ông bà tầng 3 (thắp hương trước khi mở tủ thờ, Đêm 3)
         var dt = Tim("LOC_DienThoai_TronBo"); if (dt) { VaChamBao(dt.gameObject); dt.gameObject.AddComponent<LocViec>().id = "dien_thoai"; }
+        // [3/11] giường Khôi (và tấm nilon phủ trên) — [E] Đi ngủ = hết Đêm 1–2
+        foreach (var n in new[] { "GiuongDon_Khoi", "TamNilon_PhuBui" }) { var g = Tim(n); if (!g) continue; if (!g.GetComponentInChildren<Collider>(true)) VaChamBao(g.gameObject); g.gameObject.AddComponent<LocViec>().id = "di_ngu"; }
         var anhOngBa = Tim("KhungAnhOngBa"); if (anhOngBa) { VaChamBao(anhOngBa.gameObject); anhOngBa.gameObject.AddComponent<LocViec>().id = "thap_huong_t3"; }
 
         // ── sổ thu chi 2002 — đọc tại chỗ trong tủ hồ sơ phòng làm việc (mã két)

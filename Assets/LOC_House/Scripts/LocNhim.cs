@@ -236,13 +236,14 @@ public class LocNhim : MonoBehaviour
             LocFirstPerson.PhuDe(s, d, nghieng); Ghi("thoại  " + s);
             if (ai == "NHÍM") noiHet = Time.time + d * 0.8f;
             float t = 0; bool dut = false;
-            while (t < d) { if (!dangCanh && !NguoiTrongPhong()) { dut = true; break; } t += Time.deltaTime; yield return null; if (LocFirstPerson.BamTiep()) break; }
+            while (t < d && !LocFirstPerson.boQua) { if (!dangCanh && !NguoiTrongPhong()) { dut = true; break; } LocFirstPerson.DangNoi(); t += Time.deltaTime; yield return null; if (LocFirstPerson.BamTiep()) break; }   // [3/11] hội thoại: đứng yên, giữ Enter tua
             if (!dut) break;
             LocFirstPerson.PhuDe("", 0.01f); noiHet = 0;   // đi ra giữa chừng: dừng, vào lại thì nói lại dòng này
         }
-        yield return new WaitForSeconds(nghiSau);
+        if (LocFirstPerson.boQua) { LocFirstPerson.PhuDe("", 0.01f); noiHet = 0; }
+        yield return LocFirstPerson.ChoThoai(nghiSau);
     }
-    IEnumerator Cho(float giay) { for (float t = 0; t < giay; t += Time.deltaTime) { while (!dangCanh && !NguoiTrongPhong()) yield return null; yield return null; } }
+    IEnumerator Cho(float giay) { for (float t = 0; t < giay && !LocFirstPerson.boQua; t += Time.deltaTime) { while (!dangCanh && !NguoiTrongPhong()) yield return null; LocFirstPerson.DangNoi(); yield return null; } }
 
     IEnumerator Tham(int d)
     {

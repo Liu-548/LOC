@@ -1,6 +1,6 @@
 ﻿// Dựng ngôi nhà LỘC theo prompt-gui-claude-design-gd5/00-thiet-ke-noi-that-ngoi-nha.md (phương án ★),
 // BẢN 8 × 25 + TIỆM TÁCH RIÊNG bên trái (bản vẽ đã duyệt 27/9/2026). Cao độ, thang, hầm 2,40 × 3,00 giữ nguyên số GĐ1–5.
-// Menu: LOC → Dựng nhà LỘC. Tạo lại Assets/Scenes/LOC_NhaLoc.unity mỗi lần chạy.
+// Menu: LOC → Dựng nhà LỘC. [6/11] Tạo lại 3 scene Assets/Scenes/LOC_NhaLoc_Dem1/2/3.unity mỗi lần chạy (mỗi đêm một scene, không gộp).
 //
 // Toạ độ: X = bề ngang (0 = mặt trong tường trái, đứng ngoài đường nhìn vào) · Z Unity = Y của file 00
 // (0 = mặt trong tường mặt tiền, tăng vào trong) · Y Unity = cao độ tuyệt đối (sàn T1 = 0).
@@ -17,7 +17,8 @@ using UnityEngine;
 
 public static partial class LocHouseBuilder
 {
-    const string ScenePath = "Assets/Scenes/LOC_NhaLoc.unity";
+    const string ScenePath = "Assets/Scenes/LOC_NhaLoc_Dem{0}.unity";   // [6/11] mỗi đêm một scene
+    public static string CanhDem(int d) => string.Format(ScenePath, d);
     const string MatFolder = "Assets/LOC_House/Materials";
     static readonly string[] ModelFolders = { "Assets/LOC_House/Models", "Assets/Prefab" };
     static readonly string[] HideRefs = { "ThamChieu", "PhongThamChieu", "VatKiem", "EyeLevel", "KhoiNhaXa", "SM_ScaleRef" };
@@ -54,11 +55,12 @@ public static partial class LocHouseBuilder
     public static void Build()
     {
         if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
-        if (System.IO.File.Exists(ScenePath))   // giữ bản cũ phòng khi đã sửa tay trong scene
-        {
-            System.IO.Directory.CreateDirectory("LOC_Backup");
-            System.IO.File.Copy(ScenePath, $"LOC_Backup/LOC_NhaLoc_{System.DateTime.Now:yyyyMMdd_HHmmss}.unity", true);
-        }
+        for (int d = 1; d <= 3; d++)   // giữ bản cũ phòng khi đã sửa tay trong scene
+            if (System.IO.File.Exists(CanhDem(d)))
+            {
+                System.IO.Directory.CreateDirectory("LOC_Backup");
+                System.IO.File.Copy(CanhDem(d), $"LOC_Backup/LOC_NhaLoc_Dem{d}_{System.DateTime.Now:yyyyMMdd_HHmmss}.unity", true);
+            }
         index = null; found.Clear(); missing.Clear(); placeholders.Clear(); mats.Clear(); boxObjs.Clear();
         font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
@@ -111,7 +113,7 @@ public static partial class LocHouseBuilder
 
         System.IO.Directory.CreateDirectory("Assets/Scenes");
         LuuLuoiRaFile();   // [1/11] lưới sao riêng (rà nháy, sửa 01/11…) ra file → scene dưới 100 MB (GitHub chặn file > 100 MB)
-        EditorSceneManager.SaveScene(scene, ScenePath);
+        LuuBaCanh(scene);   // [6/11] tách 3 scene theo đêm
         WriteReport();
         AssetDatabase.Refresh();
     }
@@ -170,6 +172,32 @@ public static partial class LocHouseBuilder
             }
         }
         Debug.Log($"[LOC] FixZFight: lùi {n} mặt hộp đồng phẳng");
+    }
+
+    // [6/11] Tách nhà thành 3 scene, không gộp chung: dựng đủ một lần (rà soát cần thấy cả ba đêm), lưu tạm, rồi mỗi đêm mở lại bản tạm,
+    // XOÁ HẲN nhóm Dem<khác> (chỉ giữ nhóm của đêm đó, bật lên), ghi LocMa.demBatDau + LocCotTruyen.demScene = d, lưu LOC_NhaLoc_Dem<d>.unity.
+    // Scene gộp cũ LOC_NhaLoc.unity bị xoá (còn trong git). Build Settings = 3 scene, Đêm 1 đứng đầu (menu chính nằm trên cảnh cổng Đêm 1).
+    static void LuuBaCanh(UnityEngine.SceneManagement.Scene scene)
+    {
+        const string tam = "Assets/Scenes/_LOC_NhaLoc_Tam.unity";
+        EditorSceneManager.SaveScene(scene, tam);
+        for (int d = 1; d <= 3; d++)
+        {
+            var s = EditorSceneManager.OpenScene(tam, OpenSceneMode.Single);
+            foreach (var t in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                if (t && t.name is "Dem1" or "Dem2" or "Dem3")
+                {
+                    if (t.name == "Dem" + d) t.gameObject.SetActive(true);
+                    else Object.DestroyImmediate(t.gameObject);
+                }
+            foreach (var m in Object.FindObjectsByType<LocMa>(FindObjectsInactive.Include, FindObjectsSortMode.None)) m.demBatDau = d;
+            foreach (var c in Object.FindObjectsByType<LocCotTruyen>(FindObjectsInactive.Include, FindObjectsSortMode.None)) c.demScene = d;
+            EditorSceneManager.SaveScene(s, CanhDem(d));
+        }
+        AssetDatabase.DeleteAsset(tam);
+        AssetDatabase.DeleteAsset("Assets/Scenes/LOC_NhaLoc.unity");
+        EditorBuildSettings.scenes = new[] { 1, 2, 3 }.Select(d => new EditorBuildSettingsScene(CanhDem(d), true)).ToArray();
+        EditorSceneManager.OpenScene(CanhDem(1));
     }
 
     [MenuItem("LOC/Bật-tắt nhãn chữ placeholder")]
@@ -2159,7 +2187,7 @@ public static partial class LocHouseBuilder
     {
         var sb = new System.Text.StringBuilder();
         sb.AppendLine($"BÁO CÁO DỰNG NHÀ LỘC — {System.DateTime.Now:dd/MM/yyyy HH:mm}");
-        sb.AppendLine($"Scene: {ScenePath}\n");
+        sb.AppendLine($"Scene: {CanhDem(1)} · {CanhDem(2)} · {CanhDem(3)}\n");
         sb.AppendLine($"ASSET ĐÃ ĐẶT ({found.Distinct().Count()}):");
         foreach (var s in found.Distinct().OrderBy(s => s)) sb.AppendLine("  ✓ " + s);
         sb.AppendLine($"\nASSET KHÔNG TÌM THẤY → đã thay bằng khối XANH ({missing.Distinct().Count()}):");

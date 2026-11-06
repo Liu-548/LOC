@@ -152,7 +152,7 @@ public partial class LocCotTruyen
     IEnumerator CuocGoiThay()
     {
         yield return Thoai(("KHÔI", "A lô."));
-        if (cRe) { amReo.PlayOneShot(cRe, 0.5f); yield return new WaitForSeconds(1.2f); }
+        if (cRe) { amReo.PlayOneShot(cRe, 0.5f); yield return LocFirstPerson.ChoThoai(1.2f); }
         yield return Thoai((THAY, "Khôi đấy phải không."),
             ("KHÔI", "Vâng. Ai đấy ạ."),
             (THAY, "Người lo việc thờ cúng cho nhà anh. Bố anh chắc có nhắc."),
@@ -164,7 +164,8 @@ public partial class LocCotTruyen
             (THAY, "Tối mai mùng một. Tôi gửi đồ sang. Làm đúng như trong giấy."),
             ("KHÔI", "Ông là thầy Đồng?"),
             (THAY, "Làm đúng thì con bé khỏi. Đừng có mở cái hũ."));
-        if (cTut) { amReo.PlayOneShot(cTut, 0.8f); yield return new WaitForSeconds(cTut.length); }
+        if (cTut) { amReo.PlayOneShot(cTut, 0.8f); yield return LocFirstPerson.ChoThoai(cTut.length); }
+        if (LocFirstPerson.boQua) amReo.Stop();
         LocTui.Dat("goi_thay");
         yield return new WaitForSeconds(0.6f);
         if (vpGiayThay) LocTui.Them(vpGiayThay);

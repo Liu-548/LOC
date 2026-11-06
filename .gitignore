@@ -28,3 +28,12 @@ Assets/_Recovery.meta
 LOC_KiemTra/
 *.csproj
 *.sln
+
+# log tu sinh khi Dung nha / Play
+Assets/LOC_House/BaoCao_*.txt
+Assets/LOC_House/BaoCao_*.txt.meta
+LOC_BienDich.txt
+LOC_Radio_Log.txt
+LOC_*_KetQua.txt
+LOC_Console.txt
+*.slnx

@@ -6,13 +6,13 @@ using UnityEditor.Build.Reporting;
 // Kết quả + lỗi ghi LOC_Build_KetQua.txt; bản build ở Build/LOC/ (không đưa lên git).
 public static class LocBuild
 {
-    const string Canh = "Assets/Scenes/LOC_NhaLoc.unity";
+    static string[] Canh => new[] { 1, 2, 3 }.Select(LocHouseBuilder.CanhDem).ToArray();   // [6/11] 3 scene theo đêm, Đêm 1 đầu tiên
 
     [MenuItem("LOC/Build thử (Windows .exe)")]
     public static void Build()
     {
-        EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene(Canh, true) };
-        var r = BuildPipeline.BuildPlayer(new[] { Canh }, "Build/LOC/LOC.exe", BuildTarget.StandaloneWindows64, BuildOptions.None);
+        EditorBuildSettings.scenes = Canh.Select(c => new EditorBuildSettingsScene(c, true)).ToArray();
+        var r = BuildPipeline.BuildPlayer(Canh, "Build/LOC/LOC.exe", BuildTarget.StandaloneWindows64, BuildOptions.None);
         var loi = r.steps.SelectMany(s => s.messages).Where(m => m.type is UnityEngine.LogType.Error or UnityEngine.LogType.Exception).Select(m => m.content);
         System.IO.File.WriteAllText("LOC_Build_KetQua.txt",
             $"{System.DateTime.Now:dd/MM HH:mm} {r.summary.result} · {r.summary.totalErrors} lỗi · {r.summary.totalWarnings} cảnh báo · {r.summary.totalSize / 1048576} MB · {r.summary.totalTime:mm\\:ss}\n" + string.Join("\n", loi));

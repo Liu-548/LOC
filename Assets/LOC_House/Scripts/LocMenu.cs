@@ -23,6 +23,7 @@ public class LocMenu : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     static void Reset0() { daCanhBao = vaoGame = tat = false; st = null; }
     public static bool DangChe => I && I.man != Man.Khong;   // menu / thẻ đêm đang phủ màn hình → lời mở đầu chờ
+    public static bool DangTuKiem => tat;   // [6/11] tự kiểm đổi đêm ngay trong một scene → LocCotTruyen không chuyển scene
     public static bool OMenuChinh => I && !vaoGame && I.man != Man.Khong;   // [25/10] đang ở menu chính (chưa vào game) — LocNhacMenu phát nhạc
 
     enum Man { Khong, CanhBao, Chinh, ChonDem, Ending, CaiDat, DoSang, TamDung, XacNhan, TheDem, Chet }
@@ -122,12 +123,16 @@ public class LocMenu : MonoBehaviour
     static void VeMenu() { ResetTatCa(); vaoGame = false; NapLai(); }
     public static void VeMenuChinh() => VeMenu();   // cảnh kết xong → về menu chính
     static void ChoiLaiDem() { Time.timeScale = 1; AudioListener.pause = false; LocMa.ChoiLai(); }
+    // [6/11] mỗi đêm một scene (LOC_NhaLoc_Dem1/2/3) → nạp scene của LocMa.dem (về menu: dem = 0 → Đêm 1, menu chính nằm trên cảnh cổng Đêm 1)
+    public static string CanhDem(int d) => "LOC_NhaLoc_Dem" + Mathf.Clamp(d, 1, 3);
     public static void NapLai()
     {
 #if UNITY_EDITOR
-        UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode(SceneManager.GetActiveScene().path, new LoadSceneParameters(LoadSceneMode.Single));
+        var p = "Assets/Scenes/" + CanhDem(LocMa.dem) + ".unity";
+        if (!File.Exists(p)) p = SceneManager.GetActiveScene().path;   // chưa dựng lại nhà (scene gộp cũ)
+        UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode(p, new LoadSceneParameters(LoadSceneMode.Single));
 #else
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(CanhDem(LocMa.dem));
 #endif
     }
     static void Thoat()

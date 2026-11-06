@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 //    Đổi đêm bằng F1–F3 / tự kiểm thì KHÔNG dịch người chơi.
 //  · Luật đèn hầm (B3.8b): đèn hầm đang bật mà người chơi ra khỏi hầm + hộp thang → tắt ngay, không nháy, không tiếng.
 //  · Đêm 1: lời mở đầu → thắp hương (E, nhìn ảnh) → thoại người họ hàng → [Nhím, két, sổ — đã có] → xuống hầm có đèn (độc thoại)
-//    → đi lên ("Thôi. Mai tính.") → ra khỏi cửa hầm và đã thăm Nhím → cắt đen → Đêm 2.
+//    → đi lên ("Thôi. Mai tính.") → thắp nén mới → [3/11] lên giường Khôi bấm "Đi ngủ" → cắt đen → Đêm 2 (còn việc thì độc thoại gợi ý).
 //  · H: gợi ý C1.4 — bấm (chưa chốt bấm hay giữ, TL-05), mỗi lần lùi một bậc. Hiện có gợi ý 1 (mã két).
 //  · Cờ cốt truyện lưu trong LocTui → chết thì "chơi lại đầu đêm" tự trả về đúng lúc đầu đêm.
 [DefaultExecutionOrder(20)]
@@ -31,6 +31,10 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     LocFirstPerson fp; LocCongTac ctHam; Transform banThoVong, banThoT3, dienThoai, dongHo, cuaHamT; readonly List<GameObject> linhCuu = new(); readonly List<LocDoor> cong = new();
     AudioSource amReo, amGo; AudioClip cReo, cGo, cRe, cTut; bool dangReo, nhacMay; float tDongHo; int gio;
     int demDangAp = -1; bool dangCanh, dangNoiHam;
+    [Header("[6/11] scene theo đêm")]
+    public int demScene;   // LocHouseBuilder ghi: scene này là đêm mấy (0 = scene gộp cũ, đổi đêm tại chỗ)
+    static bool sauBanNgay; bool dangNap;   // sauBanNgay: scene vừa được nạp từ HetDem → chạy cảnh ban ngày rồi mới vào đêm
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset0() => sauBanNgay = false;
     readonly Dictionary<string, int> bacGoiY = new();
 
     void Awake() { I = this; fp = GetComponent<LocFirstPerson>(); }
@@ -38,7 +42,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     void Start()
     {
         ctHam = GameObject.Find("CongTac_Ham")?.GetComponent<LocCongTac>();
-        banThoVong = GameObject.Find("BanThoVong_Dem1")?.transform;
+        banThoVong = (GameObject.Find("BanThoVong_Dem1") ?? GameObject.Find("BanThoVong_Dem2") ?? GameObject.Find("BanThoVong_Dem3"))?.transform;   // [6/11] scene theo đêm: chỉ còn bàn của đêm đó
         banThoT3 = GameObject.Find("KhungAnhOngBa")?.transform;
         dienThoai = GameObject.Find("LOC_DienThoai_TronBo")?.transform;
         dongHo = GameObject.Find("DongHoQuaLac")?.transform;
@@ -57,11 +61,30 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         LocNhim.SauEvil = () => StartCoroutine(KetThuc("Anh không đếm lại bao giờ."));
         foreach (var n in tenCong) { var d = GameObject.Find(n)?.GetComponent<LocDoor>(); if (d) cong.Add(d); }
         KhoiTaoV34();
-        ApDem(LocMa.dem); DauDem();
+        ApDem(LocMa.dem);
+        if (sauBanNgay) { sauBanNgay = false; StartCoroutine(VaoSauBanNgay()); } else DauDem();
+    }
+
+    // [6/11] scene đêm sau vừa nạp (màn còn đen): cảnh ban ngày → chỗ đứng đầu đêm → sáng lên
+    IEnumerator VaoSauBanNgay()
+    {
+        dangCanh = true; LocFirstPerson.khoa = true; LocMa.tamDung = true; LocFirstPerson.den = 1;
+        var bn = GetComponent<LocBanNgay>();
+        if (bn) yield return bn.Chay(LocMa.dem, null, false); else yield return new WaitForSeconds(2.5f);
+        DauDem();
+        yield return SangLai();
+    }
+    IEnumerator SangLai()
+    {
+        yield return new WaitForSeconds(0.8f);
+        for (float t = 1; t > 0; t -= Time.deltaTime / 1.2f) { LocFirstPerson.den = t; yield return null; }
+        LocFirstPerson.den = 0; LocFirstPerson.khoa = false; LocMa.tamDung = false; dangCanh = false;
     }
 
     void Update()
     {
+        if (dangNap) return;
+        if (demScene > 0 && LocMa.dem != demScene && !LocMenu.DangTuKiem) { dangNap = true; LocMenu.NapLai(); return; }   // [6/11] F1–F3 / đổi đêm → nạp scene của đêm đó
         if (LocMa.dem != demDangAp) ApDem(LocMa.dem);
         DenHam();
         if (dangKet) { LocFirstPerson.khoa = true; LocMa.tamDung = true; }   // [27/10] phần kết: cảnh khác (LocNhim) có nhả khoá cũng giữ lại
@@ -148,10 +171,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         bool daXuong = LocTui.Co("d1_xuong_ham");
         if (!daXuong && trongHam && ctHam && ctHam.bat) StartCoroutine(XuongHam());
         if (daXuong && !dangNoiHam && !trongHam && trongThang && !LocTui.Co("d1_mai_tinh")) { LocTui.Dat("d1_mai_tinh"); LocTui.Noi("Thôi. Mai tính."); }
-        // hết đêm: đã xuống hầm, đã thăm Nhím, đang ở ngoài hầm và ngoài phòng em, không trong cảnh nào
-        bool trongPhongNhim = LocMa.I && LocMa.I.nhimPhong.Contains(p + Vector3.up * 0.9f);
-        if (daXuong && LocNhim.daTham[1] && LocTui.Co("giu_huong_1") && !trongHam && !trongThang && !trongPhongNhim && !LocNhim.dangCanh && !LocFirstPerson.khoa && !LocTui.Mo)
-            StartCoroutine(HetDem());
+        // [3/11] hết đêm không còn tự cắt: lên giường Khôi bấm [E] Đi ngủ (ViecConLai)
     }
 
     IEnumerator XuongHam()
@@ -171,6 +191,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         if (dangCanh) return "";
         int d = LocMa.dem;
         if (id == "dien_thoai") return dangReo && nhacMay ? "[E] Nhấc máy" : "";
+        if (id == "di_ngu") return d <= 2 ? "[E] Đi ngủ" : "";
         if (id == "thap_huong_t3")
             return d == 3 && LocMa.huDaHe && !LocTui.Co("thap_huong_t3") ? (DungChinhDien(banThoT3) ? "[E] Thắp hương" : "Đứng thẳng trước bàn thờ để thắp hương") : "";
         if (id != "thap_huong") return "";
@@ -183,6 +204,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     {
         if (!GoiY(v.id).StartsWith("[E]")) return;
         if (v.id == "dien_thoai") { nhacMay = false; dangReo = false; return; }
+        if (v.id == "di_ngu") { var con = ViecConLai(); if (con != null) LocTui.Noi(con); else StartCoroutine(HetDem()); return; }
         if (v.id == "thap_huong_t3") { StartCoroutine(GiuCamera(v.transform, "thap_huong_t3")); return; }
         if (LocMa.dem == 1 && !LocTui.Co("thap_huong")) StartCoroutine(ThapHuong(v.transform));
         else StartCoroutine(GiuCamera(v.transform, "giu_huong_" + LocMa.dem));
@@ -274,32 +296,22 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         LocTui.Dat("ho_hang_ve");
     }
 
-    // ───── [29/10] đoạn dài bỏ qua được (bác nói chuyện…): giữ Space 0,8 s — cùng cách với đoạn xe buýt (LocXeBuyt).
-    //  Bỏ qua thì dừng ngay đoạn đang chạy, xoá phụ đề, gọi donDep để trả trạng thái (mở khoá, buông tay…), rồi chạy tiếp phần sau đoạn.
-    float giuSpace; bool coBoQua;
+    // ───── [29/10] đoạn dài bỏ qua được (bác nói chuyện…) · [3/11] nút bỏ qua chung ở LocFirstPerson (giữ Enter 0,8 s → boQua).
+    //  Đoạn có cảnh không phải thoại (bác bước tới, nắm tay) nên không tua được: bỏ qua thì dừng hẳn, xoá phụ đề, gọi donDep trả trạng thái.
+    bool coBoQua;
+    public bool DangDoanBoQua => coBoQua;
     IEnumerator BoQuaDuoc(IEnumerator doan, System.Action donDep)
     {
         bool xong = false;
         IEnumerator Chay() { yield return doan; xong = true; }
         var c = StartCoroutine(Chay());
-        coBoQua = true; giuSpace = 0;
+        coBoQua = true;
         while (!xong)
         {
-            var k = Keyboard.current;
-            giuSpace = LocFirstPerson.GiuBoQua(k) ? giuSpace + Time.deltaTime : 0;   // [1/11] Enter thay Space (Space làm nhảy)
-            if (giuSpace >= 0.8f) { StopCoroutine(c); LocFirstPerson.PhuDe("", 0.01f); donDep?.Invoke(); break; }
+            if (LocFirstPerson.boQua) { StopCoroutine(c); LocFirstPerson.PhuDe("", 0.01f); donDep?.Invoke(); break; }
             yield return null;
         }
-        coBoQua = false; giuSpace = 0;
-    }
-    void OnGUI()
-    {
-        if (!coBoQua || LocMenu.DangChe) return;
-        float k = Screen.height / 1080f;
-        var st = new GUIStyle(GUI.skin.label) { font = LocMenu.FontChu(1), fontSize = Mathf.RoundToInt(19 * k), alignment = TextAnchor.LowerRight };
-        st.normal.textColor = new Color(0.75f, 0.72f, 0.66f, 0.38f + 0.5f * Mathf.Clamp01(giuSpace / 0.8f));
-        GUI.Label(new Rect(0, 0, Screen.width - 36 * k, Screen.height - 30 * k), LocFirstPerson.CHU_BO_QUA, st);
-        if (giuSpace > 0) { float w = 170 * k * Mathf.Clamp01(giuSpace / 0.8f); GUI.color = new Color(0.75f, 0.72f, 0.66f, 0.7f); GUI.DrawTexture(new Rect(Screen.width - 36 * k - w, Screen.height - 26 * k, w, 2 * k), Texture2D.whiteTexture); GUI.color = Color.white; }
+        coBoQua = false;
     }
 
     const string BAC = "BÁC";
@@ -311,8 +323,32 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
             float t = 1.2f + 0.06f * cau.Length;
             if (LocDi.I) LocDi.I.Noi(ai == BAC);   // dì quay về người chơi, gật nhẹ khi tới câu của dì
             LocFirstPerson.PhuDe($"{ai}: {cau}", t, false);
-            yield return LocFirstPerson.Cho(t * LocFirstPerson.nhanChu + 0.4f);
+            yield return LocFirstPerson.ChoThoai(t * LocFirstPerson.nhanChu + 0.4f);   // [3/11] hội thoại: đứng yên, giữ Enter tua
         }
+    }
+
+    // ───── [3/11] đi ngủ = hết đêm. Còn việc thì Khôi tự nhủ việc đầu tiên còn thiếu (theo thứ tự trong đêm), không cho ngủ.
+    string ViecConLai()
+    {
+        int d = LocMa.dem;
+        if (d == 1)
+        {
+            if (!LocTui.Co("thap_huong")) return "Về tới nhà rồi. Thắp cho bố mẹ nén hương đã.";
+            if (!LocNhim.daTham[1]) return "Mình nên xem tình hình con bé sao trước nhỉ.";
+            if (!LocTui.Co("d1_xuong_ham")) return "Xem thử dưới hầm có cái gì đã.";
+            if (!LocTui.Co("giu_huong_1")) return "Bác dặn giữ hương trên linh cữu. Thắp nén mới rồi hẵng ngủ.";
+        }
+        else if (d == 2)
+        {
+            if (!LocNhim.daTham[2]) return "Mình nên xem tình hình con bé sao trước nhỉ.";
+            if (CoGoiThay && !LocTui.Co("goi_2")) return "Chưa ngủ được. Xuống phòng khách xem lại đã.";
+            if (CoGoiThay && !LocTui.Co("goi_thay")) return "Cái điện thoại lúc nãy... Chắc người ta còn gọi lại.";
+            if (mgDanChen && vpKeo && vpChen3 && !LocTui.Co("dan_chen")) return "Ông ấy dặn dán hai cái chén dưới hầm. Làm cho xong đã.";
+            if (vpChao && choDatChao && !LocTui.Co("cung_chao")) return "Bát cháo còn chưa bưng xuống hầm.";
+            if (!LocNhim.daHoangLoan) return LocTui.Co("doc:so_cua_bo") ? "Cuốn sổ của bố... đọc cho hết đã." : "Bố hay ghi chép. Chắc phải có cuốn sổ nào đấy.";
+            if (!LocTui.Co("giu_huong_2")) return "Hương trên linh cữu sắp tàn. Thắp nén mới rồi hẵng ngủ.";
+        }
+        return null;
     }
 
     // ───── hết đêm → cắt đen → đêm sau
@@ -335,11 +371,16 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         LocFirstPerson.den = 1; LocFirstPerson.PhuDe("", 0.01f);
         // [22/10] cắt cảnh ban ngày (LocBanNgay) thay màn đen; nhà đổi sang trạng thái đêm sau ngay lúc còn đen
         var bn = GetComponent<LocBanNgay>(); int sau = LocMa.dem + 1;
+        if (demScene > 0 && !LocMenu.DangTuKiem)   // [6/11] mỗi đêm một scene: đưa tang (cần linh cữu) chiếu ở đây, phần còn lại ở scene đêm sau
+        {
+            if (bn && sau == 3) yield return bn.ChayDuaTang();
+            LocTui.ChupDiemLuu();   // scene mới khôi phục túi + cờ từ điểm này (không phải đầu đêm vừa xong)
+            sauBanNgay = true; dangNap = true; LocMa.dem = sau; LocMenu.NapLai();
+            yield break;
+        }
         if (bn) yield return bn.Chay(sau, () => ApDem(sau)); else yield return new WaitForSeconds(2.5f);
         LocMa.dem = sau; ApDem(LocMa.dem); DauDem();
-        yield return new WaitForSeconds(0.8f);
-        for (float t = 1; t > 0; t -= Time.deltaTime / 1.2f) { LocFirstPerson.den = t; yield return null; }
-        LocFirstPerson.den = 0; LocFirstPerson.khoa = false; LocMa.tamDung = false; dangCanh = false;
+        yield return SangLai();
     }
 
     // ───── gợi ý H (C1.4): Khôi tự nhủ, bấm lại thì lùi một bậc, không bao giờ nói đáp án
@@ -362,7 +403,6 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         if (LocNhim.daTham[2] && !LocTui.Co("goi_2") && KC(dienThoai) < 6f) { LocTui.Dat("goi_2"); StartCoroutine(Reo(8, true)); }
         if (LocTui.Co("so_bo_het") && !LocNhim.daHoangLoan && !LocTui.Mo && !LocNhim.dangCanh && !LocFirstPerson.khoa && LocNhim.I)
         { LocNhim.I.CanhHoangLoan(); if (LocMa.I) LocMa.I.LoSom(); }
-        if (LocTui.Co("giu_huong_2") && !LocNhim.dangCanh && !LocFirstPerson.khoa && !LocTui.Mo) StartCoroutine(HetDem());
     }
 
     // chuông điện thoại bàn: lan hồi, lại gần (khi không cho nhấc) thì tắt; cho nhấc thì [E] Nhấc máy → tiếng rè, cái đài, không ai nói
@@ -383,9 +423,10 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         if (loi != null) { dangCanh = true; LocMa.tamDung = true; yield return loi(); LocMa.tamDung = false; dangCanh = false; yield break; }   // [27/10] cuộc gọi có lời (thầy Đồng)
         dangCanh = true; LocMa.tamDung = true;
         yield return Thoai(("KHÔI", "A lô."));
-        if (cRe) { amReo.PlayOneShot(cRe, 1f); yield return new WaitForSeconds(3f); }
+        if (cRe) { amReo.PlayOneShot(cRe, 1f); yield return LocFirstPerson.ChoThoai(3f); }
         yield return Thoai(("KHÔI", "A lô. Ai đấy ạ."));
-        if (cTut) { amReo.PlayOneShot(cTut, 0.8f); yield return new WaitForSeconds(cTut.length); }
+        if (cTut) { amReo.PlayOneShot(cTut, 0.8f); yield return LocFirstPerson.ChoThoai(cTut.length); }
+        if (LocFirstPerson.boQua) amReo.Stop();
         LocMa.tamDung = false; dangCanh = false;
     }
 

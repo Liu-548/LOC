@@ -633,7 +633,7 @@ public static partial class LocKhuPho
         if (EditorApplication.isPlaying) return;
         if (System.IO.Directory.Exists("LOC_KiemTra/XeBuyt"))
             foreach (var f in System.IO.Directory.GetFiles("LOC_KiemTra/XeBuyt")) System.IO.File.Delete(f);
-        if (EditorSceneManager.GetActiveScene().path != "Assets/Scenes/LOC_NhaLoc.unity") EditorSceneManager.OpenScene("Assets/Scenes/LOC_NhaLoc.unity");
+        if (EditorSceneManager.GetActiveScene().path != LocHouseBuilder.CanhDem(1)) EditorSceneManager.OpenScene(LocHouseBuilder.CanhDem(1));   // [6/11] xe buýt chỉ có ở Đêm 1
         EditorPrefs.SetBool("LOC_ThuXeBuyt", true);
         EditorApplication.isPlaying = true;
     }
