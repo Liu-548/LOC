@@ -16,6 +16,7 @@ File này gom mọi phần gameplay **chưa làm**, **làm dở** và **chưa te
 | 1.1 Tờ giấy chép lời thầy | Vào túi sau cuộc gọi, đọc được (`giay_loi_thay`) | |
 | 1.1 Cháo, lọ keo, chén số 3, dán chén | Lọ keo trên quầy cửa hàng (`lo_keo`), chén số ba (chén anh Phong) trên bàn thờ ông bà tầng 3 (`chen_3`), bát cháo trên bàn ăn (`bat_chao`). Dán chén giờ cần keo + chén số ba. Bưng bát cháo xuống bàn thờ hầm (`cung_chao`) | Đêm 2 chỉ "thắp nén mới" được khi đã có `goi_thay`, `dan_chen`, `cung_chao` (món nào không dựng được thì bỏ điều kiện đó) |
 | 1.1 Cảnh nửa tỉnh cuối đêm | Nối vào `HetDem()` của Đêm 2 | |
+| 1.1b Giấc mơ cuối Đêm 2 *(02/11, nhánh `claude/giac-mo-dem2`)* | Nửa tỉnh → *"Ngủ thôi."* → [E] Đi ngủ ở giường Khôi → giấc mơ "Chạy" (`LocGiacMo`) → bật dậy → đưa tang. Chi tiết: `ke-hoach-giac-mo-02-11.md` mục 8 | Chưa chạy thử trong Unity: dùng menu **LOC → Tự kiểm giấc mơ (Play)** |
 | 1.2 Kiện hàng + văn khấn | Gói giấy dầu trong cửa chính (Đêm 3). Mở ra: bài khấn (`van_khan`), hai tờ giấy gói chữ son (`giay_goi`), tờ niêm (`giay_niem`) | |
 | 1.2 Lời nhắn của mẹ | Trên bàn trang điểm phòng bố mẹ, Đêm 3 (`loi_nhan_me`, đọc tại chỗ) | Nội dung tạm: chỉ sang quyển sách trong tủ thờ |
 | 1.2 Cắt cảnh đưa tang | `LocBanNgay.DuaTang`: hai khung tĩnh (linh cữu giữa nhà, cổng mở nhìn ra đường) + kèn đám + phụ đề "Sáng 8/8. Đưa tang." rồi mới tới sân vắng | |
@@ -85,7 +86,7 @@ Công cụ mới: **LOC → Thử tay: chụp** (`LOC_ThuTay.txt` → `LOC_KiemT
 1. Sửa script. Nếu đổi vật trong nhà thì sửa file `Editor/LocHouseBuilder_*.cs`, **đừng** kéo thả tay trong scene, vì lần dựng sau sẽ bị ghi đè.
 2. Chạy **LOC → Dựng nhà LỘC (tạo scene)**.
 3. Kiểm bằng **LOC → Chơi thử một mạch (Play)**. Log và ảnh nằm ở `LOC_KiemTra/ChoiThu/`. Những gì cần đi bộ thật thì chơi tay.
-4. Phím thử khi Play: `F1–F3` nhảy đêm, `F8` cảnh nửa tỉnh, `F9` Good, `F10` Bad, `9` hết đêm ngay, `B` bỏ qua mini game, `Shift+1…5` các kiểu dọa của ma.
+4. Phím thử khi Play: `F1–F3` nhảy đêm, `F8` cảnh nửa tỉnh, `F9` Good, `F10` Bad, `8` vào giấc mơ ngay (xong tỉnh dậy, ở lại đêm đang chơi), `9` hết đêm ngay, `B` bỏ qua mini game, `Shift+1…5` các kiểu dọa của ma.
 
 ---
 

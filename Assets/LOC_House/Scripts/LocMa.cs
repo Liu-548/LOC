@@ -61,9 +61,7 @@ public class LocMa : MonoBehaviour
     readonly List<(Renderer r, Material[] goc, Material[] tat)> phat = new();
     readonly List<GameObject> vatSang = new();
     readonly Dictionary<Material, Material> banTat = new();
-    static bool PhatSang(Material m) =>
-        (m.HasProperty("_EmissionColor") && m.GetColor("_EmissionColor").maxColorComponent > 0.02f) ||
-        (m.HasProperty("emissiveFactor") && m.GetColor("emissiveFactor").maxColorComponent > 0.02f);
+    static bool PhatSang(Material m) => LocDien.DoDien(m);   // [03/11] chỉ đồ điện — lửa đèn dầu, nến sáp, đầu nhang không tắt khi mất điện (LocDien)
     Material BanTat(Material m)
     {
         if (banTat.TryGetValue(m, out var t)) return t;
@@ -95,11 +93,14 @@ public class LocMa : MonoBehaviour
         cam = fp && fp.cam ? fp.cam : Camera.main ? Camera.main.transform : null;
         am = gameObject.AddComponent<AudioSource>(); am.playOnAwake = false; am.spatialBlend = 0;
         foreach (var l in FindObjectsByType<Light>(FindObjectsSortMode.None))
-            if (l.type != LightType.Directional && !l.name.Contains("Ham") && !l.transform.IsChildOf(transform)) { dens.Add(l); goc[l] = l.intensity; }
+            if (l.type != LightType.Directional && !l.name.Contains("Ham") && !l.transform.IsChildOf(transform) && !LocDien.LaLua(l)) { dens.Add(l); goc[l] = l.intensity; }   // [03/11] đèn dầu không ăn điện
         ambient0 = RenderSettings.ambientLight;
-        foreach (var r in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
+        // [03/11] lấy cả vật đang ẩn (bàn thờ / rạp theo đêm bật về sau) — trước đây đồ điện trong nhóm bật sau vẫn sáng lúc mất điện
+        foreach (var r in FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
-            if (r.transform.IsChildOf(transform) || r.bounds.center.y < -0.4f) continue;
+            if (!r || r.transform.IsChildOf(transform) || r.gameObject.scene != gameObject.scene) continue;
+            float y = r.gameObject.activeInHierarchy && r.enabled ? r.bounds.center.y : r.transform.position.y;   // vật ẩn: bounds rỗng
+            if (y < -0.4f) continue;
             var ms = r.sharedMaterials; bool co = false; var tat = new Material[ms.Length];
             for (int i = 0; i < ms.Length; i++) { tat[i] = ms[i]; if (ms[i] && PhatSang(ms[i])) { tat[i] = BanTat(ms[i]); co = true; } }
             if (co) phat.Add((r, ms, tat));
@@ -357,6 +358,7 @@ public class LocMa : MonoBehaviour
 
     // ───── lấp ló
     public string lyDoLo = "";
+    static bool GhiLyDo => Application.isEditor || Debug.isDebugBuild;   // [02/11] lý do thất bại chỉ để chẩn đoán: bản phát hành khỏi dựng chuỗi / bắn tia chỉ để ghi chữ (ThuLo chạy lại mỗi 3 s khi chưa có chỗ ló)
     struct ChoLo { public int kieu; public Vector3 an, hien; public Quaternion rot; public bool lat, chiDau; }   // chiDau: chỉ hiện cái đầu (WC bố mẹ — thân sẽ đè vách)
 
     bool ThuLo(int ep = -1)
@@ -370,14 +372,18 @@ public class LocMa : MonoBehaviour
                 Vector3 P = cuaP[i], d = cuaD[i], n = cuaN[i];
                 var ph = pp - P; ph.y = 0; float kc = ph.magnitude;
                 bool hep = cuaHep != null && i < cuaHep.Length && cuaHep[i];
-                if (kc < (hep ? 2.2f : 2.6f) || kc > 14f || Mathf.Abs(pp.y - P.y) > 1.2f || Vector3.Dot(ph, n) < (hep ? 0.08f : 0.3f) * kc) { lyDoLo = $"kc {kc:0.0} dy {pp.y - P.y:0.0} dot {Vector3.Dot(ph, n) / Mathf.Max(kc, 0.01f):0.00}"; continue; }
+                if (kc < (hep ? 2.2f : 2.6f) || kc > 14f || Mathf.Abs(pp.y - P.y) > 1.2f || Vector3.Dot(ph, n) < (hep ? 0.08f : 0.3f) * kc) { if (GhiLyDo) lyDoLo = $"kc {kc:0.0} dy {pp.y - P.y:0.0} dot {Vector3.Dot(ph, n) / Mathf.Max(kc, 0.01f):0.00}"; continue; }
                 foreach (var k in new[] { LO_DAU })   // [4/10] bỏ kiểu chỉ ló bàn tay
                 {
                     var b = bong[k]; if (b == null || (ep >= 0 && ep != k)) continue;
                     TinhCua(i, k, out var c);
                     var mat = P + d * 0.03f + n * (b.matLocal.z - sauMat) + Vector3.up * b.matLocal.y;   // mắt ló qua mép
-                    if (Vector3.Angle(cam.forward, mat - cam.position) > 70f) { lyDoLo = $"góc {Vector3.Angle(cam.forward, mat - cam.position):0}°"; continue; }
-                    if (!ThayDuoc(mat, 0.08f)) { Physics.Raycast(cam.position, (mat - cam.position).normalized, out var hc, 99f); lyDoLo = $"khuất bởi {hc.collider?.name} cách mắt {Vector3.Distance(hc.point, mat):0.00} m; mắt={mat:F2} matLocal={b.matLocal:F2}"; continue; }
+                    if (Vector3.Angle(cam.forward, mat - cam.position) > 70f) { if (GhiLyDo) lyDoLo = $"góc {Vector3.Angle(cam.forward, mat - cam.position):0}°"; continue; }
+                    if (!ThayDuoc(mat, 0.08f))
+                    {
+                        if (GhiLyDo) { Physics.Raycast(cam.position, (mat - cam.position).normalized, out var hc, 99f); lyDoLo = $"khuất bởi {hc.collider?.name} cách mắt {Vector3.Distance(hc.point, mat):0.00} m; mắt={mat:F2} matLocal={b.matLocal:F2}"; }
+                        continue;
+                    }
                     if (!HopLeCua(i, ref c, out _, out _)) { lyDoLo = $"cửa {i}: thân đè {vatBiLan}"; continue; }
                     ds.Add(c);
                 }

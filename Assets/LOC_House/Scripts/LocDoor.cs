@@ -152,7 +152,7 @@ public class LocDoor : MonoBehaviour
 
     public void Toggle()
     {
-        if (khoa) return; Luu(); KiemGoc(); dich = dich < 0.5f ? 1f : 0f; CapNhatChan();
+        if (khoa) return; GhiCong("Toggle"); Luu(); KiemGoc(); dich = dich < 0.5f ? 1f : 0f; CapNhatChan();
         if (Application.isPlaying && thoiGian > 0.05f && Time.time - amCuoi > 0.08f)   // cánh bạn cùng ô cửa bật theo thì không kêu chồng   // [1/11] tiếng cửa: kẹt khi mở, bụp khi đóng · cổng/cửa sắt rít kim loại · ngăn kéo/kính lùa nhỏ
         {
             amCuoi = Time.time;
@@ -175,7 +175,15 @@ public class LocDoor : MonoBehaviour
     public void Dong() { if (DangMo) Toggle(); }
 
     // [8/10] đặt ngay trạng thái mở/đóng, không chạy hoạt cảnh, bỏ qua khoá (đầu đêm)
-    public void DatNgay(bool mo) { Luu(); KiemGoc(); dich = mo == dungSanLaMo ? 0f : 1f; t = dich; ApT(); CapNhatChan(); }
+    public void DatNgay(bool mo) { GhiCong(mo ? "DatNgay(mở)" : "DatNgay(đóng)"); Luu(); KiemGoc(); dich = mo == dungSanLaMo ? 0f : 1f; t = dich; ApT(); CapNhatChan(); }
+    // [03/11] tự kiểm báo "đầu Đêm 1: 2 cánh cổng lớn đang mở" mà chưa rõ ai mở → trong Editor, mọi lần cổng đổi trạng thái đều ghi Console
+    //  (Console kèm stack trace = biết script nào gọi). Bản build không ghi gì.
+    void GhiCong(string viec)
+    {
+#if UNITY_EDITOR
+        if (name.StartsWith("CanhCong") || name.StartsWith("CuaNgachCong")) Debug.Log($"[Cổng] {name}: {viec} · đêm {LocMa.dem} · t={Time.time:0.0}s");
+#endif
+    }
 
     void Update()
     {

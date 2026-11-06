@@ -196,7 +196,7 @@ public static partial class LocHouseBuilder
         }
         AssetDatabase.DeleteAsset(tam);
         AssetDatabase.DeleteAsset("Assets/Scenes/LOC_NhaLoc.unity");
-        EditorBuildSettings.scenes = new[] { 1, 2, 3 }.Select(d => new EditorBuildSettingsScene(CanhDem(d), true)).ToArray();
+        EditorBuildSettings.scenes = new[] { 1, 2, 3 }.Select(CanhDem).Append(LocBuild.CanhMo).Select(c => new EditorBuildSettingsScene(c, true)).ToArray();   // + cảnh mơ Đêm 2 (LocGiacMo nạp theo tên)
         EditorSceneManager.OpenScene(CanhDem(1));
     }
 

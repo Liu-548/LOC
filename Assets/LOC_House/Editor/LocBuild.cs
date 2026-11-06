@@ -6,7 +6,8 @@ using UnityEditor.Build.Reporting;
 // Kết quả + lỗi ghi LOC_Build_KetQua.txt; bản build ở Build/LOC/ (không đưa lên git).
 public static class LocBuild
 {
-    static string[] Canh => new[] { 1, 2, 3 }.Select(LocHouseBuilder.CanhDem).ToArray();   // [6/11] 3 scene theo đêm, Đêm 1 đầu tiên
+    public const string CanhMo = "Assets/Scenes/LOC_GiacMo_Dem2.unity";   // [02/11] cảnh riêng của giấc mơ cuối Đêm 2 (LocGiacMo nạp chồng lúc vào mơ)
+    static string[] Canh => new[] { 1, 2, 3 }.Select(LocHouseBuilder.CanhDem).Append(CanhMo).ToArray();   // [6/11] 3 scene theo đêm (Đêm 1 đầu tiên) + cảnh mơ
 
     [MenuItem("LOC/Build thử (Windows .exe)")]
     public static void Build()

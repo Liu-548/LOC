@@ -221,8 +221,18 @@ public class LocChoiThu : MonoBehaviour
         LocTui.Dat("goi_thay"); LocTui.Dat("dan_chen"); LocTui.Dat("cung_chao");
         Muc("ĐÊM 2 — GIỮ HƯƠNG");
         var ct = LocCotTruyen.I; Toi(ct.demSauDung, ct.demSauNhin); yield return Cho(0.5f);
-        var v = Viec("thap_huong"); G("gợi ý: " + v.GoiY); v.Bam(); yield return Cho(3.5f);
-        var ngu = Viec("di_ngu"); if (ngu) { G("giường Khôi: " + ngu.GoiY); ngu.Bam(); } else Loi("giường Khôi không có LocViec di_ngu");
+        var v = Viec("thap_huong"); G("gợi ý: " + v.GoiY); v.Bam();
+        // [02/11] giữ hương → nửa tỉnh → [E] Đi ngủ ở giường Khôi → giấc mơ (máy tự né) → tỉnh dậy → Đêm 3
+        yield return ChoDen(() => LocTui.Co("nua_tinh_2") && !LocFirstPerson.khoa, 60, "nửa tỉnh xong, trả điều khiển để đi ngủ");
+        yield return Chup("nua_tinh_xong");
+        G("giường Khôi: " + (ct.ChoNgu ? ct.ChoNgu.GoiY : "KHÔNG có chỗ ngủ"));
+        LocGiacMo.bot = LocGiacMo.Bot.Ne; ct.DiNguNgay();
+        yield return ChoDen(() => LocGiacMo.dangMo, 6, "vào giấc mơ");
+        yield return Cho(8); yield return Chup("giac_mo_chay");
+        yield return ChoDen(() => !LocGiacMo.dangMo, 180, "giấc mơ xong");
+        var kq = LocGiacMo.cuoi; if ((object)kq != null) G($"giấc mơ: {(kq.ketThoat ? "THOÁT" : "BỊ BẮT")} · {kq.tgChay:0} s · ném {kq.soNem} · trúng {kq.soTrung}");
+        LocGiacMo.bot = LocGiacMo.Bot.Khong;
+        yield return Cho(1.5f); yield return Chup("tinh_day");
         yield return ChoDen(() => LocMa.dem == 3, 75, "sang Đêm 3");
         yield return Cho(2); yield return Chup("ban_ngay_dem2_3");
         yield return ChoDen(() => !LocFirstPerson.khoa && LocFirstPerson.den == 0, 25, "trả điều khiển đầu Đêm 3");
@@ -244,7 +254,10 @@ public class LocChoiThu : MonoBehaviour
         var ctHam = T("CongTac_Ham").GetComponent<LocCongTac>();
         Toi(new Vector3(-0.6f, 0.05f, 18.1f), ctHam.transform.position); yield return Cho(0.3f); ctHam.Dat(true);
         Toi(new Vector3(-2.0f, -2.25f, 13.8f), new Vector3(-2.0f, -1.6f, 11.0f)); yield return Cho(1.5f); yield return Chup("ham_dem3");
-        var hu = FindAnyObjectByType<LocHuCot>(); G("hũ: " + hu.GoiY); hu.Bam();
+        var hu = FindAnyObjectByType<LocHuCot>(); G("hũ trước khi đọc lời nhắn của mẹ: " + hu.GoiY + " (phải là \"[E] Cái hũ\")");
+        // [02/11] v3.3: phải đọc lời nhắn của mẹ (phòng bố mẹ) thì mới hé hũ được
+        var ln = V("loi_nhan_me"); if (ln) { LocTui.Doc(ln); yield return Cho(1.5f); yield return Chup("loi_nhan_me"); LocTui.I.DatChe(0); yield return Cho(0.5f); }
+        G("hũ sau khi đọc lời nhắn: " + hu.GoiY); hu.Bam();
         yield return Cho(6); yield return Chup("he_hu_toc");
         yield return ChoDen(() => LocTui.Co("diem_luu_1"), 60, "xong cảnh phòng Nhím + điểm lưu 1");
         yield return Cho(1); yield return Chup("sau_canh_phong_nhim");

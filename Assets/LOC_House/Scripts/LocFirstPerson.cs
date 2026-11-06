@@ -230,19 +230,21 @@ public class LocFirstPerson : MonoBehaviour
         if (Event.current.type == EventType.Repaint) VHS();
         if (den > 0) { GUI.color = new Color(0, 0, 0, den); GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), Texture2D.whiteTexture); GUI.color = Color.white; }
         float k = Screen.height / 1080f;   // [22/10] chữ co theo màn hình, font Noto Serif của menu
+        // [02/11] kiểu chữ dựng một lần (LocKieuChu) thay vì `new GUIStyle` mỗi lần OnGUI — mỗi khung OnGUI gọi 2–4 lần, đang nhìn công tắc/có phụ đề là rác bộ nhớ liên tục → GC làm khựng thỉnh thoảng
         if (!string.IsNullOrEmpty(chuGiua))
         {
             var fd = LocMenu.FontChu(2);
-            var sg = new GUIStyle(GUI.skin.label) { font = fd, fontSize = Mathf.RoundToInt(44 * k), alignment = TextAnchor.MiddleCenter, fontStyle = fd ? FontStyle.Normal : FontStyle.Bold };
-            sg.normal.textColor = Color.white;
+            var sg = LocKieuChu.Lay("fp.chuGiua", fd, Mathf.RoundToInt(44 * k), fd ? FontStyle.Normal : FontStyle.Bold, TextAnchor.MiddleCenter, Color.white);
             GUI.Label(new Rect(0, 0, Screen.width, Screen.height), chuGiua, sg);
         }
         if (phuDe != null && Time.time < phuDeHet)
         {
             var fc = LocMenu.FontChu(phuDeNghieng ? 1 : 0);
-            var sp = new GUIStyle(GUI.skin.label) { font = fc, fontSize = Mathf.RoundToInt(coChu * k), alignment = TextAnchor.MiddleCenter, fontStyle = phuDeNghieng && !fc ? FontStyle.Italic : FontStyle.Normal };
-            sp.normal.textColor = phuDeNghieng ? new Color(0.78f, 0.78f, 0.78f) : Color.white;
-            var nd = new GUIContent(phuDe); var sz = sp.CalcSize(nd); float cy = Screen.height * 0.86f + 22 * k;
+            var sp = LocKieuChu.Lay("fp.phuDe", fc, Mathf.RoundToInt(coChu * k), phuDeNghieng && !fc ? FontStyle.Italic : FontStyle.Normal, TextAnchor.MiddleCenter, phuDeNghieng ? new Color(0.78f, 0.78f, 0.78f) : Color.white);
+            // đo chữ (CalcSize) tốn nhất → chỉ đo lại khi câu / cỡ / font đổi
+            if (pdChu != phuDe || pdCo != sp.fontSize || pdFont != sp.font || pdKieu != sp.fontStyle)
+            { pdChu = phuDe; pdCo = sp.fontSize; pdFont = sp.font; pdKieu = sp.fontStyle; pdNd = new GUIContent(phuDe); pdSz = sp.CalcSize(pdNd); }
+            var nd = pdNd; var sz = pdSz; float cy = Screen.height * 0.86f + 22 * k;
             if (nenChu > 0 && phuDe.Length > 0) { GUI.color = new Color(0, 0, 0, nenChu); GUI.DrawTexture(new Rect((Screen.width - sz.x) / 2 - 14 * k, cy - sz.y / 2 - 4 * k, sz.x + 28 * k, sz.y + 8 * k), Texture2D.whiteTexture); GUI.color = Color.white; }
             GUI.Label(new Rect(0, cy - sz.y / 2, Screen.width, sz.y), nd, sp);
         }
@@ -263,8 +265,8 @@ public class LocFirstPerson : MonoBehaviour
             GUI.color = Color.white;
         }
         if (string.IsNullOrEmpty(goiY)) return;
-        var st = new GUIStyle(GUI.skin.label) { fontSize = 22, alignment = TextAnchor.MiddleCenter };
-        st.normal.textColor = Color.white;
+        var st = LocKieuChu.Lay("fp.goiY", GUI.skin.label.font, 22, GUI.skin.label.fontStyle, TextAnchor.MiddleCenter, Color.white);
         GUI.Label(new Rect(0, Screen.height * 0.58f, Screen.width, 40), goiY, st);
     }
+    static string pdChu; static int pdCo; static Font pdFont; static FontStyle pdKieu; static GUIContent pdNd; static Vector2 pdSz;   // bộ nhớ đệm đo chữ phụ đề
 }

@@ -29,7 +29,7 @@ public class LocCongTac : MonoBehaviour
         ["Bep_GiengTroi"] = new[] { "Bep" },
         ["WC_T1"] = new[] { "WC_T1" },
         ["BoMe"] = new[] { "BoMe_OpTran" },
-        ["HanhLang_ChieuNghi"] = new[] { "ChieuNghi_T2", "HanhLang_T2" },
+        ["HanhLang_ChieuNghi"] = new[] { "ChieuNghi_T2", "HanhLang_T2", "Sanh_T2" },   // [03/11] sảnh T2 (đầu hành lang, trước cửa phòng bố mẹ) trước đây không công tắc nào tắt được
         ["HanhLang_Khoi"] = new[] { "HanhLang_T2" },
         ["PhongKhoi"] = new[] { "Khoi_Tran", "DenBan_Khoi" },
         ["PhongNhim"] = new[] { "DenNgu_Nhim" },   // [1/11] "Bật đèn cho em": công tắc phòng em bật/tắt được đèn ngủ (mất điện vẫn do LocMa)
@@ -40,11 +40,15 @@ public class LocCongTac : MonoBehaviour
     static readonly Dictionary<Light, Renderer[]> bong = new Dictionary<Light, Renderer[]>();
     static readonly Dictionary<Renderer, Material[]> gocMat = new Dictionary<Renderer, Material[]>(), tatMat = new Dictionary<Renderer, Material[]>();
     static Renderer[] tatCaR;
+    static int canhCache;   // [03/11] cảnh mà các bảng tĩnh trên đang trỏ vào
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    static void Reset0() { muon.Clear(); bong.Clear(); gocMat.Clear(); tatMat.Clear(); tatCaR = null; }
+    static void Reset0() { muon.Clear(); bong.Clear(); gocMat.Clear(); tatMat.Clear(); tatCaR = null; canhCache = 0; }
 
     void Awake()
     {
+        // [03/11] Chơi lại / Về menu nạp lại cảnh nhà trong cùng phiên: tatCaR còn giữ renderer của cảnh cũ (đã huỷ) → BongCua không tìm thấy
+        //  bóng nào → tắt công tắc chỉ tắt nguồn sáng, bóng / tuýp vẫn sáng rực. Cảnh mới (handle khác) thì làm lại bảng từ đầu.
+        int hc = gameObject.scene.GetHashCode(); if (hc != canhCache) { Reset0(); canhCache = hc; }   // Scene.GetHashCode() = handle của cảnh
         var l = new List<Transform>();
         foreach (var t in GetComponentsInChildren<Transform>(true)) if (t.name == "Phim") l.Add(t);
         phim = l.ToArray();
@@ -139,6 +143,13 @@ public class LocCongTac : MonoBehaviour
     {
         bool on = muon[d] && !LocMa.MatDien;
         d.enabled = on;
+        ApBong(d, on);
+        var th = d.GetComponent<LocBongTheoDen>(); if (!th) th = d.gameObject.AddComponent<LocBongTheoDen>(); th.Gan(d, on);
+    }
+
+    // bóng / tuýp quanh đèn sáng hay tắt theo đèn
+    public static void ApBong(Light d, bool on)
+    {
         foreach (var r in BongCua(d)) if (r && gocMat.TryGetValue(r, out var g) && tatMat.TryGetValue(r, out var t)) r.sharedMaterials = on ? g : t;
     }
 
@@ -153,13 +164,16 @@ public class LocCongTac : MonoBehaviour
         var l = new List<Renderer>(); var p = d.transform.position;
         foreach (var r in tatCaR)
         {
-            if (!r || (r.bounds.center - p).sqrMagnitude > 0.81f) continue;
+            if (!r || r.bounds.size == Vector3.zero || (r.bounds.center - p).sqrMagnitude > 0.81f) continue;   // vật ẩn: bounds rỗng ở gốc toạ độ
             var ms = r.sharedMaterials; bool co = false; var tat = new Material[ms.Length];
             for (int i = 0; i < ms.Length; i++)
             {
                 tat[i] = ms[i];
-                if (ms[i] && ms[i].HasProperty("_EmissionColor") && ms[i].GetColor("_EmissionColor").maxColorComponent > 0.02f)
-                { var m = new Material(ms[i]) { name = ms[i].name + "_CongTacTat" }; m.SetColor("_EmissionColor", Color.black); m.DisableKeyword("_EMISSION"); tat[i] = m; co = true; }
+                // [03/11] bóng / tuýp / chao của model .glb (glTFast) phát sáng qua "emissiveFactor", không phải "_EmissionColor":
+                //  trước đây chỉ xét _EmissionColor → tắt công tắc chỉ tắt nguồn sáng, ống tuýp / bóng compact / bóng đèn chùm vẫn sáng rực
+                //  (cả 21 bộ đèn trong nhà đều giữ vật liệu glTF ở ô phát sáng). Lửa / nhang / nến điện cắm ổ riêng không theo công tắc phòng.
+                if (LocDien.PhatSang(ms[i]) && !LocDien.KhongAnDien(ms[i]) && !LocDien.CamORieng(ms[i]))
+                { tat[i] = LocDien.BanTat(ms[i], "_CongTacTat"); co = true; }
             }
             if (!co) continue;
             if (!gocMat.ContainsKey(r)) { gocMat[r] = ms; tatMat[r] = tat; }

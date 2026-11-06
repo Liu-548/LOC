@@ -39,6 +39,7 @@ public class LocMenu : MonoBehaviour
     static readonly string[] NGAY = { "", "6/8/2002", "7/8/2002", "8/8/2002" };
     static readonly string[] NGAY_DAI = { "", "6 tháng 8 năm 2002", "7 tháng 8 năm 2002", "8 tháng 8 năm 2002" };
     static readonly string[] KET = { "good", "death", "bad", "evil" };
+    public static string NgayDai(int d) => NGAY_DAI[Mathf.Clamp(d, 0, 3)];   // [02/11] thông báo "sáng hôm sau" sau giấc mơ (LocThongBao)
     static readonly string[] KET_NHOM = { "GOOD", "DEATH", "BAD", "EVIL" };
     static readonly string[] KET_TEN = { "Tiễn", "Nhà này còn một cái chén", "Mùng một", "Cháu khá hơn bố cháu" };
     static readonly string[] KET_GOI_Y =
@@ -127,9 +128,11 @@ public class LocMenu : MonoBehaviour
     public static string CanhDem(int d) => "LOC_NhaLoc_Dem" + Mathf.Clamp(d, 1, 3);
     public static void NapLai()
     {
+        var sc = SceneManager.GetActiveScene();
+        if (sc.name == LocGiacMo.TEN_CANH && LocGiacMo.canhNha.IsValid()) sc = LocGiacMo.canhNha;   // [02/11] đang trong giấc mơ (cảnh mơ là cảnh chính) → nạp lại cảnh nhà
 #if UNITY_EDITOR
         var p = "Assets/Scenes/" + CanhDem(LocMa.dem) + ".unity";
-        if (!File.Exists(p)) p = SceneManager.GetActiveScene().path;   // chưa dựng lại nhà (scene gộp cũ)
+        if (!File.Exists(p)) p = sc.path;   // chưa dựng lại nhà (scene gộp cũ)
         UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode(p, new LoadSceneParameters(LoadSceneMode.Single));
 #else
         SceneManager.LoadScene(CanhDem(LocMa.dem));
@@ -168,7 +171,7 @@ public class LocMenu : MonoBehaviour
     {
         I = this;
 #if UNITY_EDITOR
-        foreach (var k in new[] { "LOC_TuKiemGamePlay", "LOC_TuKiemNhim", "LOC_TuKiemMa", "LOC_ThuCauThang", "LOC_ChanDoanNhay", "LOC_ThuXeBuyt" })
+        foreach (var k in new[] { "LOC_TuKiemGamePlay", "LOC_TuKiemNhim", "LOC_TuKiemMa", "LOC_ThuCauThang", "LOC_ChanDoanNhay", "LOC_ThuXeBuyt", "LOC_TuKiemGiacMo" })
             if (UnityEditor.EditorPrefs.GetBool(k, false)) tat = true;
 #endif
         if (tat) { enabled = false; return; }
@@ -181,6 +184,9 @@ public class LocMenu : MonoBehaviour
         fp = GetComponent<LocFirstPerson>();
         if (fp) lookGoc = fp.look;
         ApDung(); ApBong();
+        LocHieuNang.ApDoHoa(CD("DoHoa", 1));   // [02/11] mức đồ hoạ đã lưu (mặc định 1 = Cân bằng) — sau ApBong để LocHieuNang đọc đúng cài đặt bóng
+        if (LocThucTe.Bat) LocThucTe.Ap();
+        else if (LocThucTe.I) LocThucTe.Ap();   // [03/11] đã tự bật mà mức hiện tại là Tắt → tắt đi   // [02/11] bản thử "Thực tế" (phòng khách) đã bật từ lần trước
     }
 
     void OnApplicationFocus(bool f)
@@ -359,6 +365,7 @@ public class LocMenu : MonoBehaviour
     }
 
     // ════════════════════════════════════════ cài đặt
+    static readonly string[] TEN_THUC_TE = { "Tắt", "Phòng khách", "Cả nhà" };
     static int CD(string k, int md) => PlayerPrefs.GetInt("LOC_CD_" + k, md);
     static void DatCD(string k, int v) => PlayerPrefs.SetInt("LOC_CD_" + k, v);
     static float EV() => (CD("DoSang", 50) - 50) / 50f * 1.2f;   // ±1,2 stop
@@ -374,7 +381,9 @@ public class LocMenu : MonoBehaviour
         // độ sáng: một Volume riêng trên LocHinhCu (ưu tiên 10) và dưới LocMatDien (11) — lúc mất điện vẫn tối hẳn
         if (!hoSoSang) { hoSoSang = ScriptableObject.CreateInstance<VolumeProfile>(); hoSoSang.Add<ColorAdjustments>(); }
         if (!volSang) { volSang = new GameObject("LocDoSang").AddComponent<Volume>(); volSang.isGlobal = true; volSang.priority = 10.5f; volSang.sharedProfile = hoSoSang; }
-        if (hoSoSang.TryGet(out ColorAdjustments ca)) ca.postExposure.Override(-0.15f * phim + EV());
+        // [03/11 chiều] "Hình ảnh thực tế" (ACES + tông u ám) tối hơn bản thường → bù +0,45 stop cho dễ nhìn đồ đạc. Phơi sáng chỉ đặt ở đây:
+        //  LocDoSang (10,5) đè lên volume của LocThucTe (9,5) nên đặt postExposure bên đó không có tác dụng.
+        if (hoSoSang.TryGet(out ColorAdjustments ca)) ca.postExposure.Override(-0.15f * phim + EV() + (LocThucTe.Bat ? 0.45f : 0f));
         Application.targetFrameRate = new[] { 30, 60, 120, 144, -1 }[Mathf.Clamp(CD("Fps", 1), 0, 4)];
         QualitySettings.vSyncCount = CD("VSync", 1);
         AudioListener.volume = CD("AmLuong", 80) / 100f;
@@ -440,7 +449,13 @@ public class LocMenu : MonoBehaviour
                 });
                 hangs.Add(new Hang { ten = "Độ sáng", gt = () => "Chỉnh  ›", vao = () => { sangCu = CD("DoSang", 50); man = Man.DoSang; } });
                 hangs.Add(Chon("Lớp phim cũ", "Phim", 0, new[] { "Đầy đủ", "Nhẹ", "Tắt" }));
-                hangs.Add(Chon("Chất lượng bóng đổ", "Bong", 2, new[] { "Tắt", "Thấp", "Vừa" }, ApBong));
+                hangs.Add(Chon("Chất lượng hình ảnh", "DoHoa", 1, LocHieuNang.TEN_MUC, () => { LocHieuNang.ApDoHoa(CD("DoHoa", 1)); LocThucTe.Ap(); }));   // [03/11] chưa tự chọn "Hình ảnh thực tế" thì nó theo mức này   // [02/11] Tiết kiệm · Cân bằng · Đẹp (LocHieuNang)
+                hangs.Add(new Hang   // [03/11] mặc định theo mức đồ hoạ (Tiết kiệm = Tắt, còn lại = Cả nhà) cho tới khi người chơi tự chọn
+                {
+                    ten = "Hình ảnh thực tế", gt = () => TEN_THUC_TE[Mathf.Clamp(LocThucTe.Muc, 0, 2)],
+                    doi = d => { DatCD("ThucTe", (Mathf.Clamp(LocThucTe.Muc, 0, 2) + d + 3) % 3); ApDung(); LocThucTe.Ap(); },
+                });
+                hangs.Add(Chon("Chất lượng bóng đổ", "Bong", 2, new[] { "Tắt", "Thấp", "Vừa" }, () => { ApBong(); LocHieuNang.DocLaiBong(); }));
                 hangs.Add(Chon("Giới hạn khung hình", "Fps", 1, new[] { "30", "60", "120", "144", "Không giới hạn" }));
                 hangs.Add(Chon("Đồng bộ dọc", "VSync", 1, new[] { "Tắt", "Bật" }));
                 break;

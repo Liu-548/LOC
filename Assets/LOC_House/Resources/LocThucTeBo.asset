@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82ddf35b7945df3d7d5d86554d1b595a, type: 3}
+  m_Name: LocThucTeBo
+  m_EditorClassIdentifier: Assembly-CSharp::LocThucTeBo
+  lop:
+  - xm
+  - gach
+  - go
+  - vai
+  - da
+  - son
+  a:
+  - {fileID: 2800000, guid: 16c44cc3bc5012a4ab3155c46a646d8c, type: 3}
+  - {fileID: 2800000, guid: be76ceebcc2e8074c85d7c0a3f755a08, type: 3}
+  - {fileID: 2800000, guid: e243a8fc78cb6e3429a4df0ed1f26d92, type: 3}
+  - {fileID: 2800000, guid: 239e6ee27eb677749b7e0091db9a4f56, type: 3}
+  - {fileID: 2800000, guid: 8de64f46c847e174392721213be34f1b, type: 3}
+  - {fileID: 2800000, guid: 8dbc0cabe10e9dd44a5771bf79791ab3, type: 3}
+  n:
+  - {fileID: 2800000, guid: 0676be16c8be0794f96ee6ab2db62ad9, type: 3}
+  - {fileID: 2800000, guid: c7c3b63169a7f064d83cf9273ae67895, type: 3}
+  - {fileID: 2800000, guid: bf654ba0af60b754eadc30367ebcbec3, type: 3}
+  - {fileID: 2800000, guid: a1ae1ead11c59194ea32bc8a7ab5b2a8, type: 3}
+  - {fileID: 2800000, guid: 153102077fa44a445b58857c05a039de, type: 3}
+  - {fileID: 2800000, guid: be97d73bbebe6214a867fae60c48e096, type: 3}
+  m:
+  - {fileID: 2800000, guid: 11d0ab92b6facaa4289f2899248c13ca, type: 3}
+  - {fileID: 2800000, guid: a38c75a011ee42744931a6e5acbd6d48, type: 3}
+  - {fileID: 2800000, guid: d77eba1dc3e41c74c9d6d52ab0cf184a, type: 3}
+  - {fileID: 2800000, guid: 28a03e5eed20e0f48b90bbc9c5bf42fe, type: 3}
+  - {fileID: 2800000, guid: c31dc29f5a6feeb488a03d995c8f5076, type: 3}
+  - {fileID: 2800000, guid: 16ae241ec68f4e245a86d2d16c083b71, type: 3}
