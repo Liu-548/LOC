@@ -164,7 +164,8 @@ public class LocDoor : MonoBehaviour
             amCuoi = Time.time;
             bool sat = ten.Contains("cổng") || ten.Contains("sắt") || ten.Contains("hầm");
             var p = transform.position + Vector3.up * 1.0f;
-            if (TuDo) LocAm.Phat(DangMo ? "TuDo_Mo" : "TuDo_Dong", p, DangMo ? 0.5f : 0.4f, Random.Range(0.95f, 1.05f));   // [13/11] tủ đồ, tủ bếp/chạn, ngăn kéo bàn học (freesound door-opening-and-closing)
+            if (ten == "cửa sổ") LocAm.Phat(DangMo ? "CuaSo_Mo" : "CuaSo_Dong", p, 0.5f, Random.Range(0.96f, 1.04f));   // [13/11] cửa sổ (freesound window-opening)
+            else if (TuDo) LocAm.Phat(DangMo ? "TuDo_Mo" : "TuDo_Dong", p, DangMo ? 0.5f : 0.4f, Random.Range(0.95f, 1.05f));   // [13/11] tủ đồ, tủ bếp/chạn, ngăn kéo bàn học (freesound door-opening-and-closing)
             else if (truot != Vector3.zero || gapX > 0f) LocAm.Phat("Cua_Dong", p, 0.25f, 1.6f);
             else if (sat) LocAm.Phat("Cong_Sat", p, DangMo ? 0.55f : 0.45f, DangMo ? 1f : 1.15f);
             else if (CuaPhong) LocAm.Phat(DangMo ? "CuaPhong_Mo" : "CuaPhong_Dong", p, DangMo ? 0.6f : 0.65f, Random.Range(0.96f, 1.04f));   // [13/11] cửa phòng: tiếng mở / đóng thật (freesound main-door-opening-closing)
