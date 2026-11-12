@@ -151,7 +151,7 @@ public class LocDoor : MonoBehaviour
     }
 
     // [13/11] cửa ra vào bản lề gỗ (không tính tủ, chạn, két, cửa sổ, cổng/cửa sắt): dùng CuaPhong_Mo / CuaPhong_Dong
-    bool CuaPhong => ten.StartsWith("cửa phòng") || ten == "cửa WC" || ten == "cửa kho" || ten == "cửa chính" || ten == "cửa ban công" || ten == "cửa ra sân phơi" || ten == "cửa sắt kính ra giếng trời";   // [13/11] cửa sắt kính bếp: dùng tiếng cửa phòng
+    bool CuaPhong => ten.StartsWith("cửa phòng") || ten == "cửa WC" || ten == "cửa kho" || ten == "cửa chính" || ten == "cửa ban công" || ten == "cửa ra sân phơi";
 
     // [13/11] tủ đồ, tủ bếp / chạn, ngăn kéo (bàn học…): dùng TuDo_Mo / TuDo_Dong · không tính tủ lạnh, két
     bool TuDo => !ten.Contains("tủ lạnh") && (ten.StartsWith("cửa tủ") || ten.StartsWith("tủ") || ten.StartsWith("cửa chạn") || ten.StartsWith("ngăn"));
@@ -164,7 +164,8 @@ public class LocDoor : MonoBehaviour
             amCuoi = Time.time;
             bool sat = ten.Contains("cổng") || ten.Contains("sắt") || ten.Contains("hầm");
             var p = transform.position + Vector3.up * 1.0f;
-            if (ten == "cửa chính") LocAm.Phat(DangMo ? "CuaChinh_Mo" : "CuaChinh_Dong", p, 0.6f, Random.Range(0.97f, 1.03f));   // [13/11] cửa sắt chính (freesound irongate2)
+            if (ten == "cửa sắt xuống hầm" || ten == "cửa sắt kính ra giếng trời") LocAm.Phat(DangMo ? "CuaSat_Mo" : "CuaSat_Dong", p, 0.6f, Random.Range(0.97f, 1.03f));   // [13/11] cửa sắt cũ kẽo kẹt (freesound creaking-old-iron-door)
+            else if (ten == "cửa chính") LocAm.Phat(DangMo ? "CuaChinh_Mo" : "CuaChinh_Dong", p, 0.6f, Random.Range(0.97f, 1.03f));   // [13/11] cửa sắt chính (freesound irongate2)
             else if (ten == "cửa sổ") LocAm.Phat(DangMo ? "CuaSo_Mo" : "CuaSo_Dong", p, 0.5f, Random.Range(0.96f, 1.04f));   // [13/11] cửa sổ (freesound window-opening)
             else if (TuDo) LocAm.Phat(DangMo ? "TuDo_Mo" : "TuDo_Dong", p, DangMo ? 0.5f : 0.4f, Random.Range(0.95f, 1.05f));   // [13/11] tủ đồ, tủ bếp/chạn, ngăn kéo bàn học (freesound door-opening-and-closing)
             else if (truot != Vector3.zero || gapX > 0f) LocAm.Phat("Cua_Dong", p, 0.25f, 1.6f);
