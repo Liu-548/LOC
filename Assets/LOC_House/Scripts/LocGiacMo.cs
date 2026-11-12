@@ -742,25 +742,30 @@ public class LocGiacMo : MonoBehaviour
         void MaLao() { if (ma) { ma.position = Vector3.MoveTowards(ma.position, maDich, Time.deltaTime * 9f); ma.rotation = Quaternion.LookRotation(d); } }   // nó lao theo tới cửa
         for (float t = 0; t < 1; t += Time.deltaTime / 0.4f) { fp.transform.rotation = Quaternion.Slerp(r0, r1, t * (2 - t)); cam.localRotation = Quaternion.identity; MaLao(); yield return null; }
         var qDong = QCua(d, 0f);
-        for (float t = 0; t < 1; t += Time.deltaTime / 0.18f) { cuaBanLe.rotation = Quaternion.Slerp(qMo, qDong, t * t); MaLao(); yield return null; }
+        // [13/11] tiếng đóng cửa sắt cũ kẽo kẹt (CuaSat_Dong) phát ngay lúc bắt đầu kéo cánh — cánh khép trong 0,5 s cho khớp tiếng rít
+        LocAm.Phat("CuaSat_Dong", cuaBanLe.position, 1f);
+        for (float t = 0; t < 1; t += Time.deltaTime / 0.5f) { cuaBanLe.rotation = Quaternion.Slerp(qMo, qDong, t * t); MaLao(); yield return null; }
         if (ma) foreach (var r in ma.GetComponentsInChildren<Renderer>()) r.enabled = false;   // cửa đã đóng: không cần thấy nữa, tiếng thở vẫn còn sau cánh cửa
         cuaBanLe.rotation = qDong;
-        LocAm.Phat("Cua_Dong", cuaBanLe.position, 1f, 0.8f); LocAm.Phat("Cong_Sat", cuaBanLe.position, 0.9f);
         StartCoroutine(Lac(0.35f, 0.6f));
         if (khoaTreo) StartCoroutine(LacKhoa());
         LocAm.Phat("OKhoa_Mo", cuaBanLe.position, 0.7f, 0.85f);
         if (amMaTho) amMaTho.volume = 1f;
         yield return new WaitForSeconds(0.9f);
-        for (int i = 0; i < 2; i++)   // ma đập cửa hai cái
+        // [13/11] ma đập cửa: file GM_DapCua (door-bang-echo) có ba cú đập ở 0,1 · 0,5 · 0,9 s — cánh cửa nảy và máy quay rung đúng từng cú
+        var dap = AmTong.Dap();
+        AudioSource.PlayClipAtPoint(dap, cuaBanLe.position, 1f);
+        float[] cu = dap && dap.length > 1.2f ? new[] { 0.1f, 0.5f, 0.9f } : new[] { 0f };
+        float tDap = 0;
+        foreach (float c in cu)
         {
-            LocAm.Phat("Cong_Sat", cuaBanLe.position, 1f, 0.7f);
-            AudioSource.PlayClipAtPoint(AmTong.Dap(), cuaBanLe.position, 1f);
-            StartCoroutine(Lac(0.3f, 1f));
+            if (c > tDap) { yield return new WaitForSeconds(c - tDap); tDap = c; }
+            StartCoroutine(Lac(0.25f, 1f));
             var qa = cuaBanLe.rotation;
-            for (float t = 0; t < 1; t += Time.deltaTime / 0.15f) { cuaBanLe.rotation = Quaternion.Slerp(qa, QCua(d, 2.5f), Mathf.Sin(t * Mathf.PI)); yield return null; }   // cánh nảy vào phía trong
-            cuaBanLe.rotation = qa;
-            yield return new WaitForSeconds(1.0f);
+            for (float t = 0; t < 1; t += Time.deltaTime / 0.14f) { cuaBanLe.rotation = Quaternion.Slerp(qa, QCua(d, 2.5f), Mathf.Sin(t * Mathf.PI)); yield return null; }   // cánh nảy vào phía trong
+            cuaBanLe.rotation = qa; tDap += 0.14f;
         }
+        yield return new WaitForSeconds(1.4f);
         if (amMaTho) amMaTho.Stop(); if (amTim) amTim.volume = 0.12f;
         if (denTruoc) denTruoc.enabled = false; if (denSau) denSau.enabled = false;
         LocFirstPerson.den = 1f;
