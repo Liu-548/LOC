@@ -113,6 +113,19 @@ public partial class LocCotTruyen
         yield return HetDem();   // nua_tinh_2 đã có → HetDem bỏ cảnh nửa tỉnh, màn đang đen → thẳng sang cảnh ban ngày
     }
 
+    // [13/11] mở mắt: tối mờ → rõ dần; bị bắt thì chập chờn như chớp mắt
+    IEnumerator MoMat(bool thoat)
+    {
+        float giay = thoat ? 0.7f : 1.8f, dau = thoat ? 0.55f : 0.85f;
+        for (float t = 0; t < giay; t += Time.deltaTime)
+        {
+            float e = t / giay, d = dau * (1 - e * e * (3 - 2 * e));
+            if (!thoat && (Mathf.Abs(e - 0.35f) < 0.04f || Mathf.Abs(e - 0.62f) < 0.03f)) d = Mathf.Max(d, 0.9f);   // chớp mắt
+            LocFirstPerson.den = d; yield return null;
+        }
+        LocFirstPerson.den = 0;
+    }
+
     // bật dậy trên giường: nằm ngửa → ngồi bật dậy 0,4 s → thở dốc, nhìn quanh phòng tối → độc thoại → tối dần
     IEnumerator TinhDay(bool thoat)
     {
@@ -141,7 +154,7 @@ public partial class LocCotTruyen
         yield return new WaitForSeconds(0.5f);
         // mở mắt đột ngột
         if (LocNhim.I && LocNhim.I.khoiTho) AudioSource.PlayClipAtPoint(LocNhim.I.khoiTho, nam, thoat ? 0.8f : 1f);
-        LocFirstPerson.den = 0;
+        StartCoroutine(MoMat(thoat));   // [13/11] màn hình mờ rồi rõ dần (bị bắt: lâu hơn, chớp mắt hai lần)
         var q0 = camT.rotation; var q1 = Quaternion.LookRotation(nhin - ngoi, Vector3.up);
         for (float t = 0; t < 1; t += Time.deltaTime / 0.4f)
         {
