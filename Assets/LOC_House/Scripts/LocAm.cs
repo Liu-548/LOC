@@ -22,7 +22,8 @@ public static class LocAm
     static int truoc = -1;
     public static void BuocChan(Vector3 p, float vol)
     {
-        int i = Random.Range(0, 4); if (i == truoc) i = (i + 1) % 4; truoc = i;
-        Phat("BuocChan_Gach_" + i, p, vol, Random.Range(0.92f, 1.06f));
+        // [13/11] tiếng bước mới: 6 bước dép trên nền (freesound footsteps-rug-slippers-slow-pace) · bản gạch cũ BuocChan_Gach_0..3 vẫn để trong thư mục
+        int i = Random.Range(0, 6); if (i == truoc) i = (i + 1) % 6; truoc = i;
+        Phat("BuocChan_Dep_" + i, p, vol, Random.Range(0.94f, 1.06f));
     }
 }
