@@ -150,6 +150,9 @@ public class LocDoor : MonoBehaviour
         Toggle();
     }
 
+    // [13/11] cửa ra vào bản lề gỗ (không tính tủ, chạn, két, cửa sổ, cổng/cửa sắt): dùng CuaPhong_Mo / CuaPhong_Dong
+    bool CuaPhong => ten.StartsWith("cửa phòng") || ten == "cửa WC" || ten == "cửa kho" || ten == "cửa chính" || ten == "cửa ban công" || ten == "cửa ra sân phơi";
+
     public void Toggle()
     {
         if (khoa) return; GhiCong("Toggle"); Luu(); KiemGoc(); dich = dich < 0.5f ? 1f : 0f; CapNhatChan();
@@ -160,6 +163,7 @@ public class LocDoor : MonoBehaviour
             var p = transform.position + Vector3.up * 1.0f;
             if (truot != Vector3.zero || gapX > 0f) LocAm.Phat("Cua_Dong", p, 0.25f, 1.6f);
             else if (sat) LocAm.Phat("Cong_Sat", p, DangMo ? 0.55f : 0.45f, DangMo ? 1f : 1.15f);
+            else if (CuaPhong) LocAm.Phat(DangMo ? "CuaPhong_Mo" : "CuaPhong_Dong", p, DangMo ? 0.6f : 0.65f, Random.Range(0.96f, 1.04f));   // [13/11] cửa phòng: tiếng mở / đóng thật (freesound main-door-opening-closing)
             else LocAm.Phat(DangMo ? "Cua_Ken" : "Cua_Dong", p, DangMo ? 0.45f : 0.5f, Random.Range(0.9f, 1.08f));
         }
         if (ban != null) foreach (var d in ban) if (d && !d.khoa && d.DangMo != DangMo) d.Toggle();   // cánh bạn cùng ô cửa
