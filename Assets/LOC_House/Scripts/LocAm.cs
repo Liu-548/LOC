@@ -24,6 +24,6 @@ public static class LocAm
     {
         // [13/11] tiếng bước mới: 6 bước dép trên nền (freesound footsteps-rug-slippers-slow-pace) · bản gạch cũ BuocChan_Gach_0..3 vẫn để trong thư mục
         int i = Random.Range(0, 6); if (i == truoc) i = (i + 1) % 6; truoc = i;
-        Phat("BuocChan_Dep_" + i, p, vol, Random.Range(0.94f, 1.06f));
+        Phat("BuocChan_Dep_" + i, p, Mathf.Min(1f, vol * 2f), Random.Range(0.94f, 1.06f));   // [13/11] tiếng dép nhỏ hơn tiếng gạch cũ → to gấp đôi (đi 0,6 · chạy 0,9 · ngồi 0,24)
     }
 }
