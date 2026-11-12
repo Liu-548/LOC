@@ -515,9 +515,13 @@ public class LocGiacMo : MonoBehaviour
         if (amMaTho) amMaTho.volume = 1f;
         yield return Cho(0.6f);
         for (float t = 0; t < 1; t += Time.deltaTime / 0.7f) { yawLech = Mathf.Lerp(0, 175f, t * t * (3 - 2 * t)); DatNguoi(); yield return null; }
-        yield return Cho(1.5f);
-        for (float t = 0; t < 1; t += Time.deltaTime / 0.5f) { yawLech = Mathf.Lerp(175f, 0f, t * t * (3 - 2 * t)); DatNguoi(); yield return null; }
-        yawLech = 0; if (amMaTho) amMaTho.volume = 0.6f;
+        yield return Cho(0.6f);
+        // [13/11] quay lại thấy nó → máy quay giật sát vào mặt nó (hiện rõ mặt, mắt, miệng há dần), chớp tối → quay đầu bỏ chạy
+        float y0 = yawLech, p0 = pitch;
+        yield return ZoomMa();
+        float y1 = yawLech, p1 = pitch;
+        for (float t = 0; t < 1; t += Time.deltaTime / 0.35f) { float e = t * t * (3 - 2 * t); yawLech = Mathf.Lerp(y1, 0f, e); pitch = Mathf.Lerp(p1, p0, e); DatNguoi(); DatMa(); yield return null; }
+        yawLech = 0; pitch = p0; if (amMaTho) amMaTho.volume = 0.6f;
         LocFirstPerson.PhuDe("Chạy.", 1.6f);   // không có chữ "giữ W" — lời nhắc chạy duy nhất là "CHẠY ĐI!" lúc sắp bị bắt
     }
     IEnumerator Cho(float giay) { for (float t = 0; t < giay; t += Time.deltaTime) { DatNguoi(); DatMa(); CapNhatDen(Time.deltaTime); yield return null; } }
@@ -759,6 +763,233 @@ public class LocGiacMo : MonoBehaviour
     IEnumerator Lac(float giay, float manh) { for (float t = 0; t < giay; t += Time.deltaTime) { cam.localPosition = new Vector3(0, matCao, 0) + Random.insideUnitSphere * 0.03f * manh; yield return null; } cam.localPosition = new Vector3(0, matCao, 0); }
     IEnumerator LacKhoa() { var r0 = khoaTreo.localRotation; for (float t = 0; t < 1.2f; t += Time.deltaTime) { if (!khoaTreo) yield break; khoaTreo.localRotation = r0 * Quaternion.Euler(0, 0, Mathf.Sin(t * 30f) * 18f * (1 - t / 1.2f)); yield return null; } }
 
+    // ═════════════════════════ [13/11] mặt ma cận cảnh (lúc quay lại nhìn + lúc bị bắt)
+    //  Bản sao model ma nữ GIỮ vật liệu thật (mặt, tóc, mắt như trong nhà) thay cho bóng khói; miệng há được bằng cách bẻ hàm ngay trên lưới
+    //  (đỉnh dưới đường miệng, phía trước mặt quay quanh khớp hàm). Hai tay: model Ma_Tay (tay trái vươn) + một bản lật gương chỉ để lấy tay phải.
+    class Ham { public Mesh m; public Vector3[] v0, v; public float[] w; public Vector3 tam, truc; }
+    readonly List<Ham> ham = new();
+    readonly List<Mesh> luoiTao = new();
+    readonly List<GameObject> matMaTao = new();
+    Light denMat; Camera camC; float fov0 = -1f, near0 = -1f;
+
+    Transform TaoMaMat(int kieu, string ten, bool chiTay, bool guong)
+    {
+        var lm = LocMa.I;
+        if (!lm || lm.mau == null || lm.mau.Length <= kieu || !lm.mau[kieu]) return null;
+        var w = new GameObject(ten).transform; w.SetParent(goc, false);
+        var m = Instantiate(lm.mau[kieu], w); m.SetActive(true); m.transform.localPosition = Vector3.zero;
+        var dau = Tim(m.transform, "Dau"); var mL = Tim(m.transform, "Mat_L"); var mR = Tim(m.transform, "Mat_R");
+        if (dau && mL && mR && ((mL.position + mR.position) / 2 - dau.position).z < 0) m.transform.localRotation = Quaternion.Euler(0, 180, 0) * m.transform.localRotation;
+        Material vlMat = lm.matMat ? Moi(new Material(lm.matMat), "MaMat_Mat") : null;
+        foreach (var r in m.GetComponentsInChildren<Renderer>(true))
+        {
+            r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; r.receiveShadows = false;
+            bool phanDau = LaMat(r.name) || r.name.StartsWith("Mat") || r.name is "DaDau" or "Toc" or "Rang";
+            if (r.name == "TayAo_R" || (chiTay && (phanDau || r.name == "Vay"))) { r.enabled = false; continue; }   // tay phải buông thõng: bỏ (bản lật gương lo tay bên kia)
+            if (r.name.StartsWith("Mat_") && vlMat) r.sharedMaterial = vlMat;
+        }
+        DonThanhPhan(m);
+        if (guong) w.localScale = new Vector3(-1f, 1f, 1f);
+        matMaTao.Add(w.gameObject);
+        return w;
+    }
+
+    // tâm hai mắt (thế giới) và hướng mặt của một bản mặt ma
+    static bool MatVaHuong(Transform w, out Vector3 giua, out Vector3 truoc)
+    {
+        giua = w.position + Vector3.up * 1.6f; truoc = w.forward;
+        var mL = Tim(w, "Mat_L"); var mR = Tim(w, "Mat_R"); if (!mL || !mR) return false;
+        giua = (mL.position + mR.position) / 2;
+        var hu = Tim(w, "MatHuong"); if (hu && (hu.position - giua).sqrMagnitude > 1e-6f) truoc = (hu.position - giua).normalized;
+        return true;
+    }
+
+    // chuẩn bị bẻ hàm trên MatMa / DaDau / Rang của bản mặt w (tư thế hiện tại)
+    void ChuanBiHam(Transform w)
+    {
+        ham.Clear();
+        if (!MatVaHuong(w, out var giua, out var f)) return;
+        Renderer rang = null; foreach (var r in w.GetComponentsInChildren<Renderer>(true)) if (r.name == "Rang") rang = r;
+        var up = Vector3.ProjectOnPlane(w.up, f).normalized; var phai = Vector3.Cross(up, f).normalized;
+        var mieng = rang ? rang.bounds.center : giua - up * 0.075f + f * 0.02f;
+        var tam = mieng - f * 0.075f + up * 0.035f;   // khớp hàm: sau và trên miệng
+        float sg = Vector3.Dot(Quaternion.AngleAxis(10f, phai) * f, up) < 0 ? 1f : -1f;   // chiều quay làm cằm đi xuống
+        foreach (var mf in w.GetComponentsInChildren<MeshFilter>(true))
+        {
+            if (!(mf.name is "MatMa" or "DaDau" or "Rang") || !mf.sharedMesh || !mf.sharedMesh.isReadable) continue;
+            var m = Instantiate(mf.sharedMesh); luoiTao.Add(m); mf.sharedMesh = m;
+            var v0 = m.vertices; var wt = new float[v0.Length]; bool co = false;
+            for (int i = 0; i < v0.Length; i++)
+            {
+                var p = mf.transform.TransformPoint(v0[i]);
+                float d = Vector3.Dot(p - mieng, up), e = Vector3.Dot(p - tam, f);
+                float a = Mathf.SmoothStep(0, 1, Mathf.InverseLerp(0.006f, -0.012f, d));   // dưới đường miệng
+                float b = Mathf.SmoothStep(0, 1, Mathf.InverseLerp(-0.03f, 0.025f, e));    // nửa trước của đầu
+                float c = Mathf.SmoothStep(0, 1, Mathf.InverseLerp(-0.17f, -0.10f, d));    // tắt dần xuống cổ
+                wt[i] = a * b * c; if (wt[i] > 0) co = true;
+            }
+            if (!co) continue;
+            ham.Add(new Ham { m = m, v0 = v0, v = new Vector3[v0.Length], w = wt, tam = mf.transform.InverseTransformPoint(tam), truc = mf.transform.InverseTransformDirection(phai * sg).normalized });
+        }
+        // lòng miệng tối: khối đen sau môi, để há ra không nhìn xuyên đầu
+        if (vlDen)
+        {
+            var k = Khoi(PrimitiveType.Sphere, mieng - f * 0.035f - up * 0.015f, new Vector3(0.075f, 0.07f, 0.06f), vlDen, "LongMieng");
+            if (k) k.transform.SetParent(w, true);
+        }
+    }
+    void HaMieng(float goc)
+    {
+        foreach (var h in ham)
+        {
+            for (int i = 0; i < h.v0.Length; i++) h.v[i] = h.w[i] <= 0 ? h.v0[i] : h.tam + Quaternion.AngleAxis(goc * h.w[i], h.truc) * (h.v0[i] - h.tam);
+            h.m.vertices = h.v; h.m.RecalculateBounds();
+        }
+    }
+    void BatHinh(Transform t, bool bat) { if (!t) return; foreach (var r in t.GetComponentsInChildren<Renderer>(true)) r.enabled = bat && !LaMat(r.name); }
+    Light DenRoiMat(LightType kieu)
+    {
+        var l = new GameObject("Den_MatMa").AddComponent<Light>(); l.transform.SetParent(goc, false);
+        l.type = kieu; l.color = new Color(0.78f, 0.84f, 1f); l.shadows = LightShadows.None; l.intensity = 0f;
+        if (kieu == LightType.Spot) { l.range = 30f; l.spotAngle = 14f; } else l.range = 3f;
+        return l;
+    }
+    void DonMatMa()
+    {
+        foreach (var g in matMaTao) if (g) Destroy(g);
+        matMaTao.Clear(); ham.Clear();
+        foreach (var m in luoiTao) if (m) Destroy(m);
+        luoiTao.Clear();
+        if (denMat) Destroy(denMat.gameObject);
+        if (camC) { if (fov0 > 0) camC.fieldOfView = fov0; if (near0 > 0) camC.nearClipPlane = near0; }
+    }
+    void PhatMot(AudioClip c, float vol) { if (!c) return; var a = cam.gameObject.AddComponent<AudioSource>(); a.clip = c; a.spatialBlend = 0; a.volume = vol; a.Play(); Destroy(a, c.length + 0.1f); }
+
+    // quay lại: bóng đen cuối hành lang → máy quay giật sát (FOV hẹp) vào mặt nó, đèn chớp rọi mặt, nó giật tới, miệng há dần → chớp tối
+    IEnumerator ZoomMa()
+    {
+        camC = cam.GetComponent<Camera>(); if (!camC || !ma) yield break;
+        if (fov0 < 0) fov0 = camC.fieldOfView;
+        var mm = TaoMaMat(3, "Ma_GiacMo_Mat", false, false);
+        if (!mm) yield break;
+        mm.SetPositionAndRotation(ma.position, ma.rotation);
+        ChuanBiHam(mm);
+        BatHinh(ma, false);
+        denMat = DenRoiMat(LightType.Point); denMat.range = 2.6f;
+        var mL = Tim(mm, "Mat_L"); var mR = Tim(mm, "Mat_R");
+        Vector3 Mat() => mL && mR ? (mL.position + mR.position) / 2 : mm.position + Vector3.up * 1.6f;
+        void Nhin(float e)
+        {
+            var dir = fp.transform.InverseTransformDirection(Mat() - cam.position);
+            float yaw = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg, pt = -Mathf.Atan2(dir.y, new Vector2(dir.x, dir.z).magnitude) * Mathf.Rad2Deg;
+            yawLech = Mathf.LerpAngle(yawLech, yaw, e); pitch = Mathf.Lerp(pitch, pt, e);
+        }
+        PhatMot(Resources.Load<AudioClip>("LOC_MaNu/Ma_XuatHien"), 1f);
+        if (LocNhim.I && LocNhim.I.khoiTho) PhatMot(LocNhim.I.khoiTho, 0.9f);
+        float gap0 = gap;
+        // giật vào: 0,3 s — FOV hẹp lại cho mặt chiếm gần nửa khung, nó lướt tới 3 m
+        for (float t = 0; t < 1; t += Time.deltaTime / 0.3f)
+        {
+            float e = 1 - (1 - t) * (1 - t);
+            gap = Mathf.Lerp(gap0, gap0 - 3f, e); DatMa(); mm.SetPositionAndRotation(ma.position, ma.rotation);
+            float kc = Mathf.Max(1f, Vector3.Distance(cam.position, Mat()));
+            camC.fieldOfView = Mathf.Lerp(fov0, Mathf.Clamp(2f * Mathf.Atan(0.26f / kc) * Mathf.Rad2Deg, 4f, fov0), e);
+            Nhin(e); DatNguoi(); cam.localRotation = Quaternion.Euler(pitch, yawLech, 0);
+            denMat.transform.position = Mat() + (cam.position - Mat()).normalized * 0.7f;
+            denMat.intensity = Mathf.Lerp(0, 2.6f, e) * (Random.value < 0.2f ? 0.3f : 1f);
+            yield return null;
+        }
+        rung = 0.5f;
+        // nhìn chằm chằm 1,2 s: đầu giật cục, miệng há dần, đèn chập chờn; nửa sau nó giật tới thêm
+        var r0 = mm.rotation; float hm = 0;
+        for (float t = 0; t < 1.2f; t += Time.deltaTime)
+        {
+            if (t > 0.7f) { gap = Mathf.MoveTowards(gap, gap0 - 4.2f, Time.deltaTime * 6f); }
+            DatMa();
+            var giat = Random.value < 0.06f ? Quaternion.Euler(Random.Range(-6f, 6f), Random.Range(-4f, 4f), Random.Range(-9f, 9f)) : Quaternion.identity;
+            mm.position = ma.position; mm.rotation = Quaternion.Slerp(mm.rotation, r0 * Quaternion.AngleAxis(Mathf.Sin(t * 3f) * 4f, Vector3.forward), 0.3f) * giat;
+            hm = Mathf.MoveTowards(hm, t < 0.5f ? 18f : 48f, Time.deltaTime * 70f); HaMieng(hm);
+            float kc = Mathf.Max(1f, Vector3.Distance(cam.position, Mat()));
+            camC.fieldOfView = Mathf.Lerp(camC.fieldOfView, Mathf.Clamp(2f * Mathf.Atan(0.22f / kc) * Mathf.Rad2Deg, 4f, fov0), 0.25f);
+            Nhin(0.5f); DatNguoi(); cam.localRotation = Quaternion.Euler(pitch, yawLech, 0);
+            denMat.transform.position = Mat() + (cam.position - Mat()).normalized * 0.7f;
+            denMat.intensity = Random.value < 0.12f ? 0.15f : Random.Range(1.8f, 3f);
+            CapNhatDen(Time.deltaTime);
+            yield return null;
+        }
+        // chớp tối: trả bóng khói, FOV về như cũ
+        LocFirstPerson.den = 1f; yield return new WaitForSeconds(0.12f);
+        DonMatMa(); BatHinh(ma, true);
+        camC.fieldOfView = fov0;
+        LocFirstPerson.den = 0f;
+    }
+
+    // bị bắt: nằm ngửa, bóng đen cúi trên đầu → chớp: mặt nó hiện rõ trên mặt mình, hai tay ôm lấy đầu → giữ chặt, miệng há rộng → ập vào ống kính
+    IEnumerator VoMat()
+    {
+        camC = cam.GetComponent<Camera>();
+        var chinh = TaoMaMat(1, "Ma_GiacMo_Vo", false, false);
+        var phu = chinh ? TaoMaMat(1, "Ma_GiacMo_Vo_TayPhai", true, true) : null;
+        var lm = LocMa.I; var thetClip = lm ? lm.tiengThet : null;
+        if (!chinh || !camC)
+        {
+            // không có model: hét + nhiễu rồi cắt đen như bản cũ
+            if (thetClip) PhatMot(thetClip, 1f);
+            for (float t = 0; t < 0.65f; t += Time.deltaTime) { nhieu = t / 0.65f; rung = 1.4f; yield return null; }
+            yield break;
+        }
+        if (fov0 < 0) fov0 = camC.fieldOfView; if (near0 < 0) near0 = camC.nearClipPlane;
+        camC.nearClipPlane = 0.015f;
+        // đặt mặt nó úp xuống mặt mình: mặt hướng vào ống kính, đỉnh đầu theo phía trên khung hình
+        var q = Quaternion.LookRotation(-cam.forward, cam.up);
+        chinh.rotation = q; chinh.position = Vector3.zero;
+        MatVaHuong(chinh, out var giua0, out _);
+        var lech = Quaternion.Inverse(q) * (giua0 - chinh.position);
+        void Dat(float kc, Quaternion giat)
+        {
+            var qq = q * giat;
+            chinh.rotation = qq; chinh.position = cam.position + cam.forward * kc - qq * lech;
+            if (phu) { phu.rotation = qq; phu.position = chinh.position; }
+        }
+        Dat(0.8f, Quaternion.identity);
+        ChuanBiHam(chinh);
+        BatHinh(ma, false);
+        denMat = DenRoiMat(LightType.Point);
+        void RoiDen(float a) { denMat.transform.position = cam.position + cam.forward * 0.15f - cam.up * 0.1f; denMat.intensity = Random.value < 0.15f ? a * 0.25f : a; }
+        // chớp hiện: tiếng xuất hiện + thở hắt
+        toiChop = 0.12f;
+        PhatMot(Resources.Load<AudioClip>("LOC_MaNu/Ma_XuatHien"), 1f);
+        if (LocNhim.I && LocNhim.I.khoiTho) PhatMot(LocNhim.I.khoiTho, 1f);
+        for (float t = 0; t < 0.3f; t += Time.deltaTime) { RoiDen(2.2f); Dat(0.8f, Quaternion.Euler(0, 0, Mathf.Sin(t * 40f) * 2f)); yield return null; }
+        // vồ: lao xuống 1,15 → 0,42 m, hai tay áp vào hai bên đầu
+        for (float t = 0; t < 1; t += Time.deltaTime / 0.16f) { RoiDen(2.6f); Dat(Mathf.Lerp(0.8f, 0.42f, t * t), Quaternion.identity); yield return null; }
+        rung = 1.2f; AudioSource.PlayClipAtPoint(AmTong.Roi(), cam.position, 0.8f);
+        // giữ chặt: đầu nó giật cục, miệng há dần, mình bị giữ (máy quay rung nhẹ, không quay đi được)
+        float hm = 0;
+        for (float t = 0; t < 0.6f; t += Time.deltaTime)
+        {
+            var giat = Random.value < 0.08f ? Quaternion.Euler(Random.Range(-5f, 5f), Random.Range(-5f, 5f), Random.Range(-10f, 10f)) : Quaternion.Euler(0, 0, Mathf.Sin(t * 9f) * 3f);
+            Dat(0.42f - t * 0.05f, giat); hm = Mathf.MoveTowards(hm, 22f, Time.deltaTime * 60f); HaMieng(hm);
+            cam.position += Random.insideUnitSphere * 0.004f; RoiDen(2.4f);
+            yield return null;
+        }
+        // há rộng + hét, ập vào mặt
+        if (thetClip) PhatMot(thetClip, 1f);
+        for (float t = 0; t < 1; t += Time.deltaTime / 0.38f)
+        {
+            hm = Mathf.Lerp(22f, 62f, t * (2 - t)); HaMieng(hm);
+            Dat(Mathf.Lerp(0.37f, 0.30f, t), Quaternion.Euler(0, 0, Random.Range(-2f, 2f)));
+            cam.position += Random.insideUnitSphere * 0.006f; rung = 0.8f; RoiDen(2.8f); nhieu = t * 0.4f;
+            yield return null;
+        }
+        for (float t = 0; t < 1; t += Time.deltaTime / 0.22f)
+        {
+            Dat(Mathf.Lerp(0.30f, 0.0f, t * t), Quaternion.Euler(0, 0, Random.Range(-3f, 3f)));
+            nhieu = 0.4f + 0.6f * t; rung = 1.4f; RoiDen(3f);
+            yield return null;
+        }
+    }
+
     // ═════════════════════════ bị bắt: ngã sấp → lật ngửa, bóng đen cúi xuống → bàn tay túm cổ áo, giật lên sát mặt → hét → cắt đen
     bool daBiBat;
     IEnumerator BiBat()
@@ -782,55 +1013,12 @@ public class LocGiacMo : MonoBehaviour
         for (float t = 0; t < 1; t += Time.deltaTime / 0.45f) { cam.localRotation = Quaternion.Euler(Mathf.Lerp(20f, -72f, t * (2 - t)), 0, Mathf.Lerp(14f, 0, t)); yield return null; }
         if (amMaTho) amMaTho.volume = 1f;
         yield return new WaitForSeconds(0.5f);
-        // 3. tay nó vươn xuống túm cổ áo (đổi sang dáng Ma_Tay — cùng con ma, một tay vươn ra), giật lên sát mặt nó (~0,4 m)
-        var dang = HinhMa(1, "Ma_GiacMo_VuonTay");
-        if (dang && ma)
-        {
-            dang.SetPositionAndRotation(ma.position, ma.rotation);
-            foreach (var r in ma.GetComponentsInChildren<Renderer>()) r.enabled = false;
-        }
-        var hinh = dang ? dang : ma;
-        var dauT = hinh ? Tim(hinh, "Dau") : null;
-        Vector3 Dau() => dauT ? dauT.position : hinh ? hinh.position + Vector3.up * 1.5f + t0 * 1.0f : cam.position + Vector3.up * 0.8f;
-        var mong = dang ? TimR(dang, "Mong") : null;   // móng tay = đầu bàn tay đang vươn
-        if (mong)
-        {
-            var p0 = dang.position; var dich = cam.position + cam.forward * 0.2f - cam.up * 0.12f;   // cổ áo: đáy khung hình
-            var lech = Vector3.ClampMagnitude(dich - mong.bounds.center, 1.6f);
-            for (float t = 0; t < 1; t += Time.deltaTime / 0.3f) { dang.position = p0 + lech * (t * t); yield return null; }
-            dang.position = p0 + lech;
-            rung = 0.6f; yield return new WaitForSeconds(0.12f);
-        }
-        {
-            // giật: camera bị nhấc khỏi sàn, mặt nó kéo sát tới
-            var c0 = cam.position; var cDich = c0 + Vector3.up * 0.75f;
-            var d0 = Dau(); var huongMat = Vector3.ProjectOnPlane(d0 - c0, Vector3.up); huongMat = huongMat.sqrMagnitude > 1e-4f ? huongMat.normalized : -t0;
-            var dauDich = cDich + huongMat * 0.4f + Vector3.up * 0.05f;
-            var h0 = hinh ? hinh.position : Vector3.zero;
-            for (float t = 0; t < 1; t += Time.deltaTime / 0.22f)
-            {
-                float e = t * t;
-                cam.position = Vector3.Lerp(c0, cDich, e);
-                if (hinh) hinh.position = h0 + (dauDich - d0) * e;
-                cam.rotation = Quaternion.LookRotation(Dau() - cam.position, Vector3.up);
-                yield return null;
-            }
-        }
-        // 4. hét: rung mạnh, mặt lao vào ống kính, nhiễu — cắt đen ngay đỉnh tiếng hét
-        AudioSource thet = null;
-        var clip = LocMa.I ? LocMa.I.tiengThet : null;
-        if (clip) { thet = cam.gameObject.AddComponent<AudioSource>(); thet.clip = clip; thet.spatialBlend = 0; thet.volume = 1f; thet.Play(); }
-        nhieu = 0f;
-        for (float t = 0; t < 0.65f; t += Time.deltaTime)
-        {
-            nhieu = t / 0.65f; rung = 1.4f;
-            if (hinh) hinh.position += (cam.position - Dau()).normalized * Time.deltaTime * 0.45f;   // mặt nó lao vào ống kính
-            cam.position += Random.insideUnitSphere * 0.02f;
-            yield return null;
-        }
+        // 3–4. [13/11] nó vồ xuống: hiện rõ mặt, hai tay ôm chặt đầu, há miệng ập vào mặt → cắt đen
+        yield return VoMat();
         LocFirstPerson.den = 1f; nhieu = 0;
-        if (thet) thet.Stop();
+        foreach (var a in cam.GetComponents<AudioSource>()) if (a && LocMa.I && a.clip == LocMa.I.tiengThet) a.Stop();
         if (amMaTho) amMaTho.Stop(); if (amTim) amTim.Stop();
+        DonMatMa();
         yield return new WaitForSeconds(1.2f);
     }
     float nhieu;
@@ -927,6 +1115,7 @@ public class LocGiacMo : MonoBehaviour
     void DonDep()
     {
         daDon = true;
+        DonMatMa();
         TraMoiTruong();
         if (amTim) Destroy(amTim);
         foreach (var a in cam.GetComponents<AudioSource>()) if (a && a.clip == (LocMa.I ? LocMa.I.tiengThet : null)) Destroy(a);
