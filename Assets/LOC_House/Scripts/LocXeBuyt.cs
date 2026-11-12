@@ -57,8 +57,56 @@ public class LocXeBuyt : MonoBehaviour
 #if UNITY_EDITOR
         if (UnityEditor.EditorPrefs.GetBool("LOC_ThuXeBuyt", false)) { choChay = true; thu = true; }
 #endif
+        try { DungBacTai(); } catch (System.Exception e) { Debug.LogWarning("[LOC] Bác tài mới: " + e.Message); }
     }
-    void Start() { if (!choChay) gameObject.SetActive(false); }   // không có cảnh mở đầu: xe không có mặt (menu, Tiếp tục, chơi lại đêm)
+    void Start() { if (!choChay) gameObject.SetActive(false); }
+
+    // [13/11] bác tài: thay khối thô (gộp trong lưới thân xe) bằng model người thật — Resources/LOC_BacTai/BacTai.fbx
+    //  (dựng từ lưới MakeHuman bằng LOC_Nguon/BacTai/b1…b4.py: đàn ông ~54 tuổi, sơ mi cộc tay xanh xám, quần âu sẫm, dép; ngồi, hai tay nắm vô lăng).
+    //  Mốc trong model: Goc = khớp háng giữa, Truoc = phía trước mặt, Tren = phía trên đầu.
+    static readonly Vector3 HANG = new(-0.6f, 1.29f, 3.62f);   // khớp háng của bác trên ghế lái (cục bộ xe)
+    void DungBacTai()
+    {
+        var mau = Resources.Load<GameObject>("LOC_BacTai/BacTai"); if (!mau) return;
+        // 1. bỏ khối thô cũ: xoá tam giác các vật liệu áo / quần / da / tóc bác tài khỏi lưới thân xe
+        string[] cu = { "KP_XB_AoBacTai", "KP_XB_QuanBacTai", "KP_XB_Da", "KP_XB_Toc" };
+        foreach (var mr in GetComponentsInChildren<MeshRenderer>(true))
+        {
+            var ms = mr.sharedMaterials; var mf = mr.GetComponent<MeshFilter>(); if (!mf || !mf.sharedMesh) continue;
+            Mesh moi = null;
+            for (int i = 0; i < ms.Length; i++)
+            {
+                if (!ms[i] || System.Array.IndexOf(cu, ms[i].name) < 0) continue;
+                if (!moi) { if (!mf.sharedMesh.isReadable) break; moi = Instantiate(mf.sharedMesh); moi.name = mf.sharedMesh.name; }
+                if (i < moi.subMeshCount) moi.SetTriangles(System.Array.Empty<int>(), i);
+            }
+            if (moi) mf.sharedMesh = moi;
+        }
+        // 2. đặt model: Goc → chỗ háng, Truoc → phía trước xe, Tren → lên trên
+        var g = Instantiate(mau, transform); g.name = "BacTai";
+        var goc = g.transform.Find("Goc"); var truoc = g.transform.Find("Truoc"); var tren = g.transform.Find("Tren");
+        if (goc && truoc && tren)
+        {
+            var q = Quaternion.LookRotation(transform.TransformDirection(Vector3.forward), transform.TransformDirection(Vector3.up))
+                  * Quaternion.Inverse(Quaternion.LookRotation(truoc.position - goc.position, tren.position - goc.position));
+            g.transform.rotation = q * g.transform.rotation;
+            g.transform.position += transform.TransformPoint(HANG) - goc.position;
+        }
+        else g.transform.localPosition = HANG;
+        // 3. vật liệu: texture PS1 (lọc điểm), URP Simple Lit
+        var sh = Shader.Find("Universal Render Pipeline/Simple Lit");
+        foreach (var r in g.GetComponentsInChildren<Renderer>(true))
+        {
+            string ten = r.name.StartsWith("Body") ? "Da" : r.name.StartsWith("Ao") ? "Ao" : r.name.StartsWith("Quan") ? "Quan" : r.name.StartsWith("Toc") ? "Toc" : r.name.StartsWith("Dep") ? "Dep" : null;
+            var tex = ten != null ? Resources.Load<Texture2D>("LOC_BacTai/T_Tai_" + ten) : null;
+            if (!sh || !tex) continue;
+            tex.filterMode = FilterMode.Point;
+            var m = new Material(sh) { name = "M_Tai_" + ten };
+            m.SetTexture("_BaseMap", tex); m.SetColor("_BaseColor", Color.white); m.SetFloat("_Smoothness", ten == "Da" ? 0.18f : 0.08f);
+            r.sharedMaterial = m;
+            r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On; r.receiveShadows = true;
+        }
+    }   // không có cảnh mở đầu: xe không có mặt (menu, Tiếp tục, chơi lại đêm)
 
     // ───── vị trí trên đường theo quãng đường s
     Vector3 P(float x)
