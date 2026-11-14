@@ -13,8 +13,9 @@ using UnityEngine;
 //  · Đủ bốn số → Khôi ghép: "Một chín tám mươi. Năm anh Phong ra đời."
 public partial class LocCotTruyen
 {
-    LocVatPham vpGiayKet, vpManh1;
+    LocVatPham vpGiayKet, vpGiayKetTui, vpManh1;
     public static LocVatPham GiayKet => I ? I.vpGiayKet : null;
+    const string GIAY_ME = "<i>Gấp tư, để dưới hộp phấn. Chữ mẹ, nhỏ, đều.</i>\n\nÔng hay quên mã két.\nEm không ghi thẳng ra nữa — người ngoài đọc được.\n\nMã là <b>năm thằng cả ra đời</b>.\nÔng mà quên cả năm ấy thì em giấu bốn số ở bốn chỗ còn giữ hơi nó:\n\n   — chỗ em ghi khoản để riêng cho nó,\n   — cái bàn hai anh em ngồi học chung,\n   — chỗ ông rót thêm chén trà mỗi sáng,\n   — và chỗ con Nhím ngủ, cho em nhớ mình đã giấu nó với con bé.\n\nĐọc xong thì để lại chỗ cũ.";
     static readonly string[] MANH_ID = { "manh_ma_1", "manh_ma_2", "manh_ma_3", "manh_ma_4" };
     // số 1 nằm trong sổ thu chi (đọc sổ = thấy) · số 2–4 là mảnh giấy nhặt được
     public static int SoManh()
@@ -27,8 +28,10 @@ public partial class LocCotTruyen
     void KhoiTaoManhMa()
     {
         // [14/11] sang Đêm 2: giấy mã két hết tác dụng → bỏ khỏi túi (két đã mở, cửa hầm đã mở ở Đêm 1)
-        if (LocMa.dem >= 2) { LocTui.Bo("giay_ket"); foreach (var id in MANH_ID) LocTui.Bo(id); return; }
+        if (LocMa.dem >= 2) { LocTui.Bo("giay_ket"); LocTui.Bo("giay_ket_tui"); foreach (var id in MANH_ID) LocTui.Bo(id); return; }
         if (LocMa.dem != 1) return;
+        // bản tờ giấy của mẹ trong túi: đọc ở bàn trang điểm xong thì Khôi cầm theo (Dem1ManhMa)
+        vpGiayKetTui = MonAn(transform, "giay_ket_tui", "tờ giấy của mẹ", "Tờ giấy gấp tư lấy ở bàn trang điểm, chữ mẹ. Mã két.", 0, new[] { GIAY_ME });
         // số thứ nhất: mảnh giấy kẹp bìa sổ thu chi — đọc sổ là lấy luôn vào túi (Dem1ManhMa)
         vpManh1 = MonAn(transform, MANH_ID[0], "mảnh giấy (số thứ nhất)", "Mảnh giấy xé kẹp trong bìa sổ thu chi 2002, chữ mẹ.", 0, new[]
         {
@@ -41,11 +44,12 @@ public partial class LocCotTruyen
             if (btd && !LocTui.Co("ket_mo"))
             {
                 var g = TaoGiay("GiayMe_MaKet", btd.transform, new Vector2(0.14f, 0.10f), false);
-                if (g) vpGiayKet = Mon(g, "giay_ket", "tờ giấy của mẹ", LocVatPham.Kieu.Nhat, "Tờ giấy gấp tư dưới hộp phấn, chữ mẹ.", 1,
+                if (g) vpGiayKet = Mon(g, "giay_ket", "tờ giấy của mẹ", LocVatPham.Kieu.Doc, "Tờ giấy gấp tư dưới hộp phấn, chữ mẹ.", 1,
                     new[] { "Thằng cả...", "Anh Phong." }, new[]
                     {
-                        "<i>Gấp tư, để dưới hộp phấn. Chữ mẹ, nhỏ, đều.</i>\n\nÔng hay quên mã két.\nEm không ghi thẳng ra nữa — người ngoài đọc được.\n\nMã là <b>năm thằng cả ra đời</b>.\nÔng mà quên cả năm ấy thì em giấu bốn số ở bốn chỗ còn giữ hơi nó:\n\n   — chỗ em ghi khoản để riêng cho nó,\n   — cái bàn hai anh em ngồi học chung,\n   — chỗ ông rót thêm chén trà mỗi sáng,\n   — và chỗ con Nhím ngủ, cho em nhớ mình đã giấu nó với con bé.\n\nĐọc xong thì để lại chỗ cũ.",
+                        GIAY_ME,
                     });
+                if (vpGiayKet && LocTui.CoMon("giay_ket_tui")) vpGiayKet.gameObject.SetActive(false);   // đã cầm theo rồi
             }
             ManhTrongHoc(1, "BanHoc_Khoi_Bo", "mảnh giấy (số thứ hai)", "Mảnh giấy xé, chữ mẹ. Trong hộc bàn học của mình.",
                 "<i>Trong hộc bàn. Chữ mẹ.</i>\n\n\n<size=30><b>Số thứ hai:  9</b></size>\n\n\nHai anh em ngồi chung cái bàn này học bài\ntới năm thằng Phong chín tuổi.\n\nThằng Khôi khóc mấy hôm\nvì phải ngồi một mình.");
@@ -53,8 +57,6 @@ public partial class LocCotTruyen
                 "<i>Kẹp dưới khay trà. Chữ mẹ.</i>\n\n\n<size=30><b>Số thứ ba:  8</b></size>\n\n\nTám giờ sáng nào ông cũng pha trà,\nrót thêm một chén để đấy.\n\nÔng không nói. Em cũng không hỏi.");
             Manh(3, "BanCanhGiuong_Thuoc", "mảnh giấy (số cuối)", "Mảnh giấy xé, chữ mẹ. Kẹp dưới vỉ thuốc đầu giường con bé.",
                 "<i>Kẹp dưới vỉ thuốc. Chữ mẹ.</i>\n\n\n<size=30><b>Số cuối:  0</b></size>\n\n\nCon Nhím hỏi ngoài anh Khôi\nnó còn anh nào nữa không.\n\nEm bảo không.\nKhông có ai cả.");
-        }
-            if (vpGiayKet) vpGiayKet.docKhiNhat = true;   // nhặt vào túi, mở ra đọc ngay, đọc lại trong túi
         }
         catch (System.Exception e) { Debug.LogWarning("[LocManhMa] " + e.Message); }
     }
@@ -170,11 +172,19 @@ public partial class LocCotTruyen
             }
         }
         // đọc sổ thu chi: thấy số thứ nhất kẹp bìa
-        if (LocTui.Co("doc:so_thu_chi_2002") && !LocTui.Co("thay_so_1") && !LocTui.Mo && !LocTui.DangNoi)
+        // (theo túi chứ không theo cờ đã-thấy → save cũ đã đọc trước bản này vẫn được bỏ vào túi)
+        if (LocTui.Co("ket_mo") || LocTui.Mo) return;
+        if (vpManh1 && LocTui.Co("doc:so_thu_chi_2002") && !LocTui.CoMon(MANH_ID[0]))
         {
-            LocTui.Dat("thay_so_1");
-            if (vpManh1) LocTui.Them(vpManh1);
-            LocTui.Noi("Có mảnh giấy kẹp bìa sổ. Cầm theo.", "Một.", "...Năm nào mẹ cũng để riêng tiền cho anh.");
+            LocTui.Them(vpManh1);
+            if (!LocTui.Co("thay_so_1")) { LocTui.Dat("thay_so_1"); LocTui.Noi("Có mảnh giấy kẹp bìa sổ. Cầm theo.", "Một.", "...Năm nào mẹ cũng để riêng tiền cho anh."); }
+        }
+        // đọc tờ giấy của mẹ xong → cầm theo
+        if (vpGiayKetTui && LocTui.Co("doc:giay_ket") && !LocTui.CoMon("giay_ket_tui"))
+        {
+            LocTui.Them(vpGiayKetTui);
+            if (vpGiayKet) vpGiayKet.gameObject.SetActive(false);
+            if (!LocTui.DangNoi) LocTui.Noi("Cầm theo tờ giấy của mẹ.");
         }
         // đủ bốn mảnh → Khôi ghép mã
         if (!LocTui.Co("ghep_ma") && !LocTui.Co("ket_mo") && SoManh() >= 4 && !LocFirstPerson.khoa && !LocTui.Mo && !LocTui.DangNoi)
