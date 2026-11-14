@@ -199,12 +199,6 @@ public partial class LocCotTruyen
         return b.center - dai * Mathf.Sign(Vector3.Dot(c - b.center, dai) + 1e-4f) * nuaDai;
     }
 
-    void GoiYGiacMo(ref string id, ref string[] bac)
-    {
-        if (LocMa.dem == 2 && LocTui.Co("nua_tinh_2") && !LocTui.Co("mo_2_xong"))
-        { id = "di_ngu"; bac = new[] { "Muộn rồi. Về phòng mình ngủ.", "Phòng mình ngay cạnh phòng em." }; }
-    }
-
     void PhimThuGiacMo(Keyboard k)
     {
 #if UNITY_EDITOR

@@ -698,29 +698,6 @@ public partial class LocCotTruyen
         VeMenu();
     }
 
-    // ───── gợi ý H thêm cho phần mới
-    void GoiYHV34(ref string id, ref string[] bac)
-    {
-        int d = LocMa.dem;
-        if (d == 2)
-        {
-            if (CoGoiThay && LocNhim.daHoangLoan && !LocTui.Co("goi_thay")) { id = "goi_thay"; bac = LocTui.Co("so_bo_het") ? new[] { "Bố có ghi số ông thầy.", "Bìa sau quyển sổ. 826 315.", "Điện thoại ở phòng khách." } : new[] { "Đọc nốt quyển sổ của bố đã.", "Lật tới bìa sau." }; return; }
-            if (LocTui.Co("goi_thay") && mgDanChen && vpKeo && vpChen3 && !LocTui.Co("dan_chen")) { id = "dan_chen"; bac = new[] { "Ông ấy bảo dán hai cái chén dưới hầm.", "Keo thì cửa hàng nhà mình có bán, trên quầy.", "Còn cái chén trên phòng thờ tầng ba." }; return; }
-            if (LocTui.Co("goi_thay") && vpChao && choDatChao && !LocTui.Co("cung_chao")) { id = "cung_chao"; bac = new[] { "Còn bát cháo.", "Bác để cháo trên bàn ăn dưới bếp.", "Bưng xuống bàn thờ dưới hầm." }; return; }
-        }
-        if (d == 3)
-        {
-            // [02/11] gợi ý Đêm 3 theo v3.3: kiện hàng quen mắt → lời nhắn của mẹ → cái hũ → quyển sách → … → "Tiễn người ta đi mà lại khóa người ta lại à?"
-            if (kienHang && LocTui.Co("kien_den") && !LocTui.Co("mo_kien")) { id = "mo_kien"; bac = new[] { "Có cái gói ai để ở cửa.", "Giấy dầu, buộc dây... trông quen mắt.", "Cạnh cửa chính." }; return; }
-            if (KhoaHeHu && !LocMa.huDaHe) { id = "loi_nhan"; bac = new[] { "Mẹ có để lại gì không.", "Phòng bố mẹ.", "Bàn trang điểm của mẹ." }; return; }
-            if (!LocMa.huDaHe) { id = "he_hu"; bac = new[] { "Cái hũ dưới hầm.", "Mẹ dặn đừng động vào. Nhưng phải xem trong ấy có gì.", "Xuống hầm, ngồi xuống trước gầm bàn thờ." }; return; }
-            if (vpLoiNhanMe && !LocTui.Co("doc:sach_gia_le") && !LocTui.Co("nl_bay_mam")) { id = "sach"; bac = new[] { "Mẹ bảo có gì cứ xem quyển sách.", "Tủ thờ trên tầng ba.", "Thắp hương ông bà trước đã." }; return; }
-            if (LocTui.Co("nl_bay_mam") && vpVanKhan && !LocTui.Co("nl_doc_van")) { id = "nl_doc_van"; bac = new[] { "Còn bài khấn.", "Đứng trước bàn thờ dưới hầm mà đọc.", "Mở trong túi, lật tới trang cuối." }; return; }
-            if (mgBayMam && !LocTui.Co("nl_bay_mam") && LocMa.huDaHe && canMam.Exists(x => !LocTui.CoMon(x))) { id = "do_mam"; bac = new[] { "Mâm cúng còn thiếu đồ.", "Bát gạo, bát muối ở phòng khách. Mía ở bếp." }; return; }
-            if (LocHuCot.ChoChon) { id = "chon_hu"; bac = new[] { "Còn cái hũ.", "Ông ấy bảo niêm lại.", "Sách của mẹ thì nói khác.", "Tiễn người ta đi mà lại khóa người ta lại à?" }; return; }
-        }
-    }
-
     // ───── tiện ích
     static IEnumerator Den(float tu, float toi, float giay)
     {

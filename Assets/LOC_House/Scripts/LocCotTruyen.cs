@@ -92,6 +92,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         if (dangCanh) return;
         var k = Keyboard.current;
         if (k != null && k.hKey.wasPressedThisFrame && !LocFirstPerson.khoa && !LocTui.Mo) GoiYH();
+        GoiYChuDong();   // [14/11] gợi ý chủ động + mốc giờ thứ 11 (LocCotTruyen_GoiY.cs)
 #if UNITY_EDITOR
         if (k != null && k.digit9Key.wasPressedThisFrame && LocMa.dem < 3 && !LocFirstPerson.khoa && !LocMenu.DangChe) StartCoroutine(HetDemThu());   // [22/10] thử: phím 9 = hết đêm ngay (xem cảnh ban ngày)
 #endif
@@ -355,12 +356,13 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         }
         else if (d == 2)
         {
+            // [14/11] cùng thứ tự với bảng gợi ý H: thăm em → cuộc gọi không lời → đọc sổ → thầy Đồng → dán chén, bát cháo
             if (!LocNhim.daTham[2]) return "Mình nên xem tình hình con bé sao trước nhỉ.";
             if (CoGoiThay && !LocTui.Co("goi_2")) return "Chưa ngủ được. Xuống phòng khách xem lại đã.";
+            if (!LocNhim.daHoangLoan) return LocTui.Co("doc:so_cua_bo") ? "Cuốn sổ của bố... đọc cho hết đã." : "Bố hay ghi chép. Chắc phải có cuốn sổ nào đấy.";
             if (CoGoiThay && !LocTui.Co("goi_thay")) return "Cái điện thoại lúc nãy... Chắc người ta còn gọi lại.";
             if (mgDanChen && vpKeo && vpChen3 && !LocTui.Co("dan_chen")) return "Ông ấy dặn dán hai cái chén dưới hầm. Làm cho xong đã.";
             if (vpChao && choDatChao && !LocTui.Co("cung_chao")) return "Bát cháo còn chưa bưng xuống hầm.";
-            if (!LocNhim.daHoangLoan) return LocTui.Co("doc:so_cua_bo") ? "Cuốn sổ của bố... đọc cho hết đã." : "Bố hay ghi chép. Chắc phải có cuốn sổ nào đấy.";
             if (!LocTui.Co("giu_huong_2")) return "Hương trên linh cữu sắp tàn. Thắp nén mới rồi hẵng ngủ.";
         }
         return null;
@@ -398,19 +400,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         yield return SangLai();
     }
 
-    // ───── gợi ý H (C1.4): Khôi tự nhủ, bấm lại thì lùi một bậc, không bao giờ nói đáp án
-    void GoiYH()
-    {
-        string id = null; string[] bac = null;
-        if (LocMa.dem == 1 && LocTui.Co("thu_ket") && !LocTui.Co("ket_mo"))
-        { id = "ma_ket"; bac = new[] { "Bố mẹ chắc gì nhớ được mã. Phải ghi ở đâu đó.", "Giấy tờ nhà mình toàn để bên phòng làm việc của bố.", "...Sao lại có dòng ứng tiền cho anh Phong." }; }
-        if (id == null) GoiYGiacMo(ref id, ref bac);
-        if (id == null) GoiYHV34(ref id, ref bac);
-        if (id == null) return;
-        bacGoiY.TryGetValue(id, out int i);
-        LocTui.Noi(bac[Mathf.Min(i, bac.Length - 1)]);
-        bacGoiY[id] = i + 1;
-    }
+    // ───── gợi ý H (C1.4): [14/11] chuyển sang bảng dữ liệu — LocCotTruyen_GoiY.cs
 
     // ───── Đêm 2: cuộc gọi không lời → đọc sổ → hoảng loạn → giữ hương → hết đêm
     void Dem2()
