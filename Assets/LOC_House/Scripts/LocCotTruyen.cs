@@ -61,6 +61,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         LocNhim.SauEvil = () => StartCoroutine(KetThuc("Anh không đếm lại bao giờ."));
         foreach (var n in tenCong) { var d = GameObject.Find(n)?.GetComponent<LocDoor>(); if (d) cong.Add(d); }
         KhoiTaoV34();
+        KhoiTaoManhMa();   // [14/11] câu đố mã két 4 mảnh (LocCotTruyen_ManhMa.cs)
         KhoiTaoGiacMo();
         ApDem(LocMa.dem);
         if (sauBanNgay) { sauBanNgay = false; StartCoroutine(VaoSauBanNgay()); } else DauDem();
@@ -176,6 +177,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
     // ───── Đêm 1
     void Dem1()
     {
+        Dem1ManhMa();
         var p = fp.transform.position;
         if (LocTui.Co("d1_mo_dau") && !LocTui.Co("d1_liem") && KC(banThoVong) < 4.5f) { LocTui.Dat("d1_liem"); LocTui.Noi("Về tới nơi thì liệm rồi.", "Không kịp nhìn mặt."); }
         if (LocTui.Co("chia_ham") || LocTui.CoMon("chia_ham"))

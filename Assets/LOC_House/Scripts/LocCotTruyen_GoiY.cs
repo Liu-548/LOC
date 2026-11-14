@@ -39,7 +39,7 @@ public partial class LocCotTruyen
         var f = c.transform.forward; f.y = 0;
         if (Vector3.Dot(f.normalized, v.normalized) < 0.55f) return;
         LocTui.Dat("thay_cua_ham");
-        if (!CoChia()) LocTui.Noi("Cửa sắt... khóa treo bên ngoài.", "Dưới này là chỗ nào mà bố phải khóa kỹ thế.");
+        if (!CoChia()) LocTui.Noi("Cửa sắt... khóa treo bên ngoài.", "Dưới này là chỗ nào mà bố phải khóa kỹ thế.", "...Chìa gì quan trọng bố cũng khóa vào két.");
     }
     bool CuaHamMo => LocTui.Co("d1_xuong_ham") || (cuaHamD && (!cuaHamD.khoa || cuaHamD.DangMo));
     bool DuDoMam => canMam.Count == 0 || !canMam.Exists(x => !LocTui.CoMon(x));
@@ -51,8 +51,9 @@ public partial class LocCotTruyen
         { "d1_thap_huong",  "Thắp hương cho bố mẹ ở bàn thờ phòng khách" },
         { "d1_tham_nhim",   "Lên tầng 2 xem tình trạng của Nhím" },
         { "d1_kham_pha",    "Đi một vòng xem lại ngôi nhà" },
-        { "d1_cua_ham",     "Cửa sắt ở giếng trời bị khoá. Bố giấu gì dưới đó? Tìm chìa khoá" },
-        { "ma_ket",         "Két sắt của bố mẹ bị khoá — tìm mã số" },
+        { "d1_cua_ham",     "Cửa sắt ở giếng trời bị khoá. Chìa có lẽ bố cất trong két sắt phòng bố mẹ" },
+        { "tim_manh",       "Mẹ chép mã két ra 4 mảnh giấy, giấu 4 chỗ bố hay ngồi — tìm đủ ({n}/4)" },
+        { "ghep_ma",        "Giải 4 câu đố trên mảnh giấy (xem trong túi), ghép thành mã két" },
         { "d1_tim_cua",     "Chùm chìa này mở cửa nào? Tìm chỗ có khoá treo" },
         { "d1_lay_chia",    "Lấy đồ trong két sắt" },
         { "d1_mo_cua_ham",  "Thử chùm chìa vào cửa sắt ở giếng trời" },
@@ -98,19 +99,23 @@ public partial class LocCotTruyen
         // [14/11] KHÁM PHÁ TRƯỚC, NHIỆM VỤ SAU: thăm em xong chỉ có "đi một vòng nhà"; tự thấy cửa sắt (ThayCuaHam) / tự thử két mới mở nhiệm vụ
         Muc("d1_kham_pha", 1, 25, () => LocNhim.daTham[1] && !ThayCuaHam && !LocTui.Co("thu_ket") && !CoChia(), () => ThayCuaHam || LocTui.Co("thu_ket") || CoChia(),
             "Lâu lắm mới về. Nhà vắng quá.", "Bố mẹ đi rồi mà đồ đạc vẫn y nguyên. Đi xem lại từng chỗ.", "Giếng trời sau bếp... Hồi bé bố cấm ra đấy chơi.");
+        // (tiếng đập vọng từ hầm khi xuống tầng 1 gần giếng trời — LocCotTruyen_ManhMa.Dem1ManhMa)
         Muc("d1_cua_ham", 1, 30, () => ThayCuaHam && !LocTui.Co("thu_ket") && !CoChia(), () => CuaHamMo || LocTui.Co("thu_ket") || CoChia(),
-            "Bố khóa cái cửa này từ bao giờ.", "Chìa thì bố cất kỹ lắm. Đồ quý bố hay cất ở đâu nhỉ.", "Đồ quý bố mẹ toàn cho vào két trong phòng.");
-        Muc("ma_ket", 1, 31, () => LocTui.Co("thu_ket"), () => LocTui.Co("ket_mo"),
-            "Bố mẹ chắc gì nhớ được mã. Phải ghi ở đâu đó.", "Giấy tờ nhà mình toàn để bên phòng làm việc của bố.", "...Sao lại có dòng ứng tiền cho anh Phong.");
-        Muc("d1_lay_chia", 1, 32, () => LocTui.Co("ket_mo"), () => CoChia() || CuaHamMo,
+            "Chìa gì quan trọng bố cũng khóa vào két.", "Cái két sắt trong phòng bố mẹ.", "Phòng bố mẹ trên tầng hai. Két đứng ở góc cửa sổ.");
+        // [14/11] mã két = câu đố 4 mảnh giấy của mẹ (LocCotTruyen_ManhMa.cs)
+        Muc("tim_manh", 1, 31, () => LocTui.Co("thu_ket") && SoManh() < 4 && !LocTui.Co("ket_mo"), () => SoManh() >= 4 || LocTui.Co("ket_mo"),
+            "Bốn chỗ bố hay ngồi. Mẹ giấu ở đấy.", "Chỗ pha trà, chỗ tính sổ, chỗ canh con Nhím ốm... chỗ mẹ chải đầu.", "Bàn nước phòng khách. Bàn giấy phòng làm việc. Đầu giường con bé. Bàn trang điểm của mẹ.");
+        Muc("ghep_ma", 1, 32, () => SoManh() >= 4 && !LocTui.Co("ket_mo"), () => LocTui.Co("ket_mo"),
+            "Đủ bốn mảnh rồi. Ghép theo thứ tự.", "Một mình đứng đầu. Số sáu lộn ngược. Hai vòng tròn. Cái mâm rỗng.", "Năm anh Phong ra đời.");
+        Muc("d1_lay_chia", 1, 33, () => LocTui.Co("ket_mo"), () => CoChia() || CuaHamMo,
             "Két mở rồi.", "Trong ấy có chùm chìa lạ.", "Chùm chìa với cái khóa treo to. Chắc là của cái cửa kia.");
-        Muc("d1_tim_cua", 1, 33, () => CoChia() && !ThayCuaHam, () => ThayCuaHam || CuaHamMo,
+        Muc("d1_tim_cua", 1, 34, () => CoChia() && !ThayCuaHam, () => ThayCuaHam || CuaHamMo,
             "Chùm chìa lạ với cái khóa treo to. Khóa cái gì đây.", "Trong nhà có chỗ nào khóa treo đâu nhỉ.", "Giếng trời sau bếp... hình như có cái cửa sắt.");
-        Muc("d1_mo_cua_ham", 1, 34, () => CoChia() && ThayCuaHam, () => CuaHamMo,
+        Muc("d1_mo_cua_ham", 1, 35, () => CoChia() && ThayCuaHam, () => CuaHamMo,
             "Có chìa rồi. Thử cái cửa sắt xem.", "Cửa ở giếng trời, sau bếp.", "Bức tường bên trái giếng trời.");
-        Muc("d1_bat_den", 1, 35, () => CuaHamMo && !LocTui.Co("d1_xuong_ham"), () => DenHamBat || LocTui.Co("d1_xuong_ham"),
+        Muc("d1_bat_den", 1, 36, () => CuaHamMo && !LocTui.Co("d1_xuong_ham"), () => DenHamBat || LocTui.Co("d1_xuong_ham"),
             "Dưới đấy tối om.", "Đi mò thế này thì thấy gì. Phải có cái công tắc.", "Đầu cầu thang, chỗ có chữ viết trên tường.");
-        Muc("d1_xuong_ham", 1, 36, () => CuaHamMo && DenHamBat, () => LocTui.Co("d1_xuong_ham"),
+        Muc("d1_xuong_ham", 1, 37, () => CuaHamMo && DenHamBat, () => LocTui.Co("d1_xuong_ham"),
             "Đèn sáng rồi. Xuống xem có gì.", "Xuống hẳn dưới hầm.", "Xuống tận cuối thang.");
         Muc("d1_giu_huong", 1, 40, () => ChoGiuHuong(1), () => LocTui.Co("giu_huong_1"),
             "Hương trên linh cữu chắc tàn rồi.", "Bác dặn đêm nay đừng để tắt hương.", "Thắp nén mới ở bàn thờ dưới nhà. Đứng cho ngay.");
@@ -240,6 +245,7 @@ public partial class LocCotTruyen
         if (LocFirstPerson.khoa || LocTui.Mo || LocMenu.DangChe || dangCanh || dangKet || LocNhim.dangCanh) return;
         if (LocMa.dem == 3 && LocMa.MatDien) return;
         NV.TryGetValue(mucTieuId ?? "", out string nv);
+        if (nv != null && nv.Contains("{n}")) nv = nv.Replace("{n}", SoManh().ToString());
         if (nv != nvTruoc) { nvTruoc = nv; tNVMoi = Time.unscaledTime; }
         float moi = Mathf.Clamp01((Time.unscaledTime - tNVMoi) / 0.5f);            // hiện dần 0,5 s
         float nhay = Mathf.Clamp01(1f - (Time.unscaledTime - tNVMoi) / 3f);        // 3 s đầu: viền sáng "nhiệm vụ mới"

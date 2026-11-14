@@ -13,6 +13,7 @@ public class LocVatPham : LocTuongTac
     public string chuaToi = "";               // câu nói khi chưa tới đêm ("" = không hiện gợi ý)
     public int docTuDem;                      // mở đọc trong túi trước đêm này → chuaDoc
     public string chuaDoc = "Mai hẵng đọc.";
+    public bool docKhiNhat;                   // [14/11] nhặt xong mở ra đọc ngay (mảnh giấy câu đố mã két)
     public string canCo, chuaCo;              // [v3.3] cần cờ này mới lấy được (vd thắp hương ông bà trước khi mở tủ thờ)
     bool ThieuCo => !string.IsNullOrEmpty(canCo) && !LocTui.Co(canCo);
 
@@ -26,7 +27,7 @@ public class LocVatPham : LocTuongTac
             var t = trang[i]; if (t == null || !t.Contains("Ứng cho thằng Phong")) continue;
             int c = t.IndexOf("\n\n<i>(dòng cuối"); if (c >= 0) t = t.Substring(0, c);
             t = t.Replace("<size=23><i>4/8      Ứng cho thằng Phong ....... 1.980.000</i></size>",
-                          "\n<size=27><i><color=#1E2F63>4/8    Ứng cho thằng Phong ....... 1.980.000</color></i></size>");
+                          "\n<size=27><i><color=#1E2F63>4/8    Ứng cho thằng Phong ....... 2.000.000</color></i></size>");   // [14/11] mã két chuyển sang câu đố 4 mảnh → bỏ 1.980.000
             trang[i] = t;
         }
     }
@@ -43,7 +44,7 @@ public class LocVatPham : LocTuongTac
     {
         if (!Toi) { LocTui.Noi(chuaToi); return; }
         if (ThieuCo) { LocTui.Noi(chuaCo); return; }
-        if (kieu == Kieu.Nhat) { LocTui.Them(this); gameObject.SetActive(false); }
+        if (kieu == Kieu.Nhat) { LocTui.Them(this); gameObject.SetActive(false); if (docKhiNhat && DocDuoc) LocTui.Doc(this); }
         else if (kieu == Kieu.Doc) LocTui.Doc(this);
         LocTui.Noi(khiNhat);
     }

@@ -15,8 +15,11 @@ public class LocKetSat : LocTuongTac
     public override void Bam()
     {
         if (!canh || !canh.khoa) return;
-        if (!daNoi) { daNoi = true; LocTui.Noi("Khóa số.", "Mã gì đây."); }
-        LocTui.Dat("thu_ket");   // [8/10] mở gợi ý H mã két
+        LocTui.Dat("thu_ket");
+        // [14/11] lần đầu: mẩu giấy mẹ dán trên nóc két (câu đố 4 mảnh — LocCotTruyen_ManhMa.cs)
+        var giay = LocCotTruyen.GiayKet;
+        if (giay && !LocTui.Co("doc:giay_ket")) { LocTui.Noi("Khóa số.", "...Có mẩu giấy dán trên nóc."); LocTui.Doc(giay); return; }
+        if (!daNoi) { daNoi = true; LocTui.Noi("Khóa số.", "Mã gì đây."); }   // [8/10] mở gợi ý H mã két
         nhap = ""; dangNhap = true; LocFirstPerson.khoa = true; LocMa.tamDung = true;
     }
 
