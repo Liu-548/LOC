@@ -31,6 +31,42 @@ public partial class LocCotTruyen
     bool CuaHamMo => LocTui.Co("d1_xuong_ham") || (cuaHamD && (!cuaHamD.khoa || cuaHamD.DangMo));
     bool DuDoMam => canMam.Count == 0 || !canMam.Exists(x => !LocTui.CoMon(x));
 
+    // [14/11 chơi thử] BẢNG NHIỆM VỤ: Khôi nói xong câu đầu → hiện nhiệm vụ rõ ràng ở góc trên trái (không đánh đố)
+    static readonly Dictionary<string, string> NV = new()
+    {
+        // Đêm 1
+        { "d1_thap_huong",  "Thắp hương cho bố mẹ ở bàn thờ phòng khách" },
+        { "d1_tham_nhim",   "Lên tầng 2 xem tình trạng của Nhím" },
+        { "d1_cua_ham",     "Tìm chìa khoá cửa sắt ở giếng trời" },
+        { "ma_ket",         "Két sắt phòng bố mẹ bị khoá — sang phòng làm việc của bố tìm manh mối về mã két" },
+        { "d1_lay_chia",    "Lấy đồ trong két sắt" },
+        { "d1_mo_cua_ham",  "Mở cửa sắt ở giếng trời (sau bếp)" },
+        { "d1_bat_den",     "Tìm công tắc đèn ở đầu cầu thang hầm" },
+        { "d1_xuong_ham",   "Xuống hầm" },
+        { "d1_giu_huong",   "Thắp nén hương mới ở bàn thờ — đừng để hương tắt" },
+        { "d1_di_ngu",      "Về phòng mình đi ngủ" },
+        // Đêm 2
+        { "d2_tham_nhim",   "Lên tầng 2 thay khăn cho Nhím" },
+        { "d2_goi_khong_loi", "Nghe điện thoại bàn ở phòng khách" },
+        { "d2_doc_so",      "Đọc hết cuốn sổ của bố (lấy trong két)" },
+        { "goi_thay",       "Gọi cho ông thầy — số ghi ở bìa sau cuốn sổ" },
+        { "dan_chen",       "Dán lại chén dưới hầm — keo ở quầy hàng, chén ở phòng thờ tầng 3" },
+        { "cung_chao",      "Mang bát cháo trên bàn ăn xuống bàn thờ dưới hầm" },
+        { "d2_giu_huong",   "Giữ hương ở bàn thờ không tắt" },
+        { "di_ngu",         "Về phòng mình đi ngủ" },
+        // Đêm 3
+        { "mo_kien",        "Mở gói đồ để ở cửa chính" },
+        { "loi_nhan",       "Tìm lời nhắn của mẹ trong phòng bố mẹ" },
+        { "d3_bat_den",     "Bật đèn hầm ở đầu cầu thang" },
+        { "he_hu",          "Xuống hầm xem cái hũ dưới gầm bàn thờ" },
+        { "do_mam",         "Gom đồ cúng: gạo, muối (chỗ linh cữu), mía (dưới bếp)" },
+        { "bay_mam",        "Bày mâm cúng dưới hầm theo lời thầy" },
+        { "nl_doc_van",     "Đọc bài khấn trước bàn thờ dưới hầm" },
+        { "giu_nhang",      "Thắp nhang và giữ cho nhang cháy hết" },
+        { "chon_hu",        "Quyết định số phận cái hũ: niêm lại, hay xé niêm?" },
+    };
+    float tNVMoi; string nvTruoc, gNVChu, gNghiChu; GUIContent gNV, gNghi;
+
     void Muc(string id, int dem, int thuTu, System.Func<bool> mo, System.Func<bool> xong, params string[] bac)
         => bangGoiY.Add(new MucGoiY { id = id, dem = dem, thuTu = thuTu, mo = mo, xong = xong, bac = bac });
 
@@ -176,17 +212,39 @@ public partial class LocCotTruyen
         else NoiGoiY(m, m.bac.Length - 1);
     }
 
-    // dòng mục tiêu mờ góc trên trái: chỉ khi việc đó còn là việc đang làm
+    // BẢNG NHIỆM VỤ góc trên trái: tiêu đề · nhiệm vụ (chữ thẳng, rõ) · câu Khôi vừa tự nhủ (nghiêng, mờ)
     void OnGUI()
     {
         if (!hienMucTieu || string.IsNullOrEmpty(mucTieuChu) || mucDau == null) return;
         if (LocFirstPerson.khoa || LocTui.Mo || LocMenu.DangChe || dangCanh || dangKet || LocNhim.dangCanh) return;
         if (LocMa.dem == 3 && LocMa.MatDien) return;
-        float k = Screen.height / 1080f;
-        var f = LocMenu.FontChu(1);
-        var st = LocKieuChu.Lay("ct.mucTieu", f, Mathf.RoundToInt(22 * k), f ? FontStyle.Normal : FontStyle.Italic, TextAnchor.UpperLeft, new Color(0.85f, 0.82f, 0.74f, 0.75f));
-        var r = new Rect(34 * k, 30 * k, Screen.width * 0.45f, 120 * k);
-        GUI.color = new Color(0, 0, 0, 0.6f); GUI.Label(new Rect(r.x + 1.5f * k, r.y + 1.5f * k, r.width, r.height), mucTieuChu, st);
-        GUI.color = Color.white; GUI.Label(r, mucTieuChu, st);
+        NV.TryGetValue(mucTieuId ?? "", out string nv);
+        if (nv != nvTruoc) { nvTruoc = nv; tNVMoi = Time.unscaledTime; }
+        float moi = Mathf.Clamp01((Time.unscaledTime - tNVMoi) / 0.5f);            // hiện dần 0,5 s
+        float nhay = Mathf.Clamp01(1f - (Time.unscaledTime - tNVMoi) / 3f);        // 3 s đầu: viền sáng "nhiệm vụ mới"
+
+        float k = Screen.height / 1080f, w = Mathf.Min(560 * k, Screen.width * 0.42f), x = 30 * k, y = 28 * k, pad = 14 * k;
+        var fT = LocMenu.FontChu(2); var fN = LocMenu.FontChu(0); var fI = LocMenu.FontChu(1);
+        var sTieu = LocKieuChu.Lay("nv.tieu", fT, Mathf.RoundToInt(17 * k), fT ? FontStyle.Normal : FontStyle.Bold, TextAnchor.UpperLeft, new Color(0.86f, 0.70f, 0.42f));
+        var sNV = LocKieuChu.Lay("nv.chu", fN, Mathf.RoundToInt(23 * k), FontStyle.Normal, TextAnchor.UpperLeft, new Color(0.95f, 0.93f, 0.88f)); sNV.wordWrap = true;
+        var sNghi = LocKieuChu.Lay("nv.nghi", fI, Mathf.RoundToInt(18 * k), fI ? FontStyle.Normal : FontStyle.Italic, TextAnchor.UpperLeft, new Color(0.75f, 0.73f, 0.68f)); sNghi.wordWrap = true;
+
+        string tieu = nhay > 0 ? "NHIỆM VỤ MỚI" : "NHIỆM VỤ";
+        if (gNVChu != nv || gNghiChu != mucTieuChu)   // chỉ dựng lại khi chữ đổi (tránh rác bộ nhớ mỗi khung OnGUI)
+        {
+            gNVChu = nv; gNghiChu = mucTieuChu;
+            gNV = new GUIContent(string.IsNullOrEmpty(nv) ? mucTieuChu : nv);
+            gNghi = new GUIContent(string.IsNullOrEmpty(nv) ? "" : "“" + mucTieuChu + "”");
+        }
+        float hT = 24 * k, hN = sNV.CalcHeight(gNV, w - 2 * pad), hG = gNghi.text.Length > 0 ? sNghi.CalcHeight(gNghi, w - 2 * pad) + 6 * k : 0;
+        var hop = new Rect(x, y, w, pad + hT + hN + hG + pad);
+
+        GUI.color = new Color(0, 0, 0, 0.55f * moi); GUI.DrawTexture(hop, Texture2D.whiteTexture);
+        GUI.color = new Color(0.86f, 0.70f, 0.42f, (0.5f + 0.5f * nhay) * moi); GUI.DrawTexture(new Rect(x, y, 3 * k, hop.height), Texture2D.whiteTexture);   // vạch vàng bên trái
+        GUI.color = new Color(1, 1, 1, moi);
+        GUI.Label(new Rect(x + pad, y + pad * 0.8f, w - 2 * pad, hT), tieu, sTieu);
+        GUI.Label(new Rect(x + pad, y + pad * 0.8f + hT, w - 2 * pad, hN), gNV, sNV);
+        if (hG > 0) GUI.Label(new Rect(x + pad, y + pad * 0.8f + hT + hN + 6 * k, w - 2 * pad, hG), gNghi, sNghi);
+        GUI.color = Color.white;
     }
 }
