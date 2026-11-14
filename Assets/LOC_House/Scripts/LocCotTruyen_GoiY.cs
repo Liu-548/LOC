@@ -11,9 +11,11 @@ public partial class LocCotTruyen
 {
     [Header("Gợi ý tự động (lời Khôi)")]
     public bool goiYChuDong = true;                          // tắt = không gợi ý gì cả
-    public float[] giayBac = { 90f, 180f, 270f };             // mắc bao lâu (giây, chỉ tính lúc tự do đi lại) thì nói bậc 1 / 2 / 3
-    public float giayLapLai = 150f;                           // sau bậc 3: bao lâu nhắc lại một lần
-    public int soLapLai = 2;
+    // [14/11 chơi thử: "Đêm 1 không biết làm gì"] việc mới mở là Khôi nói ngay bậc 1 (mục tiêu), rồi rõ dần nhanh hơn
+    public float[] giayMac = { 5f, 45f, 100f };              // giây (chỉ tính lúc tự do đi lại) kể từ khi việc mở → nói bậc 1 / 2 / 3
+    public float giayNhacLai = 90f;                          // sau bậc 3: bao lâu nhắc lại một lần
+    public int soNhacLai = 3;
+    public bool hienMucTieu = true;                          // góc trên trái: dòng mờ ghi câu Khôi vừa tự nhủ cho việc đang làm
 
     class MucGoiY
     {
@@ -118,16 +120,19 @@ public partial class LocCotTruyen
     // [14/11] BỎ PHÍM H — gợi ý tự động bằng lời Khôi tự nhủ (phụ đề nghiêng như mọi câu độc thoại).
     //  · Đồng hồ "mắc" chỉ chạy khi người chơi đang tự do đi lại (không menu, không túi, không cảnh, không bị khoá) và
     //    đặt lại mỗi khi việc đứng đầu đổi → làm xong một việc là khỏi bị nhắc việc cũ.
-    //  · Mắc giayBac[0] → bậc 1 (mơ hồ) · giayBac[1] → bậc 2 · giayBac[2] → bậc 3 (gần như chỉ chỗ).
-    //    Sau bậc 3: cứ giayLapLai nhắc lại bậc 3 (hoặc bậc 1 của việc song song cùng chặng), tối đa soLapLai lần.
+    //  · giayMac[0] sau khi việc mở → bậc 1 (nêu việc) · giayMac[1] → bậc 2 (thu hẹp) · giayMac[2] → bậc 3 (gần như chỉ chỗ).
+    //    Sau bậc 3: cứ giayNhacLai nhắc lại bậc 3 (hoặc việc song song cùng chặng), tối đa soNhacLai lần.
+    //  · Câu vừa nói được giữ mờ ở góc trên trái (hienMucTieu) cho người lỡ không đọc kịp phụ đề.
     //  · Không chen ngang khi Khôi đang nói câu khác; chờ câu kia xong.
     float tMac; int lapLai;
+    string mucTieuId, mucTieuChu;
     bool daNhacMatDien;
 
     void NoiGoiY(MucGoiY m, int i)
     {
         i = Mathf.Clamp(i, 0, m.bac.Length - 1);
         LocTui.Noi(m.bac[i]);
+        mucTieuId = m.id; mucTieuChu = m.bac[i];
         bacGoiY[m.id] = Mathf.Max(bacGoiY.TryGetValue(m.id, out int c) ? c : 0, i + 1);
     }
 
@@ -149,18 +154,18 @@ public partial class LocCotTruyen
         tMac += Time.deltaTime;
         if (Time.frameCount % 15 != 0) return;
         var m = MucDangMo(); var id = m != null ? m.id : null;
-        if (id != mucDau) { mucDau = id; tMac = 0f; lapLai = 0; return; }
+        if (id != mucDau) { mucDau = id; tMac = 0f; lapLai = 0; mucTieuChu = null; return; }   // việc đổi → xoá dòng mục tiêu cũ
         if (m == null || LocTui.DangNoi) return;
 
         bacGoiY.TryGetValue(id, out int daNoi);   // số bậc đã nói cho việc này
         if (daNoi < m.bac.Length)
         {
-            if (tMac < giayBac[Mathf.Min(daNoi, giayBac.Length - 1)]) return;
+            if (tMac < giayMac[Mathf.Min(daNoi, giayMac.Length - 1)]) return;
             NoiGoiY(m, daNoi);
             return;
         }
         // đã nói hết các bậc
-        if (lapLai >= soLapLai || tMac < giayBac[giayBac.Length - 1] + giayLapLai * (lapLai + 1)) return;
+        if (lapLai >= soNhacLai || tMac < giayMac[giayMac.Length - 1] + giayNhacLai * (lapLai + 1)) return;
         lapLai++;
         var khac = MucDangMo(id);
         if (khac != null && khac.batBuoc && khac.thuTu / 10 == m.thuTu / 10 && (lapLai % 2 == 1))
@@ -169,5 +174,19 @@ public partial class LocCotTruyen
             NoiGoiY(khac, k2 < khac.bac.Length ? k2 : khac.bac.Length - 1);
         }
         else NoiGoiY(m, m.bac.Length - 1);
+    }
+
+    // dòng mục tiêu mờ góc trên trái: chỉ khi việc đó còn là việc đang làm
+    void OnGUI()
+    {
+        if (!hienMucTieu || string.IsNullOrEmpty(mucTieuChu) || mucDau == null) return;
+        if (LocFirstPerson.khoa || LocTui.Mo || LocMenu.DangChe || dangCanh || dangKet || LocNhim.dangCanh) return;
+        if (LocMa.dem == 3 && LocMa.MatDien) return;
+        float k = Screen.height / 1080f;
+        var f = LocMenu.FontChu(1);
+        var st = LocKieuChu.Lay("ct.mucTieu", f, Mathf.RoundToInt(22 * k), f ? FontStyle.Normal : FontStyle.Italic, TextAnchor.UpperLeft, new Color(0.85f, 0.82f, 0.74f, 0.75f));
+        var r = new Rect(34 * k, 30 * k, Screen.width * 0.45f, 120 * k);
+        GUI.color = new Color(0, 0, 0, 0.6f); GUI.Label(new Rect(r.x + 1.5f * k, r.y + 1.5f * k, r.width, r.height), mucTieuChu, st);
+        GUI.color = Color.white; GUI.Label(r, mucTieuChu, st);
     }
 }
