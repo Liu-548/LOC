@@ -107,7 +107,7 @@ public partial class LocCotTruyen
         Muc("tim_giay_me", 1, 30, () => LocTui.Co("thu_ket") && !LocTui.Co("doc:giay_ket") && SoManh() < 4 && !LocTui.Co("ket_mo"), () => LocTui.Co("doc:giay_ket") || SoManh() >= 4 || LocTui.Co("ket_mo"),
             "Mẹ cẩn thận lắm. Cái gì cũng ghi.", "Đồ của mẹ... ngay trong phòng này.", "Bàn trang điểm của mẹ.");
         Muc("tim_manh", 1, 31, () => LocTui.Co("doc:giay_ket") && SoManh() < 4 && !LocTui.Co("ket_mo"), () => SoManh() >= 4 || LocTui.Co("ket_mo"),
-            "Bốn chỗ còn giữ hơi anh Phong.", "Sổ thu chi của mẹ. Giường mình. Bàn nước. Chỗ con Nhím ngủ.", "Sổ thu chi trong tủ hồ sơ phòng bố. Dưới gối giường mình. Khay trà phòng khách. Đầu giường con bé.");
+            "Bốn chỗ còn giữ hơi anh Phong.", "Sổ thu chi của mẹ. Bàn học của mình. Bàn nước. Chỗ con Nhím ngủ.", "Sổ thu chi trong tủ hồ sơ phòng bố. Hộc bàn học phòng mình. Khay trà phòng khách. Đầu giường con bé.");
         Muc("ghep_ma", 1, 32, () => SoManh() >= 4 && !LocTui.Co("ket_mo"), () => LocTui.Co("ket_mo"),
             "Đủ bốn số rồi.", "Một, chín, tám, không.", "Năm anh Phong ra đời. Gõ vào két.");
         Muc("d1_lay_chia", 1, 33, () => LocTui.Co("ket_mo"), () => CoChia() || CuaHamMo,

@@ -7,7 +7,7 @@ using UnityEngine;
 //    Mẹ không ghi thẳng mã (người ngoài đọc được): mã = năm thằng cả ra đời; bốn số giấu ở bốn chỗ "còn giữ hơi nó" — chỉ người nhà hiểu.
 //  · Bốn số, mỗi số kèm một mẩu chuyện về anh Phong (người chơi hiểu dần: nhà từng có anh cả, đã mất, bị giấu với Nhím):
 //      1 kẹp bìa sổ thu chi 2002 (tủ hồ sơ phòng làm việc) — chỗ mẹ ghi khoản để riêng cho nó
-//      9 giường Khôi — cái giường hai anh em ngủ chung
+//      9 hộc bàn học phòng Khôi — cái bàn hai anh em ngồi học chung (đặt trong ngăn kéo, đi theo ngăn kéo)
 //      8 bàn nước phòng khách — chén trà bố rót thêm mỗi sáng
 //      0 tủ đầu giường phòng Nhím — chỗ con bé ngủ, mẹ đã giấu anh nó với nó
 //  · Đủ bốn số → Khôi ghép: "Một chín tám mươi. Năm anh Phong ra đời."
@@ -37,11 +37,11 @@ public partial class LocCotTruyen
                 if (g) vpGiayKet = Mon(g, "giay_ket", "tờ giấy của mẹ", LocVatPham.Kieu.Doc, "Tờ giấy gấp tư dưới hộp phấn, chữ mẹ.", 1,
                     new[] { "Thằng cả...", "Anh Phong." }, new[]
                     {
-                        "<i>Gấp tư, để dưới hộp phấn. Chữ mẹ, nhỏ, đều.</i>\n\nÔng hay quên mã két.\nEm không ghi thẳng ra nữa — người ngoài đọc được.\n\nMã là <b>năm thằng cả ra đời</b>.\nÔng mà quên cả năm ấy thì em giấu bốn số ở bốn chỗ còn giữ hơi nó:\n\n   — chỗ em ghi khoản để riêng cho nó,\n   — cái giường hai anh em ngủ chung,\n   — chỗ ông rót thêm chén trà mỗi sáng,\n   — và chỗ con Nhím ngủ, cho em nhớ mình đã giấu nó với con bé.\n\nĐọc xong thì để lại chỗ cũ.",
+                        "<i>Gấp tư, để dưới hộp phấn. Chữ mẹ, nhỏ, đều.</i>\n\nÔng hay quên mã két.\nEm không ghi thẳng ra nữa — người ngoài đọc được.\n\nMã là <b>năm thằng cả ra đời</b>.\nÔng mà quên cả năm ấy thì em giấu bốn số ở bốn chỗ còn giữ hơi nó:\n\n   — chỗ em ghi khoản để riêng cho nó,\n   — cái bàn hai anh em ngồi học chung,\n   — chỗ ông rót thêm chén trà mỗi sáng,\n   — và chỗ con Nhím ngủ, cho em nhớ mình đã giấu nó với con bé.\n\nĐọc xong thì để lại chỗ cũ.",
                     });
             }
-            Manh(1, "GiuongDon_Khoi", "mảnh giấy (số thứ hai)", "Mảnh giấy xé, chữ mẹ. Nhét dưới gối giường mình.",
-                "<i>Nhét dưới gối. Chữ mẹ.</i>\n\n\n<size=30><b>Số thứ hai:  9</b></size>\n\n\nHai anh em ngủ chung cái giường này\ntới năm thằng Phong chín tuổi.\n\nThằng Khôi khóc mấy đêm\nvì phải nằm một mình.");
+            ManhTrongHoc(1, "BanHoc_Khoi_Bo", "mảnh giấy (số thứ hai)", "Mảnh giấy xé, chữ mẹ. Trong hộc bàn học của mình.",
+                "<i>Trong hộc bàn. Chữ mẹ.</i>\n\n\n<size=30><b>Số thứ hai:  9</b></size>\n\n\nHai anh em ngồi chung cái bàn này học bài\ntới năm thằng Phong chín tuổi.\n\nThằng Khôi khóc mấy hôm\nvì phải ngồi một mình.");
             Manh(2, "Salon_BanNuoc", "mảnh giấy (số thứ ba)", "Mảnh giấy xé, chữ mẹ. Kẹp dưới khay trà.",
                 "<i>Kẹp dưới khay trà. Chữ mẹ.</i>\n\n\n<size=30><b>Số thứ ba:  8</b></size>\n\n\nTám giờ sáng nào ông cũng pha trà,\nrót thêm một chén để đấy.\n\nÔng không nói. Em cũng không hỏi.");
             Manh(3, "BanCanhGiuong_Thuoc", "mảnh giấy (số cuối)", "Mảnh giấy xé, chữ mẹ. Kẹp dưới vỉ thuốc đầu giường con bé.",
@@ -58,12 +58,34 @@ public partial class LocCotTruyen
         if (!g) return;
         var nghi = i switch
         {
-            1 => new[] { "Chín.", "...Mình chẳng nhớ gì chuyện ngủ chung." },
+            1 => new[] { "Chín.", "...Mình chẳng nhớ gì chuyện ngồi chung." },
             2 => new[] { "Tám.", "Chén trà thứ hai. Hồi nào cũng thấy, chưa bao giờ nghĩ." },
             _ => new[] { "Không.", "...Không có ai cả." },
         };
         var v = Mon(g, MANH_ID[i], ten, LocVatPham.Kieu.Nhat, ghiChu, 1, nghi, new[] { chu });
         if (v) v.docKhiNhat = true;   // nhặt là mở ra đọc luôn câu đố (đọc lại trong túi)
+    }
+
+    // mảnh giấy nằm đáy ngăn kéo của một cái bàn (con của cánh ngăn kéo → kéo ra là thấy, đóng lại là khuất)
+    void ManhTrongHoc(int i, string tenBan, string ten, string ghiChu, string chu)
+    {
+        if (LocTui.Co("ket_mo")) return;
+        var ban = GameObject.Find(tenBan); if (!ban) { Debug.LogWarning("[LocManhMa] không thấy " + tenBan); return; }
+        LocDoor ngan = null;
+        foreach (var d in ban.GetComponentsInChildren<LocDoor>(true)) if (d.ten != null && d.ten.StartsWith("ngăn")) { ngan = d; break; }
+        if (!ngan) { Manh(i, tenBan, ten, ghiChu, chu); return; }   // không có ngăn kéo → để trên mặt bàn
+        var b = BaoV(ngan.transform);
+        var g = TaoGiay("ManhMa_" + (i + 1), ban.transform, new Vector2(0.10f, 0.07f), true);
+        if (!g) return;
+        var s = g.transform.lossyScale;
+        g.transform.position = new Vector3(b.center.x, b.min.y + 0.016f, b.center.z);
+        g.transform.SetParent(ngan.transform, true);
+        var p = ngan.transform.lossyScale;   // giữ đúng cỡ thật dù ngăn kéo có co giãn
+        g.transform.localScale = new Vector3(s.x / Mathf.Max(0.001f, Mathf.Abs(p.x)), s.y / Mathf.Max(0.001f, Mathf.Abs(p.y)), s.z / Mathf.Max(0.001f, Mathf.Abs(p.z)));
+        var bc = g.GetComponent<BoxCollider>(); if (bc) bc.size = new Vector3(1.4f, 12f, 1.4f);   // thấp hơn lòng ngăn (~4 cm)
+        var nghi = new[] { "Chín.", "...Mình chẳng nhớ gì chuyện ngồi chung." };
+        var v = Mon(g, MANH_ID[i], ten, LocVatPham.Kieu.Nhat, ghiChu, 1, nghi, new[] { chu });
+        if (v) v.docKhiNhat = true;
     }
 
     // tờ giấy mỏng nằm trên mặt đồ vật: dò mặt phẳng bằng tia từ trên xuống, ưu tiên góc (giữa bàn hay có đồ)
