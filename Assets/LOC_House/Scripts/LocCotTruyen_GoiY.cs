@@ -234,7 +234,7 @@ public partial class LocCotTruyen
         {
             gNVChu = nv; gNghiChu = mucTieuChu;
             gNV = new GUIContent(string.IsNullOrEmpty(nv) ? mucTieuChu : nv);
-            gNghi = new GUIContent(string.IsNullOrEmpty(nv) ? "" : "“" + mucTieuChu + "”");
+            gNghi = new GUIContent(string.IsNullOrEmpty(nv) ? "" : "Khôi nghĩ: “" + mucTieuChu + "”");   // ghi rõ ai nghĩ — khỏi tưởng nhân vật đứng trước mặt nói
         }
         float hT = 24 * k, hN = sNV.CalcHeight(gNV, w - 2 * pad), hG = gNghi.text.Length > 0 ? sNghi.CalcHeight(gNghi, w - 2 * pad) + 6 * k : 0;
         var hop = new Rect(x, y, w, pad + hT + hN + hG + pad);
