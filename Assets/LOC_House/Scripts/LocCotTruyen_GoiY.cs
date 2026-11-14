@@ -49,8 +49,8 @@ public partial class LocCotTruyen
     {
         // Đêm 1
         { "d1_thap_huong",  "Thắp hương cho bố mẹ ở bàn thờ phòng khách" },
-        { "d1_tham_nhim",   "Lên tầng 2 xem tình trạng của Nhím" },
-        { "d1_kham_pha",    "Đi một vòng xem lại ngôi nhà" },
+        { "d1_tham_nhim",   "Lên tầng 2, lại gần giường xem tình trạng của Nhím" },
+        { "d1_kham_pha",    "Có tiếng đập cửa sắt dưới nhà — xuống tầng 1 tìm xem phát ra từ đâu" },
         { "d1_cua_ham",     "Cửa sắt ở giếng trời bị khoá. Chìa có lẽ bố cất trong két sắt phòng bố mẹ" },
         { "tim_manh",       "Mẹ chép mã két ra 4 mảnh giấy, giấu 4 chỗ bố hay ngồi — tìm đủ ({n}/4)" },
         { "ghep_ma",        "Giải 4 câu đố trên mảnh giấy (xem trong túi), ghép thành mã két" },
@@ -62,7 +62,7 @@ public partial class LocCotTruyen
         { "d1_giu_huong",   "Thắp nén hương mới ở bàn thờ — đừng để hương tắt" },
         { "d1_di_ngu",      "Về phòng mình đi ngủ" },
         // Đêm 2
-        { "d2_tham_nhim",   "Lên tầng 2 thay khăn cho Nhím" },
+        { "d2_tham_nhim",   "Lên tầng 2, lại gần giường xem Nhím thế nào" },
         { "d2_goi_khong_loi", "Nghe điện thoại bàn ở phòng khách" },
         { "d2_doc_so",      "Đọc hết cuốn sổ của bố (lấy trong két)" },
         { "goi_thay",       "Gọi cho ông thầy — số ghi ở bìa sau cuốn sổ" },
@@ -97,8 +97,8 @@ public partial class LocCotTruyen
         Muc("d1_tham_nhim", 1, 20, () => LocTui.Co("thap_huong"), () => LocNhim.daTham[1],
             "Con bé ốm từ hôm qua. Chưa lên xem nó.", "Phòng nó trên tầng hai.", "Khăn trên trán chắc khô rồi. Chậu nước để cạnh giường.");
         // [14/11] KHÁM PHÁ TRƯỚC, NHIỆM VỤ SAU: thăm em xong chỉ có "đi một vòng nhà"; tự thấy cửa sắt (ThayCuaHam) / tự thử két mới mở nhiệm vụ
-        Muc("d1_kham_pha", 1, 25, () => LocNhim.daTham[1] && !ThayCuaHam && !LocTui.Co("thu_ket") && !CoChia(), () => ThayCuaHam || LocTui.Co("thu_ket") || CoChia(),
-            "Lâu lắm mới về. Nhà vắng quá.", "Bố mẹ đi rồi mà đồ đạc vẫn y nguyên. Đi xem lại từng chỗ.", "Giếng trời sau bếp... Hồi bé bố cấm ra đấy chơi.");
+        Muc("d1_kham_pha", 1, 25, () => LocNhim.daTham[1] && LocTui.Co("go_ham") && !ThayCuaHam && !LocTui.Co("thu_ket") && !CoChia(), () => ThayCuaHam || LocTui.Co("thu_ket") || CoChia(),
+            "Tiếng sắt. Như ai đập cửa.", "Hình như từ phía sau bếp.", "Giếng trời sau bếp... Hồi bé bố cấm ra đấy chơi.");
         // (tiếng đập vọng từ hầm khi xuống tầng 1 gần giếng trời — LocCotTruyen_ManhMa.Dem1ManhMa)
         Muc("d1_cua_ham", 1, 30, () => ThayCuaHam && !LocTui.Co("thu_ket") && !CoChia(), () => CuaHamMo || LocTui.Co("thu_ket") || CoChia(),
             "Chìa gì quan trọng bố cũng khóa vào két.", "Cái két sắt trong phòng bố mẹ.", "Phòng bố mẹ trên tầng hai. Két đứng ở góc cửa sổ.");
@@ -246,6 +246,10 @@ public partial class LocCotTruyen
         if (LocMa.dem == 3 && LocMa.MatDien) return;
         NV.TryGetValue(mucTieuId ?? "", out string nv);
         if (nv != null && nv.Contains("{n}")) nv = nv.Replace("{n}", SoManh().ToString());
+        // trong phòng em: đang chờ thay khăn → nói rõ bước tiếp theo
+        if ((mucTieuId == "d1_tham_nhim" || mucTieuId == "d2_tham_nhim") && LocNhim.I && LocNhim.I.ChoThay) nv = "Thay khăn cho Nhím — tới chậu nước cạnh giường";
+        // thăm em xong mà chưa nghe tiếng đập → chưa có gì để tìm
+        if (mucTieuId == "d1_kham_pha" && !LocTui.Co("go_ham")) nv = null;
         if (nv != nvTruoc) { nvTruoc = nv; tNVMoi = Time.unscaledTime; }
         float moi = Mathf.Clamp01((Time.unscaledTime - tNVMoi) / 0.5f);            // hiện dần 0,5 s
         float nhay = Mathf.Clamp01(1f - (Time.unscaledTime - tNVMoi) / 3f);        // 3 s đầu: viền sáng "nhiệm vụ mới"

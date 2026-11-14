@@ -107,14 +107,29 @@ public partial class LocCotTruyen
         if (!fp || !cuaHamT) return;
         var p = fp.transform.position;
         // tiếng đập cửa sắt vọng lên từ hầm — dụ người chơi tới giếng trời
-        if (LocTui.Co("khoi_vo") && !LocTui.Co("go_ham") && !ThayCuaHam && !LocFirstPerson.khoa && !dangCanh)
+        //  lần 1: ~6 s sau cảnh Khôi vỡ (đang ở tầng 2) → nghe vọng xuống, Khôi: "Tiếng gì dưới nhà?" → nhiệm vụ xuống tầng 1 tìm
+        //  lần 2: xuống tầng 1, trong ~10 m quanh giếng trời mà chưa thấy cửa → đập lại, rõ hướng hơn
+        if (LocTui.Co("khoi_vo") && !ThayCuaHam && !LocFirstPerson.khoa && !dangCanh && !LocTui.Mo)
         {
-            var v = cuaHamT.position - p; float doc = Mathf.Abs(v.y); v.y = 0;
-            if (doc < 2.2f && v.magnitude < 10f)
+            if (!LocTui.Co("go_ham"))
             {
-                LocTui.Dat("go_ham");
-                LocAm.Phat("GM_DapCua", cuaHamT.position + Vector3.down * 0.8f, 0.45f, 0.82f);
-                StartCoroutine(NoiSau(2.4f, "...Tiếng gì đấy.", "Phía giếng trời."));
+                tChoGo += Time.deltaTime;
+                if (tChoGo > 6f && !LocTui.DangNoi)
+                {
+                    LocTui.Dat("go_ham");
+                    Dap(0.75f, 0.55f);
+                    StartCoroutine(NoiSau(2.6f, "...Tiếng gì dưới nhà?", "Như ai đập cửa sắt."));
+                }
+            }
+            else if (!LocTui.Co("go_ham_2"))
+            {
+                var v = cuaHamT.position - p; float doc = Mathf.Abs(v.y); v.y = 0;
+                if (doc < 2.2f && v.magnitude < 10f)
+                {
+                    LocTui.Dat("go_ham_2");
+                    Dap(0.6f, 1f);
+                    StartCoroutine(NoiSau(2.4f, "Lại nữa.", "Phía sau bếp."));
+                }
             }
         }
         // đủ bốn mảnh → Khôi ghép mã
@@ -123,6 +138,17 @@ public partial class LocCotTruyen
             LocTui.Dat("ghep_ma");
             LocTui.Noi("Một... chín... tám... không.", "Một chín tám mươi.", "...Năm anh Phong ra đời.");
         }
+    }
+    float tChoGo;
+    // tiếng đập trầm, như vọng từ dưới đất lên; khong = 0..1 (1 = hẳn 3D tại cửa, thấp = nghe được từ xa / tầng trên)
+    void Dap(float vol, float khong)
+    {
+        var c = LocAm.Lay("GM_DapCua"); if (!c || !cuaHamT) return;
+        var g = new GameObject("_Am_GoHam"); g.transform.position = cuaHamT.position + Vector3.down * 0.8f;
+        var a = g.AddComponent<AudioSource>(); a.clip = c; a.volume = vol; a.pitch = 0.82f; a.spatialBlend = khong;
+        a.minDistance = 2f; a.maxDistance = 30f; a.rolloffMode = AudioRolloffMode.Logarithmic;
+        var lp = g.AddComponent<AudioLowPassFilter>(); lp.cutoffFrequency = khong < 1f ? 900f : 1800f;   // nghe đục, như cách một lớp sàn
+        a.Play(); Destroy(g, c.length / 0.82f + 0.2f);
     }
     System.Collections.IEnumerator NoiSau(float giay, params string[] dong) { yield return new WaitForSeconds(giay); LocTui.Noi(dong); }
 }

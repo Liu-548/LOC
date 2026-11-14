@@ -6,7 +6,7 @@ using UnityEngine;
 public static class LocAm
 {
     static readonly Dictionary<string, AudioClip> kho = new();
-    static AudioClip Lay(string ten)
+    public static AudioClip Lay(string ten)
     {
         if (!kho.TryGetValue(ten, out var c)) kho[ten] = c = Resources.Load<AudioClip>("LOC_AmThanh/" + ten);
         return c;
