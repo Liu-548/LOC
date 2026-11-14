@@ -16,6 +16,21 @@ public class LocVatPham : LocTuongTac
     public string canCo, chuaCo;              // [v3.3] cần cờ này mới lấy được (vd thắp hương ông bà trước khi mở tủ thờ)
     bool ThieuCo => !string.IsNullOrEmpty(canCo) && !LocTui.Co(canCo);
 
+    // [14/11] sổ thu chi 2002: bỏ dòng chú thích lộ liễu "(dòng cuối cùng… nét của bố)" đã nướng sẵn trong scene.
+    // Dòng của bố tự nói lên bằng nét chữ: to hơn, nghiêng, mực xanh đậm — khác hẳn nét mẹ.
+    void Awake()
+    {
+        if (id != "so_thu_chi_2002" || trang == null) return;
+        for (int i = 0; i < trang.Length; i++)
+        {
+            var t = trang[i]; if (t == null || !t.Contains("Ứng cho thằng Phong")) continue;
+            int c = t.IndexOf("\n\n<i>(dòng cuối"); if (c >= 0) t = t.Substring(0, c);
+            t = t.Replace("<size=23><i>4/8      Ứng cho thằng Phong ....... 1.980.000</i></size>",
+                          "\n<size=27><i><color=#1E2F63>4/8    Ứng cho thằng Phong ....... 1.980.000</color></i></size>");
+            trang[i] = t;
+        }
+    }
+
     public bool Toi => LocMa.dem >= tuDem;
     public bool DocDuoc => trang != null && trang.Length > 0 && LocMa.dem >= docTuDem;
 
