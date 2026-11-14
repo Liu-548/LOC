@@ -256,24 +256,21 @@ public partial class LocCotTruyen
 
         float k = Screen.height / 1080f, w = Mathf.Min(560 * k, Screen.width * 0.42f), x = 30 * k, y = 28 * k, pad = 14 * k;
         var fT = LocMenu.FontChu(2); var fN = LocMenu.FontChu(0); var fI = LocMenu.FontChu(1);
-        var sTieu = LocKieuChu.Lay("nv.tieu", fT, Mathf.RoundToInt(17 * k), fT ? FontStyle.Normal : FontStyle.Bold, TextAnchor.UpperLeft, new Color(0.86f, 0.70f, 0.42f));
         var sNV = LocKieuChu.Lay("nv.chu", fN, Mathf.RoundToInt(23 * k), FontStyle.Normal, TextAnchor.UpperLeft, new Color(0.95f, 0.93f, 0.88f)); sNV.wordWrap = true;
         var sNghi = LocKieuChu.Lay("nv.nghi", fI, Mathf.RoundToInt(18 * k), fI ? FontStyle.Normal : FontStyle.Italic, TextAnchor.UpperLeft, new Color(0.75f, 0.73f, 0.68f)); sNghi.wordWrap = true;
 
-        string tieu = nhay > 0 ? "NHIỆM VỤ MỚI" : "NHIỆM VỤ";
         if (gNVChu != nv || gNghiChu != mucTieuChu)   // chỉ dựng lại khi chữ đổi (tránh rác bộ nhớ mỗi khung OnGUI)
         {
             gNVChu = nv; gNghiChu = mucTieuChu;
             gNV = new GUIContent(string.IsNullOrEmpty(nv) ? mucTieuChu : nv);
             gNghi = new GUIContent(string.IsNullOrEmpty(nv) ? "" : "Khôi nghĩ: “" + mucTieuChu + "”");   // ghi rõ ai nghĩ — khỏi tưởng nhân vật đứng trước mặt nói
         }
-        float hT = 24 * k, hN = sNV.CalcHeight(gNV, w - 2 * pad), hG = gNghi.text.Length > 0 ? sNghi.CalcHeight(gNghi, w - 2 * pad) + 6 * k : 0;
+        float hT = 0f, hN = sNV.CalcHeight(gNV, w - 2 * pad), hG = gNghi.text.Length > 0 ? sNghi.CalcHeight(gNghi, w - 2 * pad) + 6 * k : 0;
         var hop = new Rect(x, y, w, pad + hT + hN + hG + pad);
 
         GUI.color = new Color(0, 0, 0, 0.55f * moi); GUI.DrawTexture(hop, Texture2D.whiteTexture);
         GUI.color = new Color(0.86f, 0.70f, 0.42f, (0.5f + 0.5f * nhay) * moi); GUI.DrawTexture(new Rect(x, y, 3 * k, hop.height), Texture2D.whiteTexture);   // vạch vàng bên trái
         GUI.color = new Color(1, 1, 1, moi);
-        GUI.Label(new Rect(x + pad, y + pad * 0.8f, w - 2 * pad, hT), tieu, sTieu);
         GUI.Label(new Rect(x + pad, y + pad * 0.8f + hT, w - 2 * pad, hN), gNV, sNV);
         if (hG > 0) GUI.Label(new Rect(x + pad, y + pad * 0.8f + hT + hN + 6 * k, w - 2 * pad, hG), gNghi, sNghi);
         GUI.color = Color.white;
