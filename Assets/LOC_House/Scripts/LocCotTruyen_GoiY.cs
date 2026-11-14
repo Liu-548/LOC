@@ -52,8 +52,9 @@ public partial class LocCotTruyen
         { "d1_tham_nhim",   "Lên tầng 2, lại gần giường xem tình trạng của Nhím" },
         { "d1_kham_pha",    "Có tiếng đập cửa sắt dưới nhà — xuống tầng 1 tìm xem phát ra từ đâu" },
         { "d1_cua_ham",     "Cửa sắt ở giếng trời bị khoá. Chìa có lẽ bố cất trong két sắt phòng bố mẹ" },
-        { "tim_manh",       "Mẹ chép mã két ra 4 mảnh giấy, giấu 4 chỗ bố hay ngồi — tìm đủ ({n}/4)" },
-        { "ghep_ma",        "Giải 4 câu đố trên mảnh giấy (xem trong túi), ghép thành mã két" },
+        { "tim_giay_me",    "Két sắt bị khoá. Bố hay quên mã — mẹ chắc có ghi lại. Tìm trong đồ của mẹ" },
+        { "tim_manh",       "Mã két là năm anh Phong ra đời. Tìm 4 con số mẹ giấu ({n}/4)" },
+        { "ghep_ma",        "Nhập mã vào két sắt: ghép 4 số theo thứ tự" },
         { "d1_tim_cua",     "Chùm chìa này mở cửa nào? Tìm chỗ có khoá treo" },
         { "d1_lay_chia",    "Lấy đồ trong két sắt" },
         { "d1_mo_cua_ham",  "Thử chùm chìa vào cửa sắt ở giếng trời" },
@@ -102,11 +103,13 @@ public partial class LocCotTruyen
         // (tiếng đập vọng từ hầm khi xuống tầng 1 gần giếng trời — LocCotTruyen_ManhMa.Dem1ManhMa)
         Muc("d1_cua_ham", 1, 30, () => ThayCuaHam && !LocTui.Co("thu_ket") && !CoChia(), () => CuaHamMo || LocTui.Co("thu_ket") || CoChia(),
             "Chìa gì quan trọng bố cũng khóa vào két.", "Cái két sắt trong phòng bố mẹ.", "Phòng bố mẹ trên tầng hai. Két đứng ở góc cửa sổ.");
-        // [14/11] mã két = câu đố 4 mảnh giấy của mẹ (LocCotTruyen_ManhMa.cs)
-        Muc("tim_manh", 1, 31, () => LocTui.Co("thu_ket") && SoManh() < 4 && !LocTui.Co("ket_mo"), () => SoManh() >= 4 || LocTui.Co("ket_mo"),
-            "Bốn chỗ bố hay ngồi. Mẹ giấu ở đấy.", "Chỗ pha trà, chỗ tính sổ, chỗ canh con Nhím ốm... chỗ mẹ chải đầu.", "Bàn nước phòng khách. Bàn giấy phòng làm việc. Đầu giường con bé. Bàn trang điểm của mẹ.");
+        // [14/11] mã két = năm sinh anh Phong, mẹ giấu 4 số ở 4 chỗ (LocCotTruyen_ManhMa.cs)
+        Muc("tim_giay_me", 1, 30, () => LocTui.Co("thu_ket") && !LocTui.Co("doc:giay_ket") && SoManh() < 4 && !LocTui.Co("ket_mo"), () => LocTui.Co("doc:giay_ket") || SoManh() >= 4 || LocTui.Co("ket_mo"),
+            "Mẹ cẩn thận lắm. Cái gì cũng ghi.", "Đồ của mẹ... ngay trong phòng này.", "Bàn trang điểm của mẹ.");
+        Muc("tim_manh", 1, 31, () => LocTui.Co("doc:giay_ket") && SoManh() < 4 && !LocTui.Co("ket_mo"), () => SoManh() >= 4 || LocTui.Co("ket_mo"),
+            "Bốn chỗ còn giữ hơi anh Phong.", "Sổ thu chi của mẹ. Giường mình. Bàn nước. Chỗ con Nhím ngủ.", "Sổ thu chi trong tủ hồ sơ phòng bố. Dưới gối giường mình. Khay trà phòng khách. Đầu giường con bé.");
         Muc("ghep_ma", 1, 32, () => SoManh() >= 4 && !LocTui.Co("ket_mo"), () => LocTui.Co("ket_mo"),
-            "Đủ bốn mảnh rồi. Ghép theo thứ tự.", "Một mình đứng đầu. Số sáu lộn ngược. Hai vòng tròn. Cái mâm rỗng.", "Năm anh Phong ra đời.");
+            "Đủ bốn số rồi.", "Một, chín, tám, không.", "Năm anh Phong ra đời. Gõ vào két.");
         Muc("d1_lay_chia", 1, 33, () => LocTui.Co("ket_mo"), () => CoChia() || CuaHamMo,
             "Két mở rồi.", "Trong ấy có chùm chìa lạ.", "Chùm chìa với cái khóa treo to. Chắc là của cái cửa kia.");
         Muc("d1_tim_cua", 1, 34, () => CoChia() && !ThayCuaHam, () => ThayCuaHam || CuaHamMo,

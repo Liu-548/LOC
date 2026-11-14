@@ -16,9 +16,8 @@ public class LocKetSat : LocTuongTac
     {
         if (!canh || !canh.khoa) return;
         LocTui.Dat("thu_ket");
-        // [14/11] lần đầu: mẩu giấy mẹ dán trên nóc két (câu đố 4 mảnh — LocCotTruyen_ManhMa.cs)
-        var giay = LocCotTruyen.GiayKet;
-        if (giay && !LocTui.Co("doc:giay_ket")) { LocTui.Noi("Khóa số.", "...Có mẩu giấy dán trên nóc."); LocTui.Doc(giay); return; }
+        // [14/11] lần đầu chưa đọc giấy của mẹ: chỉ nghĩ, chưa mở bàn phím → hướng sang đồ của mẹ (câu đố 4 số — LocCotTruyen_ManhMa.cs)
+        if (LocCotTruyen.GiayKet && !LocTui.Co("doc:giay_ket") && !daNoi) { daNoi = true; LocTui.Noi("Khóa số.", "Bố hay quên mã lắm.", "Mẹ thế nào cũng ghi lại ở đâu đó."); return; }
         if (!daNoi) { daNoi = true; LocTui.Noi("Khóa số.", "Mã gì đây."); }   // [8/10] mở gợi ý H mã két
         nhap = ""; dangNhap = true; LocFirstPerson.khoa = true; LocMa.tamDung = true;
     }

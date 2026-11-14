@@ -17,8 +17,10 @@ public class LocVatPham : LocTuongTac
     public string canCo, chuaCo;              // [v3.3] cần cờ này mới lấy được (vd thắp hương ông bà trước khi mở tủ thờ)
     bool ThieuCo => !string.IsNullOrEmpty(canCo) && !LocTui.Co(canCo);
 
-    // [14/11] sổ thu chi 2002: bỏ dòng chú thích lộ liễu "(dòng cuối cùng… nét của bố)" đã nướng sẵn trong scene.
-    // Dòng của bố tự nói lên bằng nét chữ: to hơn, nghiêng, mực xanh đậm — khác hẳn nét mẹ.
+    // [14/11] sổ thu chi 2002 (nướng sẵn trong scene) — sửa khi chạy:
+    //  · bỏ dòng chú thích lộ liễu "(dòng cuối cùng… nét của bố)"
+    //  · dòng tháng 8 thành "Để riêng cho thằng Phong" (nét mẹ) — khoản mẹ năm nào cũng để cho đứa con đã mất
+    //  · thêm trang đầu: mảnh giấy kẹp bìa = SỐ THỨ NHẤT của mã két (câu đố 4 số — LocCotTruyen_ManhMa.cs)
     void Awake()
     {
         if (id != "so_thu_chi_2002" || trang == null) return;
@@ -26,9 +28,14 @@ public class LocVatPham : LocTuongTac
         {
             var t = trang[i]; if (t == null || !t.Contains("Ứng cho thằng Phong")) continue;
             int c = t.IndexOf("\n\n<i>(dòng cuối"); if (c >= 0) t = t.Substring(0, c);
-            t = t.Replace("<size=23><i>4/8      Ứng cho thằng Phong ....... 1.980.000</i></size>",
-                          "\n<size=27><i><color=#1E2F63>4/8    Ứng cho thằng Phong ....... 2.000.000</color></i></size>");   // [14/11] mã két chuyển sang câu đố 4 mảnh → bỏ 1.980.000
+            t = t.Replace("<size=23><i>4/8      Ứng cho thằng Phong ....... 1.980.000</i></size>", "4/8      Để riêng cho thằng Phong ....... 2.000.000");
             trang[i] = t;
+        }
+        if (trang.Length > 0 && trang[0] != null && !trang[0].Contains("Số thứ nhất"))
+        {
+            var l = new System.Collections.Generic.List<string>(trang);
+            l.Insert(0, "<i>Kẹp trong bìa sổ, một mảnh giấy xé. Chữ mẹ.</i>\n\n\n<size=30><b>Số thứ nhất:  1</b></size>\n\n\nNăm nào em cũng để riêng cho thằng Phong một khoản,\nghi vào sổ như nó vẫn còn.\n\nÔng bảo vô lý.\nEm vẫn ghi.");
+            trang = l.ToArray();
         }
     }
 

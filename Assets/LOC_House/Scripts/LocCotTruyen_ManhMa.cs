@@ -1,44 +1,51 @@
 using UnityEngine;
 
 // [14/11] ĐÊM 1 — CÂU ĐỐ MÃ KÉT (thay dòng "Ứng cho thằng Phong 1.980.000" trong sổ thu chi).
-//  · Dụ: thăm em xong, xuống tầng 1 lại gần giếng trời → tiếng đập cửa sắt vọng từ dưới hầm → người chơi tự tìm tới cửa.
+//  · Dụ: thăm em xong → tiếng đập cửa sắt vọng từ dưới hầm → người chơi tự tìm tới cửa sắt giếng trời.
 //  · Thấy cửa (KiemKhamPha) → Khôi nhớ: chìa gì quan trọng bố cũng khóa vào két.
-//  · Bấm két lần đầu → tự mở mẩu giấy mẹ dán trên nóc két: bố hay quên mã, mẹ chép ra BỐN MẢNH giấu bốn chỗ bố hay ngồi.
-//  · Bốn mảnh (nhặt vào túi, đọc lại được): mỗi mảnh một câu đố cho một chữ số → 1 · 9 · 8 · 0.
-//      1 bàn nước phòng khách (chỗ bố pha trà)  · 2 bàn giấy phòng làm việc (chỗ bố tính sổ)
-//      3 tủ đầu giường phòng Nhím (chỗ bố canh con ốm) · 4 bàn trang điểm phòng bố mẹ (chỗ mẹ chải đầu)
-//  · Đủ bốn mảnh → Khôi ghép: "Một chín tám mươi. Năm anh Phong ra đời." (1980 = năm sinh Phong, kịch bản v3.1)
+//  · Bấm két → "Bố hay quên mã. Mẹ thế nào cũng ghi lại." → đồ của mẹ: TỜ GIẤY CỦA MẸ dưới hộp phấn, bàn trang điểm (cùng phòng két).
+//    Mẹ không ghi thẳng mã (người ngoài đọc được): mã = năm thằng cả ra đời; bốn số giấu ở bốn chỗ "còn giữ hơi nó" — chỉ người nhà hiểu.
+//  · Bốn số, mỗi số kèm một mẩu chuyện về anh Phong (người chơi hiểu dần: nhà từng có anh cả, đã mất, bị giấu với Nhím):
+//      1 kẹp bìa sổ thu chi 2002 (tủ hồ sơ phòng làm việc) — chỗ mẹ ghi khoản để riêng cho nó
+//      9 giường Khôi — cái giường hai anh em ngủ chung
+//      8 bàn nước phòng khách — chén trà bố rót thêm mỗi sáng
+//      0 tủ đầu giường phòng Nhím — chỗ con bé ngủ, mẹ đã giấu anh nó với nó
+//  · Đủ bốn số → Khôi ghép: "Một chín tám mươi. Năm anh Phong ra đời."
 public partial class LocCotTruyen
 {
     LocVatPham vpGiayKet;
     public static LocVatPham GiayKet => I ? I.vpGiayKet : null;
     static readonly string[] MANH_ID = { "manh_ma_1", "manh_ma_2", "manh_ma_3", "manh_ma_4" };
-    public static int SoManh() { int n = 0; foreach (var id in MANH_ID) if (LocTui.CoMon(id)) n++; return n; }
+    // số 1 nằm trong sổ thu chi (đọc sổ = thấy) · số 2–4 là mảnh giấy nhặt được
+    public static int SoManh()
+    {
+        int n = LocTui.Co("doc:so_thu_chi_2002") ? 1 : 0;
+        for (int i = 1; i < MANH_ID.Length; i++) if (LocTui.CoMon(MANH_ID[i])) n++;
+        return n;
+    }
 
     void KhoiTaoManhMa()
     {
         if (LocMa.dem != 1) return;
         try
         {
-            // mẩu giấy mẹ dán trên nóc két
-            var ket = GameObject.Find("KetSat_Dung");
-            if (ket)
+            // tờ giấy của mẹ: dưới hộp phấn trên bàn trang điểm phòng bố mẹ (chỗ riêng của mẹ, cùng phòng két)
+            var btd = GameObject.Find("BanTrangDiem_Bo");
+            if (btd && !LocTui.Co("ket_mo"))
             {
-                var g = TaoGiay("GiayMe_TrenKet", ket.transform, new Vector2(0.12f, 0.09f), true);
-                if (g) vpGiayKet = Mon(g, "giay_ket", "mẩu giấy trên két", LocVatPham.Kieu.Doc, "Mẩu giấy dán băng dính trên nóc két, chữ mẹ.", 1,
-                    new[] { "Chữ mẹ." }, new[]
+                var g = TaoGiay("GiayMe_MaKet", btd.transform, new Vector2(0.14f, 0.10f), false);
+                if (g) vpGiayKet = Mon(g, "giay_ket", "tờ giấy của mẹ", LocVatPham.Kieu.Doc, "Tờ giấy gấp tư dưới hộp phấn, chữ mẹ.", 1,
+                    new[] { "Thằng cả...", "Anh Phong." }, new[]
                     {
-                        "<i>Băng dính đã ngả vàng. Chữ mẹ, nhỏ, đều.</i>\n\nÔng hay quên mã quá.\n\nEm chép ra bốn mảnh, giấu ở bốn chỗ ông hay ngồi nhất:\n\n   — chỗ ông pha trà mỗi sáng,\n   — chỗ ông ngồi tính sổ,\n   — chỗ ông ngồi canh con Nhím mỗi lần nó ốm,\n   — còn mảnh cuối em giữ, ở chỗ em ngồi chải đầu.\n\nGhép theo thứ tự mà mở.\nĐừng viết thẳng mã ra giấy nữa, ông nhé.",
+                        "<i>Gấp tư, để dưới hộp phấn. Chữ mẹ, nhỏ, đều.</i>\n\nÔng hay quên mã két.\nEm không ghi thẳng ra nữa — người ngoài đọc được.\n\nMã là <b>năm thằng cả ra đời</b>.\nÔng mà quên cả năm ấy thì em giấu bốn số ở bốn chỗ còn giữ hơi nó:\n\n   — chỗ em ghi khoản để riêng cho nó,\n   — cái giường hai anh em ngủ chung,\n   — chỗ ông rót thêm chén trà mỗi sáng,\n   — và chỗ con Nhím ngủ, cho em nhớ mình đã giấu nó với con bé.\n\nĐọc xong thì để lại chỗ cũ.",
                     });
             }
-            Manh(0, "Salon_BanNuoc", "mảnh giấy thứ nhất", "Mảnh giấy xé, chữ mẹ. Kẹp dưới khay trà.",
-                "<i>Mảnh thứ nhất.</i>\n\n\nĐứng đầu mà lẻ loi một mình,\ngiống ông những lúc giận cả nhà.");
-            Manh(1, "BanGiay_Go", "mảnh giấy thứ hai", "Mảnh giấy xé, chữ mẹ. Nằm lẫn trong giấy tờ của bố.",
-                "<i>Mảnh thứ hai.</i>\n\n\nLà con số sáu\nđứng trồng cây chuối.");
-            Manh(2, "BanCanhGiuong_Thuoc", "mảnh giấy thứ ba", "Mảnh giấy xé, chữ mẹ. Kẹp dưới vỉ thuốc đầu giường con bé.",
-                "<i>Mảnh thứ ba.</i>\n\n\nHai cái vòng tròn chồng lên nhau,\nnhư hai thằng con trai nhà mình\nhồi bé ngủ chung một giường.");
-            Manh(3, "BanTrangDiem_Bo", "mảnh giấy cuối", "Mảnh giấy xé, chữ mẹ. Dưới hộp phấn trên bàn trang điểm.",
-                "<i>Mảnh cuối.</i>\n\n\nTròn như cái mâm cơm,\nmà trong mâm chẳng có gì.\n\n\n<size=19><color=#6A5A48>...Năm ấy nhà mình mừng nhất.</color></size>");
+            Manh(1, "GiuongDon_Khoi", "mảnh giấy (số thứ hai)", "Mảnh giấy xé, chữ mẹ. Nhét dưới gối giường mình.",
+                "<i>Nhét dưới gối. Chữ mẹ.</i>\n\n\n<size=30><b>Số thứ hai:  9</b></size>\n\n\nHai anh em ngủ chung cái giường này\ntới năm thằng Phong chín tuổi.\n\nThằng Khôi khóc mấy đêm\nvì phải nằm một mình.");
+            Manh(2, "Salon_BanNuoc", "mảnh giấy (số thứ ba)", "Mảnh giấy xé, chữ mẹ. Kẹp dưới khay trà.",
+                "<i>Kẹp dưới khay trà. Chữ mẹ.</i>\n\n\n<size=30><b>Số thứ ba:  8</b></size>\n\n\nTám giờ sáng nào ông cũng pha trà,\nrót thêm một chén để đấy.\n\nÔng không nói. Em cũng không hỏi.");
+            Manh(3, "BanCanhGiuong_Thuoc", "mảnh giấy (số cuối)", "Mảnh giấy xé, chữ mẹ. Kẹp dưới vỉ thuốc đầu giường con bé.",
+                "<i>Kẹp dưới vỉ thuốc. Chữ mẹ.</i>\n\n\n<size=30><b>Số cuối:  0</b></size>\n\n\nCon Nhím hỏi ngoài anh Khôi\nnó còn anh nào nữa không.\n\nEm bảo không.\nKhông có ai cả.");
         }
         catch (System.Exception e) { Debug.LogWarning("[LocManhMa] " + e.Message); }
     }
@@ -51,10 +58,9 @@ public partial class LocCotTruyen
         if (!g) return;
         var nghi = i switch
         {
-            0 => new[] { "Chữ mẹ.", "...Mảnh thứ nhất. Còn ba mảnh." },
-            1 => new[] { "Lại chữ mẹ." },
-            2 => new[] { "Hai thằng con trai...", "Mình với anh Phong." },
-            _ => new[] { "Mảnh cuối." },
+            1 => new[] { "Chín.", "...Mình chẳng nhớ gì chuyện ngủ chung." },
+            2 => new[] { "Tám.", "Chén trà thứ hai. Hồi nào cũng thấy, chưa bao giờ nghĩ." },
+            _ => new[] { "Không.", "...Không có ai cả." },
         };
         var v = Mon(g, MANH_ID[i], ten, LocVatPham.Kieu.Nhat, ghiChu, 1, nghi, new[] { chu });
         if (v) v.docKhiNhat = true;   // nhặt là mở ra đọc luôn câu đố (đọc lại trong túi)
@@ -132,11 +138,17 @@ public partial class LocCotTruyen
                 }
             }
         }
+        // đọc sổ thu chi: thấy số thứ nhất kẹp bìa
+        if (LocTui.Co("doc:so_thu_chi_2002") && !LocTui.Co("thay_so_1") && !LocTui.Mo && !LocTui.DangNoi)
+        {
+            LocTui.Dat("thay_so_1");
+            LocTui.Noi("Một.", "...Năm nào mẹ cũng để riêng tiền cho anh.");
+        }
         // đủ bốn mảnh → Khôi ghép mã
         if (!LocTui.Co("ghep_ma") && !LocTui.Co("ket_mo") && SoManh() >= 4 && !LocFirstPerson.khoa && !LocTui.Mo && !LocTui.DangNoi)
         {
             LocTui.Dat("ghep_ma");
-            LocTui.Noi("Một... chín... tám... không.", "Một chín tám mươi.", "...Năm anh Phong ra đời.");
+            LocTui.Noi("Một. Chín. Tám. Không.", "Một chín tám mươi.", "...Năm anh Phong ra đời.");
         }
     }
     float tChoGo;

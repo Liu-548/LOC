@@ -52,9 +52,10 @@ public static partial class LocHouseBuilder
         // ── sổ thu chi 2002 — đọc tại chỗ trong tủ hồ sơ phòng làm việc (mã két)
         Mon(Tim("SoThuChi_2002"), "so_thu_chi_2002", "sổ thu chi 2002", LocVatPham.Kieu.Doc, "Sổ thu chi của nhà, nét chữ của mẹ.", trang: new[]
         {
+            "<i>Kẹp trong bìa sổ, một mảnh giấy xé. Chữ mẹ.</i>\n\n\n<size=30><b>Số thứ nhất:  1</b></size>\n\n\nNăm nào em cũng để riêng cho thằng Phong một khoản,\nghi vào sổ như nó vẫn còn.\n\nÔng bảo vô lý.\nEm vẫn ghi.",   // [14/11] số thứ nhất của mã két
             "<b>THU CHI — 2002</b>\n\n<i>Nét chữ của mẹ, nhỏ, đều.</i>\n\nTháng 6\n\n2/6      Tiền học con Nhím ............... 120.000\n5/6      Chợ ....................................... 45.000\n11/6    Tiền nước ................................ 38.000\n20/6    Thuốc con Nhím ...................... 60.000\n28/6    Cúng rằm ................................. 150.000",
             "Tháng 7\n\n3/7      Chợ ....................................... 52.000\n8/7      Thuốc con Nhím ...................... 80.000\n12/7    Tiền điện tháng 6 .................. 186.000\n14/7    Thuốc con Nhím ...................... 95.000\n15/7    Chợ ....................................... 40.000\n26/7    Tiền điện tháng 7 .................. 192.000",
-            "Tháng 8\n\n1/8      Thuốc con Nhím ...................... 95.000\n2/8      Bác sĩ sang bó bột ................. 150.000\n3/8      Chợ ....................................... 40.000\n\n<size=27><i><color=#1E2F63>4/8    Ứng cho thằng Phong ....... 2.000.000</color></i></size>",
+            "Tháng 8\n\n1/8      Thuốc con Nhím ...................... 95.000\n2/8      Bác sĩ sang bó bột ................. 150.000\n3/8      Chợ ....................................... 40.000\n\n4/8      Để riêng cho thằng Phong ....... 2.000.000",
         });
 
         // ── két sắt đứng phòng bố mẹ: khoá số 1980
