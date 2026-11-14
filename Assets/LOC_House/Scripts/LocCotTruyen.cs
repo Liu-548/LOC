@@ -11,7 +11,7 @@ using UnityEngine.InputSystem;
 //  · Luật đèn hầm (B3.8b): đèn hầm đang bật mà người chơi ra khỏi hầm + hộp thang → tắt ngay, không nháy, không tiếng.
 //  · Đêm 1: lời mở đầu → thắp hương (E, nhìn ảnh) → thoại người họ hàng → [Nhím, két, sổ — đã có] → xuống hầm có đèn (độc thoại)
 //    → đi lên ("Thôi. Mai tính.") → thắp nén mới → [3/11] lên giường Khôi bấm "Đi ngủ" → cắt đen → Đêm 2 (còn việc thì độc thoại gợi ý).
-//  · H: gợi ý C1.4 — bấm (chưa chốt bấm hay giữ, TL-05), mỗi lần lùi một bậc. Hiện có gợi ý 1 (mã két).
+//  · Gợi ý: [14/11] không còn phím H — Khôi tự nói ra khi người chơi mắc lâu (LocCotTruyen_GoiY.cs).
 //  · Cờ cốt truyện lưu trong LocTui → chết thì "chơi lại đầu đêm" tự trả về đúng lúc đầu đêm.
 [DefaultExecutionOrder(20)]
 public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn thiếu (cuộc gọi thầy, dán chén, kiện hàng, nghi lễ, chỗ rẽ, các kết) ở LocCotTruyen_V34.cs
@@ -91,8 +91,7 @@ public partial class LocCotTruyen : MonoBehaviour   // [27/10] phần v3.3 còn 
         if (dangKet && !thaKhoaKet) { LocFirstPerson.khoa = true; LocMa.tamDung = true; }   // [02/11] trừ đoạn Evil cho đi tới chân cầu thang   // [27/10] phần kết: cảnh khác (LocNhim) có nhả khoá cũng giữ lại
         if (dangCanh) return;
         var k = Keyboard.current;
-        if (k != null && k.hKey.wasPressedThisFrame && !LocFirstPerson.khoa && !LocTui.Mo) GoiYH();
-        GoiYChuDong();   // [14/11] gợi ý chủ động + mốc giờ thứ 11 (LocCotTruyen_GoiY.cs)
+        GoiYChuDong();   // [14/11] gợi ý tự động bằng lời Khôi (bỏ phím H) + mốc giờ thứ 11 (LocCotTruyen_GoiY.cs)
 #if UNITY_EDITOR
         if (k != null && k.digit9Key.wasPressedThisFrame && LocMa.dem < 3 && !LocFirstPerson.khoa && !LocMenu.DangChe) StartCoroutine(HetDemThu());   // [22/10] thử: phím 9 = hết đêm ngay (xem cảnh ban ngày)
 #endif

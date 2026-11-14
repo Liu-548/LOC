@@ -37,6 +37,7 @@ public class LocTui : MonoBehaviour
     const int SO_O = 6; float lucDoi = -99f;   // lucDoi: lúc túi vừa đổi → thanh sáng rõ vài giây rồi mờ đi
     readonly Dictionary<string, LocVatPham> mon = new();
     Coroutine noi;
+    public static bool DangNoi => I && I.noi != null;   // [14/11] gợi ý tự động không chen ngang lời đang nói
 
     void Awake()
     {

@@ -1,20 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// [14/11] Gợi ý phím H theo bảng dữ liệu (thay chuỗi if rải ở GoiYH / GoiYHV34 / GoiYGiacMo).
+// [14/11] Gợi ý theo bảng dữ liệu — KHÔNG CÒN PHÍM H: Khôi tự nói ra khi người chơi mắc lâu (xem GoiYChuDong).
 //  · Mỗi mục: id, đêm, thứ tự trong đêm (số nhỏ = việc chặn sớm hơn), bắt buộc hay tuỳ chọn, mo() = đã mở khoá, xong() = đã làm,
 //    bac[] = 3 câu Khôi tự nhủ: mơ hồ → thu hẹp → gần như chỉ chỗ. Không câu nào nói mã số, tên phím hay "bấm E".
-//  · Bấm H: chọn mục bắt buộc đang mở có thứ tự nhỏ nhất (tuỳ chọn chỉ khi hết bắt buộc). Đọc bậc kế tiếp.
-//    Đã qua bậc 3 mà còn mục bắt buộc khác đang mở song song → chuyển sang mục đó. Bấm lại sau hơn giayResetGoiY giây → quay về bậc 1.
-//  · Gợi ý chủ động (goiYChuDong): mục đứng đầu không đổi quá phutChuDong phút và chưa bấm H cho nó → Khôi lẩm bẩm bậc 1, mỗi mục một lần.
+//  · Chọn mục bắt buộc đang mở có thứ tự nhỏ nhất (tuỳ chọn chỉ khi hết bắt buộc).
 //  · Chỗ rẽ cuối chỉ đặt câu hỏi, không nghiêng về Niêm hay Xé. Quyển sách của mẹ không có trong gợi ý (đọc hay không đổi kết Niêm).
-//  · Nội dung bản nháp: tài liệu "Nâng cấp gợi ý phím H — LỘC" (14/11) — câu mới / sửa đều chờ nhóm duyệt 🗣.
+//  · Nội dung bản nháp: tài liệu "Nâng cấp gợi ý phím H — LỘC" (14/11) — câu mới / sửa đều chờ nhóm duyệt.
 public partial class LocCotTruyen
 {
-    [Header("Gợi ý H")]
-    public float giayResetGoiY = 90f;     // bấm H sau quãng này thì bắt đầu lại từ bậc nhẹ
-    public bool goiYChuDong = true;       // Khôi tự lẩm bẩm khi mắc quá lâu
-    public float phutChuDong = 4f;
+    [Header("Gợi ý tự động (lời Khôi)")]
+    public bool goiYChuDong = true;                          // tắt = không gợi ý gì cả
+    public float[] giayBac = { 90f, 180f, 270f };             // mắc bao lâu (giây, chỉ tính lúc tự do đi lại) thì nói bậc 1 / 2 / 3
+    public float giayLapLai = 150f;                           // sau bậc 3: bao lâu nhắc lại một lần
+    public int soLapLai = 2;
 
     class MucGoiY
     {
@@ -23,9 +22,7 @@ public partial class LocCotTruyen
         public string[] bac;
     }
     List<MucGoiY> bangGoiY;
-    readonly Dictionary<string, float> lanBamGoiY = new();   // lần bấm H gần nhất cho từng mục
-    readonly HashSet<string> daNhacChuDong = new();
-    string mucDau; float tMucDau; bool daNhacGio11;
+    string mucDau; bool daNhacGio11;
 
     LocDoor cuaHamD;
     bool DenHamBat => ctHam && ctHam.bat;
@@ -118,38 +115,59 @@ public partial class LocCotTruyen
         return tot;
     }
 
-    void GoiYH()
+    // [14/11] BỎ PHÍM H — gợi ý tự động bằng lời Khôi tự nhủ (phụ đề nghiêng như mọi câu độc thoại).
+    //  · Đồng hồ "mắc" chỉ chạy khi người chơi đang tự do đi lại (không menu, không túi, không cảnh, không bị khoá) và
+    //    đặt lại mỗi khi việc đứng đầu đổi → làm xong một việc là khỏi bị nhắc việc cũ.
+    //  · Mắc giayBac[0] → bậc 1 (mơ hồ) · giayBac[1] → bậc 2 · giayBac[2] → bậc 3 (gần như chỉ chỗ).
+    //    Sau bậc 3: cứ giayLapLai nhắc lại bậc 3 (hoặc bậc 1 của việc song song cùng chặng), tối đa soLapLai lần.
+    //  · Không chen ngang khi Khôi đang nói câu khác; chờ câu kia xong.
+    float tMac; int lapLai;
+    bool daNhacMatDien;
+
+    void NoiGoiY(MucGoiY m, int i)
     {
-        if (dangCanh || LocMenu.DangChe) return;
-        if (LocMa.dem == 3 && LocMa.MatDien) { LocTui.Noi("Đứng yên. Đừng đi về phía nó."); return; }
-        var m = MucDangMo();
-        if (m == null) { LocTui.Noi("Chẳng còn gì phải làm. ...Hay mình quên cái gì."); return; }
-        bacGoiY.TryGetValue(m.id, out int i);
-        if (lanBamGoiY.TryGetValue(m.id, out float t0) && Time.time - t0 > giayResetGoiY) i = 0;   // lâu không hỏi → bắt đầu lại từ bậc nhẹ
-        if (i >= m.bac.Length)
-        {
-            // đã qua bậc cuối: còn việc song song thì chuyển sang (từ bậc 1), không thì nhắc lại bậc cuối
-            var khac = MucDangMo(m.id);
-            if (khac != null && khac.batBuoc && khac.thuTu / 10 == m.thuTu / 10) { bacGoiY[m.id] = 0; m = khac; bacGoiY.TryGetValue(m.id, out i); if (i >= m.bac.Length) i = m.bac.Length - 1; }
-            else i = m.bac.Length - 1;
-        }
+        i = Mathf.Clamp(i, 0, m.bac.Length - 1);
         LocTui.Noi(m.bac[i]);
-        bacGoiY[m.id] = i + 1; lanBamGoiY[m.id] = Time.time;
-        daNhacChuDong.Add(m.id);
+        bacGoiY[m.id] = Mathf.Max(bacGoiY.TryGetValue(m.id, out int c) ? c : 0, i + 1);
     }
 
-    // gọi mỗi khung hình từ Update (sau khi đã loại cảnh): lẩm bẩm khi mắc quá lâu + mốc giờ thứ 11 của Đêm 3
+    // gọi mỗi khung hình từ Update (sau khi đã loại cảnh)
     void GoiYChuDong()
     {
         if (LocFirstPerson.khoa || LocTui.Mo || LocMenu.DangChe || LocNhim.dangCanh || dangKet) return;
-        if (LocMa.dem == 3 && gio >= 11 && gio < gioHet && !daNhacGio11) { daNhacGio11 = true; LocTui.Noi("Mười một giờ rồi. Qua nửa đêm là sang mùng một."); }
-        if (!goiYChuDong || (LocMa.dem == 3 && LocMa.MatDien)) return;
-        if (Time.frameCount % 30 != 0) return;   // nửa giây một lần là đủ
+        if (LocMa.dem == 3 && gio >= 11 && gio < gioHet && !daNhacGio11 && !LocTui.DangNoi) { daNhacGio11 = true; LocTui.Noi("Mười một giờ rồi. Qua nửa đêm là sang mùng một."); }
+
+        // Đêm 3 mất điện: nhắc một lần mỗi đợt, rồi im để người chơi tự xoay xở
+        if (LocMa.dem == 3 && LocMa.MatDien)
+        {
+            if (!daNhacMatDien && !LocTui.DangNoi) { daNhacMatDien = true; LocTui.Noi("Đứng yên. Đừng đi về phía nó."); }
+            return;
+        }
+        daNhacMatDien = false;
+        if (!goiYChuDong) return;
+
+        tMac += Time.deltaTime;
+        if (Time.frameCount % 15 != 0) return;
         var m = MucDangMo(); var id = m != null ? m.id : null;
-        if (id != mucDau) { mucDau = id; tMucDau = Time.time; return; }
-        if (id == null || daNhacChuDong.Contains(id) || Time.time - tMucDau < phutChuDong * 60f) return;
-        daNhacChuDong.Add(id);
-        LocTui.Noi(m.bac[0]);
-        bacGoiY[id] = Mathf.Max(bacGoiY.TryGetValue(id, out int i) ? i : 0, 1); lanBamGoiY[id] = Time.time;
+        if (id != mucDau) { mucDau = id; tMac = 0f; lapLai = 0; return; }
+        if (m == null || LocTui.DangNoi) return;
+
+        bacGoiY.TryGetValue(id, out int daNoi);   // số bậc đã nói cho việc này
+        if (daNoi < m.bac.Length)
+        {
+            if (tMac < giayBac[Mathf.Min(daNoi, giayBac.Length - 1)]) return;
+            NoiGoiY(m, daNoi);
+            return;
+        }
+        // đã nói hết các bậc
+        if (lapLai >= soLapLai || tMac < giayBac[giayBac.Length - 1] + giayLapLai * (lapLai + 1)) return;
+        lapLai++;
+        var khac = MucDangMo(id);
+        if (khac != null && khac.batBuoc && khac.thuTu / 10 == m.thuTu / 10 && (lapLai % 2 == 1))
+        {
+            bacGoiY.TryGetValue(khac.id, out int k2);
+            NoiGoiY(khac, k2 < khac.bac.Length ? k2 : khac.bac.Length - 1);
+        }
+        else NoiGoiY(m, m.bac.Length - 1);
     }
 }
